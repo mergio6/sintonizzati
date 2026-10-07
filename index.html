@@ -158,6 +158,23 @@
     position: relative; display: block; font-family: "Michroma", Verdana, sans-serif; font-size: 20px; letter-spacing: .04em;
     color: #2A1C00; opacity: 0; transform: translateY(6px); transition: opacity .3s .25s, transform .3s .25s;
   }
+  /* Prima del tocco: il display invita ad accendere la radio */
+  .loader .invito-testo {
+    position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; pointer-events: none;
+    font: clamp(12px, 3.8vh, 15px)/1 "Michroma", Verdana, sans-serif; letter-spacing: .04em;
+    color: var(--vetro-segni); text-shadow: var(--lcd-ombra); transition: opacity .3s;
+  }
+  .loader.invito { cursor: pointer; animation: invito .4s ease-out, pulsa-invito 1.6s ease-in-out .4s infinite; }
+  .loader.invito .invito-testo { opacity: 1; animation: pulsa-testo 1.6s ease-in-out infinite; }
+  .loader.invito .scala, .loader.invito .lancetta { opacity: 0; }
+  .loader .scala, .loader .lancetta { transition: opacity .35s; }
+  .loader.invito:active { transform: scale(.98); }
+  @keyframes pulsa-invito {
+    0%, 100% { box-shadow: inset 0 0 0 3px var(--corpo), 0 0 0 0 rgba(255, 181, 46, .6); }
+    50% { box-shadow: inset 0 0 0 3px var(--corpo), 0 0 0 10px rgba(255, 181, 46, 0); }
+  }
+  @keyframes pulsa-testo { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+  @keyframes invito { from { opacity: 0; } }
   .stato { margin: .75em 0 0; font-size: 15px; color: var(--tenue); font-variant-numeric: tabular-nums; min-height: 1.3em; transition: opacity .3s; }
 
   .loader.pronto {
@@ -176,8 +193,9 @@
 
   /* ---------- Schermata di gioco ---------- */
   .gioco {
+    --padx: clamp(14px, 3vw, 28px);
     display: grid; grid-template-rows: auto minmax(0, 1fr) auto; width: 100%; height: 100%;
-    padding: 10px clamp(14px, 3vw, 28px) 12px;
+    padding: 10px var(--padx) 12px;
   }
   .barra { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .marchio { display: flex; align-items: center; gap: 10px; font-family: "Michroma", Verdana, sans-serif; font-size: 15px; }
@@ -401,7 +419,8 @@
   .passaggio {
     grid-area: 2 / 1 / 4 / 2; z-index: 3; background: var(--sfondo);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: clamp(8px, 2.6vh, 14px); padding: 8px; text-align: center;
+    gap: clamp(8px, 2.6vh, 14px); padding: 8px calc(8px + var(--padx)) 20px; text-align: center;
+    margin: 0 calc(-1 * var(--padx)) -12px;      /* arriva fino ai bordi: le onde sotto non si vedono */
   }
   .passaggio[hidden] { display: none; }
   .passaggio .sopra { margin: 0; font-size: clamp(15px, 4.4vh, 20px); font-weight: 600; color: var(--tenue); max-width: 38ch; line-height: 1.3; text-wrap: balance; }
@@ -642,7 +661,7 @@
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
-    .loader.pronto, .ruota svg { animation: none; }
+    .loader.pronto, .loader.invito, .loader.invito .invito-testo, .ruota svg { animation: none; }
     .loader, .loader .label, body { transition: none; }
   }
 </style>
@@ -679,7 +698,8 @@
         <h1>Sintonizzati</h1>
         <p class="sub">Siete davvero sulla stessa lunghezza d'onda?</p>
         <div class="tuner" id="tuner">
-          <button class="loader" id="loader" disabled aria-label="Caricamento in corso">
+          <button class="loader invito" id="loader" aria-label="Trova la frequenza">
+            <span class="invito-testo" aria-hidden="true">Trova la frequenza</span>
             <span class="scala" aria-hidden="true">
               <span class="tacche"></span>
               <span class="numeri"><span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span></span>
@@ -687,7 +707,7 @@
             <span class="lancetta" aria-hidden="true"></span>
             <span class="label">Gioca</span>
           </button>
-          <p class="stato" id="stato" aria-live="polite">Cerco la frequenza…</p>
+          <p class="stato" id="stato" aria-live="polite"></p>
         </div>
       </div>
     </div>
@@ -1051,6 +1071,7 @@
     try { localStorage.setItem('sintonizzati-impostazioni', JSON.stringify(impostazioni)); } catch (e) {}
     if (chiave === 'audio' && acceso) Suoni.volume(true);
     if (chiave !== 'audio' || acceso) suona('interruttore', { acceso });
+    if (chiave === 'vibrazione' && acceso) vibra('prova');
     aggiornaInterruttori();
   }));
   document.getElementById('chiudi-impostazioni').addEventListener('click', chiudiImpostazioni);
@@ -1140,11 +1161,12 @@
       c.connect(g); g.connect(uscita(dest, pan));
       c.start(T); m.start(T); c.stop(T + dur + 0.05); m.stop(T + dur + 0.05);
     }
-    function fruscio({ t = 0, dur = 0.3, vol = 0.1, tipo = 'bandpass', f = 1800, f2, q = 0.8, att = 0.01, dest = radio, pan }) {
+    function fruscio({ t = 0, dur = 0.3, vol = 0.1, tipo = 'bandpass', f = 1800, f2, curva, q = 0.8, att = 0.01, dest = radio, pan }) {
       const T = ctx.currentTime + t;
       const s = ctx.createBufferSource(); s.buffer = rumoreBuf; s.loop = true;
-      const fl = ctx.createBiquadFilter(); fl.type = tipo; fl.frequency.setValueAtTime(f, T); fl.Q.value = q;
-      if (f2) fl.frequency.exponentialRampToValueAtTime(f2, T + dur);
+      const fl = ctx.createBiquadFilter(); fl.type = tipo; fl.frequency.setValueAtTime(curva ? curva[0] : f, T); fl.Q.value = q;
+      if (curva) fl.frequency.setValueCurveAtTime(curva, T, dur);
+      else if (f2) fl.frequency.exponentialRampToValueAtTime(f2, T + dur);
       const g = ctx.createGain(); inviluppo(g.gain, T, att, vol, dur);
       s.connect(fl); fl.connect(g); g.connect(uscita(dest, pan));
       s.start(T, Math.random() * 1.5); s.stop(T + dur + 0.05);
@@ -1153,6 +1175,42 @@
     function scatto({ t = 0, vol = 0.25, f = 2400, tonfo = 140, pan }) {
       fruscio({ t, dur: 0.025, vol: vol * 5, f, q: 1.5, att: 0.001, dest: master, pan });
       if (tonfo) tono({ f: tonfo, f2: tonfo * 0.6, t, dur: 0.06, vol: vol * 0.8, att: 0.002, pan });
+    }
+    // una voce lontana che borbotta tra una stazione e l'altra
+    function voce({ t = 0, dur = 0.3, f = 130, vol = 0.05 }) {
+      const T = ctx.currentTime + t;
+      const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f;
+      const w = ctx.createOscillator(), wg = ctx.createGain(); w.frequency.value = 4; wg.gain.value = f * 0.15;
+      w.connect(wg); wg.connect(o.frequency);
+      const f1 = ctx.createBiquadFilter(); f1.type = 'bandpass'; f1.frequency.value = 650; f1.Q.value = 5;
+      const f2 = ctx.createBiquadFilter(); f2.type = 'bandpass'; f2.frequency.value = 1150; f2.Q.value = 6;
+      const sill = ctx.createGain(); sill.gain.value = 0.5;
+      const sl = ctx.createOscillator(), slg = ctx.createGain(); sl.frequency.value = 7; slg.gain.value = 0.5;
+      sl.connect(slg); slg.connect(sill.gain);
+      const g = ctx.createGain(); inviluppo(g.gain, T, 0.03, vol, dur);
+      o.connect(f1); o.connect(f2); f1.connect(sill); f2.connect(sill); sill.connect(g); g.connect(radio);
+      [o, w, sl].forEach(x => { x.start(T); x.stop(T + dur + 0.05); });
+    }
+    // sciame che si allinea: ogni ape parte su una nota a caso e scivola sull'accordo finale
+    function sciameAllineato({ t = 0, dur = 3.6, allinea = 1.2, note = [48, 55, 60, 64, 67, 72], vol = 0.02 }) {
+      const T = ctx.currentTime + t;
+      note.forEach((n, i) => {
+        const o = ctx.createOscillator(); o.type = 'sawtooth';
+        o.frequency.setValueAtTime(170 + Math.random() * 110, T);
+        o.frequency.exponentialRampToValueAtTime(NOTA(n), T + allinea);
+        const lfo = ctx.createOscillator(), lg = ctx.createGain();
+        lfo.frequency.value = 8 + Math.random() * 6;
+        lg.gain.setValueAtTime(16, T); lg.gain.linearRampToValueAtTime(1.5, T + allinea);
+        lfo.connect(lg); lg.connect(o.frequency);
+        const fl = ctx.createBiquadFilter(); fl.type = 'lowpass'; fl.Q.value = 3;
+        fl.frequency.setValueAtTime(900, T); fl.frequency.linearRampToValueAtTime(1800, T + allinea);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, T); g.gain.linearRampToValueAtTime(vol, T + 0.4);
+        g.gain.setValueAtTime(vol, T + dur - 0.8); g.gain.linearRampToValueAtTime(0.0001, T + dur);
+        o.connect(fl); fl.connect(g);
+        g.connect(uscita(master, (i / (note.length - 1)) * 1.4 - 0.7));
+        o.start(T); lfo.start(T); o.stop(T + dur + 0.1); lfo.stop(T + dur + 0.1);
+      });
     }
     // ottoni sintetici: dente di sega leggermente scordato con filtro che si apre
     function ottone({ note, t = 0, dur = 0.3, vol = 0.03 }) {
@@ -1168,29 +1226,6 @@
         o.connect(fl); o.start(T); o.stop(T + dur + 0.2);
       }));
     }
-    // ronzio d'alveare: tante piccole "api" che vibrano e si spostano da un lato all'altro
-    function sciame({ t = 0, dur = 2.8, vol = 0.018 }) {
-      const T = ctx.currentTime + t;
-      for (let i = 0; i < 6; i++) {
-        const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = 190 + i * 17 + Math.random() * 8;
-        const lfo = ctx.createOscillator(), lg = ctx.createGain();
-        lfo.frequency.value = 7 + Math.random() * 7; lg.gain.value = 10 + Math.random() * 8;
-        lfo.connect(lg); lg.connect(o.frequency);
-        const fl = ctx.createBiquadFilter(); fl.type = 'bandpass'; fl.frequency.value = 700 + i * 150; fl.Q.value = 2;
-        const g = ctx.createGain();
-        g.gain.setValueAtTime(0.0001, T); g.gain.linearRampToValueAtTime(vol, T + 0.5);
-        g.gain.setValueAtTime(vol, T + dur - 0.6); g.gain.linearRampToValueAtTime(0.0001, T + dur);
-        o.connect(fl); fl.connect(g);
-        if (ctx.createStereoPanner) {
-          const p = ctx.createStereoPanner(), pl = ctx.createOscillator(), pg = ctx.createGain();
-          pl.frequency.value = 0.3 + Math.random() * 0.5; pg.gain.value = 0.8;
-          pl.connect(pg); pg.connect(p.pan); g.connect(p); p.connect(master);
-          pl.start(T); pl.stop(T + dur + 0.1);
-        } else g.connect(master);
-        o.start(T); lfo.start(T); o.stop(T + dur + 0.1); lfo.stop(T + dur + 0.1);
-      }
-    }
-
     /* ---------- Catalogo dei suoni ---------- */
     const S = {
       // tasti e comandi
@@ -1213,15 +1248,41 @@
         tono({ f: 150, t: 0.14, dur: 0.12, vol: 0.045, tipo: 'square', dest: radio });
       },
 
-      // benvenuto: l'interruttore si accende, fruscio, fischio di sintonia e il jingle della stazione
+      // la radio si accende e cerca la stazione, mentre la lancetta scorre sulla scala
+      ricercaIniziale(o) {
+        const dur = o.durata || 3;
+        scatto({ vol: 0.3, f: 1400, tonfo: 85 });                                  // interruttore di accensione
+        tono({ f: 50, f2: 60, tipo: 'triangle', dur: 0.8, vol: 0.06, att: 0.2 });  // ronzio delle valvole
+        // il fruscio segue la lancetta: stessa curva, con le stesse esitazioni
+        const N = 64, curva = new Float32Array(N);
+        for (let i = 0; i < N; i++) {
+          const lin = i / (N - 1), p = Math.min(1, lin + Math.sin(lin * Math.PI * 3) * 0.05 * (1 - lin));
+          curva[i] = 450 * Math.pow(7, p);
+        }
+        fruscio({ t: 0.05, dur, vol: 0.09, curva, q: 3.5, att: 0.15 });
+        fruscio({ t: 0.05, dur, vol: 0.035, f: 2500, q: 0.4, att: 0.3 });
+        if (dur < 1.5) return;
+        // fischi di eterodina e frammenti di stazioni lontane
+        tono({ f: 2800, f2: 900, t: 0.35, dur: 0.45, vol: 0.035, dest: radio });
+        voce({ t: 0.75, dur: 0.35 });
+        tono({ f: 700, f2: 1900, t: 1.15, dur: 0.4, vol: 0.03, dest: radio });
+        [64, 67, 71].forEach(n => tono({ f: NOTA(n), tipo: 'triangle', t: 1.5, dur: 0.28, vol: 0.03, att: 0.02, dest: radio }));
+        tono({ f: 2200, f2: 1300, t: 1.9, dur: 0.35, vol: 0.03, dest: radio });
+        voce({ t: 2.2, dur: 0.3, f: 170, vol: 0.04 });
+        campana({ f: NOTA(81), t: 2.55, dur: 0.25, vol: 0.04 });
+      },
+      // stazione trovata: il fruscio si chiude e il segnale arriva pulito
+      stazioneTrovata() {
+        tono({ f: 1320, dur: 0.06, vol: 0.05, tipo: 'square', dest: radio });
+        campana({ f: NOTA(79), t: 0.05, dur: 0.7, vol: 0.1 });
+        campana({ f: NOTA(84), t: 0.14, dur: 0.9, vol: 0.1 });
+      },
+      // benvenuto: il tasto Gioca e il jingle della stazione
       benvenuto() {
-        scatto({ vol: 0.35, f: 1400, tonfo: 85 });
-        tono({ f: 50, f2: 62, tipo: 'triangle', dur: 0.9, vol: 0.07, att: 0.2 });
-        fruscio({ t: 0.04, dur: 0.75, vol: 0.13, f: 3200, f2: 800, q: 0.7, att: 0.03 });
-        tono({ f: 2600, f2: 480, t: 0.1, dur: 0.5, vol: 0.045, dest: radio });
-        [72, 76, 79, 84].forEach((n, i) => campana({ f: NOTA(n), t: 0.62 + i * 0.1, dur: 1.2 - i * 0.12, vol: 0.15, pan: -0.3 + i * 0.2 }));
-        tono({ f: NOTA(48), tipo: 'triangle', t: 0.62, dur: 1.3, vol: 0.1, att: 0.02 });
-        campana({ f: NOTA(91), t: 1.08, dur: 0.9, vol: 0.06, rapporto: 5, indice: 1 });
+        scatto({ vol: 0.3, f: 1800, tonfo: 110 });
+        [72, 76, 79, 84].forEach((n, i) => campana({ f: NOTA(n), t: 0.12 + i * 0.1, dur: 1.2 - i * 0.12, vol: 0.15, pan: -0.3 + i * 0.2 }));
+        tono({ f: NOTA(48), tipo: 'triangle', t: 0.12, dur: 1.3, vol: 0.1, att: 0.02 });
+        campana({ f: NOTA(91), t: 0.58, dur: 0.9, vol: 0.06, rapporto: 5, indice: 1 });
       },
       // le onde si separano: due toni all'unisono che si allontanano e iniziano a "battere"
       separa() {
@@ -1269,21 +1330,22 @@
         campana({ f: NOTA(88), t: 0.26, dur: 1.2, vol: 0.1 });
       },
 
-      // passa il telefono: il "din-don" degli annunci
+      // passa il telefono: il doppio bip di fine trasmissione dei ricetrasmettitori ("passo!")
       passaggio(o) {
-        const t = (o.t || 0) + 0.2;
-        campana({ f: NOTA(76), t, dur: 0.9, vol: 0.1, rapporto: 1.41, indice: 1.4 });
-        campana({ f: NOTA(72), t: t + 0.24, dur: 1.2, vol: 0.1, rapporto: 1.41, indice: 1.4 });
+        const t = (o.t || 0) + 0.12;
+        fruscio({ t, dur: 0.05, vol: 0.05, f: 2500, q: 1, att: 0.003 });
+        tono({ f: 1175, t: t + 0.04, dur: 0.07, vol: 0.06, tipo: 'triangle', att: 0.004, dest: radio });
+        tono({ f: 1568, t: t + 0.12, dur: 0.1, vol: 0.06, tipo: 'triangle', att: 0.004, dest: radio });
       },
       vantaggio() {
         S.passaggio({});
-        campana({ f: NOTA(83), t: 0.75, dur: 0.25, vol: 0.1, rapporto: 2, indice: 1 });
-        campana({ f: NOTA(88), t: 0.83, dur: 0.6, vol: 0.1, rapporto: 2, indice: 1 });
+        campana({ f: NOTA(83), t: 0.4, dur: 0.25, vol: 0.09, rapporto: 2, indice: 1 });
+        campana({ f: NOTA(88), t: 0.48, dur: 0.6, vol: 0.09, rapporto: 2, indice: 1 });
       },
       cambioCapo() {
         S.passaggio({});
-        tono({ f: 500, f2: 1000, t: 0.75, dur: 0.12, vol: 0.04, dest: radio, pan: -0.5 });
-        tono({ f: 1000, f2: 500, t: 0.9, dur: 0.12, vol: 0.04, dest: radio, pan: 0.5 });
+        tono({ f: 500, f2: 1000, t: 0.42, dur: 0.12, vol: 0.04, dest: radio, pan: -0.5 });
+        tono({ f: 1000, f2: 500, t: 0.57, dur: 0.12, vol: 0.04, dest: radio, pan: 0.5 });
       },
 
       // bersaglio: si apre con un soffio che sale, si nasconde con uno che scende e uno scatto
@@ -1396,14 +1458,30 @@
           });
           fruscio({ dur: 2.1, vol: 0.05, f: 2000, q: 0.5, att: 0.3 });
         } else if (lv === 1) {
-          [72, 76, 79].forEach((n, i) => campana({ f: NOTA(n), t: i * 0.14, dur: 1.1, vol: 0.13 }));
-          [60, 64, 67].forEach(n => tono({ f: NOTA(n), tipo: 'triangle', t: 0.3, dur: 1.3, vol: 0.035, att: 0.1, dest: radio }));
+          // 15–19: la fanfara in versione breve, tre accordi e via. Soddisfatti, senza esagerare
+          [[[60, 64, 67], 0, 0.16], [[67, 71, 74], 0.2, 0.25], [[72, 76, 79], 0.5, 0.9]]
+            .forEach(([note, t, dur]) => ottone({ note, t, dur, vol: 0.03 }));
+          [[48, 0, 0.18], [43, 0.2, 0.25], [48, 0.5, 1]].forEach(([n, t, dur]) =>
+            tono({ f: NOTA(n), tipo: 'triangle', t, dur, vol: 0.12, att: 0.01 }));
+          campana({ f: NOTA(84), t: 0.55, dur: 0.9, vol: 0.06, rapporto: 3.5, indice: 1.5, pan: -0.3 });
+          campana({ f: NOTA(88), t: 0.63, dur: 0.9, vol: 0.06, rapporto: 3.5, indice: 1.5, pan: 0.3 });
         } else if (lv === 2) {
-          S.centro({});
-          S.turnoExtra({ t: 0.9 });
+          // 20–23: la fanfara completa, con gli ottoni raddoppiati all'ottava,
+          // un colpo di piatto sull'accordo finale e una cascata di campanelli
+          S.vittoria({});
+          [[[77, 81, 84], 0.4, 0.3], [[74, 79, 83], 0.75, 0.25], [[79, 84, 88], 1.05, 1.3]]
+            .forEach(([note, t, dur]) => ottone({ note, t, dur, vol: 0.016 }));
+          fruscio({ t: 1.05, dur: 1.4, vol: 0.07, tipo: 'highpass', f: 6000, q: 0.5, att: 0.008, dest: master });
+          [91, 88, 96, 93, 100, 96, 103].forEach((n, i) => campana({ f: NOTA(n), t: 1.6 + i * 0.07, dur: 0.6, vol: 0.045, rapporto: 4, indice: 1, pan: -0.7 + i * 0.23 }));
         } else {
-          sciame({ t: 0, dur: 3 });
-          S.vittoria({ t: 0.35 });
+          // 24+: "mente alveare". Lo sciame parte disordinato e in un secondo si allinea su un accordo,
+          // poi esplode la fanfara completa con un finale più lungo e più alto
+          sciameAllineato({ t: 0, dur: 4.2, allinea: 1.2 });
+          S.vittoria({ t: 1.2 });
+          fruscio({ t: 2.25, dur: 1.6, vol: 0.08, tipo: 'highpass', f: 6000, q: 0.5, att: 0.008, dest: master });
+          ottone({ note: [79, 84, 88, 91], t: 2.25, dur: 1.4, vol: 0.016 });
+          [84, 88, 91, 96, 100, 103, 108].forEach((n, i) => campana({ f: NOTA(n), t: 2.4 + i * 0.08, dur: 0.9, vol: 0.05, rapporto: 4, indice: 1, pan: -0.7 + i * 0.23 }));
+          campana({ f: NOTA(96), t: 3.1, dur: 1.4, vol: 0.06, rapporto: 3.5, indice: 1.5 });
         }
       }
     };
@@ -1422,7 +1500,31 @@
   })();
 
   function suona(nome, opzioni) { if (impostazioni.audio) Suoni.suona(nome, opzioni); }
-  function vibra(schema) { if (!impostazioni.vibrazione || !navigator.vibrate) return; navigator.vibrate(schema); }
+
+  /* ---------- Vibrazione ----------
+     Poche vibrazioni brevi, solo quando servono davvero: quando il telefono è in mano
+     e bisogna passarlo, quando una risposta viene registrata, quando c'è un errore,
+     quando si centra il bersaglio e alla fine della partita.
+     Durate in millisecondi: vibra, pausa, vibra… */
+  const VIBRAZIONI = {
+    passaggio: [20, 60, 20],                    // "passa il telefono"
+    cambioCapo: [35, 60, 35, 60, 35],           // stesso segnale, più insistente: cambiate caposquadra
+    conferma: [15],                             // risposta registrata
+    errore: [25, 50, 25],                       // nome doppio
+    trovato: [30, 50, 60],                      // la radio ha scelto chi inizia
+    centro: [40, 50, 80],                       // bersaglio centrato
+    vittoria: [60, 70, 60, 70, 160],
+    pareggio: [80, 90, 80],
+    collab0: [140],
+    collab1: [50, 60, 90],
+    collab2: [40, 50, 40, 50, 140],
+    collab3: [25, 35, 25, 35, 25, 35, 25, 35, 220],   // il ronzio dello sciame
+    prova: [35]                                 // quando si riattiva dalle impostazioni
+  };
+  function vibra(nome) {
+    if (!impostazioni.vibrazione || !navigator.vibrate) return;
+    try { navigator.vibrate(VIBRAZIONI[nome] || nome); } catch (e) {}
+  }
 
   // Il browser permette l'audio solo dopo un gesto: lo sblocchiamo al primo tocco
   ['pointerdown', 'pointerup', 'touchend', 'keydown'].forEach(ev =>
@@ -1508,10 +1610,19 @@
     stato.textContent = `Cerco la frequenza… ${mhz} MHz`;
     if (lin < 1) requestAnimationFrame(carica); else pronto();
   }
-  requestAnimationFrame(carica);
+  // La ricerca parte solo al primo tocco: così l'audio è già sbloccato e si sente
+  loader.addEventListener('click', () => {
+    if (!loader.classList.contains('invito')) return;
+    loader.classList.remove('invito');
+    loader.disabled = true;
+    loader.setAttribute('aria-label', 'Caricamento in corso');
+    suona('ricercaIniziale', { durata: durata / 1000 });
+    requestAnimationFrame(carica);
+  });
 
   function pronto() {
     progresso = 1;
+    suona('stazioneTrovata');
     stato.textContent = 'Sintonizzati!';
     loader.classList.add('pronto');
     tuner.classList.add('pronto');
@@ -1595,6 +1706,7 @@
   document.getElementById('conferma-esci').addEventListener('click', () => {
     dialogoEsci.hidden = true;
     suona('spegni');
+    if (navigator.vibrate) try { navigator.vibrate(0); } catch (e) {}
     interrompiPartita();
     vai('schermata-modi');
   });
@@ -1657,7 +1769,7 @@
     contatore.textContent = `${pieni.length}/5`;
     suggSingoli.textContent = doppio ? 'Due giocatori hanno lo stesso nome' : '';
     if (silenzioso !== true) {
-      if (doppio && !erroreSingoli) suona('errore');
+      if (doppio && !erroreSingoli) { suona('errore'); vibra('errore'); }
       else if (accese) suona('led');
       else if (spente) suona('led', { spento: true });
     }
@@ -1685,7 +1797,7 @@
   function verificaSquadre(silenzioso) {
     const [a, b] = nomiSquadre();
     const uguali = a.toLowerCase() === b.toLowerCase();
-    if (silenzioso !== true && uguali && !erroreSquadre) suona('errore');
+    if (silenzioso !== true && uguali && !erroreSquadre) { suona('errore'); vibra('errore'); }
     erroreSquadre = uguali;
     suggSquadre.textContent = uguali ? 'Le due squadre devono avere nomi diversi' : '';
     suggSquadre.classList.toggle('errore', uguali);
@@ -1964,6 +2076,7 @@
     dopoPassaggio = poi;
     passaggio.hidden = false;
     suona(o.suono || 'passaggio');
+    vibra(o.suono === 'cambioCapo' ? 'cambioCapo' : 'passaggio');
   }
   passOk.addEventListener('click', () => {
     passaggio.hidden = true;
@@ -1996,6 +2109,7 @@
     const fine = () => {
       p.candidato = finale; p.scelto = true;
       suona('trovato');
+      vibra('trovato');
       ago.style.transition = 'transform .6s cubic-bezier(.3, 1.5, .5, 1)';
       impostaAngolo(0);
       if (p.modo === 'squadre') p.squadre[altra(finale)].punti = 1;   // la seconda squadra parte da 1 punto
@@ -2068,6 +2182,7 @@
   function confermaTentativo() {
     const p = partita;
     suona('conferma');
+    vibra('conferma');
     p.tentativi.push({ chi: p.ordine[p.corrente], angolo });
     const appena = nomeDi(p.ordine[p.corrente]);
     p.corrente++;
@@ -2099,6 +2214,7 @@
     // una nota per ogni lancetta che compare, poi il commento al risultato migliore
     const n2 = p.tentativi.length, migliore = Math.max(...p.tentativi.map(t => t.punti));
     suona('esito', { punti: migliore, t: (450 + n2 * 160 + 250) / 1000 });
+    if (migliore === 4) dopo(450 + n2 * 160 + 250, () => vibra('centro'));
     if (p.puntiIndizio) suona('bonus', { t: (450 + n2 * 160 + 1100) / 1000 });
   }
 
@@ -2239,6 +2355,7 @@
   function confermaSquadra() {
     const p = partita;
     suona('conferma');
+    vibra('conferma');
     p.angolo = angolo; p.lato = null; p.fase = 'lato';
     aggiorna();
   }
@@ -2271,6 +2388,7 @@
     p.fase = 'rivelazione';
     disegnaVentaglio(p.centro); aggiorna(); apriVentaglio();
     suona('esito', { punti, t: 0.45 });
+    if (punti === 4) dopo(450, () => vibra('centro'));
     if (bonus) suona('bonus', { t: 1.3 });
   }
 
@@ -2392,8 +2510,10 @@
     p.finita = p.turno >= p.totale;
     p.fase = 'rivelazione';
     suona('conferma');
+    vibra('conferma');
     disegnaVentaglio(p.centro); aggiorna(); apriVentaglio();
     suona('esito', { punti, centro, t: 0.45 });
+    if (centro) dopo(450, () => vibra('centro'));
     if (centro) suona('turnoExtra', { t: 1.25 });
   }
 
@@ -2545,6 +2665,7 @@
 
     ondaTesto(fineTitolo, titolo);
     suona(fanfara, { livello });
+    vibra(fanfara === 'collab' ? 'collab' + livello : fanfara);
     fineNota.textContent = nota;
     partita = null;
     vai('schermata-fine');
