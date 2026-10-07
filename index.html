@@ -158,9 +158,11 @@
 
   /* ---------- Schermata iniziale ---------- */
   .intro {
-    display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center;
-    gap: clamp(20px, 5vw, 60px); width: min(920px, 100%); padding: 16px clamp(20px, 5vw, 48px);
+    /* logo e testi formano un unico blocco centrato nello schermo */
+    display: grid; grid-template-columns: auto minmax(0, max-content); align-items: center; justify-content: center;
+    gap: clamp(20px, 5vw, 60px); width: 100%; max-width: 920px; padding: 16px clamp(20px, 5vw, 48px);
   }
+  .intro > div { min-width: min(360px, 52vw); }
   .intro .logo { width: clamp(110px, 42vh, 250px); height: auto; display: block; border-radius: 23%; box-shadow: var(--ombra-tile); }
   h1 {
     margin: 0; font-family: "Michroma", "Eurostile", "Arial Black", sans-serif; font-weight: 400;
