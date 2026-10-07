@@ -694,6 +694,15 @@
   .interruttore[aria-checked="true"] { background: var(--menta); }
   .interruttore[aria-checked="true"] .cursore { transform: translateX(24px); }
 
+  @media (max-height: 360px) {
+    .dialogo .pannello { gap: 8px; padding: 10px 12px; }
+    .riga-imp { padding: 2px 0; gap: 10px; }
+    .ico-imp { width: 30px; height: 30px; }
+    .testo-imp { font-size: 15px; }
+    .testo-imp small { font-size: 12px; }
+    .dialogo .tastino { height: 40px; }
+  }
+
   /* ---------- Transizione dalla schermata iniziale al menu ---------- */
   #schermata-inizio.uscita h1, #schermata-inizio.uscita .sub, #schermata-inizio.uscita .tuner, #schermata-inizio.uscita .angolo, #schermata-inizio.uscita .credito {
     animation: svanisci-su .35s ease-in both;
@@ -1451,6 +1460,11 @@ Vergogna passeggera | Vergogna eterna
           <button class="interruttore" role="switch" aria-checked="true" data-imp="audio" aria-labelledby="imp-audio-titolo"><span class="cursore"></span></button>
         </div>
         <div class="riga-imp">
+          <span class="ico-imp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span>
+          <span class="testo-imp"><span id="imp-musica-titolo">Musica</span><small>Il sottofondo di ogni stazione</small></span>
+          <button class="interruttore" role="switch" aria-checked="true" data-imp="musica" aria-labelledby="imp-musica-titolo"><span class="cursore"></span></button>
+        </div>
+        <div class="riga-imp">
           <span class="ico-imp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M3 8v8M21 8v8"/></svg></span>
           <span class="testo-imp"><span id="imp-vibrazione-titolo">Vibrazione</span><small>Vibra durante i momenti importanti</small></span>
           <button class="interruttore" role="switch" aria-checked="true" data-imp="vibrazione" aria-labelledby="imp-vibrazione-titolo"><span class="cursore"></span></button>
@@ -1548,7 +1562,7 @@ Vergogna passeggera | Vergogna eterna
   applicaTema();
 
   /* ---------- Impostazioni: audio e vibrazione ---------- */
-  const impostazioni = { audio: true, vibrazione: true, daltonico: false };
+  const impostazioni = { audio: true, musica: true, vibrazione: true, daltonico: false };
   try { Object.assign(impostazioni, JSON.parse(localStorage.getItem('sintonizzati-impostazioni')) || {}); } catch (e) {}
   function applicaDaltonico() {
     if (impostazioni.daltonico) radice.dataset.daltonico = ''; else delete radice.dataset.daltonico;
@@ -1570,6 +1584,7 @@ Vergogna passeggera | Vergogna eterna
     if (chiave !== 'audio' || acceso) suona('interruttore', { acceso });
     if (chiave === 'vibrazione' && acceso) vibra('prova');
     if (chiave === 'daltonico') applicaDaltonico();
+    if (chiave === 'audio' || chiave === 'musica') aggiornaMusica();
     aggiornaInterruttori();
   }));
   document.getElementById('chiudi-impostazioni').addEventListener('click', chiudiImpostazioni);
@@ -1984,17 +1999,169 @@ Vergogna passeggera | Vergogna eterna
       }
     };
 
+
+    /* ---------- Musica di sottofondo delle stazioni ----------
+       Ogni stazione ha un piccolo brano in loop, suonato nota per nota da un "sequencer":
+       ogni 50 ms si programmano le note dei prossimi 300 ms, così il ritmo resta preciso. */
+    const LIVELLO_MUSICA = 0.4;
+    let musica = null;
+    const dopoTra = T => Math.max(0, T - ctx.currentTime);
+    const STRUMENTI = {
+      // Radio Merenda
+      xilofono: (n, T, d, bus) => campana({ f: NOTA(n), t: dopoTra(T), dur: 0.45, vol: 0.09, rapporto: 4, indice: 1.6, dest: bus }),
+      boing: (n, T, d, bus) => tono({ f: NOTA(n), f2: NOTA(n) * 0.92, tipo: 'triangle', t: dopoTra(T), dur: 0.22, vol: 0.13, att: 0.005, dest: bus }),
+      battimani: (n, T, d, bus) => { fruscio({ t: dopoTra(T), dur: 0.05, vol: 0.06, f: 1500, q: 1.2, att: 0.002, dest: bus }); fruscio({ t: dopoTra(T) + 0.02, dur: 0.06, vol: 0.05, f: 1300, q: 1.2, att: 0.002, dest: bus }); },
+      sonaglio: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.04, vol: 0.025, tipo: 'highpass', f: 6000, q: 0.7, att: 0.003, dest: bus }),
+      // Hit Parade
+      pianoElettrico: (n, T, d, bus) => campana({ f: NOTA(n), t: dopoTra(T), dur: 0.55, vol: 0.075, rapporto: 1, indice: 1.3, dest: bus }),
+      tappeto: (n, T, d, bus) => tono({ f: NOTA(n), tipo: 'triangle', t: dopoTra(T), dur: d, vol: 0.022, att: 0.25, dest: bus }),
+      bassoSynth: (n, T, d, bus) => tono({ f: NOTA(n), tipo: 'sawtooth', t: dopoTra(T), dur: 0.2, vol: 0.06, att: 0.005, lp: 700, dest: bus }),
+      cassa: (n, T, d, bus) => tono({ f: 120, f2: 45, t: dopoTra(T), dur: 0.18, vol: 0.12, att: 0.002, dest: bus }),
+      rullante: (n, T, d, bus) => { fruscio({ t: dopoTra(T), dur: 0.12, vol: 0.07, f: 1800, q: 0.7, att: 0.002, dest: bus }); tono({ f: 190, t: dopoTra(T), dur: 0.07, vol: 0.04, att: 0.002, dest: bus }); },
+      charleston: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.03, vol: 0.03, tipo: 'highpass', f: 7000, q: 0.7, att: 0.002, dest: bus }),
+      // Onde Cerebrali
+      vibrafono: (n, T, d, bus) => campana({ f: NOTA(n), t: dopoTra(T), dur: 1.1, vol: 0.055, rapporto: 3.98, indice: 0.9, dest: bus }),
+      cristallo: (n, T, d, bus) => campana({ f: NOTA(n), t: dopoTra(T), dur: 0.9, vol: 0.03, rapporto: 7.1, indice: 0.6, dest: bus }),
+      bassoMorbido: (n, T, d, bus) => tono({ f: NOTA(n), tipo: 'triangle', t: dopoTra(T), dur: d, vol: 0.1, att: 0.02, dest: bus }),
+      tic: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.02, vol: 0.03, f: 5200, q: 4, att: 0.001, dest: bus }),
+      // Dopo Mezzanotte
+      sax: (n, T, d, bus) => {
+        tono({ f: NOTA(n), tipo: 'sawtooth', t: dopoTra(T), dur: d * 0.95, vol: 0.04, att: 0.06, lp: 1500, vibrato: 4, dest: bus });
+        tono({ f: NOTA(n) * 1.004, tipo: 'sawtooth', t: dopoTra(T), dur: d * 0.95, vol: 0.025, att: 0.08, lp: 1300, dest: bus });
+      },
+      accordoJazz: (n, T, d, bus) => campana({ f: NOTA(n), t: dopoTra(T), dur: 0.3, vol: 0.035, rapporto: 1, indice: 1, dest: bus }),
+      contrabbasso: (n, T, d, bus) => tono({ f: NOTA(n), tipo: 'triangle', t: dopoTra(T), dur: 0.32, vol: 0.14, att: 0.01, dest: bus }),
+      schiocco: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.04, vol: 0.12, f: 2300, q: 3, att: 0.001, dest: bus }),
+      spazzola: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.18, vol: 0.03, f: 3000, q: 0.6, att: 0.05, dest: bus })
+    };
+    // ogni nota: [passo, nota MIDI o accordo, durata in passi]
+    const ripeti = (passi, ogni, da = 0) => Array.from({ length: Math.ceil((passi - da) / ogni) }, (_, i) => [da + i * ogni]);
+    const BRANI = {
+      // allegra e saltellante, in do maggiore: xilofono, basso che "rimbalza" e battimani
+      merenda: {
+        passo: 60 / 132 / 2, passi: 32,
+        tracce: {
+          xilofono: [[0, 72], [2, 76], [4, 79], [6, 76], [8, 77], [10, 81], [12, 79], [16, 76], [17, 76], [18, 79], [20, 84], [22, 79], [24, 74], [26, 77], [28, 76], [30, 72]],
+          boing: [[0, 48], [4, 43], [8, 41], [12, 48], [16, 48], [20, 43], [24, 43], [28, 48]],
+          battimani: [[4], [12], [20], [28]],
+          sonaglio: ripeti(32, 2, 1)
+        }
+      },
+      // pop da classifica anni '80: do, sol, la minore, fa, con batteria elettronica
+      hitparade: {
+        passo: 60 / 112 / 2, passi: 32,
+        tracce: {
+          pianoElettrico: [[0, 76], [2, 74], [3, 72], [6, 67], [8, 71], [10, 72], [11, 74], [16, 72], [18, 76], [20, 81], [22, 79], [23, 76], [24, 77], [26, 76], [28, 74], [30, 72]],
+          tappeto: [[0, [60, 64, 67], 8], [8, [59, 62, 67], 8], [16, [57, 60, 64], 8], [24, [57, 60, 65], 8]],
+          bassoSynth: [48, 43, 45, 41].flatMap((radice, b) => Array.from({ length: 8 }, (_, i) => [b * 8 + i, radice + (i % 2 ? 12 : 0)])),
+          cassa: ripeti(32, 4),
+          rullante: ripeti(32, 4, 2),
+          charleston: ripeti(32, 1)
+        }
+      },
+      // in 7/8, con accordi jazz "aperti" in arpeggio e una seconda linea che gira ogni 3 passi
+      cerebrali: {
+        passo: 60 / 104 / 2, passi: 28,
+        tracce: {
+          vibrafono: [[62, 66, 69, 73, 76, 80, 73], [58, 62, 65, 69, 72, 76, 69], [55, 58, 62, 65, 69, 74, 65], [57, 62, 64, 67, 70, 74, 67]]
+            .flatMap((arp, b) => arp.map((n, i) => [b * 7 + i, n])),
+          cristallo: [81, 76, 74, 69, 74, 76, 81, 79, 76, 74].map((n, i) => [i * 3, n]),
+          bassoMorbido: [[0, 50, 4], [4, 57, 3], [7, 46, 4], [11, 53, 3], [14, 43, 4], [18, 50, 3], [21, 45, 4], [25, 52, 3]],
+          tappeto: [[0, [62, 66, 69], 7], [7, [58, 62, 65], 7], [14, [55, 58, 62], 7], [21, [57, 62, 64], 7]],
+          tic: [0, 1, 2, 3].flatMap(b => [[b * 7], [b * 7 + 2], [b * 7 + 4]])
+        }
+      },
+      // lenta e "piccante": swing, contrabbasso che cammina, schiocchi di dita e un sax sornione
+      mezzanotte: {
+        passo: 60 / 84 / 2, passi: 32, swing: 0.33,
+        tracce: {
+          sax: [[0, 76, 3], [4, 72, 1], [5, 74, 1], [6, 76, 2], [8, 78, 2], [10, 76, 1], [11, 74, 1], [12, 72, 3], [18, 69, 1], [19, 72, 1], [20, 76, 2], [22, 74, 1], [23, 72, 1], [24, 71, 2], [26, 68, 1], [27, 71, 1], [28, 74, 2], [30, 79, 2]],
+          contrabbasso: [[0, 45], [2, 48], [4, 52], [6, 55], [8, 50], [10, 54], [12, 57], [14, 60], [16, 45], [18, 52], [20, 55], [22, 52], [24, 40], [26, 44], [28, 47], [30, 50]],
+          accordoJazz: [[57, 60, 64, 67], [54, 57, 60, 64], [57, 60, 64, 67], [56, 62, 67]].flatMap((acc, b) => [[b * 8 + 3, acc], [b * 8 + 7, acc]]),
+          schiocco: ripeti(32, 4, 2),
+          spazzola: ripeti(32, 2)
+        }
+      }
+    };
+    // trasforma le tracce in un elenco di eventi per ogni passo
+    Object.values(BRANI).forEach(brano => {
+      brano.eventi = Array.from({ length: brano.passi }, () => []);
+      Object.entries(brano.tracce).forEach(([strumento, note]) => note.forEach(([passo, nota, durata = 1]) => {
+        brano.eventi[passo].push({ strumento, nota, durata: durata * brano.passo });
+      }));
+    });
+
+    function avviaMusica(id) {
+      if (!prepara() || !BRANI[id]) return;
+      if (musica && musica.id === id) return;
+      const cambio = !!musica;
+      fermaMusica(0.35);
+      // un attimo di fruscio, come quando si gira la manopola su un'altra stazione
+      fruscio({ dur: cambio ? 0.45 : 0.3, vol: 0.06, f: 900, f2: 3000, q: 3, att: 0.02 });
+      const filtroBasso = ctx.createBiquadFilter(); filtroBasso.type = 'highpass'; filtroBasso.frequency.value = 90;
+      const filtroAlto = ctx.createBiquadFilter(); filtroAlto.type = 'lowpass'; filtroAlto.frequency.value = 5200;
+      const bus = ctx.createGain();
+      const T = ctx.currentTime;
+      bus.gain.setValueAtTime(0.0001, T);
+      bus.gain.setTargetAtTime(LIVELLO_MUSICA, T + 0.3, 0.35);
+      bus.connect(filtroBasso); filtroBasso.connect(filtroAlto); filtroAlto.connect(master);
+      musica = { id, bus, uscita: filtroAlto, brano: BRANI[id], passo: 0, prossimo: T + 0.35 };
+      musica.timer = setInterval(programma, 50);
+      programma();
+    }
+    function programma() {
+      if (!musica) return;
+      const m = musica, b = m.brano;
+      while (m.prossimo < ctx.currentTime + 0.3) {
+        const s = m.passo % b.passi;
+        const T = m.prossimo + (b.swing && s % 2 ? b.passo * b.swing : 0);
+        b.eventi[s].forEach(ev => {
+          const note = Array.isArray(ev.nota) ? ev.nota : [ev.nota];
+          note.forEach(n => { try { STRUMENTI[ev.strumento](n, T, ev.durata, m.bus); } catch (e) {} });
+        });
+        m.prossimo += b.passo;
+        m.passo++;
+      }
+    }
+    function fermaMusica(sfuma = 0.6) {
+      if (!musica || !ctx) return;
+      const m = musica; musica = null;
+      clearInterval(m.timer);
+      const T = ctx.currentTime;
+      m.bus.gain.cancelScheduledValues(T);
+      m.bus.gain.setTargetAtTime(0.0001, T, sfuma / 4);
+      setTimeout(() => { try { m.uscita.disconnect(); } catch (e) {} }, (sfuma + 0.6) * 1000);
+    }
+    // abbassa la musica (per esempio mentre si cerca la frequenza o durante un jingle)
+    function abbassaMusica(fattore = 0.3, durata = 0) {
+      if (!musica) return;
+      const g = musica.bus.gain, T = ctx.currentTime;
+      g.cancelScheduledValues(T);
+      g.setTargetAtTime(LIVELLO_MUSICA * fattore, T, 0.08);
+      if (durata) g.setTargetAtTime(LIVELLO_MUSICA, T + durata, 0.4);
+    }
+    function rialzaMusica() {
+      if (!musica) return;
+      const g = musica.bus.gain, T = ctx.currentTime;
+      g.cancelScheduledValues(T);
+      g.setTargetAtTime(LIVELLO_MUSICA, T, 0.3);
+    }
+
+    // i suoni importanti abbassano per un attimo la musica, così si sentono bene
+    const ABBASSA = { esito: 2, centro: 2, mancato: 1.4, trovato: 1.4, bonus: 1.2, turnoExtra: 1.4, agganciato: 1.2 };
     function suona(nome, o = {}) {
       const c = prepara();
       if (!c || !S[nome]) return;
       if (c.state === 'suspended') c.resume().catch(() => {});
+      if (ABBASSA[nome]) abbassaMusica(0.3, (o.t || 0) + ABBASSA[nome]);
       try { S[nome](o); } catch (e) { /* un suono mancato non deve mai bloccare il gioco */ }
     }
     function pausa(nascosta) {
       if (!ctx) return;
       (nascosta ? ctx.suspend() : ctx.resume()).catch(() => {});
     }
-    return { suona, sblocca, volume, pausa };
+    function musicaPer(id) { const c = prepara(); if (!c) return; if (c.state === 'suspended') c.resume().catch(() => {}); avviaMusica(id); }
+    return { suona, sblocca, volume, pausa, musica: musicaPer, fermaMusica, abbassaMusica, rialzaMusica };
   })();
 
   function suona(nome, opzioni) { if (impostazioni.audio) Suoni.suona(nome, opzioni); }
@@ -2146,6 +2313,15 @@ Vergogna passeggera | Vergogna eterna
     const sc = document.getElementById(id).querySelector('.setup');
     if (sc) sc.scrollTop = 0;
     aggiornaGuardia();
+    aggiornaMusica();
+  }
+
+  // La musica della stazione scelta accompagna la scelta dei nomi e la partita;
+  // si spegne nel menu delle modalità e nella schermata finale, dove parte la fanfara
+  const SCHERMATE_MUSICA = ['schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-gioco'];
+  function aggiornaMusica() {
+    if (impostazioni.audio && impostazioni.musica && SCHERMATE_MUSICA.includes(app.dataset.schermata)) Suoni.musica(stazioneScelta);
+    else Suoni.fermaMusica();
   }
 
   /* ---------- Tasto "indietro" di Android ----------
@@ -2273,6 +2449,7 @@ Vergogna passeggera | Vergogna eterna
     stazioneScelta = id;
     try { localStorage.setItem('sintonizzati-stazione', id); } catch (e) {}
     mostraStazione();
+    aggiornaMusica();
   }
   tastiStazione.forEach(b => b.addEventListener('click', () => {
     const id = b.dataset.stazione;
@@ -2440,6 +2617,7 @@ Vergogna passeggera | Vergogna eterna
     app.classList.add('sintonia');
     // la ricerca della frequenza compare sul display della radio, in alto
     const display = displayDi(pulsante);
+    Suoni.abbassaMusica(0.12);
     suona('ricerca');
     animaOnde(1, 1800, () => {
       suona('agganciato');
