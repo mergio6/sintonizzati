@@ -1,0 +1,22 @@
+{
+  "id": "./",
+  "name": "Sintonizzati",
+  "short_name": "Sintonizzati",
+  "description": "Siete davvero sulla stessa lunghezza d'onda? Un gioco di gruppo a tema radio anni '80.",
+  "lang": "it",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "landscape",
+  "background_color": "#0F2A30",
+  "theme_color": "#0F2A30",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    { "src": "icone/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icone/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icone/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icone/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

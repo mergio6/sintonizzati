@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#DCE3E3" id="meta-tema">
 <title>Sintonizzati</title>
+<meta name="description" content="Siete davvero sulla stessa lunghezza d'onda? Un gioco di gruppo a tema radio anni '80.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icone/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icone/icon-192.png">
+<link rel="apple-touch-icon" href="icone/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sintonizzati">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Michroma&display=swap" rel="stylesheet">
@@ -1088,8 +1096,8 @@
   const interruttori = [...dialogoImp.querySelectorAll('.interruttore')];
   let apertoDa = null;
   function aggiornaInterruttori() { interruttori.forEach(b => b.setAttribute('aria-checked', String(!!impostazioni[b.dataset.imp]))); }
-  function apriImpostazioni(da) { apertoDa = da; aggiornaInterruttori(); dialogoImp.hidden = false; suona('finestra'); interruttori[0].focus({ preventScroll: true }); }
-  function chiudiImpostazioni() { dialogoImp.hidden = true; suona('finestraGiu'); if (apertoDa) apertoDa.focus({ preventScroll: true }); }
+  function apriImpostazioni(da) { apertoDa = da; aggiornaInterruttori(); dialogoImp.hidden = false; suona('finestra'); interruttori[0].focus({ preventScroll: true }); aggiornaGuardia(); }
+  function chiudiImpostazioni() { dialogoImp.hidden = true; suona('finestraGiu'); if (apertoDa) apertoDa.focus({ preventScroll: true }); aggiornaGuardia(); }
   document.querySelectorAll('.ingranaggio').forEach(b => b.addEventListener('click', () => apriImpostazioni(b)));
   interruttori.forEach(b => b.addEventListener('click', () => {
     const chiave = b.dataset.imp, acceso = !impostazioni[chiave];
@@ -1671,7 +1679,35 @@
     else if (id === 'schermata-modi') animaOnde(1, 900);
     const sc = document.getElementById(id).querySelector('.setup');
     if (sc) sc.scrollTop = 0;
+    aggiornaGuardia();
   }
+
+  /* ---------- Tasto "indietro" di Android ----------
+     Nelle schermate dove uscire per sbaglio farebbe perdere qualcosa (nomi, partita, risultato)
+     o quando c'è una finestra aperta, teniamo una voce in più nella cronologia: il tasto indietro
+     la consuma e noi decidiamo cosa fare, invece di chiudere l'app.
+     Nella schermata iniziale e nella scelta della modalità, invece, l'app si chiude come al solito. */
+  const SCHERMATE_PROTETTE = ['schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-gioco', 'schermata-fine'];
+  let guardiaAttiva = false, ignoraIndietro = false;
+  function serveGuardia() {
+    return SCHERMATE_PROTETTE.includes(app.dataset.schermata) || !dialogoImp.hidden || !dialogoEsci.hidden;
+  }
+  function aggiornaGuardia() {
+    const serve = serveGuardia();
+    if (serve && !guardiaAttiva) { history.pushState({ sintonizzati: true }, ''); guardiaAttiva = true; }
+    else if (!serve && guardiaAttiva) { guardiaAttiva = false; ignoraIndietro = true; history.back(); }
+  }
+  window.addEventListener('popstate', () => {
+    if (ignoraIndietro) { ignoraIndietro = false; return; }   // l'abbiamo tolta noi
+    guardiaAttiva = false;
+    const qui = app.dataset.schermata;
+    if (!dialogoImp.hidden) chiudiImpostazioni();
+    else if (!dialogoEsci.hidden) chiudiDialogo();                   // come "Continua a giocare"
+    else if (qui === 'schermata-gioco') apriDialogoEsci();          // chiede se abbandonare la partita
+    else if (SCHERMATE_PREPARTITA.includes(qui)) { if (!sintonizzando) vai('schermata-modi'); }
+    else if (qui === 'schermata-fine') vai('schermata-modi');
+    aggiornaGuardia();
+  });
   document.querySelectorAll('[data-vai]').forEach(b => b.addEventListener('click', () => { if (!sintonizzando) vai(b.dataset.vai); }));
 
   let inTransizione = false;
@@ -1726,8 +1762,9 @@
   /* ---------- Conferma prima di abbandonare la partita ---------- */
   const dialogoEsci = document.getElementById('dialogo-esci');
   const btnEsci = document.getElementById('esci');
-  function chiudiDialogo() { dialogoEsci.hidden = true; suona('finestraGiu'); btnEsci.focus({ preventScroll: true }); }
-  btnEsci.addEventListener('click', () => { dialogoEsci.hidden = false; suona('finestra'); document.getElementById('resta').focus({ preventScroll: true }); });
+  function chiudiDialogo() { dialogoEsci.hidden = true; suona('finestraGiu'); btnEsci.focus({ preventScroll: true }); aggiornaGuardia(); }
+  function apriDialogoEsci() { dialogoEsci.hidden = false; suona('finestra'); document.getElementById('resta').focus({ preventScroll: true }); aggiornaGuardia(); }
+  btnEsci.addEventListener('click', apriDialogoEsci);
   document.getElementById('resta').addEventListener('click', chiudiDialogo);
   dialogoEsci.addEventListener('click', e => { if (e.target === dialogoEsci) chiudiDialogo(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !dialogoEsci.hidden) chiudiDialogo(); });
@@ -2709,6 +2746,12 @@
   });
   document.getElementById('nuova-partita').addEventListener('click', () => vai('schermata-modi'));
 })();
+</script>
+<script>
+  // Funzionamento offline: attivo solo quando il gioco è online (per esempio su GitHub Pages)
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+  }
 </script>
 </body>
 </html>
