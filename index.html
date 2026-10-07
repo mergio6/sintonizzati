@@ -39,6 +39,7 @@
     --led-spento: #C5D0D1;
     --lcd-ombra: none;
     --zona-2: #5AAFE0;
+    --zona-oro: #F2A900;
     --su-corpo: #E3EAEA;
     --zona-3: #3FC290;
     --zona-4: #E5463A;
@@ -59,7 +60,7 @@
       --onda-a: rgba(255, 181, 46, .55); --onda-b: rgba(255, 90, 71, .55);
       --ombra-tile: 0 0 0 1px rgba(155, 184, 182, .18), 0 18px 48px rgba(0, 0, 0, .35);
       --tasto: #163A42; --su-tasto: #EEF3F2; --su-tasto-tenue: #9BB8B6; --tasto-ombra: #071A1E; --led-spento: #2F4E55; --lcd-ombra: 0 0 10px rgba(255, 181, 46, .45);
-      --zona-2: #6BC1F0; --zona-3: #6FE3B4; --zona-4: #FF5A47; --su-corpo: #10292F;
+      --zona-2: #6BC1F0; --zona-3: #6FE3B4; --zona-4: #FF5A47; --su-corpo: #10292F; --zona-oro: #FFC94A;
       color-scheme: dark;
     }
   }
@@ -71,7 +72,7 @@
     --onda-a: rgba(255, 181, 46, .55); --onda-b: rgba(255, 90, 71, .55);
     --ombra-tile: 0 0 0 1px rgba(155, 184, 182, .18), 0 18px 48px rgba(0, 0, 0, .35);
     --tasto: #163A42; --su-tasto: #EEF3F2; --su-tasto-tenue: #9BB8B6; --tasto-ombra: #071A1E; --led-spento: #2F4E55; --lcd-ombra: 0 0 10px rgba(255, 181, 46, .45);
-      --zona-2: #6BC1F0; --zona-3: #6FE3B4; --zona-4: #FF5A47; --su-corpo: #10292F;
+      --zona-2: #6BC1F0; --zona-3: #6FE3B4; --zona-4: #FF5A47; --su-corpo: #10292F; --zona-oro: #FFC94A;
     color-scheme: dark;
   }
 
@@ -103,13 +104,14 @@
   .screen[hidden] { display: none; }
 
   /* Pulsante tema */
-  .tema {
+  .tema, .ingranaggio {
     width: 40px; height: 40px; flex: none; display: grid; place-items: center; padding: 0;
     border-radius: 50%; border: 1px solid var(--bordo); background: var(--superficie); cursor: pointer;
   }
-  .tema svg { width: 20px; height: 20px; }
+  .tema svg, .ingranaggio svg { width: 20px; height: 20px; }
+  .ingranaggio:active, .tema:active { filter: brightness(.95); }
   :root[data-attivo="scuro"] .tema .luna, :root[data-attivo="chiaro"] .tema .sole { display: none; }
-  .tema-angolo { position: absolute; top: 12px; right: clamp(14px, 3vw, 28px); }
+  .angolo { position: absolute; top: 12px; right: clamp(14px, 3vw, 28px); z-index: 2; }
 
   /* ---------- Schermata iniziale ---------- */
   .intro {
@@ -219,9 +221,18 @@
   .estremo.sx { background: var(--corallo); justify-content: flex-start; border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
   .estremo.dx { background: var(--menta); justify-content: flex-end; text-align: right; border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
   .mescola {
-    width: 46px; border-radius: 12px; border: 1px solid var(--bordo); background: var(--superficie);
+    position: relative; width: 46px; border-radius: 12px; border: 1px solid var(--bordo); background: var(--superficie);
     cursor: pointer; display: grid; place-items: center;
   }
+  /* Contatore dei cambi di carta rimasti */
+  .cambi {
+    position: absolute; top: -9px; right: -9px; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 11px;
+    display: grid; place-items: center; background: var(--ambra); color: #2A1C00;
+    font: 11px/1 "Michroma", Verdana, sans-serif; box-shadow: 0 0 0 2px var(--sfondo);
+  }
+  .cambi[hidden] { display: none; }
+  .cambi.esauriti { background: var(--led-spento); color: var(--tenue); }
+  .cambi.scatta { animation: trovato .45s ease-out; }
   .mescola svg { width: 22px; height: 22px; }
 
 
@@ -346,6 +357,8 @@
   .risultati { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 2px; text-align: left; }
   .risultati li { padding: 3px 4px; }
   .risultati li.zero b { color: var(--tenue); }
+  .risultati li.indizio { margin-top: 4px; border-top: 1px dashed var(--bordo); border-radius: 0; padding-top: 6px; }
+  .risultati li.indizio span { white-space: normal; font-size: 13px; line-height: 1.2; color: var(--tenue); }
   .turno { text-align: center; }
   .turno .etichetta { font-size: clamp(13px, 3.6vh, 17px); color: var(--tenue); font-weight: 600; }
   .turno .chi { font-size: clamp(22px, 8vh, 36px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; overflow-wrap: anywhere; }
@@ -358,7 +371,8 @@
   .gioco > .campo { grid-area: 2 / 1 / 3 / 2; }
   .gioco > .carta { grid-area: 3 / 1 / 4 / 2; }
   .turno .tasto-ambra.piccolo { margin-top: 12px; width: 100%; max-width: 190px; height: 46px; padding: 0 12px; font-size: 13px; }
-  .mescola:disabled { opacity: .3; cursor: default; }
+  .mescola:disabled { cursor: default; }
+  .mescola:disabled svg { opacity: .3; }
   .quadrante svg.bloccato { cursor: default; }
   .quadrante svg.scegli-lato { cursor: pointer; }
 
@@ -368,6 +382,15 @@
   .zona.z2 { fill: var(--zona-2); }
   .zona.z3 { fill: var(--zona-3); }
   .zona.z4 { fill: var(--zona-4); }
+  .zona.z-oro { fill: var(--zona-oro); }
+  .riflesso { fill: url(#bagliore-oro); animation: riflesso 3.4s ease-in-out infinite; }
+  .alone { fill: none; stroke: var(--zona-oro); stroke-width: 4; stroke-linejoin: round; opacity: 0; animation: alone 3.4s ease-in-out infinite; }
+  .bordo-oro { fill: none; stroke: #FFF7D6; stroke-width: 1; stroke-linejoin: round; opacity: 0; animation: alone 3.4s ease-in-out infinite; }
+  @keyframes alone { 50% { opacity: .35; } }
+  @keyframes riflesso { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(-165px); opacity: 0; } }
+  .scintilla { fill: #FFFBEA; transform-box: fill-box; transform-origin: center; animation: scintilla 4s ease-in-out infinite both; }
+  @keyframes scintilla { 0%, 55%, 100% { transform: scale(0) rotate(0deg); opacity: 0; } 70% { transform: scale(1) rotate(45deg); opacity: 1; } 85% { transform: scale(.4) rotate(90deg); opacity: .6; } }
+  .valore.oro { font-weight: 700; }
   .valore { font: 12px "Michroma", Verdana, sans-serif; fill: var(--vetro-segni); }
   .risposta { opacity: 0; animation: compare .35s ease-out forwards; }
   .risposta line { stroke: var(--inchiostro); stroke-width: 3; stroke-linecap: round; }
@@ -381,10 +404,16 @@
     gap: clamp(8px, 2.6vh, 14px); padding: 8px; text-align: center;
   }
   .passaggio[hidden] { display: none; }
-  .passaggio .sopra { margin: 0; font-size: clamp(15px, 4.4vh, 20px); font-weight: 600; color: var(--tenue); max-width: 38ch; line-height: 1.3; }
+  .passaggio .sopra { margin: 0; font-size: clamp(15px, 4.4vh, 20px); font-weight: 600; color: var(--tenue); max-width: 38ch; line-height: 1.3; text-wrap: balance; }
   .passaggio .lcd { width: min(480px, 100%); justify-content: center; gap: 18px; padding: clamp(10px, 3vh, 18px) 20px; box-shadow: inset 0 0 0 3px var(--corpo), inset 0 2px 8px rgba(0, 0, 0, .2); }
   .passaggio .lcd h2 { font-size: clamp(22px, 9vh, 40px); overflow-wrap: anywhere; }
-  .passaggio .nota { margin: 0; font-size: 15px; color: var(--tenue); min-height: 1.3em; }
+  .passaggio .nota { margin: 0; font-size: 15px; color: var(--tenue); min-height: 1.3em; max-width: 46ch; line-height: 1.35; text-wrap: balance; }
+  .passaggio .avviso {
+    margin: 0; display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 10px; border-radius: 999px;
+    background: var(--ambra); color: #2A1C00; font-size: 15px; font-weight: 700; animation: trovato .6s ease-out .15s both;
+  }
+  .passaggio .avviso[hidden] { display: none; }
+  .passaggio .avviso svg { width: 18px; height: 18px; flex: none; }
   .passaggio .tasto-ambra { margin-top: 4px; }
 
   /* Modalità a squadre */
@@ -484,12 +513,14 @@
   .collab-box .etichetta { font-size: clamp(13px, 3.6vh, 16px); font-weight: 600; color: var(--tenue); }
   .collab-box .totale { font: clamp(36px, 14vh, 62px)/1.1 "Michroma", Verdana, sans-serif; color: var(--ambra-testo); margin-bottom: 6px; }
   .collab-box .totale.segnato { animation: punto .6s ease-out .9s both; }
-  .pallini { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; max-width: 150px; margin-top: 4px; }
+  .pallini { display: grid; grid-template-columns: repeat(7, 11px); justify-content: center; gap: 6px; margin-top: 4px; }
   .pallini i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--tenue); }
   .pallini i.giocato { background: var(--tenue); }
   .pallini i.corrente { border-color: var(--ambra); background: var(--ambra); box-shadow: 0 0 8px var(--ambra); }
-  .pallini i.extra:not(.corrente) { border-color: var(--menta); }
-  .pallini i.extra.giocato { background: var(--menta); }
+  .pallini i.extra:not(.corrente) { border-color: var(--zona-oro); }
+  .pallini i.extra.giocato { background: var(--zona-oro); }
+  .legenda { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 13px; font-weight: 600; color: var(--tenue); line-height: 1.2; text-align: left; max-width: 160px; }
+  .legenda svg { width: 12px; height: 16px; flex: none; overflow: visible; }
   .turno .guadagno { font: clamp(30px, 11vh, 48px)/1.1 "Michroma", Verdana, sans-serif; color: var(--ambra-testo); margin: 4px 0; }
   .turno .guadagno.zero { color: var(--tenue); }
 
@@ -551,6 +582,51 @@
   .tastino:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--tasto-ombra); }
   .tastino.rosso:active { box-shadow: 0 1px 0 #9E2A20; }
 
+  /* ---------- Firma ---------- */
+  .credito {
+    position: absolute; left: 0; right: 0; bottom: 6px; margin: 0; text-align: center;
+    font-size: 12px; font-weight: 600; letter-spacing: .02em; color: var(--tenue); opacity: .85;
+  }
+  .dialogo .credito-imp { margin: 0 auto 0 4px; padding: 0; align-self: center; font-size: 13px; font-weight: 600; color: var(--su-corpo); opacity: .75; }
+
+  /* ---------- Impostazioni ---------- */
+  .interruttori { display: grid; padding-block: 4px; }
+  .riga-imp { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 8px 0; }
+  .riga-imp + .riga-imp { border-top: 1px solid var(--bordo); }
+  .ico-imp { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--vetro); color: var(--vetro-segni); }
+  .ico-imp svg { width: 20px; height: 20px; }
+  .testo-imp { display: grid; gap: 2px; font-size: 16px; font-weight: 700; }
+  .testo-imp small { font-size: 13px; font-weight: 400; color: var(--su-tasto-tenue); }
+  .interruttore {
+    position: relative; width: 56px; height: 32px; padding: 0; border: 0; border-radius: 999px; cursor: pointer;
+    background: var(--led-spento); box-shadow: inset 0 2px 4px rgba(0, 0, 0, .2); transition: background-color .2s;
+  }
+  .interruttore .cursore {
+    position: absolute; top: 4px; left: 4px; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--corpo); box-shadow: 0 2px 3px rgba(0, 0, 0, .25); transition: transform .2s cubic-bezier(.3, 1.4, .5, 1);
+  }
+  .interruttore[aria-checked="true"] { background: var(--menta); }
+  .interruttore[aria-checked="true"] .cursore { transform: translateX(24px); }
+
+  /* ---------- Transizione dalla schermata iniziale al menu ---------- */
+  #schermata-inizio.uscita h1, #schermata-inizio.uscita .sub, #schermata-inizio.uscita .tuner, #schermata-inizio.uscita .angolo, #schermata-inizio.uscita .credito {
+    animation: svanisci-su .35s ease-in both;
+  }
+  #schermata-inizio.uscita .sub { animation-delay: .05s; }
+  #schermata-inizio.uscita .tuner { animation-delay: .1s; }
+  #schermata-inizio.uscita .logo { animation: respiro .4s ease-in-out both; }
+  @keyframes svanisci-su { to { opacity: 0; transform: translateY(-16px); } }
+  @keyframes respiro { 50% { transform: scale(1.05); } }
+  .logo-volante { position: fixed; z-index: 25; margin: 0; transform-origin: 0 0; border-radius: 23%; box-shadow: var(--ombra-tile); pointer-events: none; }
+  #schermata-modi.ingresso .marchio svg, #schermata-modi.ingresso .marchio span,
+  #schermata-modi.ingresso .azioni, #schermata-modi.ingresso .pannello { opacity: 0; }
+  #schermata-modi.rivela .marchio span, #schermata-modi.rivela .azioni { animation: appari .4s ease-out both; }
+  @keyframes appari { from { opacity: 0; } }
+  #schermata-modi.rivela .pannello { animation: pannello-su .5s cubic-bezier(.2, .9, .3, 1.1) both; }
+  #schermata-modi.rivela .tasto { animation: tasto-su .5s cubic-bezier(.2, .9, .3, 1.25) both; animation-delay: calc(220ms + var(--k) * 110ms); }
+  @keyframes pannello-su { from { opacity: 0; transform: translateY(18px) scale(.96); } }
+  @keyframes tasto-su { from { opacity: 0; transform: translateY(26px); } }
+
   /* ---------- Avviso orientamento ---------- */
   .ruota {
     position: fixed; inset: 0; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center;
@@ -562,6 +638,8 @@
   @media (orientation: portrait) and (max-width: 820px) { .ruota { display: flex; } }
 
   @media (prefers-reduced-motion: reduce) {
+    .riflesso, .scintilla, .alone, .bordo-oro { animation: none !important; } .scintilla { opacity: 0; }
+    #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
     .loader.pronto, .ruota svg { animation: none; }
@@ -575,7 +653,8 @@
 
   <!-- Schermata iniziale -->
   <section class="screen" id="schermata-inizio" aria-label="Schermata iniziale">
-    <button class="tema tema-angolo" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+    <p class="credito">Creato da Mergio</p>
+    <div class="azioni angolo"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div>
     <div class="intro">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="logo" role="img" aria-label="Logo Sintonizzati">
 <rect width="200" height="200" rx="46" style="fill:var(--tile)"/>
@@ -636,12 +715,12 @@
 <g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
 <g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
 </g>
-</svg><span>Sintonizzati</span></div><div class="azioni"><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+</svg><span>Sintonizzati</span></div><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Come giocate?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
           <div class="tasti">
-            <button class="tasto" data-modo="singoli">
+            <button class="tasto" data-modo="singoli" style="--k:0">
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="24" cy="16" r="7"/><path d="M11 40c0-8 6-13 13-13s13 5 13 13"/>
               </svg>
@@ -649,16 +728,16 @@
               <span class="led"></span>
               <span class="descr"><span class="motto">Ognuno per sé</span><span class="conteggio">Da 2 a 5 giocatori</span></span>
             </button>
-            <button class="tasto" data-modo="squadre">
+            <button class="tasto" data-modo="squadre" style="--k:1">
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="15" cy="17" r="6"/><path d="M4 39c0-7 5-11 11-11 3 0 5.5 1 7 2.5"/>
                 <circle cx="33" cy="17" r="6"/><path d="M44 39c0-7-5-11-11-11s-11 4-11 11"/>
               </svg>
               <span class="titolo">Modalità a squadre</span>
               <span class="led"></span>
-              <span class="descr"><span class="motto">Divisi in due squadre</span><span class="conteggio">Da 6 giocatori in su</span></span>
+              <span class="descr"><span class="motto">Gruppo contro gruppo</span><span class="conteggio">Da 6 giocatori in su</span></span>
             </button>
-            <button class="tasto" data-modo="collab">
+            <button class="tasto" data-modo="collab" style="--k:2">
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="10" cy="19" r="5"/><circle cx="24" cy="14" r="5.5"/><circle cx="38" cy="19" r="5"/>
                 <path d="M3 40c0-6 3-10 8-10M45 40c0-6-3-10-8-10M13 40c0-8 5-13 11-13s11 5 11 13"/>
@@ -676,21 +755,21 @@
   <!-- Nomi dei giocatori singoli -->
   <section class="screen" id="schermata-singoli" aria-label="Nomi dei giocatori" hidden>
     <div class="setup">
-      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-singoli" aria-live="polite"></p><div class="azioni"><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-singoli" aria-live="polite"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Chi gioca?</h2><span class="contatore" id="contatore">0/5</span></div>
           <div class="preset">
             <label class="slot"><span class="testa">1<span class="led"></span></span>
-              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 1"></label>
+              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 1"></label>
             <label class="slot"><span class="testa">2<span class="led"></span></span>
-              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 2"></label>
+              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 2"></label>
             <label class="slot"><span class="testa">3<span class="led"></span></span>
-              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 3"></label>
+              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 3"></label>
             <label class="slot"><span class="testa">4<span class="led"></span></span>
-              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 4"></label>
+              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 4"></label>
             <label class="slot"><span class="testa">5<span class="led"></span></span>
-              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Nome" aria-label="Giocatore 5"></label>
+              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Nome" aria-label="Giocatore 5"></label>
           </div>
         </div>
         <div class="piede">
@@ -703,16 +782,16 @@
   <!-- Nomi delle squadre -->
   <section class="screen" id="schermata-squadre" aria-label="Nomi delle squadre" hidden>
     <div class="setup">
-      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-squadre" aria-live="polite"></p><div class="azioni"><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-squadre" aria-live="polite"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Come si chiamano le squadre?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
           <div class="sfida">
             <label class="slot a"><span class="testa"><span class="led"></span>Prima squadra</span>
-              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Squadra Ambra" aria-label="Nome della prima squadra"></label>
+              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Ambra" aria-label="Nome della prima squadra"></label>
             <span class="vs" aria-hidden="true">VS</span>
             <label class="slot b"><span class="testa"><span class="led"></span>Seconda squadra</span>
-              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Squadra Corallo" aria-label="Nome della seconda squadra"></label>
+              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Corallo" aria-label="Nome della seconda squadra"></label>
           </div>
         </div>
         <div class="piede">
@@ -726,7 +805,7 @@
   <!-- Informazioni della modalità collaborativa -->
   <section class="screen" id="schermata-collab" aria-label="Modalità collaborativa" hidden>
     <div class="setup">
-      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-collab" aria-live="polite"></p><div class="azioni"><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-collab" aria-live="polite"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Tutti contro il gioco</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
@@ -735,16 +814,16 @@
               <h3>Come funziona</h3>
               <ul class="regole">
                 <li><span class="segno">7</span><span>Turni di gioco. Le carte indizio non si possono cambiare.</span></li>
-                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22 7.5 3.5h9z" style="fill:var(--zona-4)"/><path d="M12 22 3 6l4.5-2.5zM12 22l9-16-4.5-2.5z" style="fill:var(--zona-3)"/></svg></span><span>Lo spicchio centrale vale 3 punti, ma se lo centrate guadagnate un turno in più.</span></li>
+                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22 7.5 3.5h9z" style="fill:var(--zona-oro)"/><path d="M12 22 3 6l4.5-2.5zM12 22l9-16-4.5-2.5z" style="fill:var(--zona-3)"/></svg></span><span>Lo spicchio centrale vale 3 punti, ma se lo centrate guadagnate un turno in più.</span></li>
               </ul>
             </div>
             <div class="scheda">
               <h3>Quanto siete sintonizzati</h3>
               <ol class="livelli">
                   <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity=".25"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>0–14</b><span>Non siete sintonizzati</span></li>
-                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>15–19</b><span>Sintonizzazione avvenuta correttamente!</span></li>
-                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>20–23</b><span>Avete una sintonia fuori dal comune</span></li>
-                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity="1"/></svg><b>24+</b><span>Avete proprio una mente alveare!</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>15–19</b><span>Sintonizzazione avvenuta correttamente</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>20–23</b><span>Avete una sintonia fuori dal comune!</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity="1"/></svg><b>24+</b><span>Mente alveare</span></li>
               </ol>
             </div>
           </div>
@@ -777,7 +856,7 @@
 <g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
 <g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
 </g>
-</svg><span>Sintonizzati</span></div><p class="suggerimento" id="fine-nota"></p><div class="azioni"><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+</svg><span>Sintonizzati</span></div><p class="suggerimento" id="fine-nota"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2 id="fine-titolo" aria-live="polite"></h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
@@ -817,7 +896,7 @@
 </g>
 </svg><span>Sintonizzati</span></div>
         <div class="azioni">
-          <button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+          <button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
           <button class="btn-piccolo" id="esci">Esci</button>
         </div>
       </header>
@@ -835,6 +914,11 @@
                 <stop offset="1" style="stop-color:#FFB52E;stop-opacity:0"/>
               </radialGradient>
               <clipPath id="taglio"><rect x="12" y="12" width="376" height="204"/></clipPath>
+              <linearGradient id="bagliore-oro" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/>
+                <stop offset=".5" stop-color="#FFFFFF" stop-opacity=".6"/>
+                <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+              </linearGradient>
             </defs>
             <rect x="0" y="0" width="400" height="236" rx="22" style="fill:var(--corpo)"/>
             <rect x="12" y="12" width="376" height="212" rx="12" style="fill:var(--vetro)"/>
@@ -861,6 +945,7 @@
       <div class="carta">
         <div class="estremo sx" id="estremo-sx">Freddo</div>
         <button class="mescola" id="mescola" aria-label="Pesca un'altra carta">
+          <span class="cambi" id="cambi" aria-hidden="true" hidden>2</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
         </button>
         <div class="estremo dx" id="estremo-dx">Caldo</div>
@@ -869,11 +954,32 @@
       <div class="passaggio" id="passaggio" hidden>
         <p class="sopra" id="pass-sopra">Passa il telefono a</p>
         <div class="lcd"><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span><h2 id="pass-nome" aria-live="polite"></h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
+        <p class="avviso" id="pass-avviso" hidden></p>
         <p class="nota" id="pass-nota"></p>
         <button class="tasto-ambra" id="pass-ok">Ok</button>
       </div>
     </div>
   </section>
+
+  <!-- Impostazioni -->
+  <div class="dialogo" id="dialogo-impostazioni" hidden>
+    <div class="pannello" role="dialog" aria-modal="true" aria-labelledby="imp-titolo">
+      <div class="lcd"><h2 id="imp-titolo">Impostazioni</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
+      <div class="scheda interruttori">
+        <div class="riga-imp">
+          <span class="ico-imp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></span>
+          <span class="testo-imp"><span id="imp-audio-titolo">Audio</span><small>Suoni ed effetti del gioco</small></span>
+          <button class="interruttore" role="switch" aria-checked="true" data-imp="audio" aria-labelledby="imp-audio-titolo"><span class="cursore"></span></button>
+        </div>
+        <div class="riga-imp">
+          <span class="ico-imp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M3 8v8M21 8v8"/></svg></span>
+          <span class="testo-imp"><span id="imp-vibrazione-titolo">Vibrazione</span><small>Vibra durante i momenti importanti</small></span>
+          <button class="interruttore" role="switch" aria-checked="true" data-imp="vibrazione" aria-labelledby="imp-vibrazione-titolo"><span class="cursore"></span></button>
+        </div>
+      </div>
+      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio</p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+    </div>
+  </div>
 
   <!-- Conferma prima di abbandonare la partita -->
   <div class="dialogo" id="dialogo-esci" hidden>
@@ -923,9 +1029,414 @@
     preferenza = radice.dataset.attivo === 'scuro' ? 'light' : 'dark';
     try { localStorage.setItem('sintonizzati-tema', preferenza); } catch (e) {}
     applicaTema();
+    suona('tema', { scuro: preferenza === 'dark' });
   }));
   sistemaScuro.addEventListener('change', applicaTema);
   applicaTema();
+
+  /* ---------- Impostazioni: audio e vibrazione ---------- */
+  const impostazioni = { audio: true, vibrazione: true };
+  try { Object.assign(impostazioni, JSON.parse(localStorage.getItem('sintonizzati-impostazioni')) || {}); } catch (e) {}
+  const dialogoImp = document.getElementById('dialogo-impostazioni');
+  const interruttori = [...dialogoImp.querySelectorAll('.interruttore')];
+  let apertoDa = null;
+  function aggiornaInterruttori() { interruttori.forEach(b => b.setAttribute('aria-checked', String(!!impostazioni[b.dataset.imp]))); }
+  function apriImpostazioni(da) { apertoDa = da; aggiornaInterruttori(); dialogoImp.hidden = false; suona('finestra'); interruttori[0].focus({ preventScroll: true }); }
+  function chiudiImpostazioni() { dialogoImp.hidden = true; suona('finestraGiu'); if (apertoDa) apertoDa.focus({ preventScroll: true }); }
+  document.querySelectorAll('.ingranaggio').forEach(b => b.addEventListener('click', () => apriImpostazioni(b)));
+  interruttori.forEach(b => b.addEventListener('click', () => {
+    const chiave = b.dataset.imp, acceso = !impostazioni[chiave];
+    if (chiave === 'audio' && !acceso) { suona('interruttore', { acceso }); Suoni.volume(false, 0.15); }
+    impostazioni[chiave] = acceso;
+    try { localStorage.setItem('sintonizzati-impostazioni', JSON.stringify(impostazioni)); } catch (e) {}
+    if (chiave === 'audio' && acceso) Suoni.volume(true);
+    if (chiave !== 'audio' || acceso) suona('interruttore', { acceso });
+    aggiornaInterruttori();
+  }));
+  document.getElementById('chiudi-impostazioni').addEventListener('click', chiudiImpostazioni);
+  dialogoImp.addEventListener('click', e => { if (e.target === dialogoImp) chiudiImpostazioni(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !dialogoImp.hidden) chiudiImpostazioni(); });
+  /* =====================================================================
+     Suoni: tutto sintetizzato al volo con la Web Audio API, senza file.
+     Il timbro è quello di una radio anni '80: scatti di tasti meccanici,
+     fruscio, fischi di sintonia, campanelli FM da sintetizzatore,
+     piccoli jingle da stazione radio e fanfare con ottoni sintetici.
+     Tutti i suoni passano da qui e rispettano l'interruttore "Audio".
+     ===================================================================== */
+  const Suoni = (() => {
+    let ctx = null, master = null, radio = null, rumoreBuf = null, ultimaTacca = -1;
+    const VOLUME = 0.85;
+    const NOTA = n => 440 * Math.pow(2, (n - 69) / 12);       // da numero MIDI a Hz
+
+    function prepara() {
+      if (ctx) return ctx;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      try { ctx = new AC(); } catch (e) { return null; }
+      // compressore finale: niente picchi fastidiosi anche quando i suoni si sommano
+      const comp = ctx.createDynamicsCompressor();
+      comp.threshold.value = -16; comp.knee.value = 10; comp.ratio.value = 4;
+      comp.attack.value = 0.003; comp.release.value = 0.25;
+      master = ctx.createGain();
+      master.gain.value = impostazioni.audio ? VOLUME : 0;
+      master.connect(comp); comp.connect(ctx.destination);
+      // "altoparlante" della radio: banda stretta con un po' di presenza sui medi
+      const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 200;
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5000;
+      const pk = ctx.createBiquadFilter(); pk.type = 'peaking'; pk.frequency.value = 1700; pk.gain.value = 3; pk.Q.value = 0.8;
+      hp.connect(lp); lp.connect(pk); pk.connect(master);
+      radio = hp;
+      // due secondi di rumore bianco, riusati per fruscio e scatti
+      rumoreBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 2), ctx.sampleRate);
+      const d = rumoreBuf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      return ctx;
+    }
+    function sblocca() {
+      const c = prepara();
+      if (c && c.state === 'suspended') c.resume().catch(() => {});
+    }
+    function volume(acceso, ritardo = 0) {
+      if (!ctx) return;
+      const T = ctx.currentTime + ritardo;
+      master.gain.cancelScheduledValues(T);
+      master.gain.setTargetAtTime(acceso ? VOLUME : 0, T, 0.03);
+    }
+
+    /* ---------- Mattoncini ---------- */
+    function inviluppo(g, T, att, picco, durata) {
+      g.setValueAtTime(0.0001, T);
+      g.linearRampToValueAtTime(picco, T + att);
+      g.exponentialRampToValueAtTime(0.0001, T + Math.max(durata, att + 0.01));
+    }
+    function uscita(dest, pan) {
+      if (!pan || !ctx.createStereoPanner) return dest;
+      const p = ctx.createStereoPanner(); p.pan.value = Math.max(-1, Math.min(1, pan)); p.connect(dest); return p;
+    }
+    function tono({ f, f2, tipo = 'sine', t = 0, dur = 0.2, vol = 0.2, att = 0.005, dest = master, pan, vibrato = 0, lp }) {
+      const T = ctx.currentTime + t;
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = tipo; o.frequency.setValueAtTime(f, T);
+      if (f2) o.frequency.exponentialRampToValueAtTime(f2, T + dur);
+      if (vibrato) {
+        const l = ctx.createOscillator(), lg = ctx.createGain();
+        l.frequency.value = 5.5; lg.gain.value = vibrato; l.connect(lg); lg.connect(o.frequency);
+        l.start(T); l.stop(T + dur + 0.05);
+      }
+      inviluppo(g.gain, T, att, vol, dur);
+      let nodo = o;
+      if (lp) { const fl = ctx.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = lp; o.connect(fl); nodo = fl; }
+      nodo.connect(g); g.connect(uscita(dest, pan));
+      o.start(T); o.stop(T + dur + 0.05);
+    }
+    // campanello FM: il timbro "cristallino" dei sintetizzatori anni '80
+    function campana({ f, t = 0, dur = 0.9, vol = 0.15, rapporto = 3.5, indice = 2.2, dest = radio, pan }) {
+      const T = ctx.currentTime + t;
+      const c = ctx.createOscillator(), m = ctx.createOscillator(), mg = ctx.createGain(), g = ctx.createGain();
+      c.frequency.value = f; m.frequency.value = f * rapporto;
+      mg.gain.setValueAtTime(f * indice, T); mg.gain.exponentialRampToValueAtTime(f * 0.05, T + dur);
+      m.connect(mg); mg.connect(c.frequency);
+      inviluppo(g.gain, T, 0.003, vol, dur);
+      c.connect(g); g.connect(uscita(dest, pan));
+      c.start(T); m.start(T); c.stop(T + dur + 0.05); m.stop(T + dur + 0.05);
+    }
+    function fruscio({ t = 0, dur = 0.3, vol = 0.1, tipo = 'bandpass', f = 1800, f2, q = 0.8, att = 0.01, dest = radio, pan }) {
+      const T = ctx.currentTime + t;
+      const s = ctx.createBufferSource(); s.buffer = rumoreBuf; s.loop = true;
+      const fl = ctx.createBiquadFilter(); fl.type = tipo; fl.frequency.setValueAtTime(f, T); fl.Q.value = q;
+      if (f2) fl.frequency.exponentialRampToValueAtTime(f2, T + dur);
+      const g = ctx.createGain(); inviluppo(g.gain, T, att, vol, dur);
+      s.connect(fl); fl.connect(g); g.connect(uscita(dest, pan));
+      s.start(T, Math.random() * 1.5); s.stop(T + dur + 0.05);
+    }
+    // scatto di un tasto meccanico: un colpetto secco e, se serve, un tonfo grave
+    function scatto({ t = 0, vol = 0.25, f = 2400, tonfo = 140, pan }) {
+      fruscio({ t, dur: 0.025, vol: vol * 5, f, q: 1.5, att: 0.001, dest: master, pan });
+      if (tonfo) tono({ f: tonfo, f2: tonfo * 0.6, t, dur: 0.06, vol: vol * 0.8, att: 0.002, pan });
+    }
+    // ottoni sintetici: dente di sega leggermente scordato con filtro che si apre
+    function ottone({ note, t = 0, dur = 0.3, vol = 0.03 }) {
+      const T = ctx.currentTime + t;
+      const fl = ctx.createBiquadFilter(); fl.type = 'lowpass'; fl.Q.value = 2;
+      fl.frequency.setValueAtTime(500, T); fl.frequency.linearRampToValueAtTime(3200, T + 0.06); fl.frequency.exponentialRampToValueAtTime(1100, T + dur);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, T); g.gain.linearRampToValueAtTime(vol, T + 0.03);
+      g.gain.setValueAtTime(vol, T + dur * 0.7); g.gain.exponentialRampToValueAtTime(0.0001, T + dur + 0.15);
+      fl.connect(g); g.connect(radio);
+      note.forEach(n => [-7, 7].forEach(det => {
+        const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = NOTA(n); o.detune.value = det;
+        o.connect(fl); o.start(T); o.stop(T + dur + 0.2);
+      }));
+    }
+    // ronzio d'alveare: tante piccole "api" che vibrano e si spostano da un lato all'altro
+    function sciame({ t = 0, dur = 2.8, vol = 0.018 }) {
+      const T = ctx.currentTime + t;
+      for (let i = 0; i < 6; i++) {
+        const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = 190 + i * 17 + Math.random() * 8;
+        const lfo = ctx.createOscillator(), lg = ctx.createGain();
+        lfo.frequency.value = 7 + Math.random() * 7; lg.gain.value = 10 + Math.random() * 8;
+        lfo.connect(lg); lg.connect(o.frequency);
+        const fl = ctx.createBiquadFilter(); fl.type = 'bandpass'; fl.frequency.value = 700 + i * 150; fl.Q.value = 2;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, T); g.gain.linearRampToValueAtTime(vol, T + 0.5);
+        g.gain.setValueAtTime(vol, T + dur - 0.6); g.gain.linearRampToValueAtTime(0.0001, T + dur);
+        o.connect(fl); fl.connect(g);
+        if (ctx.createStereoPanner) {
+          const p = ctx.createStereoPanner(), pl = ctx.createOscillator(), pg = ctx.createGain();
+          pl.frequency.value = 0.3 + Math.random() * 0.5; pg.gain.value = 0.8;
+          pl.connect(pg); pg.connect(p.pan); g.connect(p); p.connect(master);
+          pl.start(T); pl.stop(T + dur + 0.1);
+        } else g.connect(master);
+        o.start(T); lfo.start(T); o.stop(T + dur + 0.1); lfo.stop(T + dur + 0.1);
+      }
+    }
+
+    /* ---------- Catalogo dei suoni ---------- */
+    const S = {
+      // tasti e comandi
+      clic(o) { scatto({ t: o.t, vol: 0.16, f: 3400, tonfo: 0, pan: o.pan }); },
+      tasto(o) { const t = o.t || 0; scatto({ t, vol: 0.22, f: 2500, tonfo: 170 }); scatto({ t: t + 0.06, vol: 0.07, f: 3800, tonfo: 0 }); },
+      tastoGrande(o) { const t = o.t || 0; scatto({ t, vol: 0.3, f: 1800, tonfo: 115 }); scatto({ t: t + 0.09, vol: 0.1, f: 3200, tonfo: 0 }); },
+      interruttore(o) {
+        scatto({ vol: 0.2, f: o.acceso ? 3000 : 2200, tonfo: o.acceso ? 0 : 120 });
+        tono({ f: o.acceso ? 880 : 440, t: 0.02, dur: 0.08, vol: 0.08, dest: radio });
+      },
+      tema(o) {
+        scatto({ vol: 0.18, f: 2800, tonfo: 0 });
+        tono({ f: o.scuro ? 660 : 330, f2: o.scuro ? 330 : 660, t: 0.02, dur: 0.22, vol: 0.07, dest: radio });
+      },
+      finestra() { tono({ f: 320, f2: 640, dur: 0.14, vol: 0.14, dest: radio }); },
+      finestraGiu() { tono({ f: 640, f2: 320, dur: 0.14, vol: 0.12, dest: radio }); },
+      led(o) { tono({ f: o.spento ? 700 : 1400, dur: 0.07, vol: 0.13, dest: radio }); },
+      errore() {
+        tono({ f: 150, dur: 0.1, vol: 0.045, tipo: 'square', dest: radio });
+        tono({ f: 150, t: 0.14, dur: 0.12, vol: 0.045, tipo: 'square', dest: radio });
+      },
+
+      // benvenuto: l'interruttore si accende, fruscio, fischio di sintonia e il jingle della stazione
+      benvenuto() {
+        scatto({ vol: 0.35, f: 1400, tonfo: 85 });
+        tono({ f: 50, f2: 62, tipo: 'triangle', dur: 0.9, vol: 0.07, att: 0.2 });
+        fruscio({ t: 0.04, dur: 0.75, vol: 0.13, f: 3200, f2: 800, q: 0.7, att: 0.03 });
+        tono({ f: 2600, f2: 480, t: 0.1, dur: 0.5, vol: 0.045, dest: radio });
+        [72, 76, 79, 84].forEach((n, i) => campana({ f: NOTA(n), t: 0.62 + i * 0.1, dur: 1.2 - i * 0.12, vol: 0.15, pan: -0.3 + i * 0.2 }));
+        tono({ f: NOTA(48), tipo: 'triangle', t: 0.62, dur: 1.3, vol: 0.1, att: 0.02 });
+        campana({ f: NOTA(91), t: 1.08, dur: 0.9, vol: 0.06, rapporto: 5, indice: 1 });
+      },
+      // le onde si separano: due toni all'unisono che si allontanano e iniziano a "battere"
+      separa() {
+        tono({ f: 392, dur: 1.8, vol: 0.05, att: 0.2, dest: radio });
+        tono({ f: 392, f2: 420, dur: 1.8, vol: 0.05, att: 0.2, dest: radio });
+        fruscio({ dur: 1.7, vol: 0.04, f: 2400, q: 0.5, att: 0.8 });
+      },
+      riunisci() {
+        tono({ f: 392, dur: 1, vol: 0.04, att: 0.1, dest: radio });
+        tono({ f: 420, f2: 392, dur: 1, vol: 0.04, att: 0.1, dest: radio });
+      },
+      // ricerca della stazione: fruscio che scorre e due toni che convergono all'unisono
+      ricerca() {
+        fruscio({ dur: 1.85, vol: 0.09, f: 500, f2: 3500, q: 4, att: 0.05 });
+        fruscio({ dur: 1.7, vol: 0.035, f: 2000, q: 0.5, att: 0.05 });
+        tono({ f: 440, dur: 1.8, vol: 0.035, att: 0.2, dest: radio });
+        tono({ f: 520, f2: 440, dur: 1.8, vol: 0.035, att: 0.2, dest: radio });
+        [0.3, 0.7, 1.05, 1.35].forEach((t, i) => tono({ f: 500 + i * 220, t, dur: 0.07, vol: 0.025, tipo: 'square', dest: radio }));
+      },
+      // stazione agganciata: "Sintonizzati!"
+      agganciato() {
+        tono({ f: 1320, dur: 0.05, vol: 0.05, tipo: 'square', dest: radio });
+        campana({ f: NOTA(84), t: 0.05, dur: 1, vol: 0.14 });
+        campana({ f: NOTA(91), t: 0.16, dur: 1.2, vol: 0.12 });
+        [60, 64, 67].forEach(n => tono({ f: NOTA(n), tipo: 'triangle', t: 0.05, dur: 1.2, vol: 0.035, att: 0.05, dest: radio }));
+      },
+      // la radio si accende entrando in partita: ronzio delle valvole e tacche che si illuminano
+      accendiRadio() {
+        scatto({ vol: 0.25, f: 1600, tonfo: 90 });
+        tono({ f: 55, f2: 110, tipo: 'triangle', dur: 0.9, vol: 0.06, att: 0.3 });
+        fruscio({ dur: 0.8, vol: 0.05, f: 1500, q: 0.6, att: 0.3 });
+        for (let i = 0; i < 14; i++) scatto({ t: 0.25 + i * 0.036, vol: 0.04 + i * 0.002, f: 4200, tonfo: 0, pan: -0.8 + i * 0.12 });
+      },
+      // estrazione: ogni oscillazione della lancetta "passa" su una stazione
+      scansione(o) {
+        const t = o.t || 0, pan = o.pan || 0;
+        fruscio({ t, dur: 0.08, vol: 0.12, f: 700 + Math.random() * 2600, q: 5, att: 0.005, pan });
+        if (Math.random() < 0.5) tono({ f: 300 + Math.random() * 900, t: t + 0.02, dur: 0.05, vol: 0.04, tipo: 'square', dest: radio, pan });
+        scatto({ t, vol: 0.05, f: 4000, tonfo: 0, pan });
+      },
+      trovato() {
+        tono({ f: 880, f2: 1760, dur: 0.08, vol: 0.04, tipo: 'square', dest: radio });
+        campana({ f: NOTA(79), t: 0.06, dur: 0.8, vol: 0.14 });
+        campana({ f: NOTA(84), t: 0.16, dur: 1, vol: 0.14 });
+        campana({ f: NOTA(88), t: 0.26, dur: 1.2, vol: 0.1 });
+      },
+
+      // passa il telefono: il "din-don" degli annunci
+      passaggio(o) {
+        const t = (o.t || 0) + 0.2;
+        campana({ f: NOTA(76), t, dur: 0.9, vol: 0.1, rapporto: 1.41, indice: 1.4 });
+        campana({ f: NOTA(72), t: t + 0.24, dur: 1.2, vol: 0.1, rapporto: 1.41, indice: 1.4 });
+      },
+      vantaggio() {
+        S.passaggio({});
+        campana({ f: NOTA(83), t: 0.75, dur: 0.25, vol: 0.1, rapporto: 2, indice: 1 });
+        campana({ f: NOTA(88), t: 0.83, dur: 0.6, vol: 0.1, rapporto: 2, indice: 1 });
+      },
+      cambioCapo() {
+        S.passaggio({});
+        tono({ f: 500, f2: 1000, t: 0.75, dur: 0.12, vol: 0.04, dest: radio, pan: -0.5 });
+        tono({ f: 1000, f2: 500, t: 0.9, dur: 0.12, vol: 0.04, dest: radio, pan: 0.5 });
+      },
+
+      // bersaglio: si apre con un soffio che sale, si nasconde con uno che scende e uno scatto
+      apriBersaglio() {
+        fruscio({ dur: 0.45, vol: 0.08, f: 350, f2: 4200, q: 1.3, att: 0.2 });
+        tono({ f: 330, f2: 660, dur: 0.4, vol: 0.03, att: 0.1, dest: radio });
+      },
+      oro(o) {
+        const t = o.t || 0;
+        [96, 100, 103, 108, 103].forEach((n, i) => campana({ f: NOTA(n), t: t + i * 0.07, dur: 0.5, vol: 0.045, rapporto: 4, indice: 1, pan: -0.4 + i * 0.2 }));
+      },
+      nascondi() {
+        fruscio({ dur: 0.3, vol: 0.08, f: 3800, f2: 400, q: 1.3, att: 0.02 });
+        scatto({ t: 0.27, vol: 0.2, f: 2000, tonfo: 120 });
+      },
+      // la lancetta "scatta" a ogni tacca, come la manopola di sintonia
+      tacca(o) {
+        const ora = ctx.currentTime;
+        if (ora - ultimaTacca < 0.025) return;
+        ultimaTacca = ora;
+        scatto({ vol: 0.06, f: 3600 + Math.random() * 500, tonfo: 0, pan: o.pan });
+      },
+      conferma() {
+        scatto({ vol: 0.28, f: 1700, tonfo: 110 });
+        campana({ f: NOTA(79), t: 0.03, dur: 0.35, vol: 0.09, rapporto: 2, indice: 1 });
+      },
+      lato(o) {
+        scatto({ vol: 0.2, f: 2600, tonfo: 140, pan: o.pan });
+        tono({ f: o.pan < 0 ? 520 : 700, dur: 0.1, vol: 0.05, dest: radio, pan: o.pan });
+      },
+      carta(o) {
+        fruscio({ dur: 0.1, vol: 0.14, tipo: 'highpass', f: 2500, f2: 6000, q: 0.7, att: 0.005, dest: master });
+        scatto({ t: 0.08, vol: 0.08, f: 3000, tonfo: 0 });
+        if (o.ultima) tono({ f: 330, f2: 220, t: 0.15, dur: 0.18, vol: 0.05, dest: radio });
+      },
+
+      // rivelazione: una nota per ogni lancetta, più alta se vale di più
+      colpo(o) {
+        const t = o.t || 0, pan = o.pan || 0;
+        if (!o.punti) {
+          tono({ f: 150, f2: 80, t, dur: 0.2, vol: 0.22, pan });
+          fruscio({ t, dur: 0.12, vol: 0.09, f: 900, q: 1, pan });
+          return;
+        }
+        const n = { 2: 72, 3: 76, 4: 79 }[o.punti];
+        campana({ f: NOTA(n), t, dur: 0.6, vol: 0.12, pan });
+        if (o.punti === 4) campana({ f: NOTA(n + 5), t: t + 0.06, dur: 0.8, vol: 0.1, pan });
+      },
+      esito(o) {
+        const t = o.t || 0, p = o.punti;
+        if (o.centro || p === 4) return S.centro({ t });
+        if (p === 3) { campana({ f: NOTA(76), t, dur: 0.6, vol: 0.12 }); campana({ f: NOTA(79), t: t + 0.12, dur: 0.9, vol: 0.12 }); return; }
+        if (p === 2) { campana({ f: NOTA(72), t, dur: 0.6, vol: 0.1 }); campana({ f: NOTA(76), t: t + 0.14, dur: 0.8, vol: 0.09 }); return; }
+        S.mancato({ t });
+      },
+      centro(o) {
+        const t = o.t || 0;
+        [72, 76, 79, 84, 88].forEach((n, i) => campana({ f: NOTA(n), t: t + i * 0.075, dur: 1 - i * 0.08, vol: 0.13, pan: -0.4 + i * 0.2 }));
+        ottone({ note: [60, 64, 67, 72], t: t + 0.38, dur: 0.6, vol: 0.028 });
+        campana({ f: NOTA(96), t: t + 0.45, dur: 1, vol: 0.05, rapporto: 5, indice: 1 });
+      },
+      // segnale perso: il fruscio si chiude e il tono crolla
+      mancato(o) {
+        const t = o.t || 0;
+        fruscio({ t, dur: 0.65, vol: 0.16, f: 1400, f2: 250, q: 0.8, att: 0.02 });
+        tono({ f: 330, f2: 140, t, dur: 0.55, vol: 0.08, tipo: 'sawtooth', dest: radio, vibrato: 14, lp: 1600 });
+      },
+      bonus(o) {
+        const t = o.t || 0;
+        campana({ f: NOTA(83), t, dur: 0.25, vol: 0.1, rapporto: 2, indice: 1.2 });
+        campana({ f: NOTA(88), t: t + 0.08, dur: 0.7, vol: 0.1, rapporto: 2, indice: 1.2 });
+      },
+      turnoExtra(o) {
+        const t = o.t || 0;
+        [84, 86, 88, 91, 93, 96].forEach((n, i) => campana({ f: NOTA(n), t: t + i * 0.06, dur: 0.6, vol: 0.06, rapporto: 4, indice: 1, pan: -0.6 + i * 0.24 }));
+      },
+
+      // uscita dalla partita: la radio si spegne
+      spegni() {
+        scatto({ vol: 0.3, f: 1400, tonfo: 80 });
+        tono({ f: 520, f2: 45, tipo: 'sawtooth', t: 0.02, dur: 0.65, vol: 0.08, dest: radio, lp: 1800 });
+        fruscio({ t: 0.02, dur: 0.4, vol: 0.14, f: 2200, f2: 200, q: 0.6, att: 0.01 });
+      },
+
+      // fine partita: fanfara da sigla anni '80
+      vittoria(o) {
+        const t = o.t || 0;
+        [[[60, 64, 67], 0, 0.16], [[60, 64, 67], 0.2, 0.16], [[65, 69, 72], 0.4, 0.3], [[67, 71, 74], 0.75, 0.25], [[72, 76, 79, 84], 1.05, 1.3]]
+          .forEach(([note, tt, dur]) => ottone({ note, t: t + tt, dur, vol: 0.03 }));
+        [[48, 0], [48, 0.2], [53, 0.4], [55, 0.75], [48, 1.05]].forEach(([n, tt], i) =>
+          tono({ f: NOTA(n), tipo: 'triangle', t: t + tt, dur: i === 4 ? 1.4 : 0.18, vol: 0.12, att: 0.01 }));
+        [84, 88, 91, 96, 100].forEach((n, i) => campana({ f: NOTA(n), t: t + 1.1 + i * 0.08, dur: 1, vol: 0.06, rapporto: 3.5, indice: 1.5, pan: -0.6 + i * 0.3 }));
+      },
+      // pareggio: due melodie partono lontane e finiscono sulla stessa nota, in sintonia
+      pareggio() {
+        [64, 67, 69, 72].forEach((n, i) => campana({ f: NOTA(n), t: i * 0.22, dur: 0.5, vol: 0.1, pan: -0.6 }));
+        [79, 76, 74, 72].forEach((n, i) => campana({ f: NOTA(n), t: i * 0.22 + 0.11, dur: 0.5, vol: 0.1, pan: 0.6 }));
+        campana({ f: NOTA(72), t: 0.9, dur: 1.4, vol: 0.12 });
+        campana({ f: NOTA(84), t: 0.9, dur: 1.4, vol: 0.08 });
+        ottone({ note: [60, 64, 67, 72], t: 0.9, dur: 1, vol: 0.022 });
+      },
+      // collaborativa: quattro finali diversi, dal segnale perso alla mente alveare
+      collab(o) {
+        const lv = o.livello || 0;
+        if (lv === 0) {
+          // stonato e malinconico, con il fruscio che copre la stazione
+          [[67, 0, 0.32], [66, 0.36, 0.32], [65, 0.72, 0.32], [64, 1.08, 1]].forEach(([n, t, dur]) => {
+            tono({ f: NOTA(n), t, dur, vol: 0.05, tipo: 'sawtooth', dest: radio, lp: 1400, vibrato: t > 1 ? 6 : 0 });
+            tono({ f: NOTA(n) * 1.018, t, dur, vol: 0.04, tipo: 'sawtooth', dest: radio, lp: 1400 });
+          });
+          fruscio({ dur: 2.1, vol: 0.05, f: 2000, q: 0.5, att: 0.3 });
+        } else if (lv === 1) {
+          [72, 76, 79].forEach((n, i) => campana({ f: NOTA(n), t: i * 0.14, dur: 1.1, vol: 0.13 }));
+          [60, 64, 67].forEach(n => tono({ f: NOTA(n), tipo: 'triangle', t: 0.3, dur: 1.3, vol: 0.035, att: 0.1, dest: radio }));
+        } else if (lv === 2) {
+          S.centro({});
+          S.turnoExtra({ t: 0.9 });
+        } else {
+          sciame({ t: 0, dur: 3 });
+          S.vittoria({ t: 0.35 });
+        }
+      }
+    };
+
+    function suona(nome, o = {}) {
+      const c = prepara();
+      if (!c || !S[nome]) return;
+      if (c.state === 'suspended') c.resume().catch(() => {});
+      try { S[nome](o); } catch (e) { /* un suono mancato non deve mai bloccare il gioco */ }
+    }
+    function pausa(nascosta) {
+      if (!ctx) return;
+      (nascosta ? ctx.suspend() : ctx.resume()).catch(() => {});
+    }
+    return { suona, sblocca, volume, pausa };
+  })();
+
+  function suona(nome, opzioni) { if (impostazioni.audio) Suoni.suona(nome, opzioni); }
+  function vibra(schema) { if (!impostazioni.vibrazione || !navigator.vibrate) return; navigator.vibrate(schema); }
+
+  // Il browser permette l'audio solo dopo un gesto: lo sblocchiamo al primo tocco
+  ['pointerdown', 'pointerup', 'touchend', 'keydown'].forEach(ev =>
+    document.addEventListener(ev, () => { if (impostazioni.audio) Suoni.sblocca(); }, { capture: true, passive: true }));
+  document.addEventListener('visibilitychange', () => Suoni.pausa(document.hidden));
+
+  // Scatto meccanico per i tasti comuni (gli altri hanno un suono proprio)
+  document.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b || b.disabled) return;
+    if (b.matches('.tasto')) suona('tastoGrande');
+    else if (b.matches('.tasto-ambra, #pass-ok')) suona('tasto');
+    else if (b.matches('.btn-piccolo, .tastino, .ingranaggio')) suona('clic');
+  }, true);
 
   /* ---------- Onde di sfondo: si "sintonizzano" mentre carica ---------- */
   const canvas = document.getElementById('onde');
@@ -952,15 +1463,19 @@
   }
   const easeOut = x => 1 - Math.pow(1 - x, 3);
   // Porta le onde verso "in sintonia" (1) o "fuori sintonia" (0)
+  // L'animazione lavora sullo sfasamento visibile delle onde, così il movimento è uniforme dall'inizio alla fine
   let animOnde = null;
-  function animaOnde(a, durata, poi, passo) {
-    animOnde = { da: progresso, a, t0: performance.now(), durata: riduciMoto ? Math.min(durata, 200) : durata, poi, passo };
+  const sfasamentoDi = p => Math.pow(1 - p, 3);          // inverso di "1 - easeOut(p)"
+  const progressoDi = d => 1 - Math.cbrt(Math.max(0, d));
+  function animaOnde(a, durata, poi, passo, curva = 'morbida') {
+    animOnde = { da: sfasamentoDi(progresso), a: sfasamentoDi(a), meta: a, t0: performance.now(),
+      durata: riduciMoto ? Math.min(durata, 200) : durata, poi, passo, curva };
   }
   function disegna(ms) {
     if (animOnde) {
       const k = Math.min((performance.now() - animOnde.t0) / animOnde.durata, 1);
-      const e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-      progresso = animOnde.da + (animOnde.a - animOnde.da) * e;
+      const e = animOnde.curva === 'subito' ? 1 - Math.pow(1 - k, 3) : (k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+      progresso = k >= 1 ? animOnde.meta : progressoDi(animOnde.da + (animOnde.a - animOnde.da) * e);
       if (animOnde.passo) animOnde.passo(progresso);
       if (k >= 1) { const fine = animOnde.poi; animOnde = null; if (fine) fine(); }
     }
@@ -1008,43 +1523,89 @@
   const schermate = [...document.querySelectorAll('.screen')];
   const SCHERMATE_PREPARTITA = ['schermata-singoli', 'schermata-squadre', 'schermata-collab'];
   function vai(id) {
+    const da = app.dataset.schermata;
+    if (id === 'schermata-modi' && SCHERMATE_PREPARTITA.includes(da)) suona('riunisci');
     schermate.forEach(el => { el.hidden = el.id !== id; });
     app.dataset.schermata = id;
     // prima della partita le onde si separano, tornando alla scelta si riuniscono
-    if (SCHERMATE_PREPARTITA.includes(id)) { preparaNomi(id); animaOnde(0, 1100); }
+    if (SCHERMATE_PREPARTITA.includes(id)) { preparaNomi(id); if (!(animOnde && animOnde.meta === 0)) separaOnde(); }
     else if (id === 'schermata-modi') animaOnde(1, 900);
     const sc = document.getElementById(id).querySelector('.setup');
     if (sc) sc.scrollTop = 0;
   }
   document.querySelectorAll('[data-vai]').forEach(b => b.addEventListener('click', () => { if (!sintonizzando) vai(b.dataset.vai); }));
 
+  let inTransizione = false;
   loader.addEventListener('click', async () => {
-    if (!loader.classList.contains('pronto')) return;
+    if (!loader.classList.contains('pronto') || inTransizione) return;
+    inTransizione = true;
+    suona('benvenuto');
     try {
       if (radice.requestFullscreen && !document.fullscreenElement) await radice.requestFullscreen({ navigationUI: 'hide' });
       if (screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape');
     } catch (e) { /* schermo intero o blocco orientamento non disponibili: si gioca lo stesso */ }
-    vai('schermata-modi');
+    await versoIlMenu();
+    inTransizione = false;
   });
+
+  // Il testo svanisce, il logo "vola" nell'angolo in alto e il pannello del menu si monta pezzo per pezzo
+  function versoIlMenu() {
+    const inizioEl = document.getElementById('schermata-inizio');
+    const modiEl = document.getElementById('schermata-modi');
+    if (riduciMoto || !Element.prototype.animate) { vai('schermata-modi'); return Promise.resolve(); }
+    return new Promise(fatto => {
+      inizioEl.classList.add('uscita');
+      setTimeout(() => {
+        const logo = inizioEl.querySelector('.logo');
+        const da = logo.getBoundingClientRect();
+        const volo = logo.cloneNode(true);
+        volo.classList.add('logo-volante');
+        volo.removeAttribute('role'); volo.setAttribute('aria-hidden', 'true');
+        Object.assign(volo.style, { left: da.left + 'px', top: da.top + 'px', width: da.width + 'px', height: da.height + 'px' });
+        app.append(volo);
+        modiEl.classList.add('ingresso');
+        vai('schermata-modi');
+        inizioEl.classList.remove('uscita');
+        const a = modiEl.querySelector('.marchio svg').getBoundingClientRect();
+        const anim = volo.animate([
+          { transform: 'translate(0, 0) scale(1)' },
+          { transform: `translate(${a.left - da.left}px, ${a.top - da.top}px) scale(${a.width / da.width})` }
+        ], { duration: 720, easing: 'cubic-bezier(.65, 0, .25, 1)', fill: 'forwards' });
+        const fine = () => {
+          volo.remove();
+          modiEl.classList.remove('ingresso');
+          modiEl.classList.add('rivela');
+          ondaTesto(modiEl.querySelector('.lcd h2'), 'Come giocate?');
+          setTimeout(() => { modiEl.classList.remove('rivela'); fatto(); }, 1100);
+        };
+        anim.onfinish = fine;
+        anim.oncancel = fine;
+      }, 400);
+    });
+  }
 
   /* ---------- Conferma prima di abbandonare la partita ---------- */
   const dialogoEsci = document.getElementById('dialogo-esci');
   const btnEsci = document.getElementById('esci');
-  function chiudiDialogo() { dialogoEsci.hidden = true; btnEsci.focus({ preventScroll: true }); }
-  btnEsci.addEventListener('click', () => { dialogoEsci.hidden = false; document.getElementById('resta').focus({ preventScroll: true }); });
+  function chiudiDialogo() { dialogoEsci.hidden = true; suona('finestraGiu'); btnEsci.focus({ preventScroll: true }); }
+  btnEsci.addEventListener('click', () => { dialogoEsci.hidden = false; suona('finestra'); document.getElementById('resta').focus({ preventScroll: true }); });
   document.getElementById('resta').addEventListener('click', chiudiDialogo);
   dialogoEsci.addEventListener('click', e => { if (e.target === dialogoEsci) chiudiDialogo(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !dialogoEsci.hidden) chiudiDialogo(); });
   document.getElementById('conferma-esci').addEventListener('click', () => {
     dialogoEsci.hidden = true;
+    suona('spegni');
     interrompiPartita();
     vai('schermata-modi');
   });
+
+  function separaOnde() { animaOnde(0, 1700, null, null, 'subito'); suona('separa'); }
 
   /* ---------- Scelta della modalità ---------- */
   const SCHERMATA_DI = { singoli: 'schermata-singoli', squadre: 'schermata-squadre', collab: 'schermata-collab' };
   document.querySelectorAll('.tasto[data-modo]').forEach(b => b.addEventListener('click', () => {
     b.classList.add('premuto');
+    separaOnde();                       // le onde iniziano a separarsi già alla pressione del tasto
     setTimeout(() => { b.classList.remove('premuto'); vai(SCHERMATA_DI[b.dataset.modo]); }, riduciMoto ? 0 : 240);
   }));
 
@@ -1057,18 +1618,37 @@
     }));
   }
 
+  /* ---------- Nomi: iniziale maiuscola, resto minuscolo ---------- */
+  function formatoNome(testo) {
+    const t = testo.replace(/^\s+/, '');
+    return t.charAt(0).toLocaleUpperCase('it') + t.slice(1).toLocaleLowerCase('it');
+  }
+  function formattaMentreScrivi(campo) {
+    campo.addEventListener('input', () => {
+      const prima = campo.value, nuovo = formatoNome(prima);
+      if (nuovo === prima) return;
+      const pos = Math.max(0, (campo.selectionStart ?? nuovo.length) - (prima.length - nuovo.length));
+      campo.value = nuovo;
+      try { campo.setSelectionRange(pos, pos); } catch (e) {}
+    });
+  }
+
   /* ---------- Giocatori singoli ---------- */
   const campiGiocatori = [...document.querySelectorAll('#schermata-singoli input')];
   const contatore = document.getElementById('contatore');
   const suggSingoli = document.getElementById('suggerimento-singoli');
   const iniziaSingoli = document.getElementById('inizia-singoli');
 
-  function verificaSingoli() {
-    const nomi = campiGiocatori.map(c => c.value.trim());
+  let erroreSingoli = false, erroreSquadre = false;
+  function verificaSingoli(silenzioso) {
+    const nomi = campiGiocatori.map(c => formatoNome(c.value.trim()));
+    let accese = 0, spente = 0;
     const conta = {};
     nomi.forEach(n => { if (n) conta[n.toLowerCase()] = (conta[n.toLowerCase()] || 0) + 1; });
     campiGiocatori.forEach((c, i) => {
       const slot = c.closest('.slot');
+      const prima = slot.classList.contains('acceso');
+      if (!prima && nomi[i]) accese++; else if (prima && !nomi[i]) spente++;
       slot.classList.toggle('acceso', !!nomi[i]);
       slot.classList.toggle('doppio', !!nomi[i] && conta[nomi[i].toLowerCase()] > 1);
     });
@@ -1076,16 +1656,22 @@
     const doppio = new Set(pieni.map(n => n.toLowerCase())).size !== pieni.length;
     contatore.textContent = `${pieni.length}/5`;
     suggSingoli.textContent = doppio ? 'Due giocatori hanno lo stesso nome' : '';
+    if (silenzioso !== true) {
+      if (doppio && !erroreSingoli) suona('errore');
+      else if (accese) suona('led');
+      else if (spente) suona('led', { spento: true });
+    }
+    erroreSingoli = doppio;
     suggSingoli.classList.toggle('errore', doppio);
     iniziaSingoli.disabled = pieni.length < 2 || doppio;
     return pieni;
   }
-  campiGiocatori.forEach(c => c.addEventListener('input', verificaSingoli));
+  campiGiocatori.forEach(c => { formattaMentreScrivi(c); c.addEventListener('input', () => verificaSingoli()); });
   catena(campiGiocatori);
-  verificaSingoli();
+  verificaSingoli(true);
 
   iniziaSingoli.addEventListener('click', () => {
-    const nomi = verificaSingoli();
+    const nomi = verificaSingoli(true);
     if (iniziaSingoli.disabled || sintonizzando) return;
     sintonizzaEAvvia(suggSingoli, iniziaSingoli, campiGiocatori, () => avviaSingoli(nomi));
   });
@@ -1095,17 +1681,19 @@
   const suggSquadre = document.getElementById('suggerimento-squadre');
   const iniziaSquadre = document.getElementById('inizia-squadre');
 
-  function nomiSquadre() { return campiSquadre.map(c => c.value.trim() || c.placeholder); }
-  function verificaSquadre() {
+  function nomiSquadre() { return campiSquadre.map(c => formatoNome(c.value.trim()) || c.placeholder); }
+  function verificaSquadre(silenzioso) {
     const [a, b] = nomiSquadre();
     const uguali = a.toLowerCase() === b.toLowerCase();
+    if (silenzioso !== true && uguali && !erroreSquadre) suona('errore');
+    erroreSquadre = uguali;
     suggSquadre.textContent = uguali ? 'Le due squadre devono avere nomi diversi' : '';
     suggSquadre.classList.toggle('errore', uguali);
     iniziaSquadre.disabled = uguali;
   }
-  campiSquadre.forEach(c => c.addEventListener('input', verificaSquadre));
+  campiSquadre.forEach(c => { formattaMentreScrivi(c); c.addEventListener('input', () => verificaSquadre()); });
   catena(campiSquadre);
-  verificaSquadre();
+  verificaSquadre(true);
 
   iniziaSquadre.addEventListener('click', () => {
     if (iniziaSquadre.disabled || sintonizzando) return;
@@ -1141,7 +1729,7 @@
     const display = displayDi(pulsante);
     display.classList.remove('onda-testo', 'sintonizzato');
     display.textContent = display.dataset.titolo;
-    verifica();
+    verifica(true);
   }
 
   // Scrive un testo lettera per lettera, così può "ondeggiare"
@@ -1166,7 +1754,9 @@
     app.classList.add('sintonia');
     // la ricerca della frequenza compare sul display della radio, in alto
     const display = displayDi(pulsante);
+    suona('ricerca');
     animaOnde(1, 1800, () => {
+      suona('agganciato');
       display.classList.add('sintonizzato');
       ondaTesto(display, 'Sintonizzati!');
       setTimeout(() => { app.classList.remove('sintonia'); sintonizzando = false; avvio(); }, riduciMoto ? 500 : 1800);
@@ -1203,7 +1793,13 @@
     const pt = dial.createSVGPoint();
     pt.x = ev.clientX; pt.y = ev.clientY;
     const p = pt.matrixTransform(dial.getScreenCTM().inverse());
-    impostaAngolo(Math.atan2(p.x - CX, Math.max(CY - p.y, 0.001)) * 180 / Math.PI);
+    muoviLancetta(Math.atan2(p.x - CX, Math.max(CY - p.y, 0.001)) * 180 / Math.PI);
+  }
+  // muove la lancetta a mano: a ogni tacca superata si sente lo scatto della manopola
+  function muoviLancetta(g) {
+    const prima = Math.round(angolo / 4.5);
+    impostaAngolo(g);
+    if (Math.round(angolo / 4.5) !== prima) suona('tacca', { pan: angolo / 90 * 0.6 });
   }
   dial.addEventListener('pointerdown', e => {
     if (partita && partita.modo === 'squadre' && partita.fase === 'lato') {
@@ -1220,8 +1816,8 @@
   dial.addEventListener('keydown', e => {
     if (!lancettaLibera()) return;
     dial.classList.add('tastiera');
-    if (e.key === 'ArrowLeft') { impostaAngolo(angolo - 3); e.preventDefault(); }
-    if (e.key === 'ArrowRight') { impostaAngolo(angolo + 3); e.preventDefault(); }
+    if (e.key === 'ArrowLeft') { muoviLancetta(angolo - 3); e.preventDefault(); }
+    if (e.key === 'ArrowRight') { muoviLancetta(angolo + 3); e.preventDefault(); }
   });
 
   /* ---------- Mazzo di carte ---------- */
@@ -1267,6 +1863,7 @@
   const passSopra = document.getElementById('pass-sopra');
   const passNome = document.getElementById('pass-nome');
   const passNota = document.getElementById('pass-nota');
+  const passAvviso = document.getElementById('pass-avviso');
   const passOk = document.getElementById('pass-ok');
   let partita = null, ultimaPartita = null;
 
@@ -1290,12 +1887,12 @@
 
   /* ---------- Bersaglio: largo quanto due tacche lunghe, diviso in 5 spicchi ---------- */
   const BORDI = [-11.25, -6.75, -2.25, 2.25, 6.75, 11.25];
-  const CLASSI_ZONA = ['z2', 'z3', 'z4', 'z3', 'z2'];
+  function classiZona() { return partita && partita.modo === 'collab' ? ['z2', 'z3', 'z-oro', 'z3', 'z2'] : ['z2', 'z3', 'z4', 'z3', 'z2']; }
   // Regola di posizionamento: il bersaglio può uscire in parte dalla radio ai lati,
   // ma lo spicchio centrale deve restare sempre tutto visibile.
   const LIMITE_CENTRO = 90 - 2.25;
   function nuovoCentro() { return (Math.random() * 2 - 1) * LIMITE_CENTRO; }
-  function valoriBersaglio() { return partita && partita.modo === 'collab' ? ['2', '3', '3+', '3', '2'] : ['2', '3', '4', '3', '2']; }
+  function valoriBersaglio() { return partita && partita.modo === 'collab' ? ['2', '3', '3', '3', '2'] : ['2', '3', '4', '3', '2']; }
 
   function punto(g, r) { const a = g * Math.PI / 180; return [CX + r * Math.sin(a), CY - r * Math.cos(a)]; }
   function spicchio(g0, g1, r0, r1) {
@@ -1304,20 +1901,44 @@
   }
   function disegnaVentaglio(centro) {
     ventaglio.replaceChildren();
-    const valori = valoriBersaglio();
+    const valori = valoriBersaglio(), classi = classiZona();
+    let formaOro = null;
     valori.forEach((v, i) => {
-      ventaglio.append(svg('path', { d: spicchio(centro + BORDI[i], centro + BORDI[i + 1], 40, 176), class: 'zona ' + CLASSI_ZONA[i] }));
+      const forma = spicchio(centro + BORDI[i], centro + BORDI[i + 1], 40, 176);
+      ventaglio.append(svg('path', { d: forma, class: 'zona ' + classi[i] }));
+      if (classi[i] === 'z-oro') formaOro = forma;
       const medio = centro + (BORDI[i] + BORDI[i + 1]) / 2;
       if (Math.abs(medio) >= 90) return;           // spicchio fuori dalla radio: niente numero
       const s = Math.abs(Math.sin(medio * Math.PI / 180));
       const mezzo = v.length > 1 ? 10 : 5;     // metà larghezza del numero
       const [x, y] = punto(medio, Math.min(190, (181 - mezzo) / Math.max(s, 0.01)));
-      const t = svg('text', { x, y: y + 4, 'text-anchor': 'middle', class: 'valore' });
+      const t = svg('text', { x, y: y + 4, 'text-anchor': 'middle', class: 'valore' + (classi[i] === 'z-oro' ? ' oro' : '') });
       t.textContent = v;
       ventaglio.append(t);
     });
+    if (formaOro) luccichio(formaOro, centro);
+  }
+  // Lo spicchio d'oro brilla: un riflesso che scorre verso l'esterno e qualche scintilla
+  function luccichio(forma, centro) {
+    const taglio = svg('clipPath', { id: 'taglio-oro' });
+    taglio.append(svg('path', { d: forma }));
+    const riflesso = svg('g', { 'clip-path': 'url(#taglio-oro)' });
+    const asse = svg('g', { transform: `rotate(${centro} ${CX} ${CY})` });
+    asse.append(svg('rect', { x: CX - 20, y: CY - 40, width: 40, height: 28, class: 'riflesso' }));
+    riflesso.append(asse);
+    ventaglio.append(svg('path', { d: forma, class: 'alone' }), taglio, riflesso, svg('path', { d: forma, class: 'bordo-oro' }));
+    [[96, -4, 0], [146, 4, 2]].forEach(([r, scarto, ritardo]) => {
+      const [x, y] = punto(centro + scarto, r);
+      const g = svg('g', { transform: `translate(${x} ${y})` });
+      const stella = svg('path', { d: 'M0-6 1.3-1.3 6 0 1.3 1.3 0 6-1.3 1.3-6 0-1.3-1.3z', class: 'scintilla' });
+      stella.style.animationDelay = ritardo + 's';
+      g.append(stella);
+      ventaglio.append(g);
+    });
   }
   function apriVentaglio() {
+    suona('apriBersaglio');
+    if (partita && partita.modo === 'collab') suona('oro', { t: 0.35 });
     ventaglio.classList.remove('aperto');
     requestAnimationFrame(() => requestAnimationFrame(() => ventaglio.classList.add('aperto')));
   }
@@ -1334,9 +1955,15 @@
     passSopra.textContent = o.sopra;
     passNome.textContent = o.nome;
     passNota.textContent = o.nota || '';
+    passAvviso.hidden = !o.avviso;
+    if (o.avviso) {
+      passAvviso.innerHTML = o.iconaAvviso || '';
+      passAvviso.append(o.avviso);
+    }
     passOk.textContent = o.bottone;
     dopoPassaggio = poi;
     passaggio.hidden = false;
+    suona(o.suono || 'passaggio');
   }
   passOk.addEventListener('click', () => {
     passaggio.hidden = true;
@@ -1356,6 +1983,7 @@
     schermataGioco.classList.remove('accensione');
     void schermataGioco.offsetWidth;
     schermataGioco.classList.add('accensione');
+    suona('accendiRadio');
     dopo(riduciMoto ? 0 : 1050, () => { schermataGioco.classList.remove('accensione'); poi(); });
   }
 
@@ -1367,6 +1995,7 @@
     let k = 0;
     const fine = () => {
       p.candidato = finale; p.scelto = true;
+      suona('trovato');
       ago.style.transition = 'transform .6s cubic-bezier(.3, 1.5, .5, 1)';
       impostaAngolo(0);
       if (p.modo === 'squadre') p.squadre[altra(finale)].punti = 1;   // la seconda squadra parte da 1 punto
@@ -1379,6 +2008,7 @@
       const ampiezza = 80 * (1 - k / passi) + 5;
       ago.style.transition = `transform ${ritardo}ms ease-in-out`;
       impostaAngolo(k % 2 ? ampiezza : -ampiezza);
+      suona('scansione', { pan: (k % 2 ? 1 : -1) * ampiezza / 90 * 0.7 });
       aggiorna();
       k++;
       if (riduciMoto) fine();
@@ -1414,6 +2044,7 @@
     p.tentativi = [];
     p.corrente = 0;
     p.ordine = Array.from({ length: n - 1 }, (_, k) => (p.turno + 1 + k) % n);
+    p.cambiRimasti = CAMBI_PER_TURNO;
     p.fase = 'attesa';
     pulisciQuadrante(); aggiorna();
     const chi = nomeDi(p.turno);
@@ -1423,6 +2054,7 @@
 
   function nascondiBersaglio() {
     const p = partita;
+    suona('nascondi');
     p.fase = 'attesa'; chiudiVentaglio(); aggiorna();
     const g = nomeDi(p.ordine[0]);
     chiediPassaggio({
@@ -1435,6 +2067,7 @@
 
   function confermaTentativo() {
     const p = partita;
+    suona('conferma');
     p.tentativi.push({ chi: p.ordine[p.corrente], angolo });
     const appena = nomeDi(p.ordine[p.corrente]);
     p.corrente++;
@@ -1450,6 +2083,9 @@
   function rivela() {
     const p = partita, n = p.giocatori.length;
     p.tentativi.forEach(t => { t.punti = punteggio(t.angolo, p.centro); p.giocatori[t.chi].punti += t.punti; });
+    // chi ha dato l'indizio prende 1 punto per ogni giocatore che ha colpito il bersaglio
+    p.puntiIndizio = p.tentativi.filter(t => t.punti > 0).length;
+    p.giocatori[p.turno].punti += p.puntiIndizio;
     p.turniGiocati++;
     const max = Math.max(...p.giocatori.map(g => g.punti));
     const fineGiro = p.turniGiocati % n === 0;
@@ -1460,6 +2096,10 @@
     disegnaRisposte();
     aggiorna();
     apriVentaglio();
+    // una nota per ogni lancetta che compare, poi il commento al risultato migliore
+    const n2 = p.tentativi.length, migliore = Math.max(...p.tentativi.map(t => t.punti));
+    suona('esito', { punti: migliore, t: (450 + n2 * 160 + 250) / 1000 });
+    if (p.puntiIndizio) suona('bonus', { t: (450 + n2 * 160 + 1100) / 1000 });
   }
 
   function prossimoTurno() {
@@ -1480,6 +2120,7 @@
       const [x1, y1] = punto(t.angolo, 30), [x2, y2] = punto(t.angolo, r - 12), [cx, cy] = punto(t.angolo, r);
       const g = svg('g', { class: 'risposta' });
       g.style.animationDelay = `${450 + i * 160}ms`;
+      suona('colpo', { punti: t.punti, t: (450 + i * 160) / 1000, pan: t.angolo / 90 * 0.7 });
       g.append(svg('line', { x1, y1, x2, y2 }), svg('circle', { cx, cy, r: 12 }));
       const num = svg('text', { x: cx, y: cy + 4, 'text-anchor': 'middle' });
       num.textContent = t.chi + 1;
@@ -1501,7 +2142,7 @@
       } else {
         if (i === p.turno) li.classList.add('attivo');
         if (i === chiRisponde) li.classList.add('risponde');
-        if (p.fase === 'rivelazione' && p.tentativi.some(t => t.chi === i && t.punti > 0)) li.classList.add('segnato');
+        if (p.fase === 'rivelazione' && (p.tentativi.some(t => t.chi === i && t.punti > 0) || (i === p.turno && p.puntiIndizio > 0))) li.classList.add('segnato');
       }
       li.append(el('i', 'num', i + 1), el('span', '', g.nome), el('b', '', g.punti));
       lista.append(li);
@@ -1527,6 +2168,9 @@
         li.append(el('i', 'num', t.chi + 1), el('span', '', nomeDi(t.chi)), el('b', '', t.punti ? `+${t.punti}` : '0'));
         ol.append(li);
       });
+      const indizio = el('li', 'indizio' + (p.puntiIndizio ? '' : ' zero'));
+      indizio.append(el('i', 'num', p.turno + 1), el('span', '', `${nomeDi(p.turno)}, per l’indizio`), el('b', '', p.puntiIndizio ? `+${p.puntiIndizio}` : '0'));
+      ol.append(indizio);
       box.append(ol);
       if (p.finita) box.append(el('div', 'ruolo esito', 'Partita finita!'), bottone('Risultato finale', mostraFine));
       else {
@@ -1547,23 +2191,44 @@
   function avviaSquadre(nomi) {
     ultimaPartita = { modo: 'squadre', nomi };
     const turno = Math.floor(Math.random() * 2);
-    partita = { modo: 'squadre', squadre: nomi.map(nome => ({ nome, punti: 0 })), turno, carta: pesca(), cartaPronta: true, fase: 'accensione' };
-    entraInPartita(() => estrai(nomi, turno, turnoSquadra));
+    partita = { modo: 'squadre', squadre: nomi.map(nome => ({ nome, punti: 0 })), turno, turniSquadra: [0, 0], carta: pesca(), cartaPronta: true, fase: 'accensione' };
+    entraInPartita(() => estrai(nomi, turno, spiegaVantaggio));
+  }
+
+  // Prima del primo turno: perché la seconda squadra parte con un punto
+  function spiegaVantaggio() {
+    const p = partita, prima = p.squadre[p.turno].nome, seconda = p.squadre[altra(p.turno)].nome;
+    chiediPassaggio({
+      sopra: 'La squadra che gioca per seconda parte con 1 punto',
+      nome: seconda,
+      nota: `${prima} dà il primo indizio e ha un turno di vantaggio: il punto di ${seconda} serve a pareggiare i conti.`,
+      bottone: 'Ho capito', suono: 'vantaggio'
+    }, turnoSquadra);
   }
 
   function turnoSquadra() {
     const p = partita;
     prendiCarta(p);
     p.centro = nuovoCentro(); p.lato = null; p.esito = null; p.fase = 'attesa';
+    p.cambiRimasti = CAMBI_PER_TURNO;
+    p.turniSquadra[p.turno]++;
     pulisciQuadrante(); aggiorna();
+    // dal secondo turno di ogni squadra il caposquadra deve cambiare
+    const nuovo = p.turniSquadra[p.turno] > 1;
     chiediPassaggio({
-      sopra: 'Tocca alla squadra', nome: p.squadre[p.turno].nome, bottone: 'Sono il caposquadra',
-      nota: 'Il caposquadra prende il telefono, gli altri non guardano'
+      sopra: 'Tocca alla squadra', nome: p.squadre[p.turno].nome,
+      avviso: nuovo ? 'Cambiate caposquadra' : null,
+      iconaAvviso: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/></svg>',
+      nota: nuovo ? 'Il telefono va a un giocatore diverso da chi ha dato l\u2019indizio la volta scorsa. Gli altri non guardano.'
+                  : 'Scegliete un caposquadra: prende il telefono, gli altri non guardano',
+      bottone: nuovo ? 'Sono il nuovo caposquadra' : 'Sono il caposquadra',
+      suono: nuovo ? 'cambioCapo' : 'passaggio'
     }, () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
   }
 
   function nascondiSquadra() {
     const p = partita;
+    suona('nascondi');
     p.fase = 'attesa'; chiudiVentaglio(); aggiorna();
     chiediPassaggio({
       sopra: 'Caposquadra, di\u2019 l\u2019indizio ad alta voce alla squadra', nome: p.squadre[p.turno].nome,
@@ -1573,11 +2238,12 @@
 
   function confermaSquadra() {
     const p = partita;
+    suona('conferma');
     p.angolo = angolo; p.lato = null; p.fase = 'lato';
     aggiorna();
   }
 
-  function scegliLato(l) { partita.lato = l; disegnaLato(); aggiorna(); }
+  function scegliLato(l) { partita.lato = l; suona('lato', { pan: l === 'sx' ? -0.7 : 0.7 }); disegnaLato(); aggiorna(); }
 
   // Zona colorata dal lato scelto dalla squadra avversaria
   function disegnaLato() {
@@ -1604,6 +2270,8 @@
     p.vincitrice = p.pareggio ? -1 : a ? 0 : b ? 1 : -1;
     p.fase = 'rivelazione';
     disegnaVentaglio(p.centro); aggiorna(); apriVentaglio();
+    suona('esito', { punti, t: 0.45 });
+    if (bonus) suona('bonus', { t: 1.3 });
   }
 
   function prossimoSquadre() { partita.turno = altra(partita.turno); turnoSquadra(); }
@@ -1679,9 +2347,9 @@
   const TURNI_COLLAB = 7;
   const LIVELLI = [
     { min: 0, testo: 'Non siete sintonizzati' },
-    { min: 15, testo: 'Sintonizzazione avvenuta correttamente!' },
-    { min: 20, testo: 'Avete una sintonia fuori dal comune' },
-    { min: 24, testo: 'Avete proprio una mente alveare!' }
+    { min: 15, testo: 'Sintonizzazione avvenuta correttamente' },
+    { min: 20, testo: 'Avete una sintonia fuori dal comune!' },
+    { min: 24, testo: 'Mente alveare' }
   ];
   function livelloCollab(punti) { let l = 0; LIVELLI.forEach((v, i) => { if (punti >= v.min) l = i; }); return l; }
 
@@ -1704,6 +2372,7 @@
 
   function nascondiCollab() {
     const p = partita;
+    suona('nascondi');
     p.fase = 'attesa'; chiudiVentaglio(); aggiorna();
     chiediPassaggio({
       sopra: 'Di\u2019 l\u2019indizio ad alta voce', nome: 'Tutti insieme', bottone: 'Pronti',
@@ -1722,7 +2391,10 @@
     p.esito = { punti, centro };
     p.finita = p.turno >= p.totale;
     p.fase = 'rivelazione';
+    suona('conferma');
     disegnaVentaglio(p.centro); aggiorna(); apriVentaglio();
+    suona('esito', { punti, centro, t: 0.45 });
+    if (centro) suona('turnoExtra', { t: 1.25 });
   }
 
   function prossimoCollab() { partita.turno++; turnoCollab(); }
@@ -1741,6 +2413,10 @@
       pallini.append(pal);
     }
     box.append(pallini);
+    const legenda = el('div', 'legenda');
+    legenda.innerHTML = '<svg viewBox="0 0 14 18" aria-hidden="true"><path d="M7 18 2 1h10z" style="fill:var(--zona-oro)"/><path class="scintilla" d="M8-3 9 1 12 2 9 3 8 6 7 3 4 2 7 1z" transform="translate(-1 3)"/></svg>';
+    legenda.append('3 punti + turno extra');
+    box.append(legenda);
     latoSx.append(box);
   }
 
@@ -1754,7 +2430,7 @@
         el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il centro'), bottone('Conferma', confermaCollab));
     } else if (p.fase === 'rivelazione') {
       const e = p.esito;
-      const testo = e.centro ? 'Centro! Guadagnate un turno in più' : e.punti === 3 ? 'Spicchio da 3 punti' : e.punti === 2 ? 'Spicchio da 2 punti' : 'Fuori dal bersaglio';
+      const testo = e.centro ? 'Centro! 3 punti + turno extra' : e.punti === 3 ? 'Spicchio da 3 punti' : e.punti === 2 ? 'Spicchio da 2 punti' : 'Fuori dal bersaglio';
       box.append(el('div', 'etichetta', 'Risultato'), el('div', 'guadagno' + (e.punti ? '' : ' zero'), e.punti ? `+${e.punti}` : '0'),
         el('div', 'ruolo esito', testo),
         p.finita ? bottone('Risultato finale', mostraFine) : bottone('Prossimo turno', prossimoCollab));
@@ -1767,8 +2443,13 @@
     const p = partita;
     if (!p) return;
     if (p.carta) { estremoSx.textContent = p.carta[0]; estremoDx.textContent = p.carta[1]; }
-    mescola.disabled = p.fase !== 'segreto' || p.modo === 'collab';
+    const cambiRimasti = p.cambiRimasti ?? 0;
+    mescola.disabled = p.fase !== 'segreto' || p.modo === 'collab' || cambiRimasti <= 0;
     mescola.style.visibility = p.modo === 'collab' ? 'hidden' : '';
+    cambi.hidden = p.fase !== 'segreto' || p.modo === 'collab';
+    cambi.textContent = cambiRimasti;
+    cambi.classList.toggle('esauriti', cambiRimasti <= 0);
+    mescola.setAttribute('aria-label', cambiRimasti > 0 ? `Cambia carta, ancora ${cambiRimasti} ${cambiRimasti === 1 ? 'cambio' : 'cambi'}` : 'Nessun cambio di carta rimasto');
     const libera = lancettaLibera();
     const agoVisibile = libera || p.fase === 'estrazione' || p.fase === 'accensione'
       || (p.modo !== 'singoli' && (p.fase === 'lato' || p.fase === 'rivelazione'));
@@ -1782,10 +2463,16 @@
     else { disegnaClassifica(); disegnaTurnoSingoli(); }
   }
 
+  // Chi dà l'indizio può cambiare la carta al massimo 2 volte per turno
+  const CAMBI_PER_TURNO = 2;
+  const cambi = document.getElementById('cambi');
   mescola.addEventListener('click', () => {
-    if (!partita || mescola.disabled) return;
+    if (!partita || mescola.disabled || partita.cambiRimasti <= 0) return;
+    partita.cambiRimasti--;
+    suona('carta', { ultima: partita.cambiRimasti === 0 });
     partita.carta = pesca();
     aggiorna();
+    cambi.classList.remove('scatta'); void cambi.offsetWidth; cambi.classList.add('scatta');
   });
 
   /* =====================================================================
@@ -1800,7 +2487,7 @@
     fermaTimer();
     passaggio.hidden = true;
     fineCorpo.replaceChildren();
-    let titolo, nota, onde = 1;
+    let titolo, nota, onde = 1, fanfara = 'vittoria', livello = 0;
 
     if (p.modo === 'singoli') {
       const n = p.giocatori.length;
@@ -1808,6 +2495,7 @@
       const max = ordinati[0].punti;
       const vincitori = ordinati.filter(g => g.punti === max);
       titolo = vincitori.length > 1 ? 'Pareggio!' : `Vince ${vincitori[0].nome}!`;
+      fanfara = vincitori.length > 1 ? 'pareggio' : 'vittoria';
       const giri = p.turniGiocati / n;
       nota = vincitori.length > 1
         ? `${elenco(vincitori.map(g => g.nome))} a pari merito con ${max} punti`
@@ -1824,6 +2512,7 @@
       fineCorpo.append(scheda);
     } else if (p.modo === 'squadre') {
       titolo = p.pareggio ? 'Pareggio!' : `Vince ${p.squadre[p.vincitrice].nome}!`;
+      fanfara = p.pareggio ? 'pareggio' : 'vittoria';
       nota = p.pareggio ? 'Le squadre hanno raggiunto 10 punti nello stesso turno'
         : `${p.squadre[altra(p.vincitrice)].nome} si ferma a ${p.squadre[altra(p.vincitrice)].punti} punti`;
       const sfida = el('div', 'fine-sfida');
@@ -1838,6 +2527,7 @@
       fineCorpo.append(sfida);
     } else {
       const lv = livelloCollab(p.punti);
+      fanfara = 'collab'; livello = lv;
       titolo = LIVELLI[lv].testo;
       const extra = p.totale - TURNI_COLLAB;
       nota = `${p.turno} turni giocati` + (extra ? `, di cui ${extra} ${extra === 1 ? 'extra' : 'extra'}` : '');
@@ -1854,6 +2544,7 @@
     }
 
     ondaTesto(fineTitolo, titolo);
+    suona(fanfara, { livello });
     fineNota.textContent = nota;
     partita = null;
     vai('schermata-fine');
