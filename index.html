@@ -39,6 +39,11 @@
     --led-spento: #C5D0D1;
     --lcd-ombra: none;
     --zona-2: #5AAFE0;
+    --carta-sx: var(--corallo);        /* estremi della carta */
+    --carta-dx: var(--menta);
+    --squadra-b: var(--corallo);       /* seconda squadra */
+    --squadra-b-testo: var(--corallo);
+    --bagliore-b: rgba(255, 90, 71, .4);
     --zona-oro: #F2A900;
     --su-corpo: #E3EAEA;
     --zona-3: #3FC290;
@@ -74,6 +79,19 @@
     --tasto: #163A42; --su-tasto: #EEF3F2; --su-tasto-tenue: #9BB8B6; --tasto-ombra: #071A1E; --led-spento: #2F4E55; --lcd-ombra: 0 0 10px rgba(255, 181, 46, .45);
       --zona-2: #6BC1F0; --zona-3: #6FE3B4; --zona-4: #FF5A47; --su-corpo: #10292F; --zona-oro: #FFC94A;
     color-scheme: dark;
+  }
+
+  /* Modalità daltonici: tutte le coppie che portavano informazione con rosso/verde
+     diventano blu/arancio, distinguibili con ogni tipo di daltonismo; restano anche i numeri */
+  :root[data-daltonico] {
+    --zona-2: #56B4E9; --zona-3: #0072B2; --zona-4: #D55E00; --zona-oro: #E69F00;
+    --carta-sx: #E69F00; --carta-dx: #56B4E9;
+    --squadra-b: #CC79A7; --squadra-b-testo: #A8507F; --bagliore-b: rgba(204, 121, 167, .45);
+  }
+  :root[data-daltonico][data-attivo="scuro"] {
+    --zona-2: #A3D9F7; --zona-3: #3E9BE0; --zona-4: #FF7A2F; --zona-oro: #F0E442;
+    --carta-sx: #F2A93B; --carta-dx: #74C6F2;
+    --squadra-b: #E58FC3; --squadra-b-testo: #E58FC3; --bagliore-b: rgba(229, 143, 195, .45);
   }
 
   *, *::before, *::after { box-sizing: inherit; }
@@ -215,7 +233,7 @@
   .squadra .nome { font-size: clamp(13px, 3.6vh, 17px); color: var(--tenue); font-weight: 600; }
   .squadra .punti { font-family: "Michroma", Verdana, sans-serif; font-size: clamp(34px, 13vh, 64px); line-height: 1.15; font-variant-numeric: tabular-nums; }
   .squadra.a .punti { color: var(--ambra-testo); }
-  .squadra.b .punti { color: var(--corallo); }
+  .squadra.b .punti { color: var(--squadra-b-testo); }
   .squadra .di-turno {
     display: inline-block; margin-top: 4px; font-size: 13px; font-weight: 600; padding: 3px 10px;
     border-radius: 999px; background: var(--ambra); color: #2A1C00;
@@ -236,8 +254,8 @@
     display: flex; align-items: center; padding: 10px 16px; border-radius: 12px;
     font-size: clamp(16px, 4.6vh, 22px); font-weight: 800; letter-spacing: -0.01em; color: var(--su-colore); line-height: 1.1;
   }
-  .estremo.sx { background: var(--corallo); justify-content: flex-start; border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
-  .estremo.dx { background: var(--menta); justify-content: flex-end; text-align: right; border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
+  .estremo.sx { background: var(--carta-sx); justify-content: flex-start; border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
+  .estremo.dx { background: var(--carta-dx); justify-content: flex-end; text-align: right; border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
   .mescola {
     position: relative; width: 46px; border-radius: 12px; border: 1px solid var(--bordo); background: var(--superficie);
     cursor: pointer; display: grid; place-items: center;
@@ -332,9 +350,9 @@
   .sfida .slot .testa { font-family: inherit; font-size: 15px; font-weight: 600; justify-content: flex-start; gap: 8px; color: var(--su-tasto-tenue); }
   .sfida .slot input { height: 46px; font-size: 19px; font-weight: 800; }
   .sfida .slot.a .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
-  .sfida .slot.b .led { background: var(--corallo); box-shadow: 0 0 10px var(--corallo); }
+  .sfida .slot.b .led { background: var(--squadra-b); box-shadow: 0 0 10px var(--squadra-b); }
   .sfida .slot.a { box-shadow: inset 4px 0 0 var(--ambra), 0 4px 0 var(--tasto-ombra); }
-  .sfida .slot.b { box-shadow: inset -4px 0 0 var(--corallo), 0 4px 0 var(--tasto-ombra); }
+  .sfida .slot.b { box-shadow: inset -4px 0 0 var(--squadra-b), 0 4px 0 var(--tasto-ombra); }
   .sfida .vs { font-family: "Michroma", Verdana, sans-serif; font-size: 16px; color: var(--su-tasto-tenue); }
   :root[data-attivo="scuro"] .sfida .vs { color: var(--sfondo); }
   :root[data-attivo="chiaro"] .sfida .vs { color: var(--griglia); }
@@ -445,18 +463,18 @@
   .tabellone b { display: block; font: clamp(26px, 9vh, 40px)/1.15 "Michroma", Verdana, sans-serif; font-variant-numeric: tabular-nums; }
   .tabellone b { transform-origin: left center; }
   .tabellone .a b { color: var(--ambra-testo); }
-  .tabellone .b b { color: var(--corallo); }
+  .tabellone .b b { color: var(--squadra-b-testo); }
   .tabellone li.attivo.a { border-color: transparent; box-shadow: inset 0 0 0 2px var(--ambra); }
-  .tabellone li.attivo.b { border-color: transparent; box-shadow: inset 0 0 0 2px var(--corallo); }
+  .tabellone li.attivo.b { border-color: transparent; box-shadow: inset 0 0 0 2px var(--squadra-b); }
   .tabellone li.attivo.a .led, .risultati .a .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
-  .tabellone li.attivo.b .led, .risultati .b .led { background: var(--corallo); box-shadow: 0 0 10px var(--corallo); }
+  .tabellone li.attivo.b .led, .risultati .b .led { background: var(--squadra-b); box-shadow: 0 0 10px var(--squadra-b); }
   .tabellone li.segnato b { animation: punto .6s ease-out .9s both; }
   .risultati li.sq { padding-left: 8px; }
   .risultati li.sq span:nth-child(2) { white-space: normal; line-height: 1.2; font-size: 14px; }
   .turno .chi.sq { font-size: clamp(18px, 6.4vh, 28px); }
   .turno .chi.sq.a { color: var(--ambra-testo); }
-  .turno .chi.sq.b { color: var(--corallo); }
-  .turno .esito { margin-top: 6px; font-weight: 600; color: var(--inchiostro); }
+  .turno .chi.sq.b { color: var(--squadra-b-testo); }
+  .turno .esito { white-space: pre-line; margin-top: 6px; font-weight: 600; color: var(--inchiostro); }
   .scelta-lato { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; max-width: 190px; margin: 12px auto 0; }
   .lato-btn {
     height: 50px; padding: 0 4px; border-radius: 10px; border: 1px solid var(--bordo); background: var(--superficie);
@@ -465,10 +483,10 @@
   }
   .lato-btn svg { width: 18px; height: 18px; flex: none; }
   .lato-btn[aria-pressed="true"].a { background: var(--ambra); color: #2A1C00; border-color: transparent; }
-  .lato-btn[aria-pressed="true"].b { background: var(--corallo); color: var(--su-colore); border-color: transparent; }
+  .lato-btn[aria-pressed="true"].b { background: var(--squadra-b); color: var(--su-colore); border-color: transparent; }
   .scelta-lato + .tasto-ambra.piccolo { margin-top: 8px; }
   .tinta.a { fill: var(--ambra); opacity: .24; }
-  .tinta.b { fill: var(--corallo); opacity: .2; }
+  .tinta.b { fill: var(--squadra-b); opacity: .22; }
 
   @media (max-height: 340px) { .turno .ruolo:not(.esito) { display: none; } .turno .esito { font-size: 13px; } .risultati li.sq span:nth-child(2) { font-size: 13px; } .tabellone li { padding-block: 6px 4px; } .classifica li, .risultati li { padding-block: 3px; } }
 
@@ -564,11 +582,11 @@
   .fine-squadra .nome span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .fine-squadra b { display: block; font: clamp(34px, 13vh, 56px)/1.15 "Michroma", Verdana, sans-serif; }
   .fine-squadra.a b { color: var(--ambra-testo); }
-  .fine-squadra.b b { color: var(--corallo); }
+  .fine-squadra.b b { color: var(--squadra-b-testo); }
   .fine-squadra.a .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
-  .fine-squadra.b .led { background: var(--corallo); box-shadow: 0 0 10px var(--corallo); }
+  .fine-squadra.b .led { background: var(--squadra-b); box-shadow: 0 0 10px var(--squadra-b); }
   .fine-squadra.vince.a { box-shadow: inset 0 0 0 3px var(--ambra), 0 4px 0 var(--tasto-ombra), 0 0 24px rgba(255, 181, 46, .45); }
-  .fine-squadra.vince.b { box-shadow: inset 0 0 0 3px var(--corallo), 0 4px 0 var(--tasto-ombra), 0 0 24px rgba(255, 90, 71, .4); }
+  .fine-squadra.vince.b { box-shadow: inset 0 0 0 3px var(--squadra-b), 0 4px 0 var(--tasto-ombra), 0 0 24px var(--bagliore-b); }
   .fine-sfida .vs { font-family: "Michroma", Verdana, sans-serif; font-size: 16px; color: var(--griglia); }
   .fine-collab { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(8px, 1.6vw, 14px); align-items: stretch; }
   .totale-fine { display: grid; place-content: center; text-align: center; animation: compare-su .45s ease-out .3s both; }
@@ -589,7 +607,7 @@
     padding: 16px; background: rgba(8, 25, 29, .55); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
   }
   .dialogo[hidden] { display: none; }
-  .dialogo .pannello { width: min(480px, 100%); }
+  .dialogo .pannello { width: min(480px, 100%); max-height: 100%; overflow-y: auto; }
   .dialogo p { margin: 0; padding: 0 4px; font-size: clamp(15px, 4.4vh, 18px); line-height: 1.35; color: var(--su-corpo); }
   .dialogo-azioni { display: flex; justify-content: flex-end; gap: 12px; padding-bottom: 5px; }
   .tastino {
@@ -610,7 +628,7 @@
 
   /* ---------- Impostazioni ---------- */
   .interruttori { display: grid; padding-block: 4px; }
-  .riga-imp { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 8px 0; }
+  .riga-imp { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: clamp(4px, 1.6vh, 8px) 0; }
   .riga-imp + .riga-imp { border-top: 1px solid var(--bordo); }
   .ico-imp { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--vetro); color: var(--vetro-segni); }
   .ico-imp svg { width: 20px; height: 20px; }
@@ -996,6 +1014,11 @@
           <span class="testo-imp"><span id="imp-vibrazione-titolo">Vibrazione</span><small>Vibra durante i momenti importanti</small></span>
           <button class="interruttore" role="switch" aria-checked="true" data-imp="vibrazione" aria-labelledby="imp-vibrazione-titolo"><span class="cursore"></span></button>
         </div>
+        <div class="riga-imp">
+          <span class="ico-imp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
+          <span class="testo-imp"><span id="imp-daltonico-titolo">Modalità daltonici</span><small>Colori più facili da distinguere</small></span>
+          <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
+        </div>
       </div>
       <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio</p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
@@ -1055,8 +1078,12 @@
   applicaTema();
 
   /* ---------- Impostazioni: audio e vibrazione ---------- */
-  const impostazioni = { audio: true, vibrazione: true };
+  const impostazioni = { audio: true, vibrazione: true, daltonico: false };
   try { Object.assign(impostazioni, JSON.parse(localStorage.getItem('sintonizzati-impostazioni')) || {}); } catch (e) {}
+  function applicaDaltonico() {
+    if (impostazioni.daltonico) radice.dataset.daltonico = ''; else delete radice.dataset.daltonico;
+  }
+  applicaDaltonico();
   const dialogoImp = document.getElementById('dialogo-impostazioni');
   const interruttori = [...dialogoImp.querySelectorAll('.interruttore')];
   let apertoDa = null;
@@ -1072,6 +1099,7 @@
     if (chiave === 'audio' && acceso) Suoni.volume(true);
     if (chiave !== 'audio' || acceso) suona('interruttore', { acceso });
     if (chiave === 'vibrazione' && acceso) vibra('prova');
+    if (chiave === 'daltonico') applicaDaltonico();
     aggiornaInterruttori();
   }));
   document.getElementById('chiudi-impostazioni').addEventListener('click', chiudiImpostazioni);
@@ -2550,7 +2578,7 @@
         el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il centro'), bottone('Conferma', confermaCollab));
     } else if (p.fase === 'rivelazione') {
       const e = p.esito;
-      const testo = e.centro ? 'Centro! 3 punti + turno extra' : e.punti === 3 ? 'Spicchio da 3 punti' : e.punti === 2 ? 'Spicchio da 2 punti' : 'Fuori dal bersaglio';
+      const testo = e.centro ? 'Centro!\n3 punti + turno extra' : e.punti === 3 ? 'Spicchio da 3 punti' : e.punti === 2 ? 'Spicchio da 2 punti' : 'Fuori dal bersaglio';
       box.append(el('div', 'etichetta', 'Risultato'), el('div', 'guadagno' + (e.punti ? '' : ' zero'), e.punti ? `+${e.punti}` : '0'),
         el('div', 'ruolo esito', testo),
         p.finita ? bottone('Risultato finale', mostraFine) : bottone('Prossimo turno', prossimoCollab));
