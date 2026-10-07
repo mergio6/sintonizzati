@@ -39,6 +39,7 @@
     --led-spento: #C5D0D1;
     --lcd-ombra: none;
     --zona-2: #5AAFE0;
+    --su-corpo: #E3EAEA;
     --zona-3: #3FC290;
     --zona-4: #E5463A;
     color-scheme: light;
@@ -58,7 +59,7 @@
       --onda-a: rgba(255, 181, 46, .55); --onda-b: rgba(255, 90, 71, .55);
       --ombra-tile: 0 0 0 1px rgba(155, 184, 182, .18), 0 18px 48px rgba(0, 0, 0, .35);
       --tasto: #163A42; --su-tasto: #EEF3F2; --su-tasto-tenue: #9BB8B6; --tasto-ombra: #071A1E; --led-spento: #2F4E55; --lcd-ombra: 0 0 10px rgba(255, 181, 46, .45);
-      --zona-2: #6BC1F0; --zona-3: #6FE3B4; --zona-4: #FF5A47;
+      --zona-2: #6BC1F0; --zona-3: #6FE3B4; --zona-4: #FF5A47; --su-corpo: #10292F;
       color-scheme: dark;
     }
   }
@@ -70,7 +71,7 @@
     --onda-a: rgba(255, 181, 46, .55); --onda-b: rgba(255, 90, 71, .55);
     --ombra-tile: 0 0 0 1px rgba(155, 184, 182, .18), 0 18px 48px rgba(0, 0, 0, .35);
     --tasto: #163A42; --su-tasto: #EEF3F2; --su-tasto-tenue: #9BB8B6; --tasto-ombra: #071A1E; --led-spento: #2F4E55; --lcd-ombra: 0 0 10px rgba(255, 181, 46, .45);
-      --zona-2: #6BC1F0; --zona-3: #6FE3B4; --zona-4: #FF5A47;
+      --zona-2: #6BC1F0; --zona-3: #6FE3B4; --zona-4: #FF5A47; --su-corpo: #10292F;
     color-scheme: dark;
   }
 
@@ -92,7 +93,11 @@
     padding-right: env(safe-area-inset-right, 0px);
   }
   #onde { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity .8s; }
-  .app.in-gioco #onde { opacity: .3; }
+  .app[data-schermata="schermata-modi"] #onde,
+  .app[data-schermata="schermata-singoli"] #onde,
+  .app[data-schermata="schermata-squadre"] #onde { opacity: .6; }
+  .app[data-schermata="schermata-gioco"] #onde { opacity: .3; }
+  .app.sintonia #onde { opacity: 1; }
 
   .screen { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
   .screen[hidden] { display: none; }
@@ -211,8 +216,8 @@
     display: flex; align-items: center; padding: 10px 16px; border-radius: 12px;
     font-size: clamp(16px, 4.6vh, 22px); font-weight: 800; letter-spacing: -0.01em; color: var(--su-colore); line-height: 1.1;
   }
-  .estremo.sx { background: var(--menta); justify-content: flex-start; border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
-  .estremo.dx { background: var(--corallo); justify-content: flex-end; text-align: right; border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
+  .estremo.sx { background: var(--corallo); justify-content: flex-start; border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
+  .estremo.dx { background: var(--menta); justify-content: flex-end; text-align: right; border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
   .mescola {
     width: 46px; border-radius: 12px; border: 1px solid var(--bordo); background: var(--superficie);
     cursor: pointer; display: grid; place-items: center;
@@ -263,7 +268,12 @@
   .tasto:active, .tasto.premuto { transform: translateY(5px); box-shadow: 0 1px 0 var(--tasto-ombra); }
   .tasto .icona { grid-area: icona; align-self: start; width: clamp(36px, 12vh, 56px); height: auto; }
   .tasto .titolo { grid-area: titolo; font-weight: 800; font-size: clamp(17px, 5vh, 23px); letter-spacing: -0.01em; line-height: 1.15; }
-  .tasto .descr { grid-area: descr; font-size: clamp(13px, 3.8vh, 16px); color: var(--su-tasto-tenue); line-height: 1.3; }
+  .tasto .descr { grid-area: descr; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .tasto .motto { font-size: clamp(14px, 4.4vh, 18px); font-weight: 600; color: var(--su-tasto-tenue); line-height: 1.2; }
+  .tasto .conteggio {
+    font: clamp(9px, 2.8vh, 11px)/1 "Michroma", Verdana, sans-serif; letter-spacing: .02em; color: var(--su-tasto-tenue);
+    padding: 5px 10px; border: 1.5px solid currentColor; border-radius: 999px; opacity: .85;
+  }
   .tasto .led { grid-area: led; align-self: start; margin-top: 4px; }
   .tasto[data-modo="singoli"].premuto .led { background: var(--menta); box-shadow: 0 0 10px var(--menta); }
   .tasto[data-modo="squadre"].premuto .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
@@ -308,6 +318,7 @@
     box-shadow: 0 5px 0 var(--ambra-scura); transition: transform .08s, box-shadow .08s, opacity .2s;
   }
   .tasto-ambra:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 var(--ambra-scura); }
+  .tasto-ambra.premuto { transform: translateY(4px); box-shadow: 0 1px 0 var(--ambra-scura); cursor: progress; }
   .tasto-ambra:disabled { background: var(--led-spento); color: var(--tenue); box-shadow: 0 5px 0 var(--tasto-ombra); cursor: not-allowed; }
 
   /* Lati del campo nella modalità a giocatori singoli */
@@ -335,7 +346,7 @@
   .turno .chi { font-size: clamp(22px, 8vh, 36px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; overflow-wrap: anywhere; }
   .turno .ruolo { font-size: clamp(13px, 3.6vh, 15px); color: var(--tenue); margin-top: 4px; }
 
-  @media (max-height: 340px) { .tasto .descr { display: none; } .tasto { min-height: 0; } }
+  @media (max-height: 340px) { .tasto { min-height: 0; } .tasto .descr { gap: 5px; } }
 
   /* ---------- Turno: pannello destro, bersaglio e passaggio del telefono ---------- */
   .gioco > .barra { grid-area: 1 / 1 / 2 / 2; }
@@ -344,6 +355,7 @@
   .turno .tasto-ambra.piccolo { margin-top: 12px; width: 100%; max-width: 190px; height: 46px; padding: 0 12px; font-size: 13px; }
   .mescola:disabled { opacity: .3; cursor: default; }
   .quadrante svg.bloccato { cursor: default; }
+  .quadrante svg.scegli-lato { cursor: pointer; }
 
   #ventaglio { transform-origin: 200px 216px; transform: scale(.12); opacity: 0; transition: transform .55s cubic-bezier(.2, .9, .3, 1.15), opacity .25s; }
   #ventaglio.aperto { transform: none; opacity: 1; }
@@ -370,7 +382,59 @@
   .passaggio .nota { margin: 0; font-size: 15px; color: var(--tenue); min-height: 1.3em; }
   .passaggio .tasto-ambra { margin-top: 4px; }
 
-  @media (max-height: 340px) { .turno .ruolo { display: none; } .classifica li, .risultati li { padding-block: 3px; } }
+  /* Modalità a squadre */
+  .lato { min-width: 0; }
+  .tabellone { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 10px; width: 100%; max-width: 190px; }
+  .tabellone li { padding: 8px 12px 6px; border-radius: 12px; background: var(--superficie); border: 1px solid var(--bordo); }
+  .tabellone .nome { display: flex; align-items: center; gap: 8px; font-size: clamp(13px, 3.6vh, 15px); font-weight: 600; color: var(--tenue); }
+  .tabellone li, .tabellone .nome span:last-child { min-width: 0; }
+  .tabellone .nome span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tabellone b { display: block; font: clamp(26px, 9vh, 40px)/1.15 "Michroma", Verdana, sans-serif; font-variant-numeric: tabular-nums; }
+  .tabellone .a b { color: var(--ambra-testo); }
+  .tabellone .b b { color: var(--corallo); }
+  .tabellone li.attivo.a { border-color: transparent; box-shadow: inset 0 0 0 2px var(--ambra); }
+  .tabellone li.attivo.b { border-color: transparent; box-shadow: inset 0 0 0 2px var(--corallo); }
+  .tabellone li.attivo.a .led, .risultati .a .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
+  .tabellone li.attivo.b .led, .risultati .b .led { background: var(--corallo); box-shadow: 0 0 10px var(--corallo); }
+  .tabellone li.segnato b { animation: punto .6s ease-out .9s both; }
+  .risultati li.sq { padding-left: 8px; }
+  .risultati li.sq span:nth-child(2) { white-space: normal; line-height: 1.2; font-size: 14px; }
+  .turno .chi.sq { font-size: clamp(18px, 6.4vh, 28px); }
+  .turno .chi.sq.a { color: var(--ambra-testo); }
+  .turno .chi.sq.b { color: var(--corallo); }
+  .turno .esito { margin-top: 6px; font-weight: 600; color: var(--inchiostro); }
+  .scelta-lato { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; max-width: 190px; margin: 12px auto 0; }
+  .lato-btn {
+    height: 50px; padding: 0 4px; border-radius: 10px; border: 1px solid var(--bordo); background: var(--superficie);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+  }
+  .lato-btn svg { width: 18px; height: 18px; flex: none; }
+  .lato-btn[aria-pressed="true"].a { background: var(--ambra); color: #2A1C00; border-color: transparent; }
+  .lato-btn[aria-pressed="true"].b { background: var(--corallo); color: var(--su-colore); border-color: transparent; }
+  .scelta-lato + .tasto-ambra.piccolo { margin-top: 8px; }
+  .tinta.a { fill: var(--ambra); opacity: .24; }
+  .tinta.b { fill: var(--corallo); opacity: .2; }
+
+  @media (max-height: 340px) { .turno .ruolo:not(.esito) { display: none; } .turno .esito { font-size: 13px; } .risultati li.sq span:nth-child(2) { font-size: 13px; } .tabellone li { padding-block: 6px 4px; } .classifica li, .risultati li { padding-block: 3px; } }
+
+  /* ---------- Conferma per abbandonare la partita ---------- */
+  .dialogo {
+    position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center;
+    padding: 16px; background: rgba(8, 25, 29, .55); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+  }
+  .dialogo[hidden] { display: none; }
+  .dialogo .pannello { width: min(480px, 100%); }
+  .dialogo p { margin: 0; padding: 0 4px; font-size: clamp(15px, 4.4vh, 18px); line-height: 1.35; color: var(--su-corpo); }
+  .dialogo-azioni { display: flex; justify-content: flex-end; gap: 12px; padding-bottom: 5px; }
+  .tastino {
+    height: 48px; padding: 0 20px; border: 0; border-radius: 12px; cursor: pointer;
+    font-size: 16px; font-weight: 700; background: var(--tasto); color: var(--su-tasto);
+    box-shadow: 0 5px 0 var(--tasto-ombra); transition: transform .08s, box-shadow .08s;
+  }
+  .tastino.rosso { background: var(--corallo); color: var(--su-colore); box-shadow: 0 5px 0 #9E2A20; }
+  .tastino:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--tasto-ombra); }
+  .tastino.rosso:active { box-shadow: 0 1px 0 #9E2A20; }
 
   /* ---------- Avviso orientamento ---------- */
   .ruota {
@@ -390,7 +454,7 @@
 </style>
 </head>
 <body>
-<div class="app" id="app">
+<div class="app" id="app" data-schermata="schermata-inizio">
   <canvas id="onde" aria-hidden="true"></canvas>
 
   <!-- Schermata iniziale -->
@@ -438,7 +502,25 @@
   <!-- Scelta della modalità -->
   <section class="screen" id="schermata-modi" aria-label="Scelta della modalità" hidden>
     <div class="setup">
-      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-inizio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><div class="azioni"><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><div class="marchio"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" aria-hidden="true">
+<rect width="200" height="200" rx="46" style="fill:var(--tile)"/>
+<g transform="translate(100 100) scale(1.06) translate(-104 -92)">
+<g fill="none" stroke-linecap="round" style="stroke:var(--segnale)" stroke-width="4"><path d="M178.0 31.4 A11 11 0 0 0 167.0 25.0"/><path d="M185.2 28.0 A19 19 0 0 0 166.3 17.1"/></g>
+<line x1="146" y1="78" x2="168" y2="36" stroke-width="4" stroke-linecap="round" style="stroke:var(--corpo)"/>
+<circle cx="168" cy="36" r="4.5" style="fill:var(--corpo)"/>
+<path d="M60 77V64a8 8 0 0 1 8-8h50a8 8 0 0 1 8 8v13" fill="none" stroke-width="6" style="stroke:var(--corpo)"/>
+<rect x="30" y="76" width="140" height="88" rx="16" style="fill:var(--corpo)"/>
+<g fill="none" stroke-width="3" style="stroke:var(--griglia)"><circle cx="72" cy="120" r="27"/><circle cx="72" cy="120" r="19"/><circle cx="72" cy="120" r="11"/></g>
+<circle cx="72" cy="120" r="4" style="fill:var(--griglia)"/>
+<rect x="104" y="91" width="54" height="27" rx="4" style="fill:#FFB52E"/>
+<g stroke="#5A3A00" stroke-width="2" stroke-linecap="round"><line x1="110" y1="96" x2="110" y2="104"/><line x1="117" y1="97" x2="117" y2="102"/><line x1="124" y1="97" x2="124" y2="102"/><line x1="131" y1="96" x2="131" y2="104"/><line x1="138" y1="97" x2="138" y2="102"/><line x1="145" y1="97" x2="145" y2="102"/><line x1="152" y1="96" x2="152" y2="104"/></g>
+<text x="119" y="114.5" text-anchor="middle" font-family="Michroma, Verdana, sans-serif" font-size="7" style="fill:#5A3A00" letter-spacing=".5">FM</text>
+<line x1="137" y1="93.5" x2="137" y2="115.5" stroke-width="3.5" stroke-linecap="round" style="stroke:#D9362B"/>
+<g style="fill:var(--griglia)"><circle cx="114" cy="138" r="8"/><circle cx="148" cy="138" r="8"/></g>
+<g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
+<g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
+</g>
+</svg><span>Sintonizzati</span></div><div class="azioni"><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Come giocate?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
@@ -449,7 +531,7 @@
               </svg>
               <span class="titolo">Giocatori singoli</span>
               <span class="led"></span>
-              <span class="descr">Da 2 a 5 giocatori, ognuno per sé</span>
+              <span class="descr"><span class="motto">Ognuno per sé</span><span class="conteggio">Da 2 a 5 giocatori</span></span>
             </button>
             <button class="tasto" data-modo="squadre">
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
@@ -458,7 +540,7 @@
               </svg>
               <span class="titolo">Modalità a squadre</span>
               <span class="led"></span>
-              <span class="descr">Da 6 giocatori in su, divisi in due squadre</span>
+              <span class="descr"><span class="motto">Divisi in due squadre</span><span class="conteggio">Da 6 giocatori in su</span></span>
             </button>
           </div>
         </div>
@@ -475,15 +557,15 @@
           <div class="lcd"><h2>Chi gioca?</h2><span class="contatore" id="contatore">0/5</span></div>
           <div class="preset">
             <label class="slot"><span class="testa">1<span class="led"></span></span>
-              <input type="text" maxlength="12" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 1"></label>
+              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 1"></label>
             <label class="slot"><span class="testa">2<span class="led"></span></span>
-              <input type="text" maxlength="12" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 2"></label>
+              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 2"></label>
             <label class="slot"><span class="testa">3<span class="led"></span></span>
-              <input type="text" maxlength="12" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 3"></label>
+              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 3"></label>
             <label class="slot"><span class="testa">4<span class="led"></span></span>
-              <input type="text" maxlength="12" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 4"></label>
+              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 4"></label>
             <label class="slot"><span class="testa">5<span class="led"></span></span>
-              <input type="text" maxlength="12" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Nome" aria-label="Giocatore 5"></label>
+              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Nome" aria-label="Giocatore 5"></label>
           </div>
         </div>
         <div class="piede">
@@ -503,10 +585,10 @@
           <div class="lcd"><h2>Come si chiamano le squadre?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
           <div class="sfida">
             <label class="slot a"><span class="testa"><span class="led"></span>Prima squadra</span>
-              <input type="text" maxlength="16" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Squadra Ambra" aria-label="Nome della prima squadra"></label>
+              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Squadra Ambra" aria-label="Nome della prima squadra"></label>
             <span class="vs" aria-hidden="true">VS</span>
             <label class="slot b"><span class="testa"><span class="led"></span>Seconda squadra</span>
-              <input type="text" maxlength="16" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Squadra Corallo" aria-label="Nome della seconda squadra"></label>
+              <input type="text" maxlength="10" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Squadra Corallo" aria-label="Nome della seconda squadra"></label>
           </div>
         </div>
         <div class="piede">
@@ -558,11 +640,13 @@
                 <stop offset="0" style="stop-color:#FFB52E;stop-opacity:var(--bagliore)"/>
                 <stop offset="1" style="stop-color:#FFB52E;stop-opacity:0"/>
               </radialGradient>
+              <clipPath id="taglio"><rect x="12" y="12" width="376" height="204"/></clipPath>
             </defs>
             <rect x="0" y="0" width="400" height="236" rx="22" style="fill:var(--corpo)"/>
             <rect x="12" y="12" width="376" height="212" rx="12" style="fill:var(--vetro)"/>
             <rect x="12" y="12" width="376" height="212" rx="12" fill="url(#bagliore)"/>
-            <g id="ventaglio" aria-hidden="true"></g>
+            <g id="lato-scelto" aria-hidden="true"></g>
+            <g clip-path="url(#taglio)"><g id="ventaglio" aria-hidden="true"></g></g>
             <path d="M28 216 A172 172 0 0 1 372 216" fill="none" stroke-width="2" style="stroke:var(--vetro-segni)" opacity=".45"/>
             <g id="tacche" stroke-linecap="round" style="stroke:var(--vetro-segni)"></g>
             <text x="34" y="44" font-family="Michroma, Verdana, sans-serif" font-size="11" style="fill:var(--vetro-segni)" opacity=".7">FM</text>
@@ -595,6 +679,18 @@
       </div>
     </div>
   </section>
+
+  <!-- Conferma prima di abbandonare la partita -->
+  <div class="dialogo" id="dialogo-esci" hidden>
+    <div class="pannello" role="alertdialog" aria-modal="true" aria-labelledby="dialogo-titolo" aria-describedby="dialogo-testo">
+      <div class="lcd"><h2 id="dialogo-titolo">Abbandonare la partita?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
+      <p id="dialogo-testo">Se esci, la partita in corso finisce e i punteggi vanno persi.</p>
+      <div class="dialogo-azioni">
+        <button class="tastino" id="resta">Continua a giocare</button>
+        <button class="tastino rosso" id="conferma-esci">Esci</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Avviso: telefono in verticale -->
   <div class="ruota" role="alert">
@@ -660,7 +756,19 @@
     ctx.strokeStyle = colore; ctx.lineWidth = 3; ctx.stroke();
   }
   const easeOut = x => 1 - Math.pow(1 - x, 3);
+  // Porta le onde verso "in sintonia" (1) o "fuori sintonia" (0)
+  let animOnde = null;
+  function animaOnde(a, durata, poi, passo) {
+    animOnde = { da: progresso, a, t0: performance.now(), durata: riduciMoto ? Math.min(durata, 200) : durata, poi, passo };
+  }
   function disegna(ms) {
+    if (animOnde) {
+      const k = Math.min((performance.now() - animOnde.t0) / animOnde.durata, 1);
+      const e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      progresso = animOnde.da + (animOnde.a - animOnde.da) * e;
+      if (animOnde.passo) animOnde.passo(progresso);
+      if (k >= 1) { const fine = animOnde.poi; animOnde = null; if (fine) fine(); }
+    }
     const t = riduciMoto ? 0 : ms / 900;
     const dis = 1 - easeOut(progresso);
     ctx.clearRect(0, 0, w, h);
@@ -705,11 +813,14 @@
   const schermate = [...document.querySelectorAll('.screen')];
   function vai(id) {
     schermate.forEach(el => { el.hidden = el.id !== id; });
-    app.classList.toggle('in-gioco', id !== 'schermata-inizio');
+    app.dataset.schermata = id;
+    // nelle schermate dei nomi le onde si separano, tornando alla scelta si riuniscono
+    if (id === 'schermata-singoli' || id === 'schermata-squadre') { preparaNomi(id); animaOnde(0, 1100); }
+    else if (id === 'schermata-modi') animaOnde(1, 900);
     const sc = document.getElementById(id).querySelector('.setup');
     if (sc) sc.scrollTop = 0;
   }
-  document.querySelectorAll('[data-vai]').forEach(b => b.addEventListener('click', () => vai(b.dataset.vai)));
+  document.querySelectorAll('[data-vai]').forEach(b => b.addEventListener('click', () => { if (!sintonizzando) vai(b.dataset.vai); }));
 
   loader.addEventListener('click', async () => {
     if (!loader.classList.contains('pronto')) return;
@@ -720,11 +831,20 @@
     vai('schermata-modi');
   });
 
-  document.getElementById('esci').addEventListener('click', () => { fermaScansione(); passaggio.hidden = true; partita = null; vai('schermata-modi'); });
+  const dialogoEsci = document.getElementById('dialogo-esci');
+  const btnEsci = document.getElementById('esci');
+  function chiudiDialogo() { dialogoEsci.hidden = true; btnEsci.focus({ preventScroll: true }); }
+  btnEsci.addEventListener('click', () => { dialogoEsci.hidden = false; document.getElementById('resta').focus({ preventScroll: true }); });
+  document.getElementById('resta').addEventListener('click', chiudiDialogo);
+  dialogoEsci.addEventListener('click', e => { if (e.target === dialogoEsci) chiudiDialogo(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !dialogoEsci.hidden) chiudiDialogo(); });
+  document.getElementById('conferma-esci').addEventListener('click', () => {
+    dialogoEsci.hidden = true;
+    fermaScansione(); passaggio.hidden = true; partita = null;
+    vai('schermata-modi');
+  });
 
   /* ---------- Memoria dei nomi tra una partita e l'altra ---------- */
-  function ricorda(chiave, valore) { try { localStorage.setItem(chiave, JSON.stringify(valore)); } catch (e) {} }
-  function richiama(chiave) { try { return JSON.parse(localStorage.getItem(chiave)) || null; } catch (e) { return null; } }
 
   /* ---------- Scelta della modalità ---------- */
   document.querySelectorAll('.tasto[data-modo]').forEach(b => b.addEventListener('click', () => {
@@ -749,7 +869,6 @@
   const contatore = document.getElementById('contatore');
   const suggSingoli = document.getElementById('suggerimento-singoli');
   const iniziaSingoli = document.getElementById('inizia-singoli');
-  (richiama('sintonizzati-giocatori') || []).forEach((n, i) => { if (campiGiocatori[i]) campiGiocatori[i].value = n; });
 
   function verificaSingoli() {
     const nomi = campiGiocatori.map(c => c.value.trim());
@@ -778,16 +897,14 @@
 
   iniziaSingoli.addEventListener('click', () => {
     const nomi = verificaSingoli();
-    if (iniziaSingoli.disabled) return;
-    ricorda('sintonizzati-giocatori', campiGiocatori.map(c => c.value.trim()));
-    avviaSingoli(nomi);
+    if (iniziaSingoli.disabled || sintonizzando) return;
+    sintonizzaEAvvia(suggSingoli, iniziaSingoli, campiGiocatori, () => avviaSingoli(nomi));
   });
 
   /* ---------- Modalità a squadre ---------- */
   const campiSquadre = [...document.querySelectorAll('#schermata-squadre input')];
   const suggSquadre = document.getElementById('suggerimento-squadre');
   const iniziaSquadre = document.getElementById('inizia-squadre');
-  (richiama('sintonizzati-squadre') || []).forEach((n, i) => { if (campiSquadre[i] && n) campiSquadre[i].value = n; });
 
   function nomiSquadre() { return campiSquadre.map(c => c.value.trim() || c.placeholder); }
   function verificaSquadre() {
@@ -802,10 +919,34 @@
   verificaSquadre();
 
   iniziaSquadre.addEventListener('click', () => {
-    if (iniziaSquadre.disabled) return;
-    ricorda('sintonizzati-squadre', campiSquadre.map(c => c.value.trim()));
-    avviaSquadre(nomiSquadre());
+    if (iniziaSquadre.disabled || sintonizzando) return;
+    const nomi = nomiSquadre();
+    sintonizzaEAvvia(suggSquadre, iniziaSquadre, campiSquadre, () => avviaSquadre(nomi));
   });
+
+  /* ---------- Caselle vuote a ogni ingresso, e sintonia prima di giocare ---------- */
+  let sintonizzando = false;
+  function preparaNomi(id) {
+    const singoli = id === 'schermata-singoli';
+    const campi = singoli ? campiGiocatori : campiSquadre;
+    const pulsante = singoli ? iniziaSingoli : iniziaSquadre;
+    campi.forEach(c => { c.value = ''; c.disabled = false; });
+    pulsante.classList.remove('premuto');
+    if (singoli) verificaSingoli(); else verificaSquadre();
+  }
+  // Premendo "Inizia" il tasto resta abbassato e le onde tornano a unirsi, poi si entra in partita
+  function sintonizzaEAvvia(sugg, pulsante, campi, avvio) {
+    sintonizzando = true;
+    if (document.activeElement) document.activeElement.blur();
+    campi.forEach(c => { c.disabled = true; });
+    pulsante.classList.add('premuto');
+    sugg.classList.remove('errore');
+    app.classList.add('sintonia');
+    animaOnde(1, 1800, () => {
+      sugg.textContent = 'Sintonizzati!';
+      setTimeout(() => { app.classList.remove('sintonia'); sintonizzando = false; avvio(); }, riduciMoto ? 0 : 400);
+    }, p => { sugg.textContent = `Cerco la frequenza… ${(88 + p * 20).toFixed(1).replace('.', ',')} MHz`; });
+  }
 
   /* ---------- Quadrante: tacche e lancetta trascinabile ---------- */
   const NS = 'http://www.w3.org/2000/svg';
@@ -838,7 +979,15 @@
     const p = pt.matrixTransform(dial.getScreenCTM().inverse());
     impostaAngolo(Math.atan2(p.x - CX, Math.max(CY - p.y, 0.001)) * 180 / Math.PI);
   }
-  dial.addEventListener('pointerdown', e => { if (!lancettaLibera()) return; dial.classList.remove('tastiera'); trascina = true; dial.setPointerCapture(e.pointerId); daPuntatore(e); });
+  dial.addEventListener('pointerdown', e => {
+    if (partita && partita.modo === 'squadre' && partita.fase === 'lato') {
+      const pt = dial.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+      const q = pt.matrixTransform(dial.getScreenCTM().inverse());
+      const g = Math.atan2(q.x - CX, Math.max(CY - q.y, 0.001)) * 180 / Math.PI;
+      scegliLato(g < partita.angolo ? 'sx' : 'dx');
+      return;
+    }
+    if (!lancettaLibera()) return; dial.classList.remove('tastiera'); trascina = true; dial.setPointerCapture(e.pointerId); daPuntatore(e); });
   dial.addEventListener('pointermove', e => { if (trascina) daPuntatore(e); });
   dial.addEventListener('pointerup', () => { trascina = false; });
   dial.addEventListener('pointercancel', () => { trascina = false; });
@@ -883,6 +1032,7 @@
   const latoDx = document.getElementById('lato-dx');
   const ventaglio = document.getElementById('ventaglio');
   const risposte = document.getElementById('risposte');
+  const latoScelto = document.getElementById('lato-scelto');
   const mescola = document.getElementById('mescola');
   const estremoSx = document.getElementById('estremo-sx');
   const estremoDx = document.getElementById('estremo-dx');
@@ -895,12 +1045,16 @@
 
   function el(tag, cls, testo) { const e = document.createElement(tag); if (cls) e.className = cls; if (testo != null) e.textContent = testo; return e; }
   function svg(tag, attr) { const e = document.createElementNS(NS, tag); for (const k in attr) e.setAttribute(k, attr[k]); return e; }
-  function lancettaLibera() { return !!partita && (partita.fase === 'tentativo' || partita.fase === 'anteprima'); }
+  function bottone(testo, azione, cls = 'tasto-ambra piccolo') { const b = el('button', cls, testo); b.addEventListener('click', azione); return b; }
+  function lancettaLibera() { return !!partita && partita.fase === 'tentativo'; }
 
   /* ---------- Bersaglio: largo quanto due tacche lunghe, diviso in 5 spicchi ---------- */
-  const AMPIEZZA = 22.5;                       // gradi tra due tacche lunghe
   const BORDI = [-11.25, -6.75, -2.25, 2.25, 6.75, 11.25];
   const VALORI = [2, 3, 4, 3, 2];
+  // Regola di posizionamento: il bersaglio può uscire in parte dalla radio ai lati,
+  // ma lo spicchio da 4 punti deve restare sempre tutto visibile.
+  const LIMITE_CENTRO = 90 - 2.25;
+  function nuovoCentro() { return (Math.random() * 2 - 1) * LIMITE_CENTRO; }
 
   function punto(g, r) { const a = g * Math.PI / 180; return [CX + r * Math.sin(a), CY - r * Math.cos(a)]; }
   function spicchio(g0, g1, r0, r1) {
@@ -911,7 +1065,10 @@
     ventaglio.replaceChildren();
     VALORI.forEach((v, i) => {
       ventaglio.append(svg('path', { d: spicchio(centro + BORDI[i], centro + BORDI[i + 1], 40, 176), class: 'zona z' + v }));
-      const [x, y] = punto(centro + (BORDI[i] + BORDI[i + 1]) / 2, 190);
+      const medio = centro + (BORDI[i] + BORDI[i + 1]) / 2;
+      if (Math.abs(medio) >= 90) return;           // spicchio fuori dalla radio: niente numero
+      const s = Math.abs(Math.sin(medio * Math.PI / 180));
+      const [x, y] = punto(medio, Math.min(190, 178 / Math.max(s, 0.01)));
       const t = svg('text', { x, y: y + 4, 'text-anchor': 'middle', class: 'valore' });
       t.textContent = v;
       ventaglio.append(t);
@@ -922,6 +1079,7 @@
     requestAnimationFrame(() => requestAnimationFrame(() => ventaglio.classList.add('aperto')));
   }
   function chiudiVentaglio() { ventaglio.classList.remove('aperto'); ventaglio.replaceChildren(); }
+  function pulisciQuadrante() { chiudiVentaglio(); risposte.replaceChildren(); latoScelto.replaceChildren(); }
   function punteggio(g, centro) {
     const d = Math.abs(g - centro);
     return d <= 2.25 ? 4 : d <= 6.75 ? 3 : d <= 11.25 ? 2 : 0;
@@ -937,7 +1095,7 @@
     passOk.textContent = o.bottone;
     dopoPassaggio = poi;
     passaggio.hidden = false;
-    if (o.scansione != null) scansiona(o.scansione, o.sopra);
+    if (o.scansione) scansiona(o.scansione.finale, o.scansione.nomi, o.sopra);
     else { passNome.textContent = o.nome; passOk.disabled = false; }
   }
   passOk.addEventListener('click', () => {
@@ -947,8 +1105,8 @@
     if (poi) poi();
   });
   // Al primo turno la radio "scorre le stazioni" e si ferma su chi inizia
-  function scansiona(finale, sopra) {
-    const nomi = partita.giocatori.map(g => g.nome), n = nomi.length;
+  function scansiona(finale, nomi, sopra) {
+    const n = nomi.length;
     passOk.disabled = true;
     passSopra.textContent = 'La radio sceglie chi inizia…';
     const fine = () => { passNome.textContent = nomi[finale]; passSopra.textContent = sopra; passOk.disabled = false; };
@@ -963,7 +1121,9 @@
     })();
   }
 
-  /* ---------- Giocatori singoli: svolgimento del turno ---------- */
+  /* =====================================================================
+     Giocatori singoli
+     ===================================================================== */
   function avviaSingoli(nomi) {
     partita = { modo: 'singoli', giocatori: nomi.map(nome => ({ nome, punti: 0 })), turno: Math.floor(Math.random() * nomi.length) };
     vai('schermata-gioco');
@@ -974,16 +1134,17 @@
   function nuovoTurno(primo) {
     const p = partita, n = p.giocatori.length;
     p.carta = pesca();
-    p.centro = (Math.random() * 2 - 1) * (90 - AMPIEZZA / 2);
+    p.centro = nuovoCentro();
     p.tentativi = [];
     p.corrente = 0;
     p.ordine = Array.from({ length: n - 1 }, (_, k) => (p.turno + 1 + k) % n);
     p.fase = 'attesa';
-    chiudiVentaglio(); risposte.replaceChildren(); aggiorna();
+    pulisciQuadrante(); aggiorna();
     const chi = nomeDi(p.turno);
     chiediPassaggio({
       sopra: 'Passa il telefono a', nome: chi, bottone: `Sono ${chi}`,
-      nota: 'Gli altri non devono vedere lo schermo', scansione: primo ? p.turno : null
+      nota: 'Gli altri non devono vedere lo schermo',
+      scansione: primo ? { finale: p.turno, nomi: p.giocatori.map(g => g.nome) } : null
     }, () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
   }
 
@@ -1036,7 +1197,7 @@
     ordinate.forEach((t, i) => {
       // targhetta il più in alto possibile senza sovrapporsi alle altre
       const raggi = [156, 128, 100, 72];
-      let r = raggi.find(rr => { const [x, y] = punto(t.angolo, rr); return piazzati.every(([px, py]) => Math.hypot(px - x, py - y) > 26); }) || raggi[i % 4];
+      const r = raggi.find(rr => { const [x, y] = punto(t.angolo, rr); return piazzati.every(([px, py]) => Math.hypot(px - x, py - y) > 26); }) || raggi[i % 4];
       piazzati.push(punto(t.angolo, r));
       const [x1, y1] = punto(t.angolo, 30), [x2, y2] = punto(t.angolo, r - 12), [cx, cy] = punto(t.angolo, r);
       const g = svg('g', { class: 'risposta' });
@@ -1047,22 +1208,6 @@
       g.append(num);
       risposte.append(g);
     });
-  }
-
-  /* ---------- Disegno dei pannelli ---------- */
-  function aggiorna() {
-    const p = partita;
-    if (!p) return;
-    if (p.carta) { estremoSx.textContent = p.carta[0]; estremoDx.textContent = p.carta[1]; }
-    mescola.disabled = !(p.fase === 'segreto' || p.fase === 'anteprima');
-    const libera = lancettaLibera();
-    ago.style.display = libera ? '' : 'none';
-    dial.classList.toggle('bloccato', !libera);
-    dial.setAttribute('tabindex', libera ? '0' : '-1');
-    latoSx.replaceChildren(); latoDx.replaceChildren();
-    if (p.modo === 'squadre') { disegnaSquadre(); return; }
-    disegnaClassifica();
-    disegnaTurno();
   }
 
   function disegnaClassifica() {
@@ -1081,9 +1226,8 @@
     latoSx.append(lista);
   }
 
-  function disegnaTurno() {
+  function disegnaTurnoSingoli() {
     const p = partita, box = el('div', 'turno'), psy = nomeDi(p.turno);
-    const bottone = (testo, azione) => { const b = el('button', 'tasto-ambra piccolo', testo); b.addEventListener('click', azione); return b; };
     if (p.fase === 'segreto') {
       box.append(el('div', 'etichetta', 'Tocca a'), el('div', 'chi', psy),
         el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottone('Nascondi', nascondiBersaglio));
@@ -1103,23 +1247,144 @@
     latoDx.append(box);
   }
 
-  /* ---------- Modalità a squadre (ancora da progettare: anteprima del quadrante) ---------- */
+  /* =====================================================================
+     Modalità a squadre
+     Il caposquadra vede il bersaglio e dà l'indizio, la sua squadra posiziona
+     la lancetta, l'altra squadra dice se il 4 sta più a sinistra o più a destra.
+     ===================================================================== */
+  const altra = i => 1 - i;
+  const lettera = i => (i === 0 ? 'a' : 'b');
+
   function avviaSquadre(nomi) {
-    partita = { modo: 'squadre', squadre: nomi.map(nome => ({ nome, punti: 0 })), turno: 0, fase: 'anteprima', carta: pesca() };
-    chiudiVentaglio(); risposte.replaceChildren(); passaggio.hidden = true;
+    partita = { modo: 'squadre', squadre: nomi.map(nome => ({ nome, punti: 0 })), turno: Math.floor(Math.random() * 2) };
     vai('schermata-gioco');
-    impostaAngolo(0);
+    turnoSquadra(true);
+  }
+
+  function turnoSquadra(primo) {
+    const p = partita;
+    p.carta = pesca(); p.centro = nuovoCentro(); p.lato = null; p.esito = null; p.fase = 'attesa';
+    pulisciQuadrante(); aggiorna();
+    chiediPassaggio({
+      sopra: 'Tocca alla squadra', nome: p.squadre[p.turno].nome, bottone: 'Sono il caposquadra',
+      nota: 'Il caposquadra prende il telefono, gli altri non guardano',
+      scansione: primo ? { finale: p.turno, nomi: p.squadre.map(s => s.nome) } : null
+    }, () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
+  }
+
+  function nascondiSquadra() {
+    const p = partita;
+    p.fase = 'attesa'; chiudiVentaglio(); aggiorna();
+    chiediPassaggio({
+      sopra: 'Caposquadra, di\u2019 l\u2019indizio ad alta voce alla squadra', nome: p.squadre[p.turno].nome,
+      bottone: 'Pronti', nota: 'Poi mettete il telefono dove lo vede tutta la squadra'
+    }, () => { p.fase = 'tentativo'; impostaAngolo(0); aggiorna(); });
+  }
+
+  function confermaSquadra() {
+    const p = partita;
+    p.angolo = angolo; p.lato = null; p.fase = 'lato';
     aggiorna();
   }
-  function disegnaSquadre() {
-    partita.squadre.forEach((sq, i) => {
-      const box = el('div', 'squadra ' + (i === 0 ? 'a' : 'b'));
-      box.append(el('div', 'nome', sq.nome), el('div', 'punti', sq.punti));
-      const badge = el('span', 'di-turno', 'Di turno');
-      badge.hidden = partita.turno !== i;
-      box.append(badge);
-      (i === 0 ? latoSx : latoDx).append(box);
+
+  function scegliLato(l) { partita.lato = l; disegnaLato(); aggiorna(); }
+
+  // Zona colorata dal lato scelto dalla squadra avversaria
+  function disegnaLato() {
+    latoScelto.replaceChildren();
+    const p = partita;
+    if (!p || p.modo !== 'squadre' || !p.lato) return;
+    const g0 = p.lato === 'sx' ? -90 : p.angolo, g1 = p.lato === 'sx' ? p.angolo : 90;
+    if (g1 - g0 < 0.5) return;
+    latoScelto.append(svg('path', { d: spicchio(g0, g1, 36, 176), class: 'tinta ' + lettera(altra(p.turno)) }));
+  }
+
+  function rivelaSquadre() {
+    const p = partita, att = p.turno, opp = altra(att);
+    const punti = punteggio(p.angolo, p.centro);
+    const latoGiusto = p.centro < p.angolo ? 'sx' : 'dx';
+    // 4 centrato: l'altra squadra non prende nulla. Altrimenti 1 punto se ha indovinato il lato.
+    const bonus = punti === 4 ? 0 : (p.lato === latoGiusto ? 1 : 0);
+    p.squadre[att].punti += punti;
+    p.squadre[opp].punti += bonus;
+    p.esito = { punti, bonus };
+    p.fase = 'rivelazione';
+    disegnaVentaglio(p.centro); aggiorna(); apriVentaglio();
+  }
+
+  function prossimoSquadre() { partita.turno = altra(partita.turno); turnoSquadra(false); }
+
+  function disegnaTabellone() {
+    const p = partita, ol = el('ol', 'tabellone');
+    ol.setAttribute('aria-label', 'Punteggi');
+    p.squadre.forEach((sq, i) => {
+      const li = el('li', 'sq ' + lettera(i));
+      if (i === p.turno) li.classList.add('attivo');
+      if (p.fase === 'rivelazione' && (i === p.turno ? p.esito.punti : p.esito.bonus)) li.classList.add('segnato');
+      const nome = el('div', 'nome');
+      nome.append(el('span', 'led'), el('span', '', sq.nome));
+      li.append(nome, el('b', '', sq.punti));
+      ol.append(li);
     });
+    latoSx.append(ol);
+  }
+
+  function disegnaTurnoSquadre() {
+    const p = partita, box = el('div', 'turno'), att = p.turno, opp = altra(att);
+    const nomeSq = i => el('div', 'chi sq ' + lettera(i), p.squadre[i].nome);
+    if (p.fase === 'segreto') {
+      box.append(el('div', 'etichetta', 'Caposquadra di'), nomeSq(att),
+        el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottone('Nascondi', nascondiSquadra));
+    } else if (p.fase === 'tentativo') {
+      box.append(el('div', 'etichetta', 'Indizio per'), nomeSq(att),
+        el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il 4'), bottone('Conferma', confermaSquadra));
+    } else if (p.fase === 'lato') {
+      box.append(el('div', 'etichetta', 'Tocca a'), nomeSq(opp),
+        el('div', 'ruolo', 'Il 4 è a sinistra o a destra della lancetta?'));
+      const scelta = el('div', 'scelta-lato');
+      [['sx', 'Sinistra', 'M15 5l-7 7 7 7'], ['dx', 'Destra', 'M9 5l7 7-7 7']].forEach(([l, testo, d]) => {
+        const b = el('button', 'lato-btn ' + lettera(opp));
+        b.setAttribute('aria-pressed', String(p.lato === l));
+        const ico = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+        b.innerHTML = ico;
+        b.append(testo);
+        b.addEventListener('click', () => scegliLato(l));
+        scelta.append(b);
+      });
+      const rivelaBtn = bottone('Rivela', rivelaSquadre);
+      rivelaBtn.disabled = !p.lato;
+      box.append(scelta, rivelaBtn);
+    } else if (p.fase === 'rivelazione') {
+      box.append(el('div', 'etichetta', 'Risultato'));
+      const ol = el('ol', 'risultati');
+      [[att, p.esito.punti], [opp, p.esito.bonus]].forEach(([i, n]) => {
+        const li = el('li', 'sq ' + lettera(i) + (n ? '' : ' zero'));
+        li.append(el('span', 'led'), el('span', '', p.squadre[i].nome), el('b', '', n ? `+${n}` : '0'));
+        ol.append(li);
+      });
+      const nomeOpp = p.squadre[opp].nome;
+      const esito = p.esito.punti === 4 ? 'Centro preso in pieno!'
+        : p.esito.bonus ? `${nomeOpp} ha indovinato il lato` : `${nomeOpp} ha sbagliato lato`;
+      box.append(ol, el('div', 'ruolo esito', esito), bottone('Prossimo turno', prossimoSquadre));
+    }
+    latoDx.append(box);
+  }
+
+  /* ---------- Disegno dei pannelli ---------- */
+  function aggiorna() {
+    const p = partita;
+    if (!p) return;
+    if (p.carta) { estremoSx.textContent = p.carta[0]; estremoDx.textContent = p.carta[1]; }
+    mescola.disabled = p.fase !== 'segreto';
+    const libera = lancettaLibera();
+    const agoVisibile = libera || (p.modo === 'squadre' && (p.fase === 'lato' || p.fase === 'rivelazione'));
+    ago.style.display = agoVisibile ? '' : 'none';
+    dial.classList.toggle('bloccato', !libera);
+    dial.classList.toggle('scegli-lato', p.modo === 'squadre' && p.fase === 'lato');
+    dial.setAttribute('tabindex', libera ? '0' : '-1');
+    latoSx.replaceChildren(); latoDx.replaceChildren();
+    if (p.modo === 'squadre') { disegnaTabellone(); disegnaTurnoSquadre(); }
+    else { disegnaClassifica(); disegnaTurnoSingoli(); }
   }
 
   mescola.addEventListener('click', () => {
