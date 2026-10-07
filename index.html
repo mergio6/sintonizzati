@@ -2004,7 +2004,16 @@ Vergogna passeggera | Vergogna eterna
        Ogni stazione ha un piccolo brano in loop, suonato nota per nota da un "sequencer":
        ogni 50 ms si programmano le note dei prossimi 300 ms, così il ritmo resta preciso. */
     const LIVELLO_MUSICA = 0.4;
+    let livelloBase = LIVELLO_MUSICA;
     let musica = null;
+    // fattore 1 nei menu, più basso in partita: lì deve restare un sottofondo appena percepibile
+    function livelloMusica(fattore) {
+      livelloBase = LIVELLO_MUSICA * fattore;
+      if (!musica) return;
+      const g = musica.bus.gain, T = ctx.currentTime;
+      g.cancelScheduledValues(T);
+      g.setTargetAtTime(livelloBase, T, 0.5);
+    }
     const dopoTra = T => Math.max(0, T - ctx.currentTime);
     const STRUMENTI = {
       // Radio Merenda
@@ -2024,15 +2033,30 @@ Vergogna passeggera | Vergogna eterna
       cristallo: (n, T, d, bus) => campana({ f: NOTA(n), t: dopoTra(T), dur: 0.9, vol: 0.03, rapporto: 7.1, indice: 0.6, dest: bus }),
       bassoMorbido: (n, T, d, bus) => tono({ f: NOTA(n), tipo: 'triangle', t: dopoTra(T), dur: d, vol: 0.1, att: 0.02, dest: bus }),
       tic: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.02, vol: 0.03, f: 5200, q: 4, att: 0.001, dest: bus }),
-      // Dopo Mezzanotte
-      sax: (n, T, d, bus) => {
-        tono({ f: NOTA(n), tipo: 'sawtooth', t: dopoTra(T), dur: d * 0.95, vol: 0.04, att: 0.06, lp: 1500, vibrato: 4, dest: bus });
-        tono({ f: NOTA(n) * 1.004, tipo: 'sawtooth', t: dopoTra(T), dur: d * 0.95, vol: 0.025, att: 0.08, lp: 1300, dest: bus });
+      // Dopo Mezzanotte: groove funk anni '70-'80 con chitarra wah-wah
+      wah: (n, T, d, bus) => {
+        const T0 = ctx.currentTime + dopoTra(T);
+        const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = NOTA(n);
+        const fl = ctx.createBiquadFilter(); fl.type = 'bandpass'; fl.Q.value = 5;
+        // il pedale wah: il filtro si apre e si richiude, come una voce che dice "uau"
+        fl.frequency.setValueAtTime(350, T0);
+        fl.frequency.exponentialRampToValueAtTime(1900, T0 + Math.min(d * 0.6, 0.35));
+        fl.frequency.exponentialRampToValueAtTime(550, T0 + d);
+        const g = ctx.createGain(); inviluppo(g.gain, T0, 0.01, 0.045, d);
+        o.connect(fl); fl.connect(g); g.connect(bus);
+        o.start(T0); o.stop(T0 + d + 0.05);
       },
-      accordoJazz: (n, T, d, bus) => campana({ f: NOTA(n), t: dopoTra(T), dur: 0.3, vol: 0.035, rapporto: 1, indice: 1, dest: bus }),
-      contrabbasso: (n, T, d, bus) => tono({ f: NOTA(n), tipo: 'triangle', t: dopoTra(T), dur: 0.32, vol: 0.14, att: 0.01, dest: bus }),
-      schiocco: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.04, vol: 0.12, f: 2300, q: 3, att: 0.001, dest: bus }),
-      spazzola: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.18, vol: 0.03, f: 3000, q: 0.6, att: 0.05, dest: bus })
+      graffio: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.035, vol: 0.05, f: 1600, q: 2.5, att: 0.002, dest: bus }),
+      bassoFunk: (n, T, d, bus) => {
+        tono({ f: NOTA(n), tipo: 'triangle', t: dopoTra(T), dur: d * 0.9, vol: 0.09, att: 0.008, dest: bus });
+        tono({ f: NOTA(n), tipo: 'sine', t: dopoTra(T), dur: d * 0.9, vol: 0.06, att: 0.008, dest: bus });
+      },
+      rhodes: (n, T, d, bus) => campana({ f: NOTA(n), t: dopoTra(T), dur: Math.max(d, 0.6), vol: 0.028, rapporto: 1, indice: 1.1, dest: bus }),
+      sospiro: (n, T, d, bus, ev) => tono({ f: NOTA(n), f2: ev && ev.scivola ? NOTA(ev.scivola) : undefined, tipo: 'triangle', t: dopoTra(T), dur: d, vol: 0.045, att: 0.08, vibrato: 5, lp: 2400, dest: bus }),
+      cassaMorbida: (n, T, d, bus) => tono({ f: 100, f2: 42, t: dopoTra(T), dur: 0.2, vol: 0.11, att: 0.003, dest: bus }),
+      rullanteMorbido: (n, T, d, bus) => { fruscio({ t: dopoTra(T), dur: 0.1, vol: 0.05, f: 2000, q: 0.8, att: 0.003, dest: bus }); tono({ f: 210, t: dopoTra(T), dur: 0.05, vol: 0.025, att: 0.002, dest: bus }); },
+      charlestonForte: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.035, vol: 0.035, tipo: 'highpass', f: 7000, q: 0.7, att: 0.002, dest: bus }),
+      charlestonAperto: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.22, vol: 0.03, tipo: 'highpass', f: 6500, q: 0.7, att: 0.004, dest: bus })
     };
     // ogni nota: [passo, nota MIDI o accordo, durata in passi]
     const ripeti = (passi, ogni, da = 0) => Array.from({ length: Math.ceil((passi - da) / ogni) }, (_, i) => [da + i * ogni]);
@@ -2071,23 +2095,40 @@ Vergogna passeggera | Vergogna eterna
           tic: [0, 1, 2, 3].flatMap(b => [[b * 7], [b * 7 + 2], [b * 7 + 4]])
         }
       },
-      // lenta e "piccante": swing, contrabbasso che cammina, schiocchi di dita e un sax sornione
-      mezzanotte: {
-        passo: 60 / 84 / 2, passi: 32, swing: 0.33,
-        tracce: {
-          sax: [[0, 76, 3], [4, 72, 1], [5, 74, 1], [6, 76, 2], [8, 78, 2], [10, 76, 1], [11, 74, 1], [12, 72, 3], [18, 69, 1], [19, 72, 1], [20, 76, 2], [22, 74, 1], [23, 72, 1], [24, 71, 2], [26, 68, 1], [27, 71, 1], [28, 74, 2], [30, 79, 2]],
-          contrabbasso: [[0, 45], [2, 48], [4, 52], [6, 55], [8, 50], [10, 54], [12, 57], [14, 60], [16, 45], [18, 52], [20, 55], [22, 52], [24, 40], [26, 44], [28, 47], [30, 50]],
-          accordoJazz: [[57, 60, 64, 67], [54, 57, 60, 64], [57, 60, 64, 67], [56, 62, 67]].flatMap((acc, b) => [[b * 8 + 3, acc], [b * 8 + 7, acc]]),
-          schiocco: ripeti(32, 4, 2),
-          spazzola: ripeti(32, 2)
-        }
-      }
+      // "piccante": groove funk lento in mi dorico, chitarra wah-wah "bau-ciccà-uau-uau",
+      // basso morbido e sincopato, accordi di piano Rhodes e un sospiro di synth nella seconda metà
+      mezzanotte: (() => {
+        const EM = [64, 67, 71], LA = [61, 64, 67];                       // accordi della chitarra
+        const battuta = (b, acc) => [[0, acc, 3], [6, acc, 2], [10, acc, 2], [14, acc, 2]].map(([p, n, d]) => [b * 16 + p, n, d]);
+        const graffi = b => [3, 4, 12, 13].map(p => [b * 16 + p]);
+        const basso = [[0, 40, 3], [3, 40, 1], [6, 47, 2], [8, 45, 2], [10, 43, 1], [11, 40, 3],
+                       [16, 45, 3], [19, 45, 1], [22, 49, 2], [24, 52, 2], [26, 50, 1], [27, 49, 1], [28, 47, 2], [30, 45, 2]];
+        const batteria = (fn) => [0, 1, 2, 3].flatMap(b => fn(b));
+        return {
+          passo: 60 / 96 / 4, passi: 64, swing: 0.12,
+          tracce: {
+            wah: [...battuta(0, EM), ...battuta(1, LA), ...battuta(2, EM), ...battuta(3, LA)],
+            graffio: batteria(graffi),
+            bassoFunk: [...basso, ...basso.map(([p, n, d]) => [p + 32, n, d])],
+            rhodes: [0, 1, 2, 3].flatMap(b => {
+              const acc = b % 2 ? [55, 61, 66, 71] : [55, 59, 62, 66];        // la13 e mi minore 9
+              return [[b * 16, acc, 12], [b * 16 + 10, acc, 4]];
+            }),
+            sospiro: [[44, 71, 2], [46, 74, 2], [48, 76, 6, 74], [56, 79, 2], [58, 78, 2], [60, 76, 4]],
+            cassaMorbida: batteria(b => [[b * 16], [b * 16 + 7], [b * 16 + 10]]),
+            rullanteMorbido: batteria(b => [[b * 16 + 4], [b * 16 + 12]]),
+            charlestonForte: batteria(b => [0, 2, 4, 6, 8, 10, 12].map(p => [b * 16 + p])),
+            charleston: batteria(b => [1, 3, 5, 7, 9, 11, 13].map(p => [b * 16 + p])),
+            charlestonAperto: batteria(b => [[b * 16 + 14]])
+          }
+        };
+      })()
     };
     // trasforma le tracce in un elenco di eventi per ogni passo
     Object.values(BRANI).forEach(brano => {
       brano.eventi = Array.from({ length: brano.passi }, () => []);
-      Object.entries(brano.tracce).forEach(([strumento, note]) => note.forEach(([passo, nota, durata = 1]) => {
-        brano.eventi[passo].push({ strumento, nota, durata: durata * brano.passo });
+      Object.entries(brano.tracce).forEach(([strumento, note]) => note.forEach(([passo, nota, durata = 1, scivola]) => {
+        brano.eventi[passo].push({ strumento, nota, durata: durata * brano.passo, scivola });
       }));
     });
 
@@ -2103,7 +2144,7 @@ Vergogna passeggera | Vergogna eterna
       const bus = ctx.createGain();
       const T = ctx.currentTime;
       bus.gain.setValueAtTime(0.0001, T);
-      bus.gain.setTargetAtTime(LIVELLO_MUSICA, T + 0.3, 0.35);
+      bus.gain.setTargetAtTime(livelloBase, T + 0.3, 0.35);
       bus.connect(filtroBasso); filtroBasso.connect(filtroAlto); filtroAlto.connect(master);
       musica = { id, bus, uscita: filtroAlto, brano: BRANI[id], passo: 0, prossimo: T + 0.35 };
       musica.timer = setInterval(programma, 50);
@@ -2117,7 +2158,7 @@ Vergogna passeggera | Vergogna eterna
         const T = m.prossimo + (b.swing && s % 2 ? b.passo * b.swing : 0);
         b.eventi[s].forEach(ev => {
           const note = Array.isArray(ev.nota) ? ev.nota : [ev.nota];
-          note.forEach(n => { try { STRUMENTI[ev.strumento](n, T, ev.durata, m.bus); } catch (e) {} });
+          note.forEach(n => { try { STRUMENTI[ev.strumento](n, T, ev.durata, m.bus, ev); } catch (e) {} });
         });
         m.prossimo += b.passo;
         m.passo++;
@@ -2137,14 +2178,14 @@ Vergogna passeggera | Vergogna eterna
       if (!musica) return;
       const g = musica.bus.gain, T = ctx.currentTime;
       g.cancelScheduledValues(T);
-      g.setTargetAtTime(LIVELLO_MUSICA * fattore, T, 0.08);
-      if (durata) g.setTargetAtTime(LIVELLO_MUSICA, T + durata, 0.4);
+      g.setTargetAtTime(livelloBase * fattore, T, 0.08);
+      if (durata) g.setTargetAtTime(livelloBase, T + durata, 0.4);
     }
     function rialzaMusica() {
       if (!musica) return;
       const g = musica.bus.gain, T = ctx.currentTime;
       g.cancelScheduledValues(T);
-      g.setTargetAtTime(LIVELLO_MUSICA, T, 0.3);
+      g.setTargetAtTime(livelloBase, T, 0.3);
     }
 
     // i suoni importanti abbassano per un attimo la musica, così si sentono bene
@@ -2161,7 +2202,7 @@ Vergogna passeggera | Vergogna eterna
       (nascosta ? ctx.suspend() : ctx.resume()).catch(() => {});
     }
     function musicaPer(id) { const c = prepara(); if (!c) return; if (c.state === 'suspended') c.resume().catch(() => {}); avviaMusica(id); }
-    return { suona, sblocca, volume, pausa, musica: musicaPer, fermaMusica, abbassaMusica, rialzaMusica };
+    return { suona, sblocca, volume, pausa, musica: musicaPer, fermaMusica, abbassaMusica, rialzaMusica, livelloMusica };
   })();
 
   function suona(nome, opzioni) { if (impostazioni.audio) Suoni.suona(nome, opzioni); }
@@ -2320,6 +2361,8 @@ Vergogna passeggera | Vergogna eterna
   // si spegne nel menu delle modalità e nella schermata finale, dove parte la fanfara
   const SCHERMATE_MUSICA = ['schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-gioco'];
   function aggiornaMusica() {
+    // in partita la musica scende a un sottofondo minimo, per non stancare
+    Suoni.livelloMusica(app.dataset.schermata === 'schermata-gioco' ? 0.35 : 1);
     if (impostazioni.audio && impostazioni.musica && SCHERMATE_MUSICA.includes(app.dataset.schermata)) Suoni.musica(stazioneScelta);
     else Suoni.fermaMusica();
   }
