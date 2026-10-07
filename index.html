@@ -236,7 +236,7 @@
 
   /* Il pannello frontale della radio: display LCD in alto, tasti sotto */
   .pannello {
-    width: min(740px, 100%); background: var(--corpo); border-radius: 22px;
+    width: min(820px, 100%); background: var(--corpo); border-radius: 22px;
     padding: clamp(12px, 3vh, 18px); display: grid; gap: clamp(10px, 2.8vh, 16px);
     box-shadow: var(--ombra-tile);
   }
@@ -256,7 +256,7 @@
   .led { width: 10px; height: 10px; border-radius: 50%; background: var(--led-spento); flex: none; transition: background-color .15s, box-shadow .15s; }
 
   /* Tasti a pianoforte per scegliere la modalità */
-  .tasti { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px, 2vw, 16px); }
+  .tasti { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(8px, 1.6vw, 14px); }
   .tasto {
     display: grid; grid-template-columns: 1fr auto; grid-template-areas: "icona led" "titolo titolo" "descr descr";
     grid-template-rows: 1fr auto auto; align-items: end; gap: 4px 14px; text-align: left; cursor: pointer;
@@ -267,7 +267,7 @@
   }
   .tasto:active, .tasto.premuto { transform: translateY(5px); box-shadow: 0 1px 0 var(--tasto-ombra); }
   .tasto .icona { grid-area: icona; align-self: start; width: clamp(36px, 12vh, 56px); height: auto; }
-  .tasto .titolo { grid-area: titolo; font-weight: 800; font-size: clamp(17px, 5vh, 23px); letter-spacing: -0.01em; line-height: 1.15; }
+  .tasto .titolo { grid-area: titolo; font-weight: 800; font-size: clamp(16px, 4.8vh, 21px); letter-spacing: -0.01em; line-height: 1.15; }
   .tasto .descr { grid-area: descr; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
   .tasto .motto { font-size: clamp(14px, 4.4vh, 18px); font-weight: 600; color: var(--su-tasto-tenue); line-height: 1.2; }
   .tasto .conteggio {
@@ -277,6 +277,7 @@
   .tasto .led { grid-area: led; align-self: start; margin-top: 4px; }
   .tasto[data-modo="singoli"].premuto .led { background: var(--menta); box-shadow: 0 0 10px var(--menta); }
   .tasto[data-modo="squadre"].premuto .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
+  .tasto[data-modo="collab"].premuto .led { background: var(--zona-2); box-shadow: 0 0 10px var(--zona-2); }
 
   /* Preselezioni 1–5: un giocatore per stazione memorizzata */
   .preset { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(6px, 1.4vw, 12px); }
@@ -309,7 +310,7 @@
   :root[data-attivo="scuro"] .sfida .vs { color: var(--sfondo); }
   :root[data-attivo="chiaro"] .sfida .vs { color: var(--griglia); }
 
-  .piede { width: min(740px, 100%); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 6px; }
+  .piede { width: min(820px, 100%); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 6px; }
   .suggerimento { margin: 0; font-size: 15px; color: var(--tenue); line-height: 1.3; }
   .suggerimento.errore { color: var(--corallo); font-weight: 600; }
   .tasto-ambra {
@@ -390,6 +391,7 @@
   .tabellone li, .tabellone .nome span:last-child { min-width: 0; }
   .tabellone .nome span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .tabellone b { display: block; font: clamp(26px, 9vh, 40px)/1.15 "Michroma", Verdana, sans-serif; font-variant-numeric: tabular-nums; }
+  .tabellone b { transform-origin: left center; }
   .tabellone .a b { color: var(--ambra-testo); }
   .tabellone .b b { color: var(--corallo); }
   .tabellone li.attivo.a { border-color: transparent; box-shadow: inset 0 0 0 2px var(--ambra); }
@@ -417,6 +419,116 @@
   .tinta.b { fill: var(--corallo); opacity: .2; }
 
   @media (max-height: 340px) { .turno .ruolo:not(.esito) { display: none; } .turno .esito { font-size: 13px; } .risultati li.sq span:nth-child(2) { font-size: 13px; } .tabellone li { padding-block: 6px 4px; } .classifica li, .risultati li { padding-block: 3px; } }
+
+  /* ---------- Testo che ondeggia lettera per lettera ---------- */
+  .onda-testo span { display: inline-block; animation: lettera .7s ease-in-out both; animation-delay: calc(var(--i) * 45ms + 180ms); }
+  @keyframes lettera {
+    0%, 100% { transform: translateY(0); }
+    45% { transform: translateY(-7px); color: var(--corallo); }
+  }
+  .suggerimento.sintonizzato {
+    font-size: clamp(17px, 5vh, 22px); font-weight: 800; color: var(--ambra-testo); letter-spacing: .01em;
+    animation: accende .35s ease-out both; transform-origin: left center;
+  }
+  @keyframes accende { from { opacity: 0; transform: scale(.8); } }
+
+  /* ---------- La radio si accende entrando in partita ---------- */
+  #schermata-gioco.accensione .barra { animation: compare-su .4s ease-out both; }
+  #schermata-gioco.accensione .quadrante svg { animation: accendi-radio .6s cubic-bezier(.2, .9, .3, 1.1) both; transform-origin: 50% 100%; }
+  #schermata-gioco.accensione #tacche line { animation: accendi-tacca .25s ease-out both; animation-delay: calc(250ms + var(--i) * 12ms); }
+  #schermata-gioco.accensione .lato { animation: compare-su .5s ease-out .35s both; }
+  #schermata-gioco.accensione .carta { animation: compare-su .5s ease-out .5s both; }
+  @keyframes accendi-radio { from { opacity: 0; transform: scale(.9); } }
+  @keyframes accendi-tacca { from { opacity: 0; } }
+  @keyframes compare-su { from { opacity: 0; transform: translateY(14px); } }
+
+  /* Estrazione di chi inizia */
+  .estratto {
+    margin: 8px auto 0; max-width: 190px; padding: 10px 8px; border-radius: 10px;
+    background: var(--vetro); color: var(--vetro-segni); text-shadow: var(--lcd-ombra);
+    box-shadow: inset 0 0 0 3px var(--corpo), inset 0 2px 6px rgba(0, 0, 0, .18);
+    font: clamp(14px, 4.6vh, 20px)/1.2 "Michroma", Verdana, sans-serif; overflow-wrap: anywhere;
+  }
+  .estratto.scelto { animation: trovato .6s ease-out both; box-shadow: inset 0 0 0 3px var(--ambra), 0 0 18px rgba(255, 181, 46, .55); }
+  @keyframes trovato { 0% { transform: scale(1); } 35% { transform: scale(1.08); } 100% { transform: scale(1); } }
+  .classifica li.candidato { box-shadow: inset 0 0 0 2px var(--ambra); }
+  .tabellone li.segnato.b b, .tabellone li.segnato.a b { animation: punto .6s ease-out .2s both; }
+
+  /* ---------- Modalità collaborativa ---------- */
+  .info-collab { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(8px, 1.6vw, 14px); }
+  .scheda {
+    background: var(--tasto); color: var(--su-tasto); border-radius: 12px; padding: clamp(8px, 2.4vh, 12px) 14px;
+    box-shadow: 0 4px 0 var(--tasto-ombra); margin-bottom: 4px; min-width: 0;
+  }
+  .scheda h3 { margin: 0 0 6px; font-size: 14px; font-weight: 600; color: var(--su-tasto-tenue); }
+  .regole { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .regole li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 10px; align-items: center; font-size: clamp(13px, 3.6vh, 14px); line-height: 1.3; }
+  .segno {
+    width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center;
+    background: var(--vetro); color: var(--vetro-segni); font: 14px "Michroma", Verdana, sans-serif;
+  }
+  .segno svg { width: 20px; height: 20px; }
+  .livelli { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+  .livelli li {
+    display: grid; grid-template-columns: 22px 50px minmax(0, 1fr); gap: 8px; align-items: center;
+    padding: 4px 8px; border-radius: 8px; font-size: clamp(12px, 3.6vh, 14px); font-weight: 600; line-height: 1.2;
+  }
+  .livelli svg { width: 22px; height: 18px; }
+  .livelli b { font: 11px "Michroma", Verdana, sans-serif; font-variant-numeric: tabular-nums; }
+  .livelli li.attivo { background: var(--ambra); color: #2A1C00; }
+
+  .collab-box { display: grid; justify-items: center; gap: 4px; text-align: center; }
+  .collab-box .etichetta { font-size: clamp(13px, 3.6vh, 16px); font-weight: 600; color: var(--tenue); }
+  .collab-box .totale { font: clamp(36px, 14vh, 62px)/1.1 "Michroma", Verdana, sans-serif; color: var(--ambra-testo); margin-bottom: 6px; }
+  .collab-box .totale.segnato { animation: punto .6s ease-out .9s both; }
+  .pallini { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; max-width: 150px; margin-top: 4px; }
+  .pallini i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--tenue); }
+  .pallini i.giocato { background: var(--tenue); }
+  .pallini i.corrente { border-color: var(--ambra); background: var(--ambra); box-shadow: 0 0 8px var(--ambra); }
+  .pallini i.extra:not(.corrente) { border-color: var(--menta); }
+  .pallini i.extra.giocato { background: var(--menta); }
+  .turno .guadagno { font: clamp(30px, 11vh, 48px)/1.1 "Michroma", Verdana, sans-serif; color: var(--ambra-testo); margin: 4px 0; }
+  .turno .guadagno.zero { color: var(--tenue); }
+
+  /* ---------- Fine partita ---------- */
+  .podio { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 3px; max-width: 460px; }
+  .podio li {
+    display: grid; grid-template-columns: 34px auto minmax(0, 1fr) auto; gap: 10px; align-items: center;
+    padding: 5px 12px 5px 8px; border-radius: 8px; font-size: clamp(14px, 4.2vh, 17px); font-weight: 600;
+    animation: compare-su .4s ease-out both; animation-delay: calc(var(--i) * 90ms + 300ms);
+  }
+  .podio li span:nth-child(3) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .podio .pos, .podio b { font: 13px "Michroma", Verdana, sans-serif; }
+  .podio b { font-size: 15px; }
+  .podio li.vince { background: var(--ambra); color: #2A1C00; }
+  .podio li.vince .num { background: #2A1C00; color: var(--ambra); }
+  .fine-sfida { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: clamp(8px, 2vw, 16px); }
+  .fine-squadra {
+    background: var(--tasto); color: var(--su-tasto); border-radius: 12px; padding: 12px 14px; text-align: center;
+    box-shadow: 0 4px 0 var(--tasto-ombra); margin-bottom: 4px; min-width: 0; animation: compare-su .45s ease-out .3s both;
+  }
+  .fine-squadra .nome { display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 600; color: var(--su-tasto-tenue); }
+  .fine-squadra .nome span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fine-squadra b { display: block; font: clamp(34px, 13vh, 56px)/1.15 "Michroma", Verdana, sans-serif; }
+  .fine-squadra.a b { color: var(--ambra-testo); }
+  .fine-squadra.b b { color: var(--corallo); }
+  .fine-squadra.a .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
+  .fine-squadra.b .led { background: var(--corallo); box-shadow: 0 0 10px var(--corallo); }
+  .fine-squadra.vince.a { box-shadow: inset 0 0 0 3px var(--ambra), 0 4px 0 var(--tasto-ombra), 0 0 24px rgba(255, 181, 46, .45); }
+  .fine-squadra.vince.b { box-shadow: inset 0 0 0 3px var(--corallo), 0 4px 0 var(--tasto-ombra), 0 0 24px rgba(255, 90, 71, .4); }
+  .fine-sfida .vs { font-family: "Michroma", Verdana, sans-serif; font-size: 16px; color: var(--griglia); }
+  .fine-collab { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(8px, 1.6vw, 14px); align-items: stretch; }
+  .totale-fine { display: grid; place-content: center; text-align: center; animation: compare-su .45s ease-out .3s both; }
+  .totale-fine b { font: clamp(40px, 16vh, 72px)/1 "Michroma", Verdana, sans-serif; color: var(--ambra-testo); }
+  .totale-fine span { font-weight: 600; color: var(--su-tasto-tenue); margin-top: 4px; }
+  .fine-azioni { display: flex; align-items: center; gap: 12px; flex: none; }
+  .fine-azioni .btn-piccolo { height: 48px; }
+  #schermata-fine .lcd h2 { font-size: clamp(15px, 5vh, 22px); }
+
+  @media (max-height: 340px) {
+    .regole { gap: 8px; } .livelli li { padding-block: 3px; }
+    .podio li { padding-block: 3px; }
+  }
 
   /* ---------- Conferma per abbandonare la partita ---------- */
   .dialogo {
@@ -447,6 +559,7 @@
   @media (orientation: portrait) and (max-width: 820px) { .ruota { display: flex; } }
 
   @media (prefers-reduced-motion: reduce) {
+    .onda-testo span, .suggerimento.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
     .loader.pronto, .ruota svg { animation: none; }
     .loader, .loader .label, body { transition: none; }
@@ -542,6 +655,15 @@
               <span class="led"></span>
               <span class="descr"><span class="motto">Divisi in due squadre</span><span class="conteggio">Da 6 giocatori in su</span></span>
             </button>
+            <button class="tasto" data-modo="collab">
+              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
+                <circle cx="10" cy="19" r="5"/><circle cx="24" cy="14" r="5.5"/><circle cx="38" cy="19" r="5"/>
+                <path d="M3 40c0-6 3-10 8-10M45 40c0-6-3-10-8-10M13 40c0-8 5-13 11-13s11 5 11 13"/>
+              </svg>
+              <span class="titolo">Modalità collaborativa</span>
+              <span class="led"></span>
+              <span class="descr"><span class="motto">Tutti contro il gioco</span><span class="conteggio">Adatto a 2-5 giocatori</span></span>
+            </button>
           </div>
         </div>
       </div>
@@ -599,7 +721,80 @@
     </div>
   </section>
 
-  <!-- Schermata di gioco (bozza) -->
+
+  <!-- Informazioni della modalità collaborativa -->
+  <section class="screen" id="schermata-collab" aria-label="Modalità collaborativa" hidden>
+    <div class="setup">
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><div class="azioni"><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <div class="contenuto">
+        <div class="pannello">
+          <div class="lcd"><h2>Tutti contro il gioco</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="info-collab">
+            <div class="scheda">
+              <h3>Come funziona</h3>
+              <ul class="regole">
+                <li><span class="segno">7</span><span>Turni di gioco. Le carte indizio non si possono cambiare.</span></li>
+                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22 7.5 3.5h9z" style="fill:var(--zona-4)"/><path d="M12 22 3 6l4.5-2.5zM12 22l9-16-4.5-2.5z" style="fill:var(--zona-3)"/></svg></span><span>Lo spicchio centrale vale 3 punti, ma se lo centrate guadagnate un turno in più.</span></li>
+              </ul>
+            </div>
+            <div class="scheda">
+              <h3>Quanto siete sintonizzati</h3>
+              <ol class="livelli">
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity=".25"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>0–14</b><span>Non siete sintonizzati</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>15–19</b><span>Sintonizzazione avvenuta correttamente!</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>20–23</b><span>Avete una sintonia fuori dal comune</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity="1"/></svg><b>24+</b><span>Avete proprio una mente alveare!</span></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="piede">
+          <p class="suggerimento" id="suggerimento-collab" aria-live="polite">Da 2 a 5 giocatori, tutti nella stessa squadra</p>
+          <button class="tasto-ambra" id="inizia-collab">Inizia</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fine partita -->
+  <section class="screen" id="schermata-fine" aria-label="Fine partita" hidden>
+    <div class="setup">
+      <header class="barra"><div class="marchio"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" aria-hidden="true">
+<rect width="200" height="200" rx="46" style="fill:var(--tile)"/>
+<g transform="translate(100 100) scale(1.06) translate(-104 -92)">
+<g fill="none" stroke-linecap="round" style="stroke:var(--segnale)" stroke-width="4"><path d="M178.0 31.4 A11 11 0 0 0 167.0 25.0"/><path d="M185.2 28.0 A19 19 0 0 0 166.3 17.1"/></g>
+<line x1="146" y1="78" x2="168" y2="36" stroke-width="4" stroke-linecap="round" style="stroke:var(--corpo)"/>
+<circle cx="168" cy="36" r="4.5" style="fill:var(--corpo)"/>
+<path d="M60 77V64a8 8 0 0 1 8-8h50a8 8 0 0 1 8 8v13" fill="none" stroke-width="6" style="stroke:var(--corpo)"/>
+<rect x="30" y="76" width="140" height="88" rx="16" style="fill:var(--corpo)"/>
+<g fill="none" stroke-width="3" style="stroke:var(--griglia)"><circle cx="72" cy="120" r="27"/><circle cx="72" cy="120" r="19"/><circle cx="72" cy="120" r="11"/></g>
+<circle cx="72" cy="120" r="4" style="fill:var(--griglia)"/>
+<rect x="104" y="91" width="54" height="27" rx="4" style="fill:#FFB52E"/>
+<g stroke="#5A3A00" stroke-width="2" stroke-linecap="round"><line x1="110" y1="96" x2="110" y2="104"/><line x1="117" y1="97" x2="117" y2="102"/><line x1="124" y1="97" x2="124" y2="102"/><line x1="131" y1="96" x2="131" y2="104"/><line x1="138" y1="97" x2="138" y2="102"/><line x1="145" y1="97" x2="145" y2="102"/><line x1="152" y1="96" x2="152" y2="104"/></g>
+<text x="119" y="114.5" text-anchor="middle" font-family="Michroma, Verdana, sans-serif" font-size="7" style="fill:#5A3A00" letter-spacing=".5">FM</text>
+<line x1="137" y1="93.5" x2="137" y2="115.5" stroke-width="3.5" stroke-linecap="round" style="stroke:#D9362B"/>
+<g style="fill:var(--griglia)"><circle cx="114" cy="138" r="8"/><circle cx="148" cy="138" r="8"/></g>
+<g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
+<g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
+</g>
+</svg><span>Sintonizzati</span></div><div class="azioni"><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <div class="contenuto">
+        <div class="pannello">
+          <div class="lcd"><h2 id="fine-titolo" aria-live="polite"></h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div id="fine-corpo"></div>
+        </div>
+        <div class="piede">
+          <p class="suggerimento" id="fine-nota"></p>
+          <div class="fine-azioni">
+            <button class="btn-piccolo" id="nuova-partita">Nuova partita</button>
+            <button class="tasto-ambra" id="gioca-ancora">Gioca ancora</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schermata di gioco -->
   <section class="screen" id="schermata-gioco" aria-label="Partita" hidden>
     <div class="gioco">
       <header class="barra">
@@ -653,6 +848,7 @@
             <text x="366" y="44" text-anchor="end" font-family="Michroma, Verdana, sans-serif" font-size="11" style="fill:var(--vetro-segni)" opacity=".7">MHz</text>
             <g id="risposte" aria-hidden="true"></g>
             <g id="ago" style="transform-origin:200px 216px">
+              <line x1="200" y1="216" x2="200" y2="48" stroke-width="9" stroke-linecap="round" style="stroke:var(--vetro)"/>
               <line x1="200" y1="216" x2="200" y2="48" stroke-width="5" stroke-linecap="round" style="stroke:var(--corallo)"/>
             </g>
             <path d="M166 224 A34 34 0 0 1 234 224 Z" style="fill:var(--corpo)"/>
@@ -811,11 +1007,12 @@
 
   /* ---------- Navigazione tra le schermate ---------- */
   const schermate = [...document.querySelectorAll('.screen')];
+  const SCHERMATE_PREPARTITA = ['schermata-singoli', 'schermata-squadre', 'schermata-collab'];
   function vai(id) {
     schermate.forEach(el => { el.hidden = el.id !== id; });
     app.dataset.schermata = id;
-    // nelle schermate dei nomi le onde si separano, tornando alla scelta si riuniscono
-    if (id === 'schermata-singoli' || id === 'schermata-squadre') { preparaNomi(id); animaOnde(0, 1100); }
+    // prima della partita le onde si separano, tornando alla scelta si riuniscono
+    if (SCHERMATE_PREPARTITA.includes(id)) { preparaNomi(id); animaOnde(0, 1100); }
     else if (id === 'schermata-modi') animaOnde(1, 900);
     const sc = document.getElementById(id).querySelector('.setup');
     if (sc) sc.scrollTop = 0;
@@ -831,6 +1028,7 @@
     vai('schermata-modi');
   });
 
+  /* ---------- Conferma prima di abbandonare la partita ---------- */
   const dialogoEsci = document.getElementById('dialogo-esci');
   const btnEsci = document.getElementById('esci');
   function chiudiDialogo() { dialogoEsci.hidden = true; btnEsci.focus({ preventScroll: true }); }
@@ -840,19 +1038,15 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !dialogoEsci.hidden) chiudiDialogo(); });
   document.getElementById('conferma-esci').addEventListener('click', () => {
     dialogoEsci.hidden = true;
-    fermaScansione(); passaggio.hidden = true; partita = null;
+    interrompiPartita();
     vai('schermata-modi');
   });
 
-  /* ---------- Memoria dei nomi tra una partita e l'altra ---------- */
-
   /* ---------- Scelta della modalità ---------- */
+  const SCHERMATA_DI = { singoli: 'schermata-singoli', squadre: 'schermata-squadre', collab: 'schermata-collab' };
   document.querySelectorAll('.tasto[data-modo]').forEach(b => b.addEventListener('click', () => {
     b.classList.add('premuto');
-    setTimeout(() => {
-      b.classList.remove('premuto');
-      vai(b.dataset.modo === 'singoli' ? 'schermata-singoli' : 'schermata-squadre');
-    }, riduciMoto ? 0 : 240);
+    setTimeout(() => { b.classList.remove('premuto'); vai(SCHERMATA_DI[b.dataset.modo]); }, riduciMoto ? 0 : 240);
   }));
 
   // Invio passa alla casella successiva, sull'ultima chiude la tastiera
@@ -924,16 +1118,42 @@
     sintonizzaEAvvia(suggSquadre, iniziaSquadre, campiSquadre, () => avviaSquadre(nomi));
   });
 
+  /* ---------- Modalità collaborativa ---------- */
+  const suggCollab = document.getElementById('suggerimento-collab');
+  const iniziaCollab = document.getElementById('inizia-collab');
+  const TESTO_COLLAB = 'Da 2 a 5 giocatori, tutti nella stessa squadra';
+  iniziaCollab.addEventListener('click', () => {
+    if (sintonizzando) return;
+    sintonizzaEAvvia(suggCollab, iniziaCollab, [], () => avviaCollab());
+  });
+
   /* ---------- Caselle vuote a ogni ingresso, e sintonia prima di giocare ---------- */
   let sintonizzando = false;
   function preparaNomi(id) {
-    const singoli = id === 'schermata-singoli';
-    const campi = singoli ? campiGiocatori : campiSquadre;
-    const pulsante = singoli ? iniziaSingoli : iniziaSquadre;
+    const conf = {
+      'schermata-singoli': [campiGiocatori, iniziaSingoli, suggSingoli, verificaSingoli],
+      'schermata-squadre': [campiSquadre, iniziaSquadre, suggSquadre, verificaSquadre],
+      'schermata-collab': [[], iniziaCollab, suggCollab, () => { suggCollab.textContent = TESTO_COLLAB; }]
+    }[id];
+    const [campi, pulsante, sugg, verifica] = conf;
     campi.forEach(c => { c.value = ''; c.disabled = false; });
     pulsante.classList.remove('premuto');
-    if (singoli) verificaSingoli(); else verificaSquadre();
+    sugg.classList.remove('sintonizzato', 'errore');
+    verifica();
   }
+
+  // Scrive un testo lettera per lettera, così può "ondeggiare"
+  function ondaTesto(elemento, testo) {
+    elemento.replaceChildren();
+    [...testo].forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.textContent = ch === ' ' ? '\u00A0' : ch;
+      s.style.setProperty('--i', i);
+      elemento.append(s);
+    });
+    elemento.classList.add('onda-testo');
+  }
+
   // Premendo "Inizia" il tasto resta abbassato e le onde tornano a unirsi, poi si entra in partita
   function sintonizzaEAvvia(sugg, pulsante, campi, avvio) {
     sintonizzando = true;
@@ -943,8 +1163,9 @@
     sugg.classList.remove('errore');
     app.classList.add('sintonia');
     animaOnde(1, 1800, () => {
-      sugg.textContent = 'Sintonizzati!';
-      setTimeout(() => { app.classList.remove('sintonia'); sintonizzando = false; avvio(); }, riduciMoto ? 0 : 400);
+      sugg.classList.add('sintonizzato');
+      ondaTesto(sugg, 'Sintonizzati!');
+      setTimeout(() => { app.classList.remove('sintonia'); sintonizzando = false; avvio(); }, riduciMoto ? 500 : 1800);
     }, p => { sugg.textContent = `Cerco la frequenza… ${(88 + p * 20).toFixed(1).replace('.', ',')} MHz`; });
   }
 
@@ -961,6 +1182,7 @@
     l.setAttribute('x2', CX + r2 * Math.cos(a)); l.setAttribute('y2', CY - r2 * Math.sin(a));
     l.setAttribute('stroke-width', lunga ? 3.5 : 2);
     l.setAttribute('opacity', lunga ? 0.9 : 0.55);
+    l.style.setProperty('--i', i);
     tacche.appendChild(l);
   }
 
@@ -1028,6 +1250,7 @@
   }
 
   /* ---------- Elementi della partita ---------- */
+  const schermataGioco = document.getElementById('schermata-gioco');
   const latoSx = document.getElementById('lato-sx');
   const latoDx = document.getElementById('lato-dx');
   const ventaglio = document.getElementById('ventaglio');
@@ -1041,20 +1264,34 @@
   const passNome = document.getElementById('pass-nome');
   const passNota = document.getElementById('pass-nota');
   const passOk = document.getElementById('pass-ok');
-  let partita = null;
+  let partita = null, ultimaPartita = null;
 
   function el(tag, cls, testo) { const e = document.createElement(tag); if (cls) e.className = cls; if (testo != null) e.textContent = testo; return e; }
   function svg(tag, attr) { const e = document.createElementNS(NS, tag); for (const k in attr) e.setAttribute(k, attr[k]); return e; }
   function bottone(testo, azione, cls = 'tasto-ambra piccolo') { const b = el('button', cls, testo); b.addEventListener('click', azione); return b; }
   function lancettaLibera() { return !!partita && partita.fase === 'tentativo'; }
+  function elenco(nomi) { return nomi.length < 2 ? nomi.join('') : nomi.slice(0, -1).join(', ') + ' e ' + nomi[nomi.length - 1]; }
+
+  // Timer della partita, tutti fermabili insieme quando si esce
+  const timers = new Set();
+  function dopo(ms, f) { const id = setTimeout(() => { timers.delete(id); f(); }, ms); timers.add(id); return id; }
+  function fermaTimer() { timers.forEach(clearTimeout); timers.clear(); }
+  function interrompiPartita() {
+    fermaTimer();
+    passaggio.hidden = true;
+    schermataGioco.classList.remove('accensione');
+    ago.style.transition = '';
+    partita = null;
+  }
 
   /* ---------- Bersaglio: largo quanto due tacche lunghe, diviso in 5 spicchi ---------- */
   const BORDI = [-11.25, -6.75, -2.25, 2.25, 6.75, 11.25];
-  const VALORI = [2, 3, 4, 3, 2];
+  const CLASSI_ZONA = ['z2', 'z3', 'z4', 'z3', 'z2'];
   // Regola di posizionamento: il bersaglio può uscire in parte dalla radio ai lati,
-  // ma lo spicchio da 4 punti deve restare sempre tutto visibile.
+  // ma lo spicchio centrale deve restare sempre tutto visibile.
   const LIMITE_CENTRO = 90 - 2.25;
   function nuovoCentro() { return (Math.random() * 2 - 1) * LIMITE_CENTRO; }
+  function valoriBersaglio() { return partita && partita.modo === 'collab' ? ['2', '3', '3+', '3', '2'] : ['2', '3', '4', '3', '2']; }
 
   function punto(g, r) { const a = g * Math.PI / 180; return [CX + r * Math.sin(a), CY - r * Math.cos(a)]; }
   function spicchio(g0, g1, r0, r1) {
@@ -1063,12 +1300,14 @@
   }
   function disegnaVentaglio(centro) {
     ventaglio.replaceChildren();
-    VALORI.forEach((v, i) => {
-      ventaglio.append(svg('path', { d: spicchio(centro + BORDI[i], centro + BORDI[i + 1], 40, 176), class: 'zona z' + v }));
+    const valori = valoriBersaglio();
+    valori.forEach((v, i) => {
+      ventaglio.append(svg('path', { d: spicchio(centro + BORDI[i], centro + BORDI[i + 1], 40, 176), class: 'zona ' + CLASSI_ZONA[i] }));
       const medio = centro + (BORDI[i] + BORDI[i + 1]) / 2;
       if (Math.abs(medio) >= 90) return;           // spicchio fuori dalla radio: niente numero
       const s = Math.abs(Math.sin(medio * Math.PI / 180));
-      const [x, y] = punto(medio, Math.min(190, 178 / Math.max(s, 0.01)));
+      const mezzo = v.length > 1 ? 10 : 5;     // metà larghezza del numero
+      const [x, y] = punto(medio, Math.min(190, (181 - mezzo) / Math.max(s, 0.01)));
       const t = svg('text', { x, y: y + 4, 'text-anchor': 'middle', class: 'valore' });
       t.textContent = v;
       ventaglio.append(t);
@@ -1086,54 +1325,87 @@
   }
 
   /* ---------- Passaggio del telefono ---------- */
-  let dopoPassaggio = null, timerScan = null;
-  function fermaScansione() { clearTimeout(timerScan); timerScan = null; }
+  let dopoPassaggio = null;
   function chiediPassaggio(o, poi) {
-    fermaScansione();
     passSopra.textContent = o.sopra;
+    passNome.textContent = o.nome;
     passNota.textContent = o.nota || '';
     passOk.textContent = o.bottone;
     dopoPassaggio = poi;
     passaggio.hidden = false;
-    if (o.scansione) scansiona(o.scansione.finale, o.scansione.nomi, o.sopra);
-    else { passNome.textContent = o.nome; passOk.disabled = false; }
   }
   passOk.addEventListener('click', () => {
-    if (passOk.disabled) return;
     passaggio.hidden = true;
     const poi = dopoPassaggio; dopoPassaggio = null;
     if (poi) poi();
   });
-  // Al primo turno la radio "scorre le stazioni" e si ferma su chi inizia
-  function scansiona(finale, nomi, sopra) {
-    const n = nomi.length;
-    passOk.disabled = true;
-    passSopra.textContent = 'La radio sceglie chi inizia…';
-    const fine = () => { passNome.textContent = nomi[finale]; passSopra.textContent = sopra; passOk.disabled = false; };
-    if (riduciMoto) { fine(); return; }
-    const passi = 18, inizio = ((finale - (passi - 1)) % n + n) % n;
+
+  /* ---------- Entrata in partita: la radio si accende ---------- */
+  function entraInPartita(poi) {
+    passaggio.hidden = true;
+    pulisciQuadrante();
+    ago.style.transition = '';
+    impostaAngolo(0);
+    vai('schermata-gioco');
+    animaOnde(1, 800);
+    aggiorna();
+    schermataGioco.classList.remove('accensione');
+    void schermataGioco.offsetWidth;
+    schermataGioco.classList.add('accensione');
+    dopo(riduciMoto ? 0 : 1050, () => { schermataGioco.classList.remove('accensione'); poi(); });
+  }
+
+  // Estrazione: la lancetta oscilla come quando si cerca una stazione e si ferma su chi inizia
+  function estrai(nomi, finale, poi) {
+    const p = partita, n = nomi.length;
+    p.fase = 'estrazione'; p.scelto = false;
+    const passi = Math.max(16, n * 4), inizio = ((finale - (passi - 1)) % n + n) % n;
     let k = 0;
-    (function passo() {
-      passNome.textContent = nomi[(inizio + k) % n];
+    const fine = () => {
+      p.candidato = finale; p.scelto = true;
+      ago.style.transition = 'transform .6s cubic-bezier(.3, 1.5, .5, 1)';
+      impostaAngolo(0);
+      if (p.modo === 'squadre') p.squadre[altra(finale)].punti = 1;   // la seconda squadra parte da 1 punto
+      aggiorna();
+      dopo(riduciMoto ? 800 : (p.modo === 'squadre' ? 2400 : 1600), () => { ago.style.transition = ''; poi(); });
+    };
+    const passo = () => {
+      p.candidato = (inizio + k) % n;
+      const ritardo = 60 + Math.pow(k / passi, 3) * 340;
+      const ampiezza = 80 * (1 - k / passi) + 5;
+      ago.style.transition = `transform ${ritardo}ms ease-in-out`;
+      impostaAngolo(k % 2 ? ampiezza : -ampiezza);
+      aggiorna();
       k++;
-      if (k < passi) timerScan = setTimeout(passo, 55 + Math.pow(k / passi, 3) * 330);
-      else timerScan = setTimeout(fine, 250);
-    })();
+      if (riduciMoto) fine();
+      else if (k < passi) dopo(ritardo, passo);
+      else dopo(ritardo + 120, fine);
+    };
+    passo();
+  }
+
+  function pannelloEstrazione(box, nomeScelto, extra) {
+    const p = partita;
+    box.append(el('div', 'etichetta', p.scelto ? 'Inizia' : 'La radio sceglie chi inizia'));
+    box.append(el('div', 'estratto' + (p.scelto ? ' scelto' : ''), nomeScelto));
+    if (p.scelto && extra) box.append(el('div', 'ruolo', extra));
   }
 
   /* =====================================================================
-     Giocatori singoli
+     Giocatori singoli: vince chi arriva a 10, ma si finisce sempre il giro
      ===================================================================== */
   function avviaSingoli(nomi) {
-    partita = { modo: 'singoli', giocatori: nomi.map(nome => ({ nome, punti: 0 })), turno: Math.floor(Math.random() * nomi.length) };
-    vai('schermata-gioco');
-    nuovoTurno(true);
+    ultimaPartita = { modo: 'singoli', nomi };
+    const turno = Math.floor(Math.random() * nomi.length);
+    partita = { modo: 'singoli', giocatori: nomi.map(nome => ({ nome, punti: 0 })), turno, turniGiocati: 0, carta: pesca(), cartaPronta: true, fase: 'accensione' };
+    entraInPartita(() => estrai(nomi, turno, nuovoTurno));
   }
   function nomeDi(i) { return partita.giocatori[i].nome; }
+  function prendiCarta(p) { if (!p.cartaPronta) p.carta = pesca(); p.cartaPronta = false; }
 
-  function nuovoTurno(primo) {
+  function nuovoTurno() {
     const p = partita, n = p.giocatori.length;
-    p.carta = pesca();
+    prendiCarta(p);
     p.centro = nuovoCentro();
     p.tentativi = [];
     p.corrente = 0;
@@ -1141,11 +1413,8 @@
     p.fase = 'attesa';
     pulisciQuadrante(); aggiorna();
     const chi = nomeDi(p.turno);
-    chiediPassaggio({
-      sopra: 'Passa il telefono a', nome: chi, bottone: `Sono ${chi}`,
-      nota: 'Gli altri non devono vedere lo schermo',
-      scansione: primo ? { finale: p.turno, nomi: p.giocatori.map(g => g.nome) } : null
-    }, () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
+    chiediPassaggio({ sopra: 'Passa il telefono a', nome: chi, bottone: `Sono ${chi}`, nota: 'Gli altri non devono vedere lo schermo' },
+      () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
   }
 
   function nascondiBersaglio() {
@@ -1175,8 +1444,13 @@
   }
 
   function rivela() {
-    const p = partita;
+    const p = partita, n = p.giocatori.length;
     p.tentativi.forEach(t => { t.punti = punteggio(t.angolo, p.centro); p.giocatori[t.chi].punti += t.punti; });
+    p.turniGiocati++;
+    const max = Math.max(...p.giocatori.map(g => g.punti));
+    const fineGiro = p.turniGiocati % n === 0;
+    p.finita = fineGiro && max >= 10;          // tutti devono aver dato lo stesso numero di indizi
+    p.ultimoGiro = !p.finita && max >= 10;
     p.fase = 'rivelazione';
     disegnaVentaglio(p.centro);
     disegnaRisposte();
@@ -1186,7 +1460,7 @@
 
   function prossimoTurno() {
     partita.turno = (partita.turno + 1) % partita.giocatori.length;
-    nuovoTurno(false);
+    nuovoTurno();
   }
 
   // Una lancetta per ogni risposta, con il numero del giocatore sulla punta
@@ -1214,12 +1488,17 @@
     const p = partita;
     const lista = el('ol', 'classifica');
     lista.setAttribute('aria-label', 'Punteggi');
+    const estrazione = p.fase === 'estrazione' || p.fase === 'accensione';
     const chiRisponde = p.fase === 'tentativo' ? p.ordine[p.corrente] : -1;
     p.giocatori.forEach((g, i) => {
       const li = el('li');
-      if (i === p.turno) li.classList.add('attivo');
-      if (i === chiRisponde) li.classList.add('risponde');
-      if (p.fase === 'rivelazione' && p.tentativi.some(t => t.chi === i && t.punti > 0)) li.classList.add('segnato');
+      if (estrazione) {
+        if (p.fase === 'estrazione' && i === p.candidato) li.classList.add(p.scelto ? 'attivo' : 'candidato');
+      } else {
+        if (i === p.turno) li.classList.add('attivo');
+        if (i === chiRisponde) li.classList.add('risponde');
+        if (p.fase === 'rivelazione' && p.tentativi.some(t => t.chi === i && t.punti > 0)) li.classList.add('segnato');
+      }
       li.append(el('i', 'num', i + 1), el('span', '', g.nome), el('b', '', g.punti));
       lista.append(li);
     });
@@ -1227,48 +1506,55 @@
   }
 
   function disegnaTurnoSingoli() {
-    const p = partita, box = el('div', 'turno'), psy = nomeDi(p.turno);
-    if (p.fase === 'segreto') {
-      box.append(el('div', 'etichetta', 'Tocca a'), el('div', 'chi', psy),
+    const p = partita, box = el('div', 'turno');
+    if (p.fase === 'estrazione') {
+      pannelloEstrazione(box, nomeDi(p.candidato), 'Dà il primo indizio');
+    } else if (p.fase === 'segreto') {
+      box.append(el('div', 'etichetta', 'Tocca a'), el('div', 'chi', nomeDi(p.turno)),
         el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottone('Nascondi', nascondiBersaglio));
     } else if (p.fase === 'tentativo') {
-      box.append(el('div', 'etichetta', `Indizio di ${psy}`), el('div', 'chi', nomeDi(p.ordine[p.corrente])),
+      box.append(el('div', 'etichetta', `Indizio di ${nomeDi(p.turno)}`), el('div', 'chi', nomeDi(p.ordine[p.corrente])),
         el('div', 'ruolo', 'Metti la lancetta sul centro del bersaglio'), bottone('Conferma', confermaTentativo));
     } else if (p.fase === 'rivelazione') {
-      box.append(el('div', 'etichetta', `Bersaglio di ${psy}`));
+      box.append(el('div', 'etichetta', `Bersaglio di ${nomeDi(p.turno)}`));
       const ol = el('ol', 'risultati');
       p.tentativi.slice().sort((a, b) => b.punti - a.punti).forEach(t => {
         const li = el('li', t.punti ? '' : 'zero');
         li.append(el('i', 'num', t.chi + 1), el('span', '', nomeDi(t.chi)), el('b', '', t.punti ? `+${t.punti}` : '0'));
         ol.append(li);
       });
-      box.append(ol, bottone('Prossimo turno', prossimoTurno));
+      box.append(ol);
+      if (p.finita) box.append(el('div', 'ruolo esito', 'Partita finita!'), bottone('Risultato finale', mostraFine));
+      else {
+        if (p.ultimoGiro) box.append(el('div', 'ruolo esito', 'Qualcuno è a 10 punti: si finisce il giro'));
+        box.append(bottone('Prossimo turno', prossimoTurno));
+      }
     }
     latoDx.append(box);
   }
 
   /* =====================================================================
-     Modalità a squadre
-     Il caposquadra vede il bersaglio e dà l'indizio, la sua squadra posiziona
-     la lancetta, l'altra squadra dice se il 4 sta più a sinistra o più a destra.
+     Modalità a squadre: chi inizia parte da 0, l'altra squadra da 1.
+     Vince chi arriva a 10; se ci arrivano insieme è pareggio.
      ===================================================================== */
   const altra = i => 1 - i;
   const lettera = i => (i === 0 ? 'a' : 'b');
 
   function avviaSquadre(nomi) {
-    partita = { modo: 'squadre', squadre: nomi.map(nome => ({ nome, punti: 0 })), turno: Math.floor(Math.random() * 2) };
-    vai('schermata-gioco');
-    turnoSquadra(true);
+    ultimaPartita = { modo: 'squadre', nomi };
+    const turno = Math.floor(Math.random() * 2);
+    partita = { modo: 'squadre', squadre: nomi.map(nome => ({ nome, punti: 0 })), turno, carta: pesca(), cartaPronta: true, fase: 'accensione' };
+    entraInPartita(() => estrai(nomi, turno, turnoSquadra));
   }
 
-  function turnoSquadra(primo) {
+  function turnoSquadra() {
     const p = partita;
-    p.carta = pesca(); p.centro = nuovoCentro(); p.lato = null; p.esito = null; p.fase = 'attesa';
+    prendiCarta(p);
+    p.centro = nuovoCentro(); p.lato = null; p.esito = null; p.fase = 'attesa';
     pulisciQuadrante(); aggiorna();
     chiediPassaggio({
       sopra: 'Tocca alla squadra', nome: p.squadre[p.turno].nome, bottone: 'Sono il caposquadra',
-      nota: 'Il caposquadra prende il telefono, gli altri non guardano',
-      scansione: primo ? { finale: p.turno, nomi: p.squadre.map(s => s.nome) } : null
+      nota: 'Il caposquadra prende il telefono, gli altri non guardano'
     }, () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
   }
 
@@ -1308,19 +1594,29 @@
     p.squadre[att].punti += punti;
     p.squadre[opp].punti += bonus;
     p.esito = { punti, bonus };
+    const a = p.squadre[0].punti >= 10, b = p.squadre[1].punti >= 10;
+    p.finita = a || b;
+    p.pareggio = a && b;
+    p.vincitrice = p.pareggio ? -1 : a ? 0 : b ? 1 : -1;
     p.fase = 'rivelazione';
     disegnaVentaglio(p.centro); aggiorna(); apriVentaglio();
   }
 
-  function prossimoSquadre() { partita.turno = altra(partita.turno); turnoSquadra(false); }
+  function prossimoSquadre() { partita.turno = altra(partita.turno); turnoSquadra(); }
 
   function disegnaTabellone() {
     const p = partita, ol = el('ol', 'tabellone');
     ol.setAttribute('aria-label', 'Punteggi');
+    const estrazione = p.fase === 'estrazione' || p.fase === 'accensione';
     p.squadre.forEach((sq, i) => {
       const li = el('li', 'sq ' + lettera(i));
-      if (i === p.turno) li.classList.add('attivo');
-      if (p.fase === 'rivelazione' && (i === p.turno ? p.esito.punti : p.esito.bonus)) li.classList.add('segnato');
+      if (estrazione) {
+        if (p.fase === 'estrazione' && i === p.candidato) li.classList.add('attivo');
+        if (p.scelto && i !== p.candidato) li.classList.add('segnato');
+      } else {
+        if (i === p.turno) li.classList.add('attivo');
+        if (p.fase === 'rivelazione' && (i === p.turno ? p.esito.punti : p.esito.bonus)) li.classList.add('segnato');
+      }
       const nome = el('div', 'nome');
       nome.append(el('span', 'led'), el('span', '', sq.nome));
       li.append(nome, el('b', '', sq.punti));
@@ -1332,7 +1628,9 @@
   function disegnaTurnoSquadre() {
     const p = partita, box = el('div', 'turno'), att = p.turno, opp = altra(att);
     const nomeSq = i => el('div', 'chi sq ' + lettera(i), p.squadre[i].nome);
-    if (p.fase === 'segreto') {
+    if (p.fase === 'estrazione') {
+      pannelloEstrazione(box, p.squadre[p.candidato].nome, `${p.squadre[altra(p.candidato)].nome} parte da 1 punto`);
+    } else if (p.fase === 'segreto') {
       box.append(el('div', 'etichetta', 'Caposquadra di'), nomeSq(att),
         el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottone('Nascondi', nascondiSquadra));
     } else if (p.fase === 'tentativo') {
@@ -1345,8 +1643,7 @@
       [['sx', 'Sinistra', 'M15 5l-7 7 7 7'], ['dx', 'Destra', 'M9 5l7 7-7 7']].forEach(([l, testo, d]) => {
         const b = el('button', 'lato-btn ' + lettera(opp));
         b.setAttribute('aria-pressed', String(p.lato === l));
-        const ico = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
-        b.innerHTML = ico;
+        b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
         b.append(testo);
         b.addEventListener('click', () => scegliLato(l));
         scelta.append(b);
@@ -1365,7 +1662,98 @@
       const nomeOpp = p.squadre[opp].nome;
       const esito = p.esito.punti === 4 ? 'Centro preso in pieno!'
         : p.esito.bonus ? `${nomeOpp} ha indovinato il lato` : `${nomeOpp} ha sbagliato lato`;
-      box.append(ol, el('div', 'ruolo esito', esito), bottone('Prossimo turno', prossimoSquadre));
+      box.append(ol, el('div', 'ruolo esito', esito),
+        p.finita ? bottone('Risultato finale', mostraFine) : bottone('Prossimo turno', prossimoSquadre));
+    }
+    latoDx.append(box);
+  }
+
+  /* =====================================================================
+     Modalità collaborativa: tutti contro il gioco, 7 turni.
+     Il centro vale 3 punti e regala un turno in più.
+     ===================================================================== */
+  const TURNI_COLLAB = 7;
+  const LIVELLI = [
+    { min: 0, testo: 'Non siete sintonizzati' },
+    { min: 15, testo: 'Sintonizzazione avvenuta correttamente!' },
+    { min: 20, testo: 'Avete una sintonia fuori dal comune' },
+    { min: 24, testo: 'Avete proprio una mente alveare!' }
+  ];
+  function livelloCollab(punti) { let l = 0; LIVELLI.forEach((v, i) => { if (punti >= v.min) l = i; }); return l; }
+
+  function avviaCollab() {
+    ultimaPartita = { modo: 'collab' };
+    partita = { modo: 'collab', punti: 0, turno: 1, totale: TURNI_COLLAB, carta: pesca(), cartaPronta: true, fase: 'accensione' };
+    entraInPartita(turnoCollab);
+  }
+
+  function turnoCollab() {
+    const p = partita;
+    prendiCarta(p);
+    p.centro = nuovoCentro(); p.esito = null; p.fase = 'attesa';
+    pulisciQuadrante(); aggiorna();
+    chiediPassaggio({
+      sopra: p.turno === 1 ? 'Scegliete chi dà il primo indizio' : 'Passate il telefono a chi dà il prossimo indizio',
+      nome: `Turno ${p.turno} di ${p.totale}`, bottone: 'Mostra il bersaglio', nota: 'Gli altri non guardano lo schermo'
+    }, () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
+  }
+
+  function nascondiCollab() {
+    const p = partita;
+    p.fase = 'attesa'; chiudiVentaglio(); aggiorna();
+    chiediPassaggio({
+      sopra: 'Di\u2019 l\u2019indizio ad alta voce', nome: 'Tutti insieme', bottone: 'Pronti',
+      nota: 'Mettete il telefono dove lo vedono tutti'
+    }, () => { p.fase = 'tentativo'; impostaAngolo(0); aggiorna(); });
+  }
+
+  function confermaCollab() {
+    const p = partita;
+    p.angolo = angolo;
+    const d = Math.abs(p.angolo - p.centro);
+    const centro = d <= 2.25;
+    const punti = d <= 6.75 ? 3 : d <= 11.25 ? 2 : 0;
+    if (centro) p.totale++;                     // centro: un turno (e una carta) in più
+    p.punti += punti;
+    p.esito = { punti, centro };
+    p.finita = p.turno >= p.totale;
+    p.fase = 'rivelazione';
+    disegnaVentaglio(p.centro); aggiorna(); apriVentaglio();
+  }
+
+  function prossimoCollab() { partita.turno++; turnoCollab(); }
+
+  function disegnaCollab() {
+    const p = partita, box = el('div', 'collab-box');
+    box.append(el('div', 'etichetta', 'Punti'));
+    const tot = el('b', 'totale' + (p.fase === 'rivelazione' && p.esito.punti ? ' segnato' : ''), p.punti);
+    box.append(tot, el('div', 'etichetta', `Turno ${p.turno} di ${p.totale}`));
+    const pallini = el('div', 'pallini');
+    for (let i = 1; i <= p.totale; i++) {
+      const pal = el('i');
+      if (i < p.turno || (i === p.turno && p.fase === 'rivelazione')) pal.className = 'giocato';
+      else if (i === p.turno) pal.className = 'corrente';
+      if (i > TURNI_COLLAB) pal.classList.add('extra');
+      pallini.append(pal);
+    }
+    box.append(pallini);
+    latoSx.append(box);
+  }
+
+  function disegnaTurnoCollab() {
+    const p = partita, box = el('div', 'turno');
+    if (p.fase === 'segreto') {
+      box.append(el('div', 'etichetta', `Turno ${p.turno} di ${p.totale}`), el('div', 'chi', 'Tocca a te'),
+        el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottone('Nascondi', nascondiCollab));
+    } else if (p.fase === 'tentativo') {
+      box.append(el('div', 'etichetta', `Turno ${p.turno} di ${p.totale}`), el('div', 'chi', 'Tutti insieme'),
+        el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il centro'), bottone('Conferma', confermaCollab));
+    } else if (p.fase === 'rivelazione') {
+      const e = p.esito;
+      const testo = e.centro ? 'Centro! Guadagnate un turno in più' : e.punti === 3 ? 'Spicchio da 3 punti' : e.punti === 2 ? 'Spicchio da 2 punti' : 'Fuori dal bersaglio';
+      box.append(el('div', 'etichetta', 'Risultato'), el('div', 'guadagno' + (e.punti ? '' : ' zero'), e.punti ? `+${e.punti}` : '0'),
+        el('div', 'ruolo esito', testo),
+        p.finita ? bottone('Risultato finale', mostraFine) : bottone('Prossimo turno', prossimoCollab));
     }
     latoDx.append(box);
   }
@@ -1375,15 +1763,18 @@
     const p = partita;
     if (!p) return;
     if (p.carta) { estremoSx.textContent = p.carta[0]; estremoDx.textContent = p.carta[1]; }
-    mescola.disabled = p.fase !== 'segreto';
+    mescola.disabled = p.fase !== 'segreto' || p.modo === 'collab';
+    mescola.style.visibility = p.modo === 'collab' ? 'hidden' : '';
     const libera = lancettaLibera();
-    const agoVisibile = libera || (p.modo === 'squadre' && (p.fase === 'lato' || p.fase === 'rivelazione'));
+    const agoVisibile = libera || p.fase === 'estrazione' || p.fase === 'accensione'
+      || (p.modo !== 'singoli' && (p.fase === 'lato' || p.fase === 'rivelazione'));
     ago.style.display = agoVisibile ? '' : 'none';
     dial.classList.toggle('bloccato', !libera);
     dial.classList.toggle('scegli-lato', p.modo === 'squadre' && p.fase === 'lato');
     dial.setAttribute('tabindex', libera ? '0' : '-1');
     latoSx.replaceChildren(); latoDx.replaceChildren();
     if (p.modo === 'squadre') { disegnaTabellone(); disegnaTurnoSquadre(); }
+    else if (p.modo === 'collab') { disegnaCollab(); disegnaTurnoCollab(); }
     else { disegnaClassifica(); disegnaTurnoSingoli(); }
   }
 
@@ -1392,6 +1783,87 @@
     partita.carta = pesca();
     aggiorna();
   });
+
+  /* =====================================================================
+     Fine partita
+     ===================================================================== */
+  const fineTitolo = document.getElementById('fine-titolo');
+  const fineCorpo = document.getElementById('fine-corpo');
+  const fineNota = document.getElementById('fine-nota');
+
+  function mostraFine() {
+    const p = partita;
+    fermaTimer();
+    passaggio.hidden = true;
+    fineCorpo.replaceChildren();
+    let titolo, nota, onde = 1;
+
+    if (p.modo === 'singoli') {
+      const n = p.giocatori.length;
+      const ordinati = p.giocatori.map((g, i) => ({ ...g, i })).sort((a, b) => b.punti - a.punti);
+      const max = ordinati[0].punti;
+      const vincitori = ordinati.filter(g => g.punti === max);
+      titolo = vincitori.length > 1 ? 'Pareggio!' : `Vince ${vincitori[0].nome}!`;
+      const giri = p.turniGiocati / n;
+      nota = vincitori.length > 1
+        ? `${elenco(vincitori.map(g => g.nome))} a pari merito con ${max} punti`
+        : `${max} punti dopo ${giri} ${giri === 1 ? 'giro' : 'giri'}`;
+      const scheda = el('div', 'scheda'), ol = el('ol', 'podio');
+      ordinati.forEach((g, k) => {
+        const pos = ordinati.findIndex(o => o.punti === g.punti) + 1;   // a pari punti, stessa posizione
+        const li = el('li', g.punti === max ? 'vince' : '');
+        li.style.setProperty('--i', k);
+        li.append(el('span', 'pos', `${pos}°`), el('i', 'num', g.i + 1), el('span', '', g.nome), el('b', '', g.punti));
+        ol.append(li);
+      });
+      scheda.append(ol);
+      fineCorpo.append(scheda);
+    } else if (p.modo === 'squadre') {
+      titolo = p.pareggio ? 'Pareggio!' : `Vince ${p.squadre[p.vincitrice].nome}!`;
+      nota = p.pareggio ? 'Le squadre hanno raggiunto 10 punti nello stesso turno'
+        : `${p.squadre[altra(p.vincitrice)].nome} si ferma a ${p.squadre[altra(p.vincitrice)].punti} punti`;
+      const sfida = el('div', 'fine-sfida');
+      p.squadre.forEach((sq, i) => {
+        const box = el('div', 'fine-squadra ' + lettera(i) + ((p.pareggio || p.vincitrice === i) ? ' vince' : ''));
+        const nome = el('div', 'nome');
+        nome.append(el('span', 'led'), el('span', '', sq.nome));
+        box.append(nome, el('b', '', sq.punti));
+        sfida.append(box);
+        if (i === 0) sfida.append(el('span', 'vs', 'VS'));
+      });
+      fineCorpo.append(sfida);
+    } else {
+      const lv = livelloCollab(p.punti);
+      titolo = LIVELLI[lv].testo;
+      const extra = p.totale - TURNI_COLLAB;
+      nota = `${p.turno} turni giocati` + (extra ? `, di cui ${extra} ${extra === 1 ? 'extra' : 'extra'}` : '');
+      if (lv === 0) onde = 0.3;                 // non sintonizzati: le onde restano sfasate
+      const griglia = el('div', 'fine-collab');
+      const sinistra = el('div', 'scheda totale-fine');
+      sinistra.append(el('b', '', p.punti), el('span', '', 'punti'));
+      const destra = el('div', 'scheda');
+      const livelli = document.querySelector('#schermata-collab .livelli').cloneNode(true);
+      livelli.children[lv].classList.add('attivo');
+      destra.append(livelli);
+      griglia.append(sinistra, destra);
+      fineCorpo.append(griglia);
+    }
+
+    ondaTesto(fineTitolo, titolo);
+    fineNota.textContent = nota;
+    partita = null;
+    vai('schermata-fine');
+    animaOnde(onde, 1400);
+  }
+
+  document.getElementById('gioca-ancora').addEventListener('click', () => {
+    const u = ultimaPartita;
+    if (!u) return vai('schermata-modi');
+    if (u.modo === 'singoli') avviaSingoli(u.nomi);
+    else if (u.modo === 'squadre') avviaSquadre(u.nomi);
+    else avviaCollab();
+  });
+  document.getElementById('nuova-partita').addEventListener('click', () => vai('schermata-modi'));
 })();
 </script>
 </body>
