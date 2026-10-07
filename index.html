@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" translate="no">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="google" content="notranslate">
+<meta name="format-detection" content="telephone=no, email=no, address=no">
 <meta name="theme-color" content="#DCE3E3" id="meta-tema">
 <title>Sintonizzati</title>
 <meta name="description" content="Siete davvero sulla stessa lunghezza d'onda? Un gioco di gruppo a tema radio anni '80.">
@@ -103,6 +105,21 @@
   }
 
   *, *::before, *::after { box-sizing: inherit; }
+
+  /* ---------- Comportamento da app, non da pagina web ----------
+     niente zoom con due dita o doppio tocco, niente "tira giù per aggiornare",
+     niente rimbalzi ai bordi, niente selezione del testo o menu col tocco prolungato */
+  html, body {
+    overscroll-behavior: none;
+    touch-action: pan-x pan-y;
+    -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+    -webkit-touch-callout: none;
+  }
+  *, *::before, *::after { -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+  button, a, svg, img, .slot, .tasto, .estremo { touch-action: manipulation; -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
+  img, svg { -webkit-user-drag: none; }
+  .setup, .dialogo .pannello { overscroll-behavior: contain; }
+  input { -webkit-touch-callout: default; touch-action: manipulation; }
   html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); background: var(--sfondo); }
   body {
     height: 100%; margin: 0; overflow: hidden;
@@ -1056,6 +1073,23 @@
 <script>
 (() => {
   const radice = document.documentElement;
+
+  /* ---------- Gesti del browser disattivati ---------- */
+  const eCampo = el => el && el.closest && el.closest('input, textarea');
+  // zoom con due dita (anche dove il viewport non basta, come su Safari)
+  document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+  ['gesturestart', 'gesturechange', 'gestureend'].forEach(ev => document.addEventListener(ev, e => e.preventDefault(), { passive: false }));
+  // doppio tocco per ingrandire
+  document.addEventListener('dblclick', e => { if (!eCampo(e.target)) e.preventDefault(); }, { passive: false });
+  // menu del tocco prolungato e selezione del testo (nelle caselle dei nomi restano attivi)
+  document.addEventListener('contextmenu', e => { if (!eCampo(e.target)) e.preventDefault(); });
+  document.addEventListener('selectstart', e => { if (!eCampo(e.target)) e.preventDefault(); });
+  document.addEventListener('dragstart', e => e.preventDefault());
+  // zoom da tastiera e rotellina (Ctrl + / Ctrl -), utile sui tablet con tastiera
+  document.addEventListener('wheel', e => { if (e.ctrlKey) e.preventDefault(); }, { passive: false });
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) e.preventDefault();
+  });
   const riduciMoto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sistemaScuro = window.matchMedia('(prefers-color-scheme: dark)');
   const app = document.getElementById('app');
