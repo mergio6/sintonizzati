@@ -1,12 +1,13 @@
 /* Service worker di Sintonizzati: permette di giocare anche senza connessione.
-   La pagina viene sempre chiesta prima alla rete, così ogni aggiornamento caricato
-   su GitHub arriva subito; se manca la connessione si usa la copia salvata.
+   La pagina e le carte (carte.txt) vengono sempre chieste prima alla rete, così ogni
+   aggiornamento caricato su GitHub arriva subito; se manca la connessione si usa la copia salvata.
    Se cambi le icone o il manifest, aumenta il numero di VERSIONE. */
-const VERSIONE = 'sintonizzati-v1';
+const VERSIONE = 'sintonizzati-v2';
 const FILE = [
   './',
   './index.html',
   './manifest.webmanifest',
+  './carte.txt',
   './icone/icon-192.png',
   './icone/icon-512.png',
   './icone/icon-maskable-192.png',
@@ -41,6 +42,19 @@ self.addEventListener('fetch', evento => {
           return risposta;
         })
         .catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+
+  // Le carte: prima la rete (così le nuove carte arrivano subito), poi la copia salvata
+  if (new URL(richiesta.url).pathname.endsWith('/carte.txt')) {
+    evento.respondWith(
+      fetch(richiesta)
+        .then(risposta => {
+          if (risposta.ok) { const copia = risposta.clone(); caches.open(VERSIONE).then(cache => cache.put('./carte.txt', copia)); }
+          return risposta;
+        })
+        .catch(() => caches.match('./carte.txt'))
     );
     return;
   }

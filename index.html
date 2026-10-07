@@ -646,6 +646,28 @@
   .tastino:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--tasto-ombra); }
   .tastino.rosso:active { box-shadow: 0 1px 0 #9E2A20; }
 
+  /* ---------- Scelta della stazione ---------- */
+  .stazioni { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .stazioni .tasto { min-height: 0; padding: clamp(10px, 2.8vh, 16px) 14px; gap: 2px 10px; }
+  .stazioni .tasto .icona { width: clamp(28px, 8vh, 40px); }
+  .stazioni .tasto .titolo { font-size: clamp(15px, 4.4vh, 19px); }
+  .stazioni .tasto .motto { font-size: clamp(12px, 3.6vh, 15px); }
+  .stazioni .tasto .descr { gap: 6px; }
+  @media (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } }
+  .stazioni .tasto.scelto {
+    transform: translateY(5px);
+    box-shadow: inset 0 0 0 3px var(--colore), 0 1px 0 var(--tasto-ombra);
+  }
+  .stazioni .tasto.scelto .led { background: var(--colore); box-shadow: 0 0 10px var(--colore); }
+  .tastino.ambra { background: var(--ambra); color: #2A1C00; box-shadow: 0 5px 0 var(--ambra-scura); }
+  .tastino.ambra:active { box-shadow: 0 1px 0 var(--ambra-scura); }
+  .chip-stazione {
+    margin-left: 4px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--bordo);
+    font: 600 12px/1.2 "Bricolage Grotesque", system-ui, sans-serif; color: var(--tenue); white-space: nowrap;
+  }
+  .chip-stazione:empty { display: none; }
+  @media (max-width: 720px) { #schermata-gioco .marchio-nome { display: none; } }
+
   /* ---------- Firma ---------- */
   .credito {
     position: absolute; left: 0; right: 0; bottom: 6px; margin: 0; text-align: center;
@@ -712,6 +734,356 @@
 </style>
 </head>
 <body>
+<script type="text/plain" id="carte-predefinite">
+# =====================================================================
+#  SINTONIZZATI · le carte parola
+# =====================================================================
+#  Come funziona questo file:
+#  - una carta per riga: estremo di sinistra | estremo di destra
+#  - le righe che iniziano con # sono note e vengono ignorate
+#  - [Nome della stazione] indica a quale mazzo appartengono le carte sotto
+#  - le quattro stazioni sono: [Radio Merenda], [Hit Parade],
+#    [Onde Cerebrali] e [Dopo Mezzanotte]
+#  - se una riga è scritta male, il gioco la salta e usa tutte le altre
+#  - tieni gli estremi brevi (massimo una ventina di caratteri)
+# =====================================================================
+
+
+[Radio Merenda]
+# Per i più piccoli: parole semplici e cose di tutti i giorni
+
+Piccolo | Grande
+Lento | Veloce
+Silenzioso | Rumoroso
+Freddo | Caldo
+Morbido | Duro
+Facile | Difficile
+Leggero | Pesante
+Pulito | Sporco
+Noioso | Divertente
+Triste | Allegro
+Brutto | Bello
+Cattivo | Buono
+Corto | Lungo
+Basso | Alto
+Vuoto | Pieno
+Vecchio | Nuovo
+Debole | Forte
+Calmo | Agitato
+Timido | Coraggioso
+Ordinato | Disordinato
+Liscio | Ruvido
+Bagnato | Asciutto
+Dolce | Salato
+Puzza | Profuma
+Comune | Raro
+Inutile | Utile
+Fragile | Indistruttibile
+Colore scuro | Colore chiaro
+Poco colorato | Coloratissimo
+Spaventoso | Coccoloso
+Fa ridere | Fa piangere
+Esiste davvero | È inventato
+Cosa da piccoli | Cosa da grandi
+Da fare di giorno | Da fare di notte
+Cosa d'estate | Cosa d'inverno
+Si fa al mare | Si fa in montagna
+Si fa a scuola | Si fa a casa
+Cibo che non mi piace | Cibo che adoro
+Cibo da merenda | Cibo da cena
+Facile da mangiare | Difficile da mangiare
+Frutta aspra | Frutta dolce
+Facile da disegnare | Difficile da disegnare
+Animale tenero | Animale pauroso
+Animale lento | Animale veloce
+Animale piccolo | Animale enorme
+Animale di casa | Animale selvatico
+Gioco tranquillo | Gioco scatenato
+Giocattolo noioso | Giocattolo fantastico
+Cartone per piccoli | Cartone per grandi
+Personaggio buono | Personaggio cattivo
+Supereroe debole | Supereroe fortissimo
+Mostro buffo | Mostro spaventoso
+Sport facile | Sport difficile
+Mestiere facile | Mestiere difficile
+Mestiere noioso | Mestiere da sogno
+Regalo deludente | Regalo fantastico
+Posto noioso | Posto avventuroso
+Posto sicuro | Posto pericoloso
+Rumore piacevole | Rumore fastidioso
+Parola facile | Parola difficile
+Galleggia | Affonda
+Si rompe subito | Dura per sempre
+
+
+[Hit Parade]
+# Il mazzo standard: i grandi classici per tutti
+
+Freddo | Caldo
+Sopravvalutato | Sottovalutato
+Inutile | Utile
+Facile da disegnare | Difficile da disegnare
+Noioso | Emozionante
+Cibo da colazione | Cibo da cena
+Animale debole | Animale forte
+Film per bambini | Film per adulti
+Comune | Raro
+Brutto | Bello
+Puzza | Profuma
+Hobby da nonni | Hobby da ragazzi
+Economico | Costoso
+Rilassante | Stressante
+Antico | Moderno
+Minuscolo | Enorme
+Salato | Dolce
+Lento | Veloce
+Silenzioso | Rumoroso
+Sicuro | Pericoloso
+Da fare in estate | Da fare in inverno
+Morbido | Duro
+Leggero | Pesante
+Da città | Da campagna
+Pigro | Instancabile
+Prevedibile | Sorprendente
+Snob | Alla mano
+Fa bene | Fa male
+Triste | Allegro
+Inquietante | Rassicurante
+Superpotere inutile | Superpotere utile
+Canzone da ballare | Canzone da piangere
+Vacanza da incubo | Vacanza da sogno
+Lavoro noioso | Lavoro da sogno
+Personaggio buono | Personaggio cattivo
+Odiato | Amato
+Fuori moda | Di moda
+Mangiabile | Immangiabile
+Poco italiano | Italianissimo
+Liscio | Ruvido
+Bagnato | Asciutto
+Regalo pessimo | Regalo perfetto
+Sport facile | Sport difficile
+Da fare da soli | Da fare in compagnia
+Normale | Strano
+Brutta parola | Bella parola
+Talento inutile | Talento utile
+Film brutto | Film capolavoro
+Canzone brutta | Canzone bellissima
+Serie TV noiosa | Serie TV avvincente
+Cibo sopravvalutato | Cibo sottovalutato
+Piatto facile | Piatto difficile
+Colazione triste | Colazione da re
+Si beve caldo | Si beve freddo
+Bevanda disgustosa | Bevanda deliziosa
+Invenzione inutile | Invenzione geniale
+App inutile | App indispensabile
+Oggetto inutile | Oggetto indispensabile
+Facile da ricordare | Difficile da ricordare
+Facile da dire | Difficile da dire
+Mestiere sottopagato | Mestiere strapagato
+Mestiere sicuro | Mestiere pericoloso
+Si fa al lavoro | Si fa in vacanza
+Hobby economico | Hobby costoso
+Sport noioso | Sport spettacolare
+Sport per pigri | Sport per atleti
+Animale brutto | Animale bellissimo
+Animale innocuo | Animale letale
+Animale sopravvalutato | Animale sottovalutato
+Città brutta | Città bellissima
+Città da visitare | Città da evitare
+Posto rilassante | Posto caotico
+Vacanza economica | Vacanza di lusso
+Viaggio breve | Viaggio infinito
+Mezzo lento | Mezzo veloce
+Festa noiosa | Festa memorabile
+Regalo da riciclare | Regalo da tenere
+Casual | Elegante
+Vestito estivo | Vestito invernale
+Colore triste | Colore allegro
+Nome antico | Nome moderno
+Lingua facile | Lingua difficile
+Gioco facile | Gioco complicato
+Famoso | Sconosciuto
+Eroe | Cattivo
+Fortunato | Sfortunato
+Ottimista | Pessimista
+Puntuale | Ritardatario
+Tirchio | Spendaccione
+Introverso | Estroverso
+Vecchio stile | All'avanguardia
+Cosa da boomer | Cosa da Gen Z
+Tecnologia vecchia | Tecnologia futuristica
+Prudente | Rischioso
+Fatto in casa | Industriale
+Sapore delicato | Sapore forte
+Cibo leggero | Cibo pesante
+Per niente piccante | Piccantissimo
+Croccante | Molle
+Snack sano | Snack spazzatura
+Piatto del nord | Piatto del sud
+Cibo di strada | Cibo stellato
+Cena veloce | Cena elaborata
+Moda passeggera | Intramontabile
+Programma trash | Programma colto
+Film da ridere | Film da piangere
+Libro noioso | Libro avvincente
+Divertente | Irritante
+Imbarazzante | Da vantarsi
+Facile da trovare | Introvabile
+Dura poco | Dura per sempre
+Faccenda odiosa | Faccenda piacevole
+Superstizione assurda | Superstizione sensata
+Scusa credibile | Scusa ridicola
+Regola stupida | Regola sacrosanta
+Abitudine sana | Abitudine pessima
+Vizio innocuo | Vizio pericoloso
+Da mattinieri | Da nottambuli
+Rumore rilassante | Rumore insopportabile
+Lavoro manuale | Lavoro intellettuale
+Per niente romantico | Romanticissimo
+Fragile | Indistruttibile
+
+
+[Onde Cerebrali]
+# Concetti astratti e sfumati: per chi vuole ragionarci su
+
+Etico | Immorale
+Arte | Non arte
+Scoperto | Inventato
+Naturale | Artificiale
+Razionale | Irrazionale
+Destino | Caso
+Ordine | Caos
+Utopia | Distopia
+Mainstream | Di nicchia
+Concreto | Astratto
+Oggettivo | Soggettivo
+Semplice | Complesso
+Bene comune | Interesse personale
+Libertà | Sicurezza
+Tradizione | Progresso
+Corpo | Mente
+Emozione | Ragione
+Individuo | Collettività
+Effimero | Eterno
+Reale | Immaginario
+Verità scomoda | Bugia comoda
+Sacro | Profano
+Raffinato | Kitsch
+Genialità | Follia
+Coraggio | Incoscienza
+Prudenza | Codardia
+Ambizione sana | Ambizione tossica
+Giustizia | Vendetta
+Perdonabile | Imperdonabile
+Diritto | Privilegio
+Bisogno | Capriccio
+Necessario | Superfluo
+Talento | Fortuna
+Merito | Raccomandazione
+Innato | Imparato
+Natura | Cultura
+Istinto | Riflessione
+Nostalgico | Visionario
+Conservatore | Rivoluzionario
+Ottimismo | Cinismo
+Amore | Abitudine
+Amicizia | Convenienza
+Ironia | Sarcasmo
+Satira | Offesa
+Cultura alta | Cultura popolare
+Profondo | Superficiale
+Ispirazione | Plagio
+Minimalista | Barocco
+Funzionale | Decorativo
+Utile alla società | Dannoso alla società
+Lavoro | Vocazione
+Successo | Realizzazione
+Ricchezza | Felicità
+Tempo libero | Tempo perso
+Dubbio | Certezza
+Fede | Scienza
+Credibile | Assurdo
+Teoria | Pratica
+Invecchia bene | Invecchia male
+Cliché | Inaspettato
+Ovvietà | Paradosso
+Silenzio d'oro | Silenzio imbarazzante
+Fallimento | Lezione
+Ricordo | Rimpianto
+Quantità | Qualità
+Arte da museo | Arte di strada
+Maturo | Infantile
+Coerente | Contraddittorio
+Moderato | Estremo
+Pubblico | Privato
+Egoista | Altruista
+Spontaneo | Calcolato
+Autentico | Costruito
+Fatto per amore | Fatto per soldi
+
+
+[Dopo Mezzanotte]
+# Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
+
+Appuntamento flop | Appuntamento da sogno
+Abbordaggio pessimo | Abbordaggio geniale
+Bacio imbarazzante | Bacio da film
+Per niente sexy | Sexyssimo
+Mestiere poco sexy | Mestiere sexy
+Accento poco sexy | Accento sexy
+Cocktail leggero | Cocktail micidiale
+Sbronza leggera | Sbronza epica
+Postumi leggeri | Postumi devastanti
+Messaggio innocuo | Messaggio da ubriachi
+Idea da sobri | Idea da ubriachi
+Canzone da sobri | Canzone da ubriachi
+Segreto innocente | Segreto inconfessabile
+Bugia bianca | Bugia imperdonabile
+Peccato veniale | Peccato mortale
+Fantasia innocente | Fantasia proibita
+Da dire a cena | Da dire a letto
+Si fa in pubblico | Si fa in privato
+Relazione noiosa | Relazione passionale
+Ex dimenticabile | Ex indimenticabile
+Flirt innocente | Flirt pericoloso
+Regalo romantico | Regalo piccante
+Posto poco romantico | Posto romanticissimo
+Look da divano | Look da seduzione
+Serata tranquilla | Serata leggendaria
+Notte tranquilla | Notte brava
+Festa noiosa | Festa senza limiti
+Vizio accettabile | Vizio inconfessabile
+Imbarazzo lieve | Imbarazzo cosmico
+Domanda innocente | Domanda indiscreta
+Gossip noioso | Gossip succoso
+Tradimento perdonabile | Imperdonabile
+Red flag | Green flag
+Profilo inquietante | Profilo irresistibile
+Foto imbarazzante | Foto da profilo
+Da raccontare a mamma | Da non raccontare mai
+Da vedere coi genitori | Da vedere da soli
+Parolaccia leggera | Parolaccia pesante
+Battuta pulita | Battuta sporca
+Humor innocente | Humor nero
+Gelosia sana | Gelosia tossica
+Locale squallido | Locale esclusivo
+Single felice | Single disperato
+Matrimonio da favola | Matrimonio da incubo
+Tatuaggio da pentirsi | Tatuaggio azzeccato
+Confessione leggera | Confessione scioccante
+Rischio calcolato | Follia totale
+Posizione comoda | Posizione acrobatica
+Detto ad alta voce | Pensato e mai detto
+Coinquilino perfetto | Coinquilino da incubo
+Suocera adorabile | Suocera terribile
+Collega simpatico | Collega insopportabile
+Vino da cartone | Vino pregiato
+Bacio da dimenticare | Bacio leggendario
+Scusa per non uscire | Scusa per restare
+Weekend tranquillo | Weekend da raccontare
+Spesa da adulti | Spesa da ragazzini
+Vergogna passeggera | Vergogna eterna
+</script>
 <div class="app" id="app" data-schermata="schermata-inizio">
   <canvas id="onde" aria-hidden="true"></canvas>
 
@@ -817,10 +1189,52 @@
     </div>
   </section>
 
+
+  <!-- Scelta della stazione (mazzo di carte) -->
+  <section class="screen" id="schermata-stazione" aria-label="Scelta delle carte" hidden>
+    <div class="setup">
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <div class="contenuto">
+        <div class="pannello">
+          <div class="lcd"><h2>Su che stazione giocate?</h2><span class="contatore" id="conta-carte"></span></div>
+          <div class="tasti stazioni">
+            <button class="tasto" data-stazione="merenda" aria-pressed="false" style="--k:0; --colore:var(--menta)">
+              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="18" r="11"/><path d="M24 29v15M18.5 18a5.5 5.5 0 0 1 11 0 3 3 0 0 1-6 0"/></svg>
+              <span class="titolo">Radio Merenda</span>
+              <span class="led"></span>
+              <span class="descr"><span class="motto">Parole semplici per i più piccoli</span><span class="conteggio">Per bambini</span></span>
+            </button>
+            <button class="tasto" data-stazione="hitparade" aria-pressed="false" style="--k:1; --colore:var(--ambra)">
+              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 36V11l20-5v25"/><circle cx="13" cy="36" r="5"/><circle cx="33" cy="31" r="5"/></svg>
+              <span class="titolo">Hit Parade</span>
+              <span class="led"></span>
+              <span class="descr"><span class="motto">I grandi classici per tutti</span><span class="conteggio">Per tutti</span></span>
+            </button>
+            <button class="tasto" data-stazione="cerebrali" aria-pressed="false" style="--k:2; --colore:var(--zona-2)">
+              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 31a12 12 0 1 1 14 0v5H17z"/><path d="M19 41h10M21 45h6M24 22v-5M20 19l4 3 4-3"/></svg>
+              <span class="titolo">Onde Cerebrali</span>
+              <span class="led"></span>
+              <span class="descr"><span class="motto">Concetti astratti e sfumati</span><span class="conteggio">Più impegnativa</span></span>
+            </button>
+            <button class="tasto" data-stazione="mezzanotte" aria-pressed="false" style="--k:3; --colore:var(--corallo)">
+              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M33 35A15 15 0 0 1 19 8a15 15 0 1 0 14 27z"/><path d="M36 9l1.5 3 3 1.5-3 1.5-1.5 3-1.5-3-3-1.5 3-1.5z"/></svg>
+              <span class="titolo">Dopo Mezzanotte</span>
+              <span class="led"></span>
+              <span class="descr"><span class="motto">Temi piccanti per adulti</span><span class="conteggio">Solo 18+</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="piede">
+          <button class="tasto-ambra" id="avanti-stazione">Avanti</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Nomi dei giocatori singoli -->
   <section class="screen" id="schermata-singoli" aria-label="Nomi dei giocatori" hidden>
     <div class="setup">
-      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-singoli" aria-live="polite"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-stazione"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-singoli" aria-live="polite"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Chi gioca?</h2><span class="contatore" id="contatore">0/5</span></div>
@@ -847,7 +1261,7 @@
   <!-- Nomi delle squadre -->
   <section class="screen" id="schermata-squadre" aria-label="Nomi delle squadre" hidden>
     <div class="setup">
-      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-squadre" aria-live="polite"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-stazione"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-squadre" aria-live="polite"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Come si chiamano le squadre?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
@@ -870,7 +1284,7 @@
   <!-- Informazioni della modalità collaborativa -->
   <section class="screen" id="schermata-collab" aria-label="Modalità collaborativa" hidden>
     <div class="setup">
-      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-collab" aria-live="polite"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-stazione"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-collab" aria-live="polite"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Tutti contro il gioco</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
@@ -959,7 +1373,7 @@
 <g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
 <g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
 </g>
-</svg><span>Sintonizzati</span></div>
+</svg><span class="marchio-nome">Sintonizzati</span><span class="chip-stazione" id="chip-stazione"></span></div>
         <div class="azioni">
           <button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
           <button class="btn-piccolo" id="esci">Esci</button>
@@ -1048,6 +1462,18 @@
         </div>
       </div>
       <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio</p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+    </div>
+  </div>
+
+  <!-- Conferma per la stazione per adulti -->
+  <div class="dialogo" id="dialogo-adulti" hidden>
+    <div class="pannello" role="alertdialog" aria-modal="true" aria-labelledby="adulti-titolo" aria-describedby="adulti-testo">
+      <div class="lcd"><h2 id="adulti-titolo">Dopo Mezzanotte</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
+      <p id="adulti-testo">Questa stazione ha carte con temi per adulti. Siete tutti maggiorenni?</p>
+      <div class="dialogo-azioni">
+        <button class="tastino" id="adulti-no">Annulla</button>
+        <button class="tastino ambra" id="adulti-si">Sì, siamo maggiorenni</button>
+      </div>
     </div>
   </div>
 
@@ -1704,14 +2130,18 @@
 
   /* ---------- Navigazione tra le schermate ---------- */
   const schermate = [...document.querySelectorAll('.screen')];
-  const SCHERMATE_PREPARTITA = ['schermata-singoli', 'schermata-squadre', 'schermata-collab'];
+  const SCHERMATE_PREPARTITA = ['schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab'];
   function vai(id) {
     const da = app.dataset.schermata;
     if (id === 'schermata-modi' && SCHERMATE_PREPARTITA.includes(da)) suona('riunisci');
     schermate.forEach(el => { el.hidden = el.id !== id; });
     app.dataset.schermata = id;
     // prima della partita le onde si separano, tornando alla scelta si riuniscono
-    if (SCHERMATE_PREPARTITA.includes(id)) { preparaNomi(id); if (!(animOnde && animOnde.meta === 0)) separaOnde(); }
+    if (SCHERMATE_PREPARTITA.includes(id)) {
+      if (id === 'schermata-stazione') mostraStazione(); else preparaNomi(id);
+      const giaSeparate = animOnde ? animOnde.meta === 0 : progresso < 0.02;
+      if (!giaSeparate) separaOnde();
+    }
     else if (id === 'schermata-modi') animaOnde(1, 900);
     const sc = document.getElementById(id).querySelector('.setup');
     if (sc) sc.scrollTop = 0;
@@ -1723,10 +2153,10 @@
      o quando c'è una finestra aperta, teniamo una voce in più nella cronologia: il tasto indietro
      la consuma e noi decidiamo cosa fare, invece di chiudere l'app.
      Nella schermata iniziale e nella scelta della modalità, invece, l'app si chiude come al solito. */
-  const SCHERMATE_PROTETTE = ['schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-gioco', 'schermata-fine'];
+  const SCHERMATE_PROTETTE = ['schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-gioco', 'schermata-fine'];
   let guardiaAttiva = false, ignoraIndietro = false;
   function serveGuardia() {
-    return SCHERMATE_PROTETTE.includes(app.dataset.schermata) || !dialogoImp.hidden || !dialogoEsci.hidden;
+    return SCHERMATE_PROTETTE.includes(app.dataset.schermata) || [...document.querySelectorAll('.dialogo')].some(d => !d.hidden);
   }
   function aggiornaGuardia() {
     const serve = serveGuardia();
@@ -1738,9 +2168,11 @@
     guardiaAttiva = false;
     const qui = app.dataset.schermata;
     if (!dialogoImp.hidden) chiudiImpostazioni();
+    else if (!dialogoAdulti.hidden) chiudiAdulti();
     else if (!dialogoEsci.hidden) chiudiDialogo();                   // come "Continua a giocare"
     else if (qui === 'schermata-gioco') apriDialogoEsci();          // chiede se abbandonare la partita
-    else if (SCHERMATE_PREPARTITA.includes(qui)) { if (!sintonizzando) vai('schermata-modi'); }
+    else if (qui === 'schermata-stazione') vai('schermata-modi');
+    else if (SCHERMATE_PREPARTITA.includes(qui)) { if (!sintonizzando) vai('schermata-stazione'); }
     else if (qui === 'schermata-fine') vai('schermata-modi');
     aggiornaGuardia();
   });
@@ -1816,11 +2248,52 @@
 
   /* ---------- Scelta della modalità ---------- */
   const SCHERMATA_DI = { singoli: 'schermata-singoli', squadre: 'schermata-squadre', collab: 'schermata-collab' };
+  let modoScelto = 'singoli';
   document.querySelectorAll('.tasto[data-modo]').forEach(b => b.addEventListener('click', () => {
     b.classList.add('premuto');
+    modoScelto = b.dataset.modo;
     separaOnde();                       // le onde iniziano a separarsi già alla pressione del tasto
-    setTimeout(() => { b.classList.remove('premuto'); vai(SCHERMATA_DI[b.dataset.modo]); }, riduciMoto ? 0 : 240);
+    setTimeout(() => { b.classList.remove('premuto'); vai('schermata-stazione'); }, riduciMoto ? 0 : 240);
   }));
+
+  /* ---------- Scelta della stazione: i tasti funzionano come i preset di una radio,
+     ne resta abbassato uno solo ---------- */
+  const tastiStazione = [...document.querySelectorAll('.tasto[data-stazione]')];
+  const contaCarte = document.getElementById('conta-carte');
+  function mostraStazione() {
+    tastiStazione.forEach(b => {
+      const scelto = b.dataset.stazione === stazioneScelta;
+      b.classList.toggle('scelto', scelto);
+      b.setAttribute('aria-pressed', String(scelto));
+    });
+    const n = (MAZZI[stazioneScelta] || []).length;
+    contaCarte.textContent = `${n} carte`;
+  }
+  function scegliStazione(id) {
+    stazioneScelta = id;
+    try { localStorage.setItem('sintonizzati-stazione', id); } catch (e) {}
+    mostraStazione();
+  }
+  tastiStazione.forEach(b => b.addEventListener('click', () => {
+    const id = b.dataset.stazione;
+    if (id === 'mezzanotte' && !maggiorenni()) { chiediMaggiorenni(); return; }
+    scegliStazione(id);
+  }));
+  document.getElementById('avanti-stazione').addEventListener('click', () => vai(SCHERMATA_DI[modoScelto]));
+
+  // Dopo Mezzanotte: si chiede una volta sola se sono tutti maggiorenni
+  const dialogoAdulti = document.getElementById('dialogo-adulti');
+  function maggiorenni() { try { return localStorage.getItem('sintonizzati-maggiorenni') === 'si'; } catch (e) { return false; } }
+  function chiediMaggiorenni() { dialogoAdulti.hidden = false; suona('finestra'); document.getElementById('adulti-no').focus({ preventScroll: true }); aggiornaGuardia(); }
+  function chiudiAdulti() { dialogoAdulti.hidden = true; suona('finestraGiu'); aggiornaGuardia(); }
+  document.getElementById('adulti-no').addEventListener('click', chiudiAdulti);
+  document.getElementById('adulti-si').addEventListener('click', () => {
+    try { localStorage.setItem('sintonizzati-maggiorenni', 'si'); } catch (e) {}
+    chiudiAdulti();
+    scegliStazione('mezzanotte');
+  });
+  dialogoAdulti.addEventListener('click', e => { if (e.target === dialogoAdulti) chiudiAdulti(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !dialogoAdulti.hidden) chiudiAdulti(); });
 
   // Invio passa alla casella successiva, sull'ultima chiude la tastiera
   function catena(campi) {
@@ -2033,33 +2506,63 @@
     if (e.key === 'ArrowRight') { muoviLancetta(angolo + 3); e.preventDefault(); }
   });
 
-  /* ---------- Mazzo di carte ---------- */
-  const CARTE = [
-    ['Freddo', 'Caldo'], ['Sopravvalutato', 'Sottovalutato'], ['Inutile', 'Utile'],
-    ['Facile da disegnare', 'Difficile da disegnare'], ['Noioso', 'Emozionante'],
-    ['Cibo da colazione', 'Cibo da cena'], ['Animale debole', 'Animale forte'],
-    ['Film per bambini', 'Film per adulti'], ['Comune', 'Raro'], ['Brutto', 'Bello'],
-    ['Puzza', 'Profuma'], ['Hobby da nonni', 'Hobby da ragazzi'], ['Economico', 'Costoso'],
-    ['Rilassante', 'Stressante'], ['Antico', 'Moderno'], ['Minuscolo', 'Enorme'],
-    ['Salato', 'Dolce'], ['Lento', 'Veloce'], ['Silenzioso', 'Rumoroso'], ['Sicuro', 'Pericoloso'],
-    ['Da fare in estate', 'Da fare in inverno'], ['Morbido', 'Duro'], ['Leggero', 'Pesante'],
-    ['Da città', 'Da campagna'], ['Pigro', 'Instancabile'], ['Prevedibile', 'Sorprendente'],
-    ['Snob', 'Alla mano'], ['Fa bene', 'Fa male'], ['Triste', 'Allegro'],
-    ['Inquietante', 'Rassicurante'], ['Superpotere inutile', 'Superpotere utile'],
-    ['Canzone da ballare', 'Canzone da piangere'], ['Vacanza da incubo', 'Vacanza da sogno'],
-    ['Lavoro noioso', 'Lavoro da sogno'], ['Personaggio buono', 'Personaggio cattivo'],
-    ['Odiato', 'Amato'], ['Fuori moda', 'Di moda'], ['Mangiabile', 'Immangiabile'],
-    ['Poco italiano', 'Italianissimo'], ['Liscio', 'Ruvido'], ['Bagnato', 'Asciutto'],
-    ['Regalo pessimo', 'Regalo perfetto'], ['Sport facile', 'Sport difficile'],
-    ['Da fare da soli', 'Da fare in compagnia'], ['Normale', 'Strano'], ['Brutta parola', 'Bella parola']
+  /* ---------- Stazioni: i quattro mazzi di carte ----------
+     Le carte arrivano dal file carte.txt su GitHub. Dentro la pagina c'è una copia di riserva,
+     usata al primo avvio senza internet o se il file non si trova. */
+  const STAZIONI = [
+    { id: 'merenda', nome: 'Radio Merenda' },
+    { id: 'hitparade', nome: 'Hit Parade' },
+    { id: 'cerebrali', nome: 'Onde Cerebrali' },
+    { id: 'mezzanotte', nome: 'Dopo Mezzanotte' }
   ];
-  let mazzo = [];
+  const chiaveStazione = t => t.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const maiuscolaIniziale = t => t.charAt(0).toLocaleUpperCase('it') + t.slice(1);
+  function leggiCarte(testo) {
+    const mazzi = {};
+    let attuale = null;
+    testo.split(/\r?\n/).forEach(grezza => {
+      const riga = grezza.trim();
+      if (!riga || riga.startsWith('#')) return;
+      const sezione = riga.match(/^\[(.+)\]$/);
+      if (sezione) {
+        const s = STAZIONI.find(x => chiaveStazione(x.nome) === chiaveStazione(sezione[1]));
+        attuale = s ? s.id : null;
+        return;
+      }
+      if (!attuale) return;
+      const parti = riga.split('|').map(x => x.trim());
+      if (parti.length !== 2 || !parti[0] || !parti[1]) return;      // riga scritta male: si salta
+      (mazzi[attuale] = mazzi[attuale] || []).push(parti.map(maiuscolaIniziale));
+    });
+    return mazzi;
+  }
+  const MAZZI = leggiCarte(document.getElementById('carte-predefinite').textContent);
+  fetch('carte.txt', { cache: 'no-cache' })
+    .then(r => (r.ok ? r.text() : Promise.reject()))
+    .then(testo => {
+      const nuovi = leggiCarte(testo);
+      STAZIONI.forEach(s => { if (nuovi[s.id] && nuovi[s.id].length >= 5) MAZZI[s.id] = nuovi[s.id]; });
+      mostraStazione();
+    })
+    .catch(() => { /* offline o file mancante: restano le carte di riserva */ });
+
+  let stazioneScelta = 'hitparade';
+  try {
+    const salvata = localStorage.getItem('sintonizzati-stazione');
+    if (STAZIONI.some(s => s.id === salvata)) stazioneScelta = salvata;
+  } catch (e) {}
+  const nomeStazione = id => (STAZIONI.find(s => s.id === id) || STAZIONI[1]).nome;
+
+  // Pesca dalla stazione scelta senza ripetere carte finché il mazzo non è finito
+  let pila = [], pilaDi = null;
   function pesca() {
-    if (!mazzo.length) {
-      mazzo = CARTE.slice();
-      for (let i = mazzo.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [mazzo[i], mazzo[j]] = [mazzo[j], mazzo[i]]; }
+    const carte = MAZZI[stazioneScelta] && MAZZI[stazioneScelta].length ? MAZZI[stazioneScelta] : MAZZI.hitparade;
+    if (pilaDi !== stazioneScelta || !pila.length) {
+      pila = carte.slice();
+      for (let i = pila.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pila[i], pila[j]] = [pila[j], pila[i]]; }
+      pilaDi = stazioneScelta;
     }
-    return mazzo.pop();
+    return pila.pop();
   }
 
   /* ---------- Elementi della partita ---------- */
@@ -2187,6 +2690,7 @@
 
   /* ---------- Entrata in partita: la radio si accende ---------- */
   function entraInPartita(poi) {
+    document.getElementById('chip-stazione').textContent = nomeStazione(stazioneScelta);
     passaggio.hidden = true;
     pulisciQuadrante();
     ago.style.transition = '';

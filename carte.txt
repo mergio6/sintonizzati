@@ -1,0 +1,348 @@
+# =====================================================================
+#  SINTONIZZATI · le carte parola
+# =====================================================================
+#  Come funziona questo file:
+#  - una carta per riga: estremo di sinistra | estremo di destra
+#  - le righe che iniziano con # sono note e vengono ignorate
+#  - [Nome della stazione] indica a quale mazzo appartengono le carte sotto
+#  - le quattro stazioni sono: [Radio Merenda], [Hit Parade],
+#    [Onde Cerebrali] e [Dopo Mezzanotte]
+#  - se una riga è scritta male, il gioco la salta e usa tutte le altre
+#  - tieni gli estremi brevi (massimo una ventina di caratteri)
+# =====================================================================
+
+
+[Radio Merenda]
+# Per i più piccoli: parole semplici e cose di tutti i giorni
+
+Piccolo | Grande
+Lento | Veloce
+Silenzioso | Rumoroso
+Freddo | Caldo
+Morbido | Duro
+Facile | Difficile
+Leggero | Pesante
+Pulito | Sporco
+Noioso | Divertente
+Triste | Allegro
+Brutto | Bello
+Cattivo | Buono
+Corto | Lungo
+Basso | Alto
+Vuoto | Pieno
+Vecchio | Nuovo
+Debole | Forte
+Calmo | Agitato
+Timido | Coraggioso
+Ordinato | Disordinato
+Liscio | Ruvido
+Bagnato | Asciutto
+Dolce | Salato
+Puzza | Profuma
+Comune | Raro
+Inutile | Utile
+Fragile | Indistruttibile
+Colore scuro | Colore chiaro
+Poco colorato | Coloratissimo
+Spaventoso | Coccoloso
+Fa ridere | Fa piangere
+Esiste davvero | È inventato
+Cosa da piccoli | Cosa da grandi
+Da fare di giorno | Da fare di notte
+Cosa d'estate | Cosa d'inverno
+Si fa al mare | Si fa in montagna
+Si fa a scuola | Si fa a casa
+Cibo che non mi piace | Cibo che adoro
+Cibo da merenda | Cibo da cena
+Facile da mangiare | Difficile da mangiare
+Frutta aspra | Frutta dolce
+Facile da disegnare | Difficile da disegnare
+Animale tenero | Animale pauroso
+Animale lento | Animale veloce
+Animale piccolo | Animale enorme
+Animale di casa | Animale selvatico
+Gioco tranquillo | Gioco scatenato
+Giocattolo noioso | Giocattolo fantastico
+Cartone per piccoli | Cartone per grandi
+Personaggio buono | Personaggio cattivo
+Supereroe debole | Supereroe fortissimo
+Mostro buffo | Mostro spaventoso
+Sport facile | Sport difficile
+Mestiere facile | Mestiere difficile
+Mestiere noioso | Mestiere da sogno
+Regalo deludente | Regalo fantastico
+Posto noioso | Posto avventuroso
+Posto sicuro | Posto pericoloso
+Rumore piacevole | Rumore fastidioso
+Parola facile | Parola difficile
+Galleggia | Affonda
+Si rompe subito | Dura per sempre
+
+
+[Hit Parade]
+# Il mazzo standard: i grandi classici per tutti
+
+Freddo | Caldo
+Sopravvalutato | Sottovalutato
+Inutile | Utile
+Facile da disegnare | Difficile da disegnare
+Noioso | Emozionante
+Cibo da colazione | Cibo da cena
+Animale debole | Animale forte
+Film per bambini | Film per adulti
+Comune | Raro
+Brutto | Bello
+Puzza | Profuma
+Hobby da nonni | Hobby da ragazzi
+Economico | Costoso
+Rilassante | Stressante
+Antico | Moderno
+Minuscolo | Enorme
+Salato | Dolce
+Lento | Veloce
+Silenzioso | Rumoroso
+Sicuro | Pericoloso
+Da fare in estate | Da fare in inverno
+Morbido | Duro
+Leggero | Pesante
+Da città | Da campagna
+Pigro | Instancabile
+Prevedibile | Sorprendente
+Snob | Alla mano
+Fa bene | Fa male
+Triste | Allegro
+Inquietante | Rassicurante
+Superpotere inutile | Superpotere utile
+Canzone da ballare | Canzone da piangere
+Vacanza da incubo | Vacanza da sogno
+Lavoro noioso | Lavoro da sogno
+Personaggio buono | Personaggio cattivo
+Odiato | Amato
+Fuori moda | Di moda
+Mangiabile | Immangiabile
+Poco italiano | Italianissimo
+Liscio | Ruvido
+Bagnato | Asciutto
+Regalo pessimo | Regalo perfetto
+Sport facile | Sport difficile
+Da fare da soli | Da fare in compagnia
+Normale | Strano
+Brutta parola | Bella parola
+Talento inutile | Talento utile
+Film brutto | Film capolavoro
+Canzone brutta | Canzone bellissima
+Serie TV noiosa | Serie TV avvincente
+Cibo sopravvalutato | Cibo sottovalutato
+Piatto facile | Piatto difficile
+Colazione triste | Colazione da re
+Si beve caldo | Si beve freddo
+Bevanda disgustosa | Bevanda deliziosa
+Invenzione inutile | Invenzione geniale
+App inutile | App indispensabile
+Oggetto inutile | Oggetto indispensabile
+Facile da ricordare | Difficile da ricordare
+Facile da dire | Difficile da dire
+Mestiere sottopagato | Mestiere strapagato
+Mestiere sicuro | Mestiere pericoloso
+Si fa al lavoro | Si fa in vacanza
+Hobby economico | Hobby costoso
+Sport noioso | Sport spettacolare
+Sport per pigri | Sport per atleti
+Animale brutto | Animale bellissimo
+Animale innocuo | Animale letale
+Animale sopravvalutato | Animale sottovalutato
+Città brutta | Città bellissima
+Città da visitare | Città da evitare
+Posto rilassante | Posto caotico
+Vacanza economica | Vacanza di lusso
+Viaggio breve | Viaggio infinito
+Mezzo lento | Mezzo veloce
+Festa noiosa | Festa memorabile
+Regalo da riciclare | Regalo da tenere
+Casual | Elegante
+Vestito estivo | Vestito invernale
+Colore triste | Colore allegro
+Nome antico | Nome moderno
+Lingua facile | Lingua difficile
+Gioco facile | Gioco complicato
+Famoso | Sconosciuto
+Eroe | Cattivo
+Fortunato | Sfortunato
+Ottimista | Pessimista
+Puntuale | Ritardatario
+Tirchio | Spendaccione
+Introverso | Estroverso
+Vecchio stile | All'avanguardia
+Cosa da boomer | Cosa da Gen Z
+Tecnologia vecchia | Tecnologia futuristica
+Prudente | Rischioso
+Fatto in casa | Industriale
+Sapore delicato | Sapore forte
+Cibo leggero | Cibo pesante
+Per niente piccante | Piccantissimo
+Croccante | Molle
+Snack sano | Snack spazzatura
+Piatto del nord | Piatto del sud
+Cibo di strada | Cibo stellato
+Cena veloce | Cena elaborata
+Moda passeggera | Intramontabile
+Programma trash | Programma colto
+Film da ridere | Film da piangere
+Libro noioso | Libro avvincente
+Divertente | Irritante
+Imbarazzante | Da vantarsi
+Facile da trovare | Introvabile
+Dura poco | Dura per sempre
+Faccenda odiosa | Faccenda piacevole
+Superstizione assurda | Superstizione sensata
+Scusa credibile | Scusa ridicola
+Regola stupida | Regola sacrosanta
+Abitudine sana | Abitudine pessima
+Vizio innocuo | Vizio pericoloso
+Da mattinieri | Da nottambuli
+Rumore rilassante | Rumore insopportabile
+Lavoro manuale | Lavoro intellettuale
+Per niente romantico | Romanticissimo
+Fragile | Indistruttibile
+
+
+[Onde Cerebrali]
+# Concetti astratti e sfumati: per chi vuole ragionarci su
+
+Etico | Immorale
+Arte | Non arte
+Scoperto | Inventato
+Naturale | Artificiale
+Razionale | Irrazionale
+Destino | Caso
+Ordine | Caos
+Utopia | Distopia
+Mainstream | Di nicchia
+Concreto | Astratto
+Oggettivo | Soggettivo
+Semplice | Complesso
+Bene comune | Interesse personale
+Libertà | Sicurezza
+Tradizione | Progresso
+Corpo | Mente
+Emozione | Ragione
+Individuo | Collettività
+Effimero | Eterno
+Reale | Immaginario
+Verità scomoda | Bugia comoda
+Sacro | Profano
+Raffinato | Kitsch
+Genialità | Follia
+Coraggio | Incoscienza
+Prudenza | Codardia
+Ambizione sana | Ambizione tossica
+Giustizia | Vendetta
+Perdonabile | Imperdonabile
+Diritto | Privilegio
+Bisogno | Capriccio
+Necessario | Superfluo
+Talento | Fortuna
+Merito | Raccomandazione
+Innato | Imparato
+Natura | Cultura
+Istinto | Riflessione
+Nostalgico | Visionario
+Conservatore | Rivoluzionario
+Ottimismo | Cinismo
+Amore | Abitudine
+Amicizia | Convenienza
+Ironia | Sarcasmo
+Satira | Offesa
+Cultura alta | Cultura popolare
+Profondo | Superficiale
+Ispirazione | Plagio
+Minimalista | Barocco
+Funzionale | Decorativo
+Utile alla società | Dannoso alla società
+Lavoro | Vocazione
+Successo | Realizzazione
+Ricchezza | Felicità
+Tempo libero | Tempo perso
+Dubbio | Certezza
+Fede | Scienza
+Credibile | Assurdo
+Teoria | Pratica
+Invecchia bene | Invecchia male
+Cliché | Inaspettato
+Ovvietà | Paradosso
+Silenzio d'oro | Silenzio imbarazzante
+Fallimento | Lezione
+Ricordo | Rimpianto
+Quantità | Qualità
+Arte da museo | Arte di strada
+Maturo | Infantile
+Coerente | Contraddittorio
+Moderato | Estremo
+Pubblico | Privato
+Egoista | Altruista
+Spontaneo | Calcolato
+Autentico | Costruito
+Fatto per amore | Fatto per soldi
+
+
+[Dopo Mezzanotte]
+# Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
+
+Appuntamento flop | Appuntamento da sogno
+Abbordaggio pessimo | Abbordaggio geniale
+Bacio imbarazzante | Bacio da film
+Per niente sexy | Sexyssimo
+Mestiere poco sexy | Mestiere sexy
+Accento poco sexy | Accento sexy
+Cocktail leggero | Cocktail micidiale
+Sbronza leggera | Sbronza epica
+Postumi leggeri | Postumi devastanti
+Messaggio innocuo | Messaggio da ubriachi
+Idea da sobri | Idea da ubriachi
+Canzone da sobri | Canzone da ubriachi
+Segreto innocente | Segreto inconfessabile
+Bugia bianca | Bugia imperdonabile
+Peccato veniale | Peccato mortale
+Fantasia innocente | Fantasia proibita
+Da dire a cena | Da dire a letto
+Si fa in pubblico | Si fa in privato
+Relazione noiosa | Relazione passionale
+Ex dimenticabile | Ex indimenticabile
+Flirt innocente | Flirt pericoloso
+Regalo romantico | Regalo piccante
+Posto poco romantico | Posto romanticissimo
+Look da divano | Look da seduzione
+Serata tranquilla | Serata leggendaria
+Notte tranquilla | Notte brava
+Festa noiosa | Festa senza limiti
+Vizio accettabile | Vizio inconfessabile
+Imbarazzo lieve | Imbarazzo cosmico
+Domanda innocente | Domanda indiscreta
+Gossip noioso | Gossip succoso
+Tradimento perdonabile | Imperdonabile
+Red flag | Green flag
+Profilo inquietante | Profilo irresistibile
+Foto imbarazzante | Foto da profilo
+Da raccontare a mamma | Da non raccontare mai
+Da vedere coi genitori | Da vedere da soli
+Parolaccia leggera | Parolaccia pesante
+Battuta pulita | Battuta sporca
+Humor innocente | Humor nero
+Gelosia sana | Gelosia tossica
+Locale squallido | Locale esclusivo
+Single felice | Single disperato
+Matrimonio da favola | Matrimonio da incubo
+Tatuaggio da pentirsi | Tatuaggio azzeccato
+Confessione leggera | Confessione scioccante
+Rischio calcolato | Follia totale
+Posizione comoda | Posizione acrobatica
+Detto ad alta voce | Pensato e mai detto
+Coinquilino perfetto | Coinquilino da incubo
+Suocera adorabile | Suocera terribile
+Collega simpatico | Collega insopportabile
+Vino da cartone | Vino pregiato
+Bacio da dimenticare | Bacio leggendario
+Scusa per non uscire | Scusa per restare
+Weekend tranquillo | Weekend da raccontare
+Spesa da adulti | Spesa da ragazzini
+Vergogna passeggera | Vergogna eterna
