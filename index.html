@@ -604,8 +604,23 @@
     #schermata-collab .regole li { font-size: 12.5px; line-height: 1.25; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; }
     #schermata-collab .segno { width: 26px; height: 26px; font-size: 12px; }
     #schermata-collab .segno svg { width: 16px; height: 16px; }
-    #schermata-collab .livelli li { padding-block: 2px; font-size: 12.5px; }
+    #schermata-collab .livelli li { padding-block: 2px; font-size: 12.5px; grid-template-columns: 20px 40px minmax(0, 1fr); gap: 6px; }
+    #schermata-collab .info-collab { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
     #schermata-collab .tasto-ambra { height: 46px; }
+  }
+
+  /* telefoni molto bassi: ancora un po' più compatta */
+  @container app (max-height: 340px) {
+    #schermata-collab .barra .btn-piccolo, #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { height: 34px; }
+    #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { width: 34px; }
+    #schermata-collab .setup { padding-top: 4px; padding-bottom: 6px; }
+    #schermata-collab .pannello { padding: 8px; gap: 6px; }
+    #schermata-collab .lcd { padding-block: 4px; }
+    #schermata-collab .lcd h2 { font-size: 13px; }
+    #schermata-collab .scheda { padding: 6px 9px; margin-bottom: 3px; }
+    #schermata-collab .regole li, #schermata-collab .livelli li { font-size: 12px; line-height: 1.2; }
+    #schermata-collab .livelli li { padding-block: 1px; }
+    #schermata-collab .tasto-ambra { height: 42px; }
   }
 
   /* ---------- Fine partita ---------- */
@@ -1491,8 +1506,8 @@ Vizio | Virtù
             <div class="scheda">
               <h3>Come funziona</h3>
               <ul class="regole">
-                <li><span class="segno">7</span><span>Avete 7 turni disponibili. La carta indizio si può cambiare una sola volta!</span></li>
-                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22 7.5 3.5h9z" style="fill:var(--zona-oro)"/><path d="M12 22 3 6l4.5-2.5zM12 22l9-16-4.5-2.5z" style="fill:var(--zona-3)"/></svg></span><span>Lo spicchio dorato centrale vale 3 punti ma vi fa guadagnare un turno extra.</span></li>
+                <li><span class="segno">7</span><span>Avete a disposizione 7 turni di gioco. La carta indizio si può cambiare una sola volta per turno.</span></li>
+                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22 7.5 3.5h9z" style="fill:var(--zona-oro)"/><path d="M12 22 3 6l4.5-2.5zM12 22l9-16-4.5-2.5z" style="fill:var(--zona-3)"/></svg></span><span>Lo spicchio dorato centrale vale solo 3 punti ma vi fa guadagnare un turno extra di gioco.</span></li>
               </ul>
             </div>
             <div class="scheda">
@@ -3535,8 +3550,7 @@ Vizio | Virtù
 
   function avviaCollab() {
     ultimaPartita = { modo: 'collab' };
-    // un solo cambio di carta per tutta la partita (non si ricarica a ogni turno)
-    partita = { modo: 'collab', punti: 0, turno: 1, totale: TURNI_COLLAB, cambiRimasti: 1, carta: pesca(), cartaPronta: true, fase: 'accensione' };
+    partita = { modo: 'collab', punti: 0, turno: 1, totale: TURNI_COLLAB, carta: pesca(), cartaPronta: true, fase: 'accensione' };
     entraInPartita(turnoCollab);
   }
 
@@ -3544,6 +3558,7 @@ Vizio | Virtù
     const p = partita;
     prendiCarta(p);
     p.centro = nuovoCentro(); p.esito = null; p.fase = 'attesa';
+    p.cambiRimasti = 1;                 // nella cooperativa: un cambio di carta per turno
     pulisciQuadrante(); aggiorna();
     chiediPassaggio({
       sopra: p.turno === 1 ? 'Scegliete chi dà il primo indizio' : 'Passate il telefono a chi dà il prossimo indizio',
