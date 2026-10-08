@@ -285,12 +285,6 @@
     display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 10px;
     width: min(560px, 100%); margin: 10px auto 0;
   }
-  /* soggetto comune ai due estremi delle carte lunghe ("Furto dal frigo aziendale …") */
-  .soggetto-carta {
-    grid-column: 1 / -1; justify-self: center; max-width: 100%; margin-bottom: -2px; text-align: center; text-wrap: balance;
-    font-size: 14px; font-size: clamp(12.5px, 3.8cqh, 16px); font-weight: 800; line-height: 1.2; color: var(--inchiostro);
-  }
-  .soggetto-carta[hidden] { display: none; }
   /* menu: "Sintonizzati su …" con la stazione che sta suonando, in uno stile diverso dal marchio */
   .marchio-testo { display: inline-flex; align-items: baseline; gap: 7px; white-space: nowrap; }
   .marchio .in-onda { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; font-family: "Bricolage Grotesque", system-ui, sans-serif; font-size: 16px; }
@@ -298,13 +292,26 @@
   .in-onda .su { font-weight: 500; color: var(--tenue); font-style: italic; }
   .in-onda .nome-onda { font-weight: 800; color: var(--ambra-testo); letter-spacing: -.01em; }
   .in-onda.cerca .nome-onda { animation: cerca-nome 1.5s linear both; }
-  .soggetto-carta .puntini { color: var(--tenue); font-weight: 600; }
   .estremo {
     display: flex; align-items: center; padding: 10px 16px; border-radius: 12px;
     font-size: clamp(16px, 4.6vh, 22px); font-size: clamp(16px, 4.6cqh, 22px); font-weight: 800; letter-spacing: -0.01em; color: var(--su-colore); line-height: 1.1;
   }
   .estremo.sx { background: var(--carta-sx); justify-content: flex-start; border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
   .estremo.dx { background: var(--carta-dx); justify-content: flex-end; text-align: right; border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
+  /* Carte lunghe: ogni lato tiene la sua frase intera, ma le parole uguali sui due lati sono piccole
+     e tenui e quelle che cambiano restano grandi. Se non ci stanno sulla stessa riga,
+     le parole grandi vanno a capo tutte insieme sotto (o sopra) quelle piccole. */
+  .estremo .frase {
+    display: block; font-size: clamp(11px, 3.3vh, 14px); font-size: clamp(11px, 3.3cqh, 14px);
+    font-weight: 700; line-height: 1.2; letter-spacing: 0;
+  }
+  .estremo .comune { opacity: .78; }
+  .carta.a-capo .estremo { padding-block: 8px; }
+  .carta.a-capo .estremo .comune { display: block; }
+  .estremo .diversa {
+    display: inline-block; font-size: clamp(16px, 4.6vh, 22px); font-size: clamp(16px, 4.6cqh, 22px);
+    font-weight: 800; line-height: 1.05; letter-spacing: -0.01em;
+  }
   .mescola {
     position: relative; width: 46px; border-radius: 12px; border: 1px solid var(--bordo); background: var(--superficie);
     cursor: pointer; display: grid; place-items: center;
@@ -1691,6 +1698,39 @@ Lettera d'amore imbarazzante | Lettera d'amore indimenticabile
 Cosa da anni '90 | Cosa da anni 2000
 Gioco in scatola dimenticato | Gioco in scatola immortale
 
+# --- nuove carte (ottobre 2026) ---
+Parente che vedi spesso | Parente che vedi ai matrimoni
+Cugino modello | Cugino pecora nera
+Frase da mamma rassicurante | Frase da mamma minacciosa
+Bugia dei genitori smascherata subito | Bugia dei genitori creduta per anni
+Aneddoto del nonno verosimile | Aneddoto del nonno leggendario
+Porzione normale | Porzione da nonna
+Meglio appena fatto | Meglio il giorno dopo
+Ricetta intoccabile | Ricetta da reinventare
+Cibo che odiavi da bambino | Cibo che amavi da bambino
+Sapore d'estate | Sapore d'inverno
+Gelato confezionato anonimo | Gelato confezionato mitico
+Prodotto da Autogrill inutile | Prodotto da Autogrill irresistibile
+Maestra dolcissima | Maestra terribile
+Compagno di banco tranquillo | Compagno di banco disastroso
+Giustificazione credibile | Giustificazione assurda
+Punizione blanda | Punizione esemplare
+Soprannome affettuoso | Soprannome spietato
+Penitenza leggera | Penitenza crudele
+Pesce d'aprile innocente | Pesce d'aprile da denuncia
+Cartone d'infanzia dolce | Cartone d'infanzia traumatico
+Sigla dimenticata | Sigla che sai a memoria
+Suono anni '90 dimenticato | Suono anni '90 inconfondibile
+Aggeggio anni '90 superato | Aggeggio anni '90 rimpianto
+Sparito per sempre | Esiste ancora
+Mestiere d'altri tempi | Mestiere di oggi
+Regalo della comunione deludente | Regalo della comunione da sogno
+Giostra tranquilla | Giostra da brividi
+Musica da balera | Musica da discoteca
+Spiaggia libera | Stabilimento esclusivo
+Gioco di carte semplice | Gioco di carte complicato
+Usanza italiana normale | Usanza italiana inspiegabile
+
 # --- copie da altre stazioni (ottobre 2026) ---
 Si fa al mare | Si fa in montagna
 Cibo da merenda | Cibo da cena
@@ -1780,6 +1820,41 @@ Armatura brutta ma utile | Armatura bella ma inutile
 Personaggio muto | Personaggio logorroico
 Gioco da maratona notturna | Gioco da cinque minuti
 
+# --- nuove carte (ottobre 2026) ---
+Power-up deludente | Power-up devastante
+Checkpoint ovunque | Checkpoint introvabili
+Gioco accessibile | Gioco per masochisti
+Gioco onesto | Gioco mangiasoldi
+Si molla subito | Ancora una partita!
+Gioco che unisce | Gioco che distrugge amicizie
+Hype tradito | Hype ripagato
+Lore inesistente | Lore sterminata
+Segreto facile da trovare | Segreto introvabile
+Effetto sonoro fastidioso | Effetto sonoro iconico
+Cheat code innocuo | Cheat code che rompe il gioco
+NPC prezioso | NPC insopportabile
+Nemico che non torna più | Nemico che torna sempre
+Personaggio da salvare | Personaggio che salva tutti
+Master generoso | Master sadico
+Legale buono | Caotico malvagio
+Forza bruta | Pura magia
+Arma medievale | Arma futuristica
+Rifugio anti-zombie sicuro | Rifugio anti-zombie disastroso
+Trasformazione lampo | Trasformazione infinita
+Pettinatura normale | Pettinatura da anime
+Manga breve | Manga infinito
+Identità segreta credibile | Identità segreta ridicola
+Piano del cattivo sensato | Piano del cattivo assurdo
+Poteri di nascita | Solo gadget e soldi
+Fandom tranquillo | Fandom tossico
+Sapere nerd inutile | Sapere nerd utilissimo
+Fantascienza plausibile | Fantascienza assurda
+Gadget sci-fi superfluo | Gadget sci-fi da avere subito
+Tecnologia fragile | Tecnologia indistruttibile
+Trucco tech placebo | Trucco tech infallibile
+Scena di hacking realistica | Scena di hacking ridicola
+Postazione sobria | Postazione piena di LED
+
 # --- copie da altre stazioni (ottobre 2026) ---
 Pokémon potente | Pokémon scarso
 Supereroe debole | Supereroe fortissimo
@@ -1865,6 +1940,33 @@ Biglietto del concerto regalato | Biglietto del concerto carissimo
 Musica da ascensore | Musica da brividi
 Personaggio da fiction scontato | Personaggio da fiction originale
 Telefilm anni '90 dimenticato | Telefilm anni '90 indimenticabile
+
+# --- nuove carte (ottobre 2026) ---
+Basta una volta | Da rivedere all'infinito
+Da vedere al cinema | Da vedere sul divano
+Da vedere coi genitori | Imbarazzante coi genitori
+Zero lacrime | Fazzoletti finiti
+Piace alla critica | Piace al pubblico
+Finale aperto | Finale chiuso
+Scena post-credit inutile | Scena post-credit fondamentale
+Ultima stagione all'altezza | Ultima stagione disastrosa
+Miniserie | Serie infinita
+Adattamento fedelissimo | Adattamento irriconoscibile
+Casting perfetto | Casting sbagliatissimo
+Attore monoespressivo | Attore trasformista
+Recitazione sobria | Recitazione sopra le righe
+Cattivo da odiare | Cattivo per cui tifi
+Film estivo | Film natalizio
+Talk show pacato | Talk show da rissa
+Vincitore di talent dimenticato | Vincitore di talent diventato star
+Star riservata | Star esibizionista
+Look da red carpet elegante | Look da red carpet assurdo
+Canzone da matrimonio | Canzone da funerale
+Canzone d'amore | Canzone di rabbia
+Da cantare a squarciagola | Da ascoltare in silenzio
+Musica per dormire | Musica per pogare
+Playback spudorato | Live impeccabile
+Voce naturale | Autotune a palla
 
 # --- copie da altre stazioni (ottobre 2026) ---
 Fa ridere | Fa piangere
@@ -2579,7 +2681,6 @@ Silenzio d'oro | Silenzio imbarazzante
       </div>
 
       <div class="carta">
-        <div class="soggetto-carta" id="soggetto-carta" hidden></div>
         <div class="estremo sx" id="estremo-sx">Freddo</div>
         <button class="mescola" id="mescola" aria-label="Pesca un'altra carta">
           <span class="cambi" id="cambi" aria-hidden="true" hidden>2</span>
@@ -4523,9 +4624,9 @@ Silenzio d'oro | Silenzio imbarazzante
   const estremoDx = document.getElementById('estremo-dx');
 
   /* ---------- Carte lunghe: se i due estremi ripetono le stesse parole all'inizio o alla fine,
-     quelle parole si mostrano una volta sola sopra la carta e ai lati restano solo le differenze.
-     "Furto dal frigo aziendale perdonabile | Furto dal frigo aziendale imperdonabile" diventa
-     "Furto dal frigo aziendale …" con "Perdonabile" e "Imperdonabile". Le carte brevi restano come sono. */
+     ogni lato mostra comunque la sua frase intera, ma con le parole in comune piccole e tenui
+     e quelle che cambiano grandi: "Furto dal frigo aziendale PERDONABILE" e
+     "Furto dal frigo aziendale IMPERDONABILE". Le carte brevi restano come sono. */
   const PAROLINE = new Set(('di da a in con su per tra fra che e o il lo la i gli le un uno una del dello della dei degli delle ' +
     'al allo alla ai agli alle dal dallo dalla dai dagli dalle nel nello nella nei negli nelle sul sullo sulla sui sugli sulle col cui non ti mi si ci vi ne').split(' '));
   const parolina = w => PAROLINE.has(w.toLowerCase()) || /^(l|un|dell|dall|nell|sull|all)['’]$/i.test(w);
@@ -4535,7 +4636,6 @@ Silenzio d'oro | Silenzio imbarazzante
     const corta = Math.min(A.length, B.length);
     let p = 0;
     while (p < corta - 1 && uguali(A[p], B[p])) p++;
-    while (p > 0 && parolina(A[p - 1])) p--;                 // il soggetto non resta appeso a "di", "che"...
     let s = 0;
     while (s < corta - p - 1 && uguali(A[A.length - 1 - s], B[B.length - 1 - s])) s++;
     const valida = (p, s) => {
@@ -4544,30 +4644,45 @@ Silenzio d'oro | Silenzio imbarazzante
     };
     if (s && !valida(p, s)) s = 0;
     if (p && !valida(p, s)) p = 0;
-    if (p === 1 && !s && A[0].length <= 2) p = 0;            // "Ha", "È": meglio lasciare la carta intera
-    if (p === 1 && s && A[0].length <= 2) return null;
+    // "Il", "Da", "È"... da soli su una riga stonano: restano attaccati alle parole grandi
+    if (p && A.slice(0, p).join(' ').length <= 3) p = 0;
+    if (s && A.slice(A.length - s).join(' ').length <= 3) s = 0;
     if (!p && !s) return null;
-    return {
-      prima: A.slice(0, p).join(' '), dopo: s ? A.slice(A.length - s).join(' ') : '',
-      sx: maiuscolaIniziale(A.slice(p, A.length - s).join(' ')), dx: maiuscolaIniziale(B.slice(p, B.length - s).join(' '))
-    };
+    const lato = W => ({ prima: W.slice(0, p).join(' '), diversa: W.slice(p, W.length - s).join(' '), dopo: W.slice(W.length - s).join(' ') });
+    return [lato(A), lato(B)];
   }
-  const soggettoCarta = document.getElementById('soggetto-carta');
+  function scriviEstremo(riquadro, testo, parti) {
+    if (!parti) { riquadro.textContent = testo; return; }
+    const frase = el('span', 'frase');
+    if (parti.prima) frase.append(el('span', 'comune', parti.prima), ' ');
+    frase.append(el('span', 'diversa', parti.diversa));
+    if (parti.dopo) frase.append(' ', el('span', 'comune', parti.dopo));
+    riquadro.replaceChildren(frase);
+  }
   function mostraCarta(carta) {
-    const parti = separaCarta(carta);
-    if (!parti) {
-      estremoSx.textContent = carta[0]; estremoDx.textContent = carta[1];
-      soggettoCarta.hidden = true; soggettoCarta.textContent = '';
-      return;
-    }
-    estremoSx.textContent = parti.sx; estremoDx.textContent = parti.dx;
-    soggettoCarta.replaceChildren();
-    if (parti.prima) soggettoCarta.append(parti.prima + ' ');
-    soggettoCarta.append(el('span', 'puntini', '…'));
-    if (parti.dopo) soggettoCarta.append(' ' + parti.dopo);
-    soggettoCarta.setAttribute('aria-label', `${carta[0]} oppure ${carta[1]}`);
-    soggettoCarta.hidden = false;
+    const parti = separaCarta(carta) || [];
+    scriviEstremo(estremoSx, carta[0], parti[0]);
+    scriviEstremo(estremoDx, carta[1], parti[1]);
+    impaginaCarta();
   }
+  /* Se anche un solo lato non sta su una riga, entrambi vanno "a capo" allo stesso modo:
+     parole piccole sopra (o sotto) e parole grandi su una riga a sé, così i due lati si leggono uguali. */
+  const barraCarta = estremoSx.parentElement;
+  function impaginaCarta() {
+    barraCarta.classList.remove('a-capo');
+    const frasi = [...barraCarta.querySelectorAll('.frase')];
+    if (!frasi.length || !estremoSx.offsetWidth) return;
+    barraCarta.classList.toggle('a-capo', frasi.some(f => {
+      const grande = f.querySelector('.diversa'), riga = parseFloat(getComputedStyle(grande).fontSize) * 1.5;
+      return grande.offsetHeight > riga || f.offsetHeight > grande.offsetHeight + riga / 3;
+    }));
+  }
+  let larghezzaCarta = 0;
+  if (window.ResizeObserver) new ResizeObserver(() => {
+    if (estremoSx.offsetWidth !== larghezzaCarta) { larghezzaCarta = estremoSx.offsetWidth; impaginaCarta(); }
+  }).observe(estremoSx);
+  else addEventListener('resize', impaginaCarta);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(impaginaCarta);
   const passaggio = document.getElementById('passaggio');
   const passSopra = document.getElementById('pass-sopra');
   const passNome = document.getElementById('pass-nome');

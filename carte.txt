@@ -550,6 +550,39 @@ Lettera d'amore imbarazzante | Lettera d'amore indimenticabile
 Cosa da anni '90 | Cosa da anni 2000
 Gioco in scatola dimenticato | Gioco in scatola immortale
 
+# --- nuove carte (ottobre 2026) ---
+Parente che vedi spesso | Parente che vedi ai matrimoni
+Cugino modello | Cugino pecora nera
+Frase da mamma rassicurante | Frase da mamma minacciosa
+Bugia dei genitori smascherata subito | Bugia dei genitori creduta per anni
+Aneddoto del nonno verosimile | Aneddoto del nonno leggendario
+Porzione normale | Porzione da nonna
+Meglio appena fatto | Meglio il giorno dopo
+Ricetta intoccabile | Ricetta da reinventare
+Cibo che odiavi da bambino | Cibo che amavi da bambino
+Sapore d'estate | Sapore d'inverno
+Gelato confezionato anonimo | Gelato confezionato mitico
+Prodotto da Autogrill inutile | Prodotto da Autogrill irresistibile
+Maestra dolcissima | Maestra terribile
+Compagno di banco tranquillo | Compagno di banco disastroso
+Giustificazione credibile | Giustificazione assurda
+Punizione blanda | Punizione esemplare
+Soprannome affettuoso | Soprannome spietato
+Penitenza leggera | Penitenza crudele
+Pesce d'aprile innocente | Pesce d'aprile da denuncia
+Cartone d'infanzia dolce | Cartone d'infanzia traumatico
+Sigla dimenticata | Sigla che sai a memoria
+Suono anni '90 dimenticato | Suono anni '90 inconfondibile
+Aggeggio anni '90 superato | Aggeggio anni '90 rimpianto
+Sparito per sempre | Esiste ancora
+Mestiere d'altri tempi | Mestiere di oggi
+Regalo della comunione deludente | Regalo della comunione da sogno
+Giostra tranquilla | Giostra da brividi
+Musica da balera | Musica da discoteca
+Spiaggia libera | Stabilimento esclusivo
+Gioco di carte semplice | Gioco di carte complicato
+Usanza italiana normale | Usanza italiana inspiegabile
+
 # --- copie da altre stazioni (ottobre 2026) ---
 Si fa al mare | Si fa in montagna
 Cibo da merenda | Cibo da cena
@@ -639,6 +672,41 @@ Armatura brutta ma utile | Armatura bella ma inutile
 Personaggio muto | Personaggio logorroico
 Gioco da maratona notturna | Gioco da cinque minuti
 
+# --- nuove carte (ottobre 2026) ---
+Power-up deludente | Power-up devastante
+Checkpoint ovunque | Checkpoint introvabili
+Gioco accessibile | Gioco per masochisti
+Gioco onesto | Gioco mangiasoldi
+Si molla subito | Ancora una partita!
+Gioco che unisce | Gioco che distrugge amicizie
+Hype tradito | Hype ripagato
+Lore inesistente | Lore sterminata
+Segreto facile da trovare | Segreto introvabile
+Effetto sonoro fastidioso | Effetto sonoro iconico
+Cheat code innocuo | Cheat code che rompe il gioco
+NPC prezioso | NPC insopportabile
+Nemico che non torna più | Nemico che torna sempre
+Personaggio da salvare | Personaggio che salva tutti
+Master generoso | Master sadico
+Legale buono | Caotico malvagio
+Forza bruta | Pura magia
+Arma medievale | Arma futuristica
+Rifugio anti-zombie sicuro | Rifugio anti-zombie disastroso
+Trasformazione lampo | Trasformazione infinita
+Pettinatura normale | Pettinatura da anime
+Manga breve | Manga infinito
+Identità segreta credibile | Identità segreta ridicola
+Piano del cattivo sensato | Piano del cattivo assurdo
+Poteri di nascita | Solo gadget e soldi
+Fandom tranquillo | Fandom tossico
+Sapere nerd inutile | Sapere nerd utilissimo
+Fantascienza plausibile | Fantascienza assurda
+Gadget sci-fi superfluo | Gadget sci-fi da avere subito
+Tecnologia fragile | Tecnologia indistruttibile
+Trucco tech placebo | Trucco tech infallibile
+Scena di hacking realistica | Scena di hacking ridicola
+Postazione sobria | Postazione piena di LED
+
 # --- copie da altre stazioni (ottobre 2026) ---
 Pokémon potente | Pokémon scarso
 Supereroe debole | Supereroe fortissimo
@@ -724,6 +792,33 @@ Biglietto del concerto regalato | Biglietto del concerto carissimo
 Musica da ascensore | Musica da brividi
 Personaggio da fiction scontato | Personaggio da fiction originale
 Telefilm anni '90 dimenticato | Telefilm anni '90 indimenticabile
+
+# --- nuove carte (ottobre 2026) ---
+Basta una volta | Da rivedere all'infinito
+Da vedere al cinema | Da vedere sul divano
+Da vedere coi genitori | Imbarazzante coi genitori
+Zero lacrime | Fazzoletti finiti
+Piace alla critica | Piace al pubblico
+Finale aperto | Finale chiuso
+Scena post-credit inutile | Scena post-credit fondamentale
+Ultima stagione all'altezza | Ultima stagione disastrosa
+Miniserie | Serie infinita
+Adattamento fedelissimo | Adattamento irriconoscibile
+Casting perfetto | Casting sbagliatissimo
+Attore monoespressivo | Attore trasformista
+Recitazione sobria | Recitazione sopra le righe
+Cattivo da odiare | Cattivo per cui tifi
+Film estivo | Film natalizio
+Talk show pacato | Talk show da rissa
+Vincitore di talent dimenticato | Vincitore di talent diventato star
+Star riservata | Star esibizionista
+Look da red carpet elegante | Look da red carpet assurdo
+Canzone da matrimonio | Canzone da funerale
+Canzone d'amore | Canzone di rabbia
+Da cantare a squarciagola | Da ascoltare in silenzio
+Musica per dormire | Musica per pogare
+Playback spudorato | Live impeccabile
+Voce naturale | Autotune a palla
 
 # --- copie da altre stazioni (ottobre 2026) ---
 Fa ridere | Fa piangere
