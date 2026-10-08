@@ -734,36 +734,73 @@
   .stazioni[data-banda="fm"] .tasto[data-banda]:not([data-banda="fm"]),
   .stazioni[data-banda="pirata"] .tasto[data-banda]:not([data-banda="pirata"]) { display: none; }
   .stazioni.cambio .tasto:not(.banda) { animation: tasto-su .45s cubic-bezier(.2, .9, .3, 1.2) both; animation-delay: calc(var(--k) * 70ms); }
-  /* il selettore ha l'aspetto del vetro del display, con una manopola che gira */
+  /* Il sintonizzatore: un modulo incassato nella radio, con il display della frequenza,
+     la griglia dell'altoparlante e una manopola di alluminio zigrinata */
   .stazioni .tasto.banda {
-    display: flex; flex-direction: column; align-items: stretch; gap: 2px; cursor: default; touch-action: none;
-    background: var(--vetro); color: var(--vetro-segni); text-shadow: var(--lcd-ombra);
-    box-shadow: inset 0 0 0 2px var(--corpo), 0 6px 0 var(--tasto-ombra);
+    --modulo: var(--corpo); --scala: #DCE5E5;
+    position: relative; container-type: inline-size;
+    display: flex; flex-direction: column; align-items: stretch; gap: clamp(3px, 1.2vh, 7px); gap: clamp(3px, 1.2cqh, 7px);
+    padding: 8px 8px 6px; padding: clamp(6px, 2cqh, 10px) clamp(6px, 2cqh, 10px) clamp(4px, 1.4cqh, 8px);
+    cursor: default; touch-action: none; color: var(--scala); text-shadow: none;
+    background: radial-gradient(circle, rgba(220, 229, 229, .1) 0 1px, transparent 1.4px) 0 0 / 6px 6px, var(--modulo);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07), inset 0 3px 10px rgba(0, 0, 0, .45), 0 6px 0 var(--tasto-ombra);
   }
-  .stazioni .tasto.banda:active { transform: none; box-shadow: inset 0 0 0 2px var(--corpo), 0 6px 0 var(--tasto-ombra); }
-  .stazioni .tasto.banda .titolo { display: block; font-size: clamp(12px, 3.6vh, 15px); font-size: clamp(12px, 3.6cqh, 15px); font-weight: 800; line-height: 1.15; }
-  .stazioni .tasto.banda .ascolto-etichetta { display: block; font-size: .78em; font-weight: 600; opacity: .75; }
-  .stazioni .tasto.banda { container-type: inline-size; }
-  .stazioni .tasto.banda .conteggio { color: var(--vetro-segni); white-space: nowrap; align-self: flex-start; letter-spacing: 0; padding: 5px 7px;
-    font-size: clamp(8px, 2.5vh, 10px); font-size: clamp(7px, min(2.5cqh, calc((100cqi - 20px) / 13.1)), 10px); }
+  :root[data-attivo="scuro"] .stazioni .tasto.banda { --modulo: #0C2126; }
+  .stazioni .tasto.banda:active { transform: none; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07), inset 0 3px 10px rgba(0, 0, 0, .45), 0 6px 0 var(--tasto-ombra); }
+  /* display retroilluminato: il colore cambia con la gamma della stazione in ascolto */
+  .display-radio {
+    --display: var(--vetro-segni); --display-ombra: var(--lcd-ombra);
+    position: relative; overflow: hidden; flex: none;
+    display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 6px;
+    padding: 5px 8px 6px; padding: clamp(3px, 1.2cqh, 6px) 8px clamp(4px, 1.4cqh, 7px);
+    background: var(--vetro); border-radius: 7px; color: var(--display); text-shadow: var(--display-ombra);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, .3), 0 0 0 1.5px rgba(0, 0, 0, .35), 0 1.5px 0 1.5px rgba(255, 255, 255, .07);
+    transition: color .3s;
+  }
+  .display-radio::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(165deg, rgba(255, 255, 255, .16), transparent 42%); }
+  .tasto.banda[data-in-onda="fm"] .display-radio { --display: #0E6B50; }
+  .tasto.banda[data-in-onda="pirata"] .display-radio { --display: #C2352A; }
+  :root[data-attivo="scuro"] .tasto.banda[data-in-onda="fm"] .display-radio { --display: var(--menta); --display-ombra: 0 0 10px rgba(111, 227, 180, .45); }
+  :root[data-attivo="scuro"] .tasto.banda[data-in-onda="pirata"] .display-radio { --display: var(--corallo); --display-ombra: 0 0 10px rgba(255, 90, 71, .5); }
+  .display-radio .ascolto-etichetta { font-size: 9px; font-size: clamp(8px, 2.5cqh, 10px); font-weight: 700; opacity: .72; line-height: 1.2; }
+  .segnale { display: flex; align-items: flex-end; gap: 1.5px; height: 9px; }
+  .segnale i { width: 2.5px; border-radius: 1px; background: currentColor; opacity: .2; transition: opacity .12s; }
+  .segnale i:nth-child(1) { height: 3px; } .segnale i:nth-child(2) { height: 5px; } .segnale i:nth-child(3) { height: 7px; } .segnale i:nth-child(4) { height: 9px; }
+  [data-segnale="1"] .segnale i:nth-child(-n+1), [data-segnale="2"] .segnale i:nth-child(-n+2),
+  [data-segnale="3"] .segnale i:nth-child(-n+3), [data-segnale="4"] .segnale i { opacity: 1; }
+  .frequenza { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 4px; font-family: "Michroma", Verdana, sans-serif; line-height: 1.15; white-space: nowrap; }
+  .cifre { font-size: 18px; font-size: clamp(13px, min(5.6cqh, calc((100cqi - 50px) / 4.3)), 24px); font-variant-numeric: tabular-nums; }
+  .unita { font-size: 9px; font-size: clamp(7px, 2.4cqh, 10px); opacity: .8; }
+  .display-radio .ascolto-nome { grid-column: 1 / -1; font-weight: 800; font-size: 13px; font-size: clamp(10px, min(3.5cqh, calc((100cqi - 16px) / 8.6)), 14px); line-height: 1.15; white-space: nowrap; }
+  .vite {
+    position: absolute; bottom: 6px; left: 6px; width: 7px; height: 7px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #F2F5F5, #7C8F92 72%); box-shadow: 0 1px 1px rgba(0, 0, 0, .5);
+  }
+  .vite::after { content: ""; position: absolute; left: 1px; right: 1px; top: 3px; height: 1px; background: rgba(0, 0, 0, .5); transform: rotate(38deg); }
+  .vite.destra { left: auto; right: 6px; } .vite.destra::after { transform: rotate(-22deg); }
   .manopola { display: block; width: 100%; height: auto; max-height: 92px; flex: 1 1 auto; min-height: 0; cursor: grab; touch-action: none; }
   .manopola:active { cursor: grabbing; }
-  .tacche-banda line { stroke: var(--vetro-segni); stroke-width: 1.3; stroke-linecap: round; opacity: .55; }
+  .tacche-banda line { stroke: var(--scala); stroke-width: 1.3; stroke-linecap: round; opacity: .45; }
   .tacche-banda line.lunga { stroke-width: 2.2; opacity: .7; transition: opacity .2s, stroke .2s; }
-  .stazioni[data-banda="am"] .lunga[data-pos="am"], .stazioni[data-banda="fm"] .lunga[data-pos="fm"] { opacity: 1; }
+  .stazioni[data-banda="am"] .lunga[data-pos="am"], .stazioni[data-banda="fm"] .lunga[data-pos="fm"] { opacity: 1; stroke: var(--ambra); }
   .stazioni[data-banda="pirata"] .lunga[data-pos="pirata"] { opacity: 1; stroke: var(--corallo); }
-  .etichetta-banda { font: 9.5px "Michroma", Verdana, sans-serif; fill: var(--vetro-segni); opacity: .55; transition: opacity .2s; cursor: pointer; }
-  .zona-pirata { fill: none; stroke: var(--corallo); stroke-width: 3.5; stroke-linecap: round; opacity: .55; }
+  .etichetta-banda { font: 9.5px "Michroma", Verdana, sans-serif; fill: var(--scala); opacity: .5; transition: opacity .2s, fill .2s; cursor: pointer; }
+  .zona-pirata { fill: none; stroke: var(--corallo); stroke-width: 3.5; stroke-linecap: round; opacity: .6; }
   .lucchetto { fill: var(--corallo); stroke: var(--corallo); stroke-width: 1.6; opacity: .7; cursor: pointer; }
   .lucchetto rect { stroke: none; }
-  .stazioni[data-banda="am"] .etichetta-banda[data-pos="am"], .stazioni[data-banda="fm"] .etichetta-banda[data-pos="fm"] { opacity: 1; }
-  .stazioni[data-banda="pirata"] .lucchetto { opacity: 1; }
-  #manopola-corpo { transform-origin: 60px 58px; transition: transform .28s cubic-bezier(.3, 1.4, .5, 1); }
-  .manopola.trascina #manopola-corpo { transition: none; }
-  .corpo-manopola { fill: var(--corpo); }
-  .ghiera { fill: none; stroke: var(--griglia); stroke-width: 1.5; stroke-dasharray: 2 2.4; }
-  .indice { stroke: var(--ambra); stroke-width: 3; stroke-linecap: round; }
-  .stazioni[data-banda="pirata"] .indice { stroke: var(--corallo); }
+  .stazioni[data-banda="am"] .etichetta-banda[data-pos="am"], .stazioni[data-banda="fm"] .etichetta-banda[data-pos="fm"] { opacity: 1; fill: var(--ambra); filter: drop-shadow(0 0 2.5px rgba(255, 181, 46, .75)); }
+  .stazioni[data-banda="pirata"] .lucchetto { opacity: 1; filter: drop-shadow(0 0 3px rgba(255, 90, 71, .8)); }
+  #manopola-corpo, .indice-manopola { transform-origin: 60px 58px; transition: transform .28s cubic-bezier(.3, 1.4, .5, 1); }
+  .manopola.trascina #manopola-corpo, .manopola.trascina .indice-manopola { transition: none; }
+  .ombra-manopola { fill: #000; opacity: .45; filter: blur(1.6px); }
+  .zigrinatura { fill: #55696C; stroke: #B4C2C4; stroke-width: 2.3; stroke-dasharray: 1.5 1.57; }
+  .metallo-chiaro { stop-color: #F5F8F8; } .metallo-scuro { stop-color: #8A9DA0; }
+  .cappello-luce { stop-color: #FFFFFF; } .cappello-medio { stop-color: #D9E1E2; } .cappello-bordo { stop-color: #A9B8BA; }
+  .cappello { stroke: rgba(0, 0, 0, .18); stroke-width: .6; }
+  .riflesso-manopola { fill: none; stroke: #fff; stroke-width: 1.6; stroke-linecap: round; opacity: .55; }
+  .indice { stroke: #22383D; stroke-width: 2.2; stroke-linecap: round; opacity: .8; }
+  .punta-indice { fill: var(--ambra); filter: drop-shadow(0 0 2px rgba(255, 181, 46, .9)); }
+  .stazioni[data-banda="pirata"] .punta-indice { fill: var(--corallo); filter: drop-shadow(0 0 2px rgba(255, 90, 71, .9)); }
   @supports (grid-template-rows: subgrid) {
     .stazioni { grid-template-rows: 1fr auto auto auto; row-gap: 0; }
     .stazioni .tasto:not(.banda) {
@@ -1033,7 +1070,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .riflesso, .scintilla, .alone, .bordo-oro, .stazioni.cambio .tasto { animation: none !important; }
-    #manopola-corpo { transition: none; } .scintilla { opacity: 0; }
+    #manopola-corpo, .indice-manopola { transition: none; } .scintilla { opacity: 0; }
     .sfondo *, .cerca .led, .cerca .ascolto-nome { animation: none !important; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .fine-squadra, .totale-fine { animation: none !important; }
@@ -2059,21 +2096,31 @@ Vizio | Virtù
               <span class="led"></span>
               <span class="descr"><span class="motto">Temi piccanti per adulti</span><span class="conteggio">Solo 18+</span></span>
             </button>
-            <div class="tasto banda" id="selettore-banda" role="slider" tabindex="0" aria-label="Gamma d'onda" aria-valuetext="AM" style="--k:3">
-              <span class="titolo"><span class="ascolto-etichetta">In ascolto:</span> <span class="ascolto-nome" id="ascolto-nome">Hit Parade</span></span>
+            <div class="tasto banda" id="selettore-banda" role="slider" tabindex="0" aria-label="Gamma d'onda" aria-valuetext="AM" data-in-onda="am" data-segnale="3" style="--k:3">
+              <div class="display-radio">
+                <span class="ascolto-etichetta">In ascolto</span>
+                <span class="segnale" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                <span class="frequenza"><span class="cifre" id="freq-cifre">1080</span><span class="unita" id="freq-unita">kHz</span></span>
+                <span class="ascolto-nome" id="ascolto-nome">Hit Parade</span>
+              </div>
               <svg class="manopola" id="manopola" viewBox="10 6 100 72" aria-hidden="true">
                 <path class="zona-pirata" d="M81.4 34.2 A32 32 0 0 1 90.4 48.1"/>
                 <g class="tacche-banda"><line x1="41.3" y1="49.7" x2="38.1" y2="48.2"/><line class="lunga" data-pos="am" x1="43.2" y1="46.2" x2="37.5" y2="42.2"/><line x1="45.8" y1="43.3" x2="43.3" y2="40.7"/><line x1="48.8" y1="40.8" x2="46.9" y2="37.9"/><line x1="52.3" y1="39.0" x2="51.0" y2="35.7"/><line x1="56.1" y1="37.9" x2="55.4" y2="34.4"/><line class="lunga" data-pos="fm" x1="60.0" y1="37.5" x2="60.0" y2="30.5"/><line x1="63.9" y1="37.9" x2="64.6" y2="34.4"/><line x1="67.7" y1="39.0" x2="69.0" y2="35.7"/><line x1="71.2" y1="40.8" x2="73.1" y2="37.9"/><line x1="74.2" y1="43.3" x2="76.7" y2="40.7"/><line class="lunga" data-pos="pirata" x1="76.8" y1="46.2" x2="82.5" y2="42.2"/><line x1="78.7" y1="49.7" x2="81.9" y2="48.2"/></g>
                 <text class="etichetta-banda" data-pos="am" x="34" y="43.5" text-anchor="end">AM</text>
                 <text class="etichetta-banda" data-pos="fm" x="60" y="23" text-anchor="middle">FM</text>
                 <g class="lucchetto" transform="translate(98.5 36.7)"><rect x="-5" y="-2" width="10" height="8" rx="1.5"/><path d="M-3-2v-2.5a3 3 0 0 1 6 0V-2" fill="none"/></g>
-                <g id="manopola-corpo">
-                  <circle cx="60" cy="58" r="17" class="corpo-manopola"/>
-                  <circle cx="60" cy="58" r="12" class="ghiera"/>
-                  <line x1="60" y1="54" x2="60" y2="43" class="indice"/>
-                </g>
+                <defs>
+                  <linearGradient id="luce-manopola" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" class="metallo-chiaro"/><stop offset="1" class="metallo-scuro"/></linearGradient>
+                  <radialGradient id="luce-cappello" cx=".36" cy=".3" r=".85"><stop offset="0" class="cappello-luce"/><stop offset=".6" class="cappello-medio"/><stop offset="1" class="cappello-bordo"/></radialGradient>
+                </defs>
+                <ellipse class="ombra-manopola" cx="61.2" cy="60.6" rx="18.6" ry="18"/>
+                <g id="manopola-corpo"><circle class="zigrinatura" cx="60" cy="58" r="17.6"/></g>
+                <circle class="corpo-manopola" cx="60" cy="58" r="15.4" fill="url(#luce-manopola)"/>
+                <circle class="cappello" cx="60" cy="58" r="10.8" fill="url(#luce-cappello)"/>
+                <path class="riflesso-manopola" d="M47.6 52.4A13.2 13.2 0 0 1 57.4 45.1"/>
+                <g class="indice-manopola"><line class="indice" x1="60" y1="55.6" x2="60" y2="45.4"/><circle class="punta-indice" cx="60" cy="45.4" r="1.7"/></g>
               </svg>
-              <span class="descr"><span class="conteggio" id="banda-chip">AM · 530–1600 kHz</span></span>
+              <span class="vite" aria-hidden="true"></span><span class="vite destra" aria-hidden="true"></span>
             </div>
           </div>
         </div>
@@ -3621,7 +3668,48 @@ Vizio | Virtù
   const ANGOLO = { am: -55, fm: 0, pirata: 55 };
   const NOME_BANDA = { am: 'AM · 530–1600 kHz', fm: 'FM · 88–108 MHz', pirata: 'Frequenze Pirata' };
   let bandaVisibile = 'am';
-  function ruotaManopola(gradi) { corpoManopola.style.transform = `rotate(${gradi}deg)`; }
+  const indiceManopola = document.querySelector('.indice-manopola');
+  function ruotaManopola(gradi) { corpoManopola.style.transform = indiceManopola.style.transform = `rotate(${gradi}deg)`; }
+  // il display mostra la frequenza della stazione in ascolto; quelle pirata sono fuori banda (e un po' sospette)
+  const FREQUENZE = { merenda: '612', hitparade: '1080', cerebrali: '1440', paesello: '97.3', ottobit: '88.8',
+                      primavisione: '102.4', fuoriorario: '18.00', ondanera: '66.6', mezzanotte: '00.01' };
+  const SEGNALE = { am: 3, fm: 4, pirata: 2 };          // le pirata arrivano un po' deboli
+  const cifre = document.getElementById('freq-cifre'), unita = document.getElementById('freq-unita');
+  let rotella = 0;
+  function mostraFrequenza(id) {
+    const banda = bandaDi(id);
+    cifre.textContent = FREQUENZE[id] || '';
+    unita.textContent = banda === 'am' ? 'kHz' : 'MHz';
+    selettore.dataset.inOnda = banda;
+    selettore.dataset.segnale = SEGNALE[banda];
+  }
+  function formattaFrequenza(v, decimali, banda) {
+    if (banda === 'am') return String(Math.round(Math.min(1710, Math.max(520, v))));
+    const s = Math.max(0, v).toFixed(decimali);
+    return decimali === 2 ? s.padStart(5, '0') : s;
+  }
+  // cambiando stazione le cifre corrono, superano la frequenza, tornano indietro e si fermano, insieme al fruscio
+  function sintonizzaCifre(da, a) {
+    cancelAnimationFrame(rotella); rotella = 0;
+    const banda = bandaDi(a), testo = FREQUENZE[a] || '', arrivo = parseFloat(testo);
+    const decimali = (testo.split('.')[1] || '').length;
+    const stessaUnita = (bandaDi(da) === 'am') === (banda === 'am');
+    const partenza = stessaUnita && FREQUENZE[da] ? parseFloat(FREQUENZE[da]) : arrivo + (Math.random() < .5 ? -1 : 1) * (banda === 'am' ? 420 : 9);
+    selettore.dataset.inOnda = banda;
+    unita.textContent = banda === 'am' ? 'kHz' : 'MHz';
+    if (riduciMoto || !isFinite(arrivo)) { mostraFrequenza(a); return; }
+    const t0 = performance.now(), D = 1350, giri = 1.3 + Math.random() * .6;
+    const passo = ora => {
+      const x = Math.min(1, (ora - t0) / D);
+      if (x >= 1) { rotella = 0; mostraFrequenza(a); return; }
+      let v = arrivo + (partenza - arrivo) * Math.exp(-3.4 * x) * Math.cos(Math.PI * 2 * giri * x);
+      v += (Math.random() - .5) * (1 - x) * (banda === 'am' ? 24 : .5);
+      cifre.textContent = formattaFrequenza(v, decimali, banda);
+      selettore.dataset.segnale = Math.random() < .25 + x * .5 ? 1 + Math.floor(Math.random() * 2) : 0;
+      rotella = requestAnimationFrame(passo);
+    };
+    rotella = requestAnimationFrame(passo);
+  }
   // gli sfondi a tema sfumano appena sopra il titolo: qui si misura dove comincia in ogni tasto
   function misuraTitoli() {
     tastiStazione.forEach(b => {
@@ -3642,8 +3730,8 @@ Vizio | Virtù
     griglia.dataset.banda = bandaVisibile;
     ruotaManopola(ANGOLO[bandaVisibile]);
     selettore.setAttribute('aria-valuetext', NOME_BANDA[bandaVisibile]);
-    document.getElementById('banda-chip').textContent = NOME_BANDA[bandaVisibile];
     document.getElementById('ascolto-nome').textContent = nomeStazione(stazioneScelta);
+    if (!rotella) mostraFrequenza(stazioneScelta);
     misuraTitoli();
   }
   function impostaBanda(nuova) {
@@ -3706,9 +3794,11 @@ Vizio | Virtù
   let fineRicerca = 0;
   function scegliStazione(id) {
     if (id === stazioneScelta) return;
+    const prima = stazioneScelta;
     stazioneScelta = id;
     suona('cercaStazione');
     mostraStazione();
+    sintonizzaCifre(prima, id);
     aggiornaMusica();
     // il led della stazione e il nome sul display tremolano finché il segnale non si aggancia
     clearTimeout(fineRicerca);
