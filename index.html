@@ -292,7 +292,8 @@
   }
   .soggetto-carta[hidden] { display: none; }
   /* menu: "Sintonizzati su …" con la stazione che sta suonando, in uno stile diverso dal marchio */
-  .marchio .in-onda { display: inline-flex; align-items: baseline; gap: 5px; margin-left: -3px; white-space: nowrap; font-family: "Bricolage Grotesque", system-ui, sans-serif; font-size: 16px; line-height: 1; }
+  .marchio-testo { display: inline-flex; align-items: baseline; gap: 7px; white-space: nowrap; }
+  .marchio .in-onda { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; font-family: "Bricolage Grotesque", system-ui, sans-serif; font-size: 16px; }
   .marchio .in-onda[hidden] { display: none; }
   .in-onda .su { font-weight: 500; color: var(--tenue); font-style: italic; }
   .in-onda .nome-onda { font-weight: 800; color: var(--ambra-testo); letter-spacing: -.01em; }
@@ -2232,7 +2233,7 @@ Silenzio d'oro | Silenzio imbarazzante
 <g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
 <g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
 </g>
-</svg><span>Sintonizzati</span><span class="in-onda" id="in-onda" aria-live="polite" hidden><span class="su">su</span><span class="nome-onda" id="nome-onda"></span></span></div><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+</svg><span class="marchio-testo"><span>Sintonizzati</span><span class="in-onda" id="in-onda" aria-live="polite" hidden><span class="su">su</span><span class="nome-onda" id="nome-onda"></span></span></span></div><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Come giocate?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
@@ -2551,8 +2552,14 @@ Silenzio d'oro | Silenzio imbarazzante
             <g clip-path="url(#taglio)"><g id="ventaglio" aria-hidden="true"></g></g>
             <path d="M28 216 A172 172 0 0 1 372 216" fill="none" stroke-width="2" style="stroke:var(--vetro-segni)" opacity=".45"/>
             <g id="tacche" stroke-linecap="round" style="stroke:var(--vetro-segni)"></g>
-            <text x="34" y="44" font-family="Michroma, Verdana, sans-serif" font-size="11" style="fill:var(--vetro-segni)" opacity=".7">FM</text>
-            <text x="366" y="44" text-anchor="end" font-family="Michroma, Verdana, sans-serif" font-size="11" style="fill:var(--vetro-segni)" opacity=".7">MHz</text>
+            <text id="dial-banda" x="34" y="44" font-family="Michroma, Verdana, sans-serif" font-size="11" style="fill:var(--vetro-segni)" opacity=".7">FM</text>
+            <g id="dial-teschio" transform="translate(72 39.5)" opacity=".75" style="display:none">
+              <g stroke-width="2.2" stroke-linecap="round" style="stroke:var(--vetro-segni)"><path d="M-8-6.5 8 8M8-6.5-8 8"/></g>
+              <g style="fill:var(--vetro-segni)"><circle cx="-8.3" cy="-6.8" r="1.6"/><circle cx="8.3" cy="-6.8" r="1.6"/><circle cx="-8.3" cy="8.3" r="1.6"/><circle cx="8.3" cy="8.3" r="1.6"/>
+                <path d="M0-7.5c-4.1 0-6.8 2.7-6.8 6.2 0 2.3 1.2 3.9 2.6 4.8V6.3c0 .7.5 1.2 1.2 1.2h6c.7 0 1.2-.5 1.2-1.2V3.5c1.4-.9 2.6-2.5 2.6-4.8 0-3.5-2.7-6.2-6.8-6.2z"/></g>
+              <g style="fill:var(--vetro)"><circle cx="-2.6" cy="-1" r="1.9"/><circle cx="2.6" cy="-1" r="1.9"/><path d="M0 1.6-1 3.4h2z"/><rect x="-1.9" y="5" width=".8" height="2.6"/><rect x="1.1" y="5" width=".8" height="2.6"/></g>
+            </g>
+            <text id="dial-unita" x="366" y="44" text-anchor="end" font-family="Michroma, Verdana, sans-serif" font-size="11" style="fill:var(--vetro-segni)" opacity=".7">MHz</text>
             <g id="risposte" aria-hidden="true"></g>
             <g id="ago" style="transform-origin:200px 216px">
               <line x1="200" y1="216" x2="200" y2="48" stroke-width="9" stroke-linecap="round" style="stroke:var(--vetro)"/>
@@ -4600,16 +4607,29 @@ Silenzio d'oro | Silenzio imbarazzante
     ventaglio.replaceChildren();
     const valori = valoriBersaglio(), classi = classiZona();
     let formaOro = null;
+    // dove va ogni numero: fuori dallo spicchio, ma dentro il vetro della radio
+    const posti = valori.map((v, i) => {
+      const medio = centro + (BORDI[i] + BORDI[i + 1]) / 2;
+      if (Math.abs(medio) >= 90) return null;            // spicchio fuori dalla radio: niente numero
+      const s = Math.abs(Math.sin(medio * Math.PI / 180));
+      const mezzo = v.length > 1 ? 10 : 5;               // metà larghezza del numero
+      const stretto = Math.min(190, (181 - mezzo) / Math.max(s, 0.01)) < 186;
+      // vicino ai bordi il numero finirebbe sopra lo spicchio: va rimpicciolito per stare tra la punta e il bordo
+      const scala = stretto ? Math.max(0.6, Math.min(0.78, (186 - 177 * s) / (mezzo * (1 + s)))) : 1;
+      return { medio, s, mezzo, stretto, scala };
+    });
+    // tutti i numeri dello stesso bersaglio hanno la stessa grandezza
+    const scala = Math.min(1, ...posti.filter(Boolean).map(p => p.scala));
     valori.forEach((v, i) => {
       const forma = spicchio(centro + BORDI[i], centro + BORDI[i + 1], 40, 176);
       ventaglio.append(svg('path', { d: forma, class: 'zona ' + classi[i] }));
       if (classi[i] === 'z-oro') formaOro = forma;
-      const medio = centro + (BORDI[i] + BORDI[i + 1]) / 2;
-      if (Math.abs(medio) >= 90) return;           // spicchio fuori dalla radio: niente numero
-      const s = Math.abs(Math.sin(medio * Math.PI / 180));
-      const mezzo = v.length > 1 ? 10 : 5;     // metà larghezza del numero
-      const [x, y] = punto(medio, Math.min(190, (181 - mezzo) / Math.max(s, 0.01)));
-      const t = svg('text', { x, y: y + 4, 'text-anchor': 'middle', class: 'valore' + (classi[i] === 'z-oro' ? ' oro' : '') });
+      const p = posti[i];
+      if (!p) return;
+      const r = p.stretto ? 177 + p.mezzo * scala : Math.min(190, (181 - p.mezzo * scala) / Math.max(p.s, 0.01));
+      const [x, y] = punto(p.medio, r);
+      const t = svg('text', { x, y: y + 4 * scala, 'text-anchor': 'middle', class: 'valore' + (classi[i] === 'z-oro' ? ' oro' : '') });
+      if (scala < 1) t.style.fontSize = (12 * scala).toFixed(1) + 'px';
       t.textContent = v;
       ventaglio.append(t);
     });
@@ -4672,6 +4692,11 @@ Silenzio d'oro | Silenzio imbarazzante
   /* ---------- Entrata in partita: la radio si accende ---------- */
   function entraInPartita(poi) {
     document.getElementById('chip-stazione').textContent = nomeStazione(stazioneScelta);
+    // la scala segue la stazione: AM e kHz per le AM, FM e MHz per le altre, e un teschio per le pirata
+    const banda = bandaDi(stazioneScelta);
+    document.getElementById('dial-banda').textContent = banda === 'am' ? 'AM' : 'FM';
+    document.getElementById('dial-unita').textContent = banda === 'am' ? 'kHz' : 'MHz';
+    document.getElementById('dial-teschio').style.display = banda === 'pirata' ? '' : 'none';
     passaggio.hidden = true;
     pulisciQuadrante();
     ago.style.transition = '';
