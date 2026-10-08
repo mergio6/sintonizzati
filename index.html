@@ -725,8 +725,8 @@
   .stazioni .tasto .titolo { font-size: clamp(15px, 4.4vh, 19px); font-size: clamp(15px, 4.4cqh, 19px); }
   .stazioni .tasto .motto { font-size: clamp(12px, 3.6vh, 15px); font-size: clamp(12px, 3.6cqh, 15px); }
   .stazioni .tasto .descr { gap: 6px; }
-  @media (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } .stazioni .tasto.banda .motto { display: none; } }
-  @container app (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } .stazioni .tasto.banda .motto { display: none; } }
+  @media (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } }
+  @container app (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } }
   /* tre gamme d'onda: si vedono solo le tre stazioni della gamma attiva, più la manopola */
   .stazioni[data-banda="am"] .tasto[data-banda]:not([data-banda="am"]),
   .stazioni[data-banda="fm"] .tasto[data-banda]:not([data-banda="fm"]),
@@ -739,13 +739,15 @@
     box-shadow: inset 0 0 0 2px var(--corpo), 0 6px 0 var(--tasto-ombra);
   }
   .stazioni .tasto.banda:active { transform: none; box-shadow: inset 0 0 0 2px var(--corpo), 0 6px 0 var(--tasto-ombra); }
-  .stazioni .tasto.banda .titolo { font-size: clamp(12px, 3.4vh, 14px); font-size: clamp(12px, 3.4cqh, 14px); font-weight: 700; opacity: .85; }
-  .stazioni .tasto.banda .motto, .stazioni .tasto.banda .conteggio { color: var(--vetro-segni); }
+  .stazioni .tasto.banda .titolo { display: block; font-size: clamp(12px, 3.6vh, 15px); font-size: clamp(12px, 3.6cqh, 15px); font-weight: 800; line-height: 1.15; }
+  .stazioni .tasto.banda .ascolto-etichetta { display: block; font-size: .78em; font-weight: 600; opacity: .75; }
+  .stazioni .tasto.banda .conteggio { color: var(--vetro-segni); white-space: nowrap; align-self: flex-start; }
   .manopola { display: block; width: 100%; height: auto; max-height: 92px; flex: 1 1 auto; min-height: 0; cursor: grab; touch-action: none; }
   .manopola:active { cursor: grabbing; }
-  .tacche-banda line { stroke: var(--vetro-segni); stroke-width: 1.4; stroke-linecap: round; opacity: .7; }
+  .tacche-banda line { stroke: var(--vetro-segni); stroke-width: 1.3; stroke-linecap: round; opacity: .6; }
+  .tacche-banda line.lunga { stroke-width: 2; opacity: .9; }
   .etichetta-banda { font: 11px "Michroma", Verdana, sans-serif; fill: var(--vetro-segni); opacity: .55; transition: opacity .2s; cursor: pointer; }
-  .zona-pirata { fill: none; stroke: var(--corallo); stroke-width: 5; stroke-linecap: round; opacity: .55; }
+  .zona-pirata { fill: none; stroke: var(--corallo); stroke-width: 3.5; stroke-linecap: round; opacity: .55; }
   .lucchetto { fill: var(--corallo); stroke: var(--corallo); stroke-width: 1.6; opacity: .7; cursor: pointer; }
   .lucchetto rect { stroke: none; }
   .stazioni[data-banda="am"] .etichetta-banda[data-pos="am"], .stazioni[data-banda="fm"] .etichetta-banda[data-pos="fm"] { opacity: 1; }
@@ -756,6 +758,20 @@
   .ghiera { fill: none; stroke: var(--griglia); stroke-width: 1.5; stroke-dasharray: 2 2.4; }
   .indice { stroke: var(--ambra); stroke-width: 3; stroke-linecap: round; }
   .stazioni[data-banda="pirata"] .indice { stroke: var(--corallo); }
+  @supports (grid-template-rows: subgrid) {
+    .stazioni { grid-template-rows: 1fr auto auto auto; row-gap: 0; }
+    .stazioni .tasto:not(.banda) {
+      grid-row: span 4; grid-template-rows: subgrid; row-gap: 3px;
+      grid-template-areas: "icona led" "titolo titolo" "motto motto" "chip chip";
+    }
+    .stazioni .tasto:not(.banda) .descr { display: contents; }
+    .stazioni .tasto:not(.banda) .titolo { align-self: end; }
+    .stazioni .tasto:not(.banda) .motto { grid-area: motto; align-self: start; }
+    .stazioni .tasto:not(.banda) .conteggio { grid-area: chip; justify-self: start; align-self: end; margin-top: 5px; }
+    .stazioni .tasto.banda { grid-row: span 4; }
+    @media (max-height: 430px) { .stazioni .tasto:not(.banda) { grid-template-areas: ". led" "titolo titolo" "motto motto" "chip chip"; } }
+    @container app (max-height: 430px) { .stazioni .tasto:not(.banda) { grid-template-areas: ". led" "titolo titolo" "motto motto" "chip chip"; } }
+  }
   .stazioni .tasto.scelto {
     transform: translateY(5px);
     box-shadow: inset 0 0 0 3px var(--colore), 0 1px 0 var(--tasto-ombra);
@@ -1861,20 +1877,20 @@ Lavoro dei sogni da bambino | Lavoro attuale
               <span class="descr"><span class="motto">Lavoro, colleghi e dopo-lavoro</span><span class="conteggio">Solo 18+</span></span>
             </button>
             <div class="tasto banda" id="selettore-banda" role="slider" tabindex="0" aria-label="Gamma d'onda" aria-valuetext="AM" style="--k:3">
-              <span class="titolo">Gamma d'onda</span>
-              <svg class="manopola" id="manopola" viewBox="16 6 88 72" aria-hidden="true">
-                <path class="zona-pirata" d="M80.7 35.0 A31 31 0 0 1 89.1 47.4"/>
-                <g class="tacche-banda"><line x1="37.4" y1="49.8" x2="33.7" y2="48.4"/><line x1="39.2" y1="46.0" x2="35.8" y2="44.0"/><line x1="41.6" y1="42.6" x2="38.6" y2="40.0"/><line x1="44.6" y1="39.6" x2="42.0" y2="36.6"/><line x1="48.0" y1="37.2" x2="46.0" y2="33.8"/><line x1="51.8" y1="35.4" x2="50.4" y2="31.7"/><line x1="55.8" y1="34.4" x2="55.1" y2="30.4"/><line x1="60.0" y1="34.0" x2="60.0" y2="28.0"/><line x1="64.2" y1="34.4" x2="64.9" y2="30.4"/><line x1="68.2" y1="35.4" x2="69.6" y2="31.7"/><line x1="72.0" y1="37.2" x2="74.0" y2="33.8"/><line x1="75.4" y1="39.6" x2="78.0" y2="36.6"/><line x1="78.4" y1="42.6" x2="81.4" y2="40.0"/><line x1="80.8" y1="46.0" x2="84.2" y2="44.0"/><line x1="82.6" y1="49.8" x2="86.3" y2="48.4"/></g>
-                <text class="etichetta-banda" data-pos="am" x="28.1" y="39.6" text-anchor="middle">AM</text>
-                <text class="etichetta-banda" data-pos="fm" x="60.0" y="21.0" text-anchor="middle">FM</text>
-                <g class="lucchetto" transform="translate(91.9 35.6)"><rect x="-5" y="-2" width="10" height="8" rx="1.5"/><path d="M-3-2v-2.5a3 3 0 0 1 6 0V-2" fill="none"/></g>
+              <span class="titolo"><span class="ascolto-etichetta">In ascolto:</span> <span class="ascolto-nome" id="ascolto-nome">Hit Parade</span></span>
+              <svg class="manopola" id="manopola" viewBox="14 6 92 72" aria-hidden="true">
+                <path class="zona-pirata" d="M80.0 35.0 A30.5 30.5 0 0 1 89.0 48.6"/>
+                <g class="tacche-banda"><line x1="40.7" y1="51.0" x2="37.4" y2="49.8"/><line x1="42.2" y1="47.8" x2="39.2" y2="46.0"/><line x1="44.3" y1="44.8" x2="41.6" y2="42.6"/><line x1="46.8" y1="42.3" x2="44.6" y2="39.6"/><line x1="49.8" y1="40.2" x2="48.0" y2="37.2"/><line x1="53.0" y1="38.7" x2="51.8" y2="35.4"/><line x1="56.4" y1="37.8" x2="55.8" y2="34.4"/><line x1="60.0" y1="37.5" x2="60.0" y2="34.0"/><line x1="63.6" y1="37.8" x2="64.2" y2="34.4"/><line x1="67.0" y1="38.7" x2="68.2" y2="35.4"/><line x1="70.2" y1="40.2" x2="72.0" y2="37.2"/><line x1="73.2" y1="42.3" x2="75.4" y2="39.6"/><line x1="75.7" y1="44.8" x2="78.4" y2="42.6"/><line x1="77.8" y1="47.8" x2="80.8" y2="46.0"/><line x1="79.3" y1="51.0" x2="82.6" y2="49.8"/><line class="lunga" x1="43.2" y1="46.2" x2="37.9" y2="42.5"/><line class="lunga" x1="60.0" y1="37.5" x2="60.0" y2="31.0"/><line class="lunga" x1="76.8" y1="46.2" x2="82.1" y2="42.5"/></g>
+                <text class="etichetta-banda" data-pos="am" x="26.5" y="40.2" text-anchor="middle">AM</text>
+                <text class="etichetta-banda" data-pos="fm" x="60.0" y="22.0" text-anchor="middle">FM</text>
+                <g class="lucchetto" transform="translate(94.4 35.7)"><rect x="-5" y="-2" width="10" height="8" rx="1.5"/><path d="M-3-2v-2.5a3 3 0 0 1 6 0V-2" fill="none"/></g>
                 <g id="manopola-corpo">
                   <circle cx="60" cy="58" r="17" class="corpo-manopola"/>
                   <circle cx="60" cy="58" r="12" class="ghiera"/>
                   <line x1="60" y1="54" x2="60" y2="43" class="indice"/>
                 </g>
               </svg>
-              <span class="descr"><span class="motto" id="banda-motto">Gira la manopola</span><span class="conteggio" id="banda-chip">AM · 530–1600 kHz</span></span>
+              <span class="descr"><span class="conteggio" id="banda-chip">AM · 530–1600 kHz</span></span>
             </div>
           </div>
         </div>
@@ -3347,7 +3363,7 @@ Lavoro dei sogni da bambino | Lavoro attuale
   // la manopola ha tre posizioni: AM, FM e la zona nascosta delle Frequenze Pirata
   const BANDE = ['am', 'fm', 'pirata'];
   const ANGOLO = { am: -55, fm: 0, pirata: 55 };
-  const NOME_BANDA = { am: 'AM · 530–1600 kHz', fm: 'FM · 88–108 MHz', pirata: 'Frequenze Pirata · 18+' };
+  const NOME_BANDA = { am: 'AM · 530–1600 kHz', fm: 'FM · 88–108 MHz', pirata: 'Frequenze Pirata' };
   let bandaVisibile = 'am';
   function ruotaManopola(gradi) { corpoManopola.style.transform = `rotate(${gradi}deg)`; }
   function mostraStazione() {
@@ -3362,8 +3378,7 @@ Lavoro dei sogni da bambino | Lavoro attuale
     ruotaManopola(ANGOLO[bandaVisibile]);
     selettore.setAttribute('aria-valuetext', NOME_BANDA[bandaVisibile]);
     document.getElementById('banda-chip').textContent = NOME_BANDA[bandaVisibile];
-    document.getElementById('banda-motto').textContent = bandaDi(stazioneScelta) === bandaVisibile
-      ? 'Gira la manopola' : `In ascolto: ${nomeStazione(stazioneScelta)}`;
+    document.getElementById('ascolto-nome').textContent = nomeStazione(stazioneScelta);
   }
   function impostaBanda(nuova) {
     if (nuova === bandaVisibile) { ruotaManopola(ANGOLO[nuova]); return; }
@@ -3408,7 +3423,7 @@ Lavoro dei sogni da bambino | Lavoro attuale
       scelta = bandaVicina(Math.atan2(q.x - 60, Math.max(58 - q.y, 0.001)) * 180 / Math.PI);
     } else {
       // tocco: sull'etichetta vicina, altrimenti avanti di una posizione
-      const etichette = { am: [27.9, 35.6], fm: [60, 17], pirata: [92.1, 35.6] };
+      const etichette = { am: [26.5, 36.2], fm: [60.0, 18.0], pirata: [94.4, 35.7] };
       const toccata = BANDE.find(b => Math.hypot(q.x - etichette[b][0], q.y - etichette[b][1]) < 14);
       scelta = toccata || BANDE[(BANDE.indexOf(bandaVisibile) + 1) % BANDE.length];
     }
