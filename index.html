@@ -725,6 +725,8 @@
   .stazioni .tasto .titolo { font-size: clamp(15px, 4.4vh, 19px); font-size: clamp(15px, 4.4cqh, 19px); }
   .stazioni .tasto .motto { font-size: clamp(12px, 3.6vh, 15px); font-size: clamp(12px, 3.6cqh, 15px); }
   .stazioni .tasto .descr { gap: 6px; }
+  /* l'etichetta in basso resta su una riga: sui telefoni più stretti il testo si rimpicciolisce quel tanto che basta */
+  .stazioni .tasto:not(.banda) .conteggio { white-space: nowrap; font-size: clamp(7px, min(2.8cqh, calc((22.24cqw - 58px) / 11.4)), 11px); }
   @media (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } }
   @container app (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } }
   /* tre gamme d'onda: si vedono solo le tre stazioni della gamma attiva, più la manopola */
@@ -783,7 +785,7 @@
   .sfondo svg { position: absolute; display: block; overflow: visible; }
   .sfondo svg * { transform-box: fill-box; }
   /* Radio Merenda: codette colorate che scendono piano */
-  [data-stazione="merenda"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 14%, transparent 46%); mask-image: linear-gradient(to bottom, #000 0, #000 14%, transparent 46%); }
+  [data-stazione="merenda"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 min(14%, calc(var(--testo, 999px) - 10px)), transparent min(46%, calc(var(--testo, 999px) + 4px))); mask-image: linear-gradient(to bottom, #000 0, #000 min(14%, calc(var(--testo, 999px) - 10px)), transparent min(46%, calc(var(--testo, 999px) + 4px))); }
   .deco-codette { inset: 0; width: 100%; height: 100%; }
   .deco-codette line { stroke-width: 3.4; stroke-linecap: round; opacity: .55; }
   .deco-codette .c1 { stroke: var(--menta); } .deco-codette .c2 { stroke: var(--ambra); } .deco-codette .c3 { stroke: var(--corallo); }
@@ -791,7 +793,7 @@
   .tasto.scelto .pioggia { animation: codette 7s linear infinite; }
   @keyframes codette { to { transform: translateY(70px); } }
   /* Hit Parade: un vinile che ha il led come perno e gira quando la stazione è scelta */
-  [data-stazione="hitparade"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 34%, transparent 62%); mask-image: linear-gradient(to bottom, #000 0, #000 34%, transparent 62%); }
+  [data-stazione="hitparade"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 min(34%, calc(var(--testo, 999px) - 10px)), transparent min(62%, calc(var(--testo, 999px) + 4px))); mask-image: linear-gradient(to bottom, #000 0, #000 min(34%, calc(var(--testo, 999px) - 10px)), transparent min(62%, calc(var(--testo, 999px) + 4px))); }
   .deco-vinile {
     width: 30vh; width: 30cqh; height: 30vh; height: 30cqh; right: 16px; transform: translate(50%, -50%);
     top: calc(clamp(10px, 2.8vh, 16px) + 6px); top: calc(clamp(10px, 2.8cqh, 16px) + 6px);
@@ -805,7 +807,7 @@
   .tasto.scelto .disco { animation: vinile 4s linear infinite; }
   @keyframes vinile { to { transform: rotate(360deg); } }
   /* Onde Cerebrali: tre tracce di onde cerebrali, lente, medie e veloci */
-  [data-stazione="cerebrali"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 26%, transparent 52%); mask-image: linear-gradient(to bottom, #000 0, #000 26%, transparent 52%); }
+  [data-stazione="cerebrali"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 min(26%, calc(var(--testo, 999px) - 10px)), transparent min(52%, calc(var(--testo, 999px) + 4px))); mask-image: linear-gradient(to bottom, #000 0, #000 min(26%, calc(var(--testo, 999px) - 10px)), transparent min(52%, calc(var(--testo, 999px) + 4px))); }
   .deco-onde { left: 0; top: 4%; width: 100%; height: 40%; }
   .traccia path { fill: none; stroke: var(--colore); stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
   .t1 path { stroke-width: 2.2; opacity: .55; } .t2 path { stroke-width: 1.7; opacity: .45; } .t3 path { stroke-width: 1.2; opacity: .32; }
@@ -814,6 +816,65 @@
   .tasto.scelto .t3 { animation: traccia 5.5s linear infinite; }
   .sfondo .traccia { transform-box: view-box; }
   @keyframes traccia { to { transform: translateX(-200px); } }
+  /* Amarcord Radio: un festone di bandierine tricolore appeso al led, che si muove alla brezza */
+  [data-stazione="paesello"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 min(30%, calc(var(--testo, 999px) - 10px)), transparent min(56%, calc(var(--testo, 999px) + 4px))); mask-image: linear-gradient(to bottom, #000 0, #000 min(30%, calc(var(--testo, 999px) - 10px)), transparent min(56%, calc(var(--testo, 999px) + 4px))); }
+  .deco-festone {
+    --festone: min(14cqh, 6.5cqw, 52px);
+    height: min(14vh, 6.5vw, 52px); height: var(--festone); width: auto; aspect-ratio: 300 / 50; right: 16px;
+    top: calc(clamp(10px, 2.8vh, 16px) + 6px);
+    /* appeso al led; se il titolo va su due righe e manca spazio, il festone sale verso il bordo in alto */
+    top: min(calc(clamp(10px, 2.8cqh, 16px) + 6px), calc(var(--testo, 999px) - var(--festone) * .6));
+  }
+  .corda { fill: none; stroke: var(--su-tasto); stroke-width: 1; opacity: .35; }
+  .bandierina { transform-origin: 50% 0; stroke-linejoin: round; }
+  .bandierina.verde { fill: var(--menta); opacity: .8; }
+  .bandierina.rossa { fill: var(--corallo); opacity: .75; }
+  .bandierina.bianca { fill: color-mix(in srgb, #fff 82%, var(--tasto)); stroke: var(--su-tasto); stroke-width: .8; stroke-opacity: .22; }
+  .tasto.scelto .bandierina { animation: brezza 2.4s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -0.37s); }
+  @keyframes brezza { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
+  /* 8-Bit FM: linee del monitor, stelle a pixel che lampeggiano e un'astronave che attraversa lo schermo */
+  [data-stazione="ottobit"] .sfondo {
+    background: repeating-linear-gradient(to bottom, color-mix(in srgb, var(--colore) 10%, transparent) 0 1px, transparent 1px 4px);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 min(30%, calc(var(--testo, 999px) - 10px)), transparent min(58%, calc(var(--testo, 999px) + 4px))); mask-image: linear-gradient(to bottom, #000 0, #000 min(30%, calc(var(--testo, 999px) - 10px)), transparent min(58%, calc(var(--testo, 999px) + 4px)));
+  }
+  .deco-stelle { inset: 0; width: 100%; height: 56%; shape-rendering: crispEdges; }
+  .stella-pixel { fill: var(--colore); opacity: .7; }
+  .stella-pixel:nth-child(3n) { fill: var(--menta); } .stella-pixel:nth-child(4n) { fill: var(--ambra); }
+  .tasto.scelto .stella-pixel { animation: lampeggio 1.6s steps(1) infinite; animation-delay: calc(var(--i) * -0.29s); }
+  @keyframes lampeggio { 0% { opacity: .75; } 40% { opacity: .15; } 55% { opacity: .9; } 80% { opacity: .35; } }
+  .deco-astronave {
+    width: 39px; height: 15px; left: 46%; top: 15%; shape-rendering: crispEdges; overflow: hidden;
+  }
+  .scafo { fill: var(--colore); opacity: .85; } .oblo { fill: var(--menta); }
+  .fiamma rect { fill: var(--ambra); }
+  .tasto.scelto .deco-astronave { animation: rotta 7s steps(70) infinite; }
+  .tasto.scelto .fiamma { animation: fiamma .24s steps(1) infinite; }
+  @keyframes rotta { 0% { left: 46%; } 50% { left: -30%; } 50.01% { left: 104%; } 100% { left: 46%; } }
+  @keyframes fiamma { 50% { fill: var(--corallo); opacity: .5; } }
+  .tasto.scelto .fiamma rect { animation: fiamma-colore .24s steps(1) infinite; }
+  @keyframes fiamma-colore { 50% { fill: var(--corallo); } }
+  /* Prima Visione: una pellicola che scorre come nel proiettore, con qualche stellina */
+  [data-stazione="primavisione"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 min(32%, calc(var(--testo, 999px) - 10px)), transparent min(58%, calc(var(--testo, 999px) + 4px))); mask-image: linear-gradient(to bottom, #000 0, #000 min(32%, calc(var(--testo, 999px) - 10px)), transparent min(58%, calc(var(--testo, 999px) + 4px))); }
+  .deco-pellicola { inset: 0; width: 100%; height: 58%; }
+  .pellicola { stroke: var(--colore); stroke-width: 24; opacity: .32; }
+  .fotogrammi { stroke: var(--tasto); stroke-width: 12.5; stroke-dasharray: 15 4; opacity: .7; }
+  .perforazioni { stroke: var(--tasto); stroke-width: 3.4; stroke-dasharray: 3.4 6.1; opacity: .9; }
+  .tasto.scelto .fotogrammi, .tasto.scelto .perforazioni { animation: proiettore 1.4s linear infinite; }
+  @keyframes proiettore { to { stroke-dashoffset: -19; } }
+  .stellina { fill: var(--colore); opacity: .55; transform-origin: center; }
+  .tasto.scelto .stellina { animation: brilla 2.2s ease-in-out infinite; animation-delay: calc(var(--i) * -0.73s); }
+  @keyframes brilla { 0%, 100% { transform: scale(.55); opacity: .3; } 50% { transform: scale(1.15) rotate(20deg); opacity: .85; } }
+  /* ricerca della frequenza: led e nome sul display tremolano per un secondo e mezzo */
+  .stazioni .tasto.scelto.cerca .led { animation: cerca-led 1.5s linear both; }
+  .tasto.banda.cerca .ascolto-nome { animation: cerca-nome 1.5s linear both; }
+  @keyframes cerca-led {
+    0% { opacity: .15; } 6% { opacity: .9; } 11% { opacity: .2; } 17% { opacity: .7; } 24% { opacity: .1; } 31% { opacity: 1; }
+    36% { opacity: .3; } 44% { opacity: .85; } 50% { opacity: .2; } 58% { opacity: 1; } 63% { opacity: .45; } 72% { opacity: 1; } 76% { opacity: .7; } 84%, 100% { opacity: 1; }
+  }
+  @keyframes cerca-nome {
+    0% { opacity: .2; filter: blur(1.5px); } 10% { opacity: .7; } 16% { opacity: .25; } 28% { opacity: .8; filter: blur(1px); }
+    34% { opacity: .35; } 48% { opacity: .9; filter: blur(.6px); } 55% { opacity: .5; } 70% { opacity: 1; filter: blur(0); } 76% { opacity: .75; } 86%, 100% { opacity: 1; filter: none; }
+  }
   .stazioni .tasto.scelto {
     transform: translateY(5px);
     box-shadow: inset 0 0 0 3px var(--colore), 0 1px 0 var(--tasto-ombra);
@@ -895,7 +956,7 @@
   @media (prefers-reduced-motion: reduce) {
     .riflesso, .scintilla, .alone, .bordo-oro, .stazioni.cambio .tasto { animation: none !important; }
     #manopola-corpo { transition: none; } .scintilla { opacity: 0; }
-    .sfondo * { animation: none !important; }
+    .sfondo *, .cerca .led, .cerca .ascolto-nome { animation: none !important; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
@@ -915,8 +976,8 @@
 #  - [Nome della stazione] indica a quale mazzo appartengono le carte sotto
 #  - le nove stazioni sono divise in tre gamme d'onda:
 #    AM: [Radio Merenda], [Hit Parade], [Onde Cerebrali]
-#    FM: [Radio Paesello], [8-Bit FM], [Prima Visione]
-#    Frequenze Pirata (solo 18+): [Onda Nera], [Dopo Mezzanotte], [Fuori Orario]
+#    FM: [Amarcord Radio], [8-Bit FM], [Prima Visione]
+#    Frequenze Pirata (solo 18+): [Fuori Orario], [Onda Nera], [Dopo Mezzanotte]
 #  - se una riga è scritta male, il gioco la salta e usa tutte le altre
 #  - tieni gli estremi brevi (massimo una ventina di caratteri)
 # =====================================================================
@@ -1013,7 +1074,6 @@ Meglio caldo | Meglio freddo
 Rigido | Flessibile
 Colore piacevole | Colore spiacevole
 Animale da compagnia comune | Animale da compagnia insolito
-
 
 [Hit Parade]
 # Il mazzo standard: i grandi classici per tutti
@@ -1248,7 +1308,6 @@ Innocuo | Pericoloso
 Film triste | Film allegro
 Pessimo genere musicale | Ottimo genere musicale
 
-
 [Onde Cerebrali]
 # Concetti astratti e sfumati: per chi vuole ragionarci su
 
@@ -1366,6 +1425,315 @@ Avvantaggia te | Avvantaggia tutti
 Talento innato | Abilità acquisita
 Pacchiano | Raffinato
 
+[Amarcord Radio]
+# Nostalgia e italianità: infanzia anni '80-2000, cibo, dialetti, parenti e luoghi comuni
+
+Merendina dimenticata | Merendina leggendaria
+Gioco da cortile noioso | Gioco da cortile epico
+Giocattolo dimenticato | Giocattolo iconico
+Figurina comune | Figurina introvabile
+Gita scolastica noiosa | Gita scolastica epica
+Compiti delle vacanze leggeri | Compiti delle vacanze infiniti
+Ricordo d'infanzia sbiadito | Ricordo d'infanzia vivido
+Sogno da bambino realistico | Sogno da bambino impossibile
+Diario segreto noioso | Diario segreto esplosivo
+Videocassetta da buttare | Videocassetta da tenere
+Suoneria imbarazzante | Suoneria mitica
+Oggetto vintage inutile | Oggetto vintage da collezione
+Tormentone imbarazzante | Tormentone intramontabile
+Moda da dimenticare | Moda da far tornare
+Programma TV dimenticato | Programma TV leggendario
+Personaggio TV dimenticato | Personaggio TV leggendario
+Pubblicità dimenticabile | Pubblicità indimenticabile
+Jingle dimenticato | Jingle che canti ancora
+Canzone di Sanremo flop | Canzone di Sanremo cult
+Cantante italiano meteora | Cantante italiano leggenda
+Cinepanettone dimenticabile | Cinepanettone cult
+Canzone da karaoke facile | Canzone da karaoke impossibile
+Ballo di gruppo imbarazzante | Ballo di gruppo irresistibile
+Motorino sfigato | Motorino leggendario
+Campeggio da incubo | Campeggio da sogno
+Rito da spiaggia noioso | Rito da spiaggia irrinunciabile
+Pranzo della domenica leggero | Pranzo della domenica infinito
+Domanda dei parenti innocua | Domanda dei parenti imbarazzante
+Regola della nonna assurda | Regola della nonna sacrosanta
+Rimedio della nonna inutile | Rimedio della nonna miracoloso
+Ricetta della nonna semplice | Ricetta della nonna segreta
+Mamma italiana tranquilla | Mamma italiana apprensiva
+Gesto italiano offensivo | Gesto italiano affettuoso
+Dialetto incomprensibile | Dialetto chiarissimo
+Parola dialettale brutta | Parola dialettale bellissima
+Modo di dire antico | Modo di dire moderno
+Detto popolare falso | Detto popolare saggio
+Luogo comune falso | Luogo comune vero
+Pizza ortodossa | Pizza eretica
+Abbinamento tradizionale | Abbinamento eretico
+Formato di pasta sottovalutato | Formato di pasta sopravvalutato
+Piatto regionale sottovalutato | Piatto regionale sopravvalutato
+Gusto di gelato deludente | Gusto di gelato irrinunciabile
+Caffè fatto male | Caffè perfetto
+Bevanda da nonno | Bevanda da ragazzi
+Sagra noiosa | Sagra imperdibile
+Gioco da osteria noioso | Gioco da osteria appassionante
+Bar di paese | Locale alla moda
+Borgo sconosciuto | Borgo famosissimo
+Regione sottovalutata | Regione sopravvalutata
+Souvenir inutile | Souvenir prezioso
+Vacanza da italiano medio | Vacanza esotica
+Italiano illustre sottovalutato | Italiano illustre sopravvalutato
+Invenzione italiana minore | Invenzione italiana geniale
+Odore dell'infanzia brutto | Odore dell'infanzia bellissimo
+Festa di paese tranquilla | Festa di paese scatenata
+Tradizione di Natale noiosa | Tradizione di Natale imperdibile
+Lettera d'amore imbarazzante | Lettera d'amore indimenticabile
+Cosa da anni '90 | Cosa da anni 2000
+Gioco in scatola dimenticato | Gioco in scatola immortale
+
+[8-Bit FM]
+# Per nerd: videogiochi, fumetti, anime, giochi di ruolo, fantascienza e tecnologia
+
+Videogioco rilassante | Videogioco frustrante
+Boss finale ridicolo | Boss finale leggendario
+Console dimenticata | Console leggendaria
+Grafica pixellosa | Grafica realistica
+Colonna sonora dimenticabile | Colonna sonora epica
+Livello acquatico odioso | Livello acquatico bellissimo
+Missione secondaria noiosa | Missione secondaria imperdibile
+Tutorial inutile | Tutorial indispensabile
+Easter egg banale | Easter egg geniale
+Glitch fastidioso | Glitch leggendario
+Personaggio giocabile scarso | Personaggio giocabile fortissimo
+Compagno di squadra inutile | Compagno di squadra perfetto
+Arma da videogioco inutile | Arma da videogioco leggendaria
+Pozione inutile | Pozione miracolosa
+Mostro da primo livello | Mostro da ultimo livello
+Dungeon tranquillo | Dungeon infernale
+Gioco da sala giochi noioso | Gioco da sala giochi leggendario
+Remake inutile | Remake necessario
+Aggiornamento disastroso | Aggiornamento perfetto
+Connessione da lag | Connessione perfetta
+Nome utente imbarazzante | Nome utente epico
+Classe da GdR debole | Classe da GdR fortissima
+Tiro di dado disastroso | Tiro di dado critico
+Gioco da tavolo per principianti | Gioco da tavolo per esperti
+Incantesimo inutile | Incantesimo potentissimo
+Creatura magica innocua | Creatura magica letale
+Mondo immaginario da visitare | Mondo immaginario da evitare
+Cattivo dimenticabile | Cattivo iconico
+Finale deludente | Finale perfetto
+Sequel inutile | Sequel migliore dell'originale
+Saga da recuperare | Saga da abbandonare
+Trama semplice | Trama complicatissima
+Personaggio secondario inutile | Personaggio secondario che ruba la scena
+Personaggio da odiare | Personaggio da amare
+Teoria dei fan assurda | Teoria dei fan geniale
+Spoiler innocuo | Spoiler imperdonabile
+Anime per tutti | Anime per veri fan
+Fumetto per bambini | Fumetto per adulti
+Costume da supereroe ridicolo | Costume da supereroe iconico
+Cosplay facile | Cosplay difficilissimo
+Collezione normale | Collezione ossessiva
+Passione nerd moderata | Passione nerd estrema
+Gergo nerd comprensibile | Gergo nerd incomprensibile
+Robot amichevole | Robot minaccioso
+Alieno pacifico | Alieno invasore
+Pianeta abitabile | Pianeta infernale
+Astronave scassata | Astronave da sogno
+Paradosso temporale innocuo | Paradosso temporale catastrofico
+Tecnologia impossibile | Tecnologia in arrivo
+IA amichevole | IA inquietante
+Codice leggibile | Codice incomprensibile
+Bug innocuo | Bug catastrofico
+Password debole | Password inattaccabile
+Meme vecchio | Meme fresco
+Controller comodo | Controller scomodo
+Gioco per console | Gioco per computer
+Mappa minuscola | Mappa sterminata
+Armatura brutta ma utile | Armatura bella ma inutile
+Personaggio muto | Personaggio logorroico
+Gioco da maratona notturna | Gioco da cinque minuti
+
+[Prima Visione]
+# Cinema, serie TV, musica e star: lo spettacolo in tutte le sue forme
+
+Trailer noioso | Trailer irresistibile
+Locandina brutta | Locandina iconica
+Titolo italiano tradotto male | Titolo italiano azzeccato
+Doppiaggio terribile | Doppiaggio perfetto
+Film da vedere doppiato | Film da vedere in lingua originale
+Colpo di scena prevedibile | Colpo di scena sconvolgente
+Inizio lento | Inizio folgorante
+Film troppo corto | Film troppo lungo
+Film da popcorn | Film da festival
+Oscar meritato | Oscar rubato
+Cameo dimenticabile | Cameo leggendario
+Effetti speciali ridicoli | Effetti speciali spettacolari
+Horror che fa ridere | Horror che terrorizza
+Commedia romantica stucchevole | Commedia romantica perfetta
+Scena d'amore imbarazzante | Scena d'amore memorabile
+Citazione dimenticabile | Citazione leggendaria
+Vecchio film noioso | Vecchio film immortale
+Biopic noioso | Biopic emozionante
+Documentario soporifero | Documentario affascinante
+Musical insopportabile | Musical imperdibile
+Regista sottovalutato | Regista sopravvalutato
+Genere di film sottovalutato | Genere di film sopravvalutato
+Film da primo appuntamento sbagliato | Film da primo appuntamento perfetto
+Maratona di film stancante | Maratona di film epica
+Posto al cinema pessimo | Posto al cinema perfetto
+Vicino di poltrona educato | Vicino di poltrona insopportabile
+Snack da cinema deludente | Snack da cinema irrinunciabile
+Serie da mollare subito | Serie da divorare
+Episodio di riempimento | Episodio cult
+Spin-off inutile | Spin-off riuscito
+Reality insopportabile | Reality irresistibile
+Quiz TV facile | Quiz TV impossibile
+Programma di cucina noioso | Programma di cucina appassionante
+Conduttore antipatico | Conduttore amatissimo
+Premiazione noiosa | Premiazione memorabile
+Celebrità sottovalutata | Celebrità sopravvalutata
+Star antipatica | Star simpatica
+Coppia vip improbabile | Coppia vip perfetta
+Scandalo vip innocuo | Scandalo vip epocale
+Carriera finita presto | Carriera infinita
+Influencer utile | Influencer inutile
+Concerto da dimenticare | Concerto indimenticabile
+Band da garage | Band da stadio
+Album flop | Album capolavoro
+Ritornello che non ricordi | Ritornello che non ti esce dalla testa
+Videoclip dimenticabile | Videoclip iconico
+Canzone da doccia | Canzone da stadio
+Testo di canzone profondo | Testo di canzone senza senso
+Assolo noioso | Assolo leggendario
+Strumento facile da suonare | Strumento difficilissimo
+Duetto improbabile | Duetto perfetto
+Cover peggiore dell'originale | Cover migliore dell'originale
+Voce stonata | Voce celestiale
+Concerto in piccolo locale | Concerto in uno stadio
+Biglietto del concerto regalato | Biglietto del concerto carissimo
+Musica da ascensore | Musica da brividi
+Personaggio da fiction scontato | Personaggio da fiction originale
+Telefilm anni '90 dimenticato | Telefilm anni '90 indimenticabile
+
+[Fuori Orario]
+# La vita lavorativa vista dal lato scomodo: capi, colleghi, riunioni e dopo-lavoro
+
+Riunione inutile | Riunione indispensabile
+Presentazione noiosa | Presentazione brillante
+Brainstorming inutile | Brainstorming produttivo
+Capo comprensivo | Capo tiranno
+Capo assente | Capo onnipresente
+Messaggio del capo innocuo | Messaggio del capo terrificante
+Commento sul capo innocuo | Commento sul capo da licenziamento
+Ascensore col capo silenzioso | Ascensore col capo imbarazzante
+Regalo per il capo azzeccato | Regalo per il capo imbarazzante
+Leccapiedi discreto | Leccapiedi sfacciato
+Collega silenzioso | Collega logorroico
+Pettegolezzo d'ufficio innocuo | Pettegolezzo d'ufficio esplosivo
+Flirt in ufficio innocuo | Flirt in ufficio pericoloso
+Storia tra colleghi segreta | Storia tra colleghi nota a tutti
+Email gentile | Email passivo-aggressiva
+Firma email sobria | Firma email esagerata
+Chat di lavoro tranquilla | Chat di lavoro infernale
+Videochiamata tranquilla | Videochiamata imbarazzante
+Smart working serio | Smart working in pigiama
+Lunedì mattina sopportabile | Lunedì mattina infernale
+Venerdì pomeriggio produttivo | Venerdì pomeriggio inutile
+Pausa caffè breve | Pausa caffè infinita
+Mensa aziendale deludente | Mensa aziendale stellata
+Furto dal frigo aziendale perdonabile | Furto dal frigo aziendale imperdonabile
+Scrivania ordinata | Scrivania esplosa
+Stampante collaborativa | Stampante diabolica
+Open space silenzioso | Open space infernale
+Pendolarismo breve | Pendolarismo infernale
+Ritardo giustificabile | Ritardo ingiustificabile
+Malattia credibile | Malattia inventata
+Scadenza comoda | Scadenza impossibile
+Multitasking riuscito | Multitasking disastroso
+Obiettivo aziendale realistico | Obiettivo aziendale delirante
+Gergo aziendale comprensibile | Gergo aziendale incomprensibile
+Team building divertente | Team building imbarazzante
+Cena aziendale noiosa | Cena aziendale leggendaria
+Festa aziendale sobria | Festa aziendale fuori controllo
+Aperitivo dopo il lavoro sobrio | Aperitivo dopo il lavoro epico
+Look da ufficio sobrio | Look da ufficio audace
+Battuta in riunione azzeccata | Battuta in riunione disastrosa
+Colloquio di lavoro disastroso | Colloquio di lavoro perfetto
+Domanda da colloquio facile | Domanda da colloquio impossibile
+Curriculum onesto | Curriculum gonfiato
+Primo giorno di lavoro tranquillo | Primo giorno di lavoro traumatico
+Aumento ridicolo | Aumento da sogno
+Straordinario pagato | Straordinario gratis
+Promozione meritata | Promozione immeritata
+Ferie vere | Ferie col portatile
+Cliente gentile | Cliente da incubo
+Reclamo ragionevole | Reclamo assurdo
+Dimissioni educate | Dimissioni plateali
+Licenziamento meritato | Licenziamento ingiusto
+Collega che fa tutto | Collega che non fa niente
+Riunione alle 9 del lunedì | Riunione alle 18 del venerdì
+Badge dimenticato | Badge perso per sempre
+Lavoro dei sogni da bambino | Lavoro attuale
+
+[Onda Nera]
+# Umorismo nero e macabro, fantasmi, misteri e paure: per adulti, senza contenuti espliciti
+
+Morte ridicola | Morte epica
+Ultime parole dimenticabili | Ultime parole leggendarie
+Ultimo desiderio banale | Ultimo desiderio assurdo
+Ultimo pasto deludente | Ultimo pasto perfetto
+Funerale noioso | Funerale memorabile
+Epitaffio banale | Epitaffio geniale
+Necrologio sobrio | Necrologio esagerato
+Bara economica | Bara di lusso
+Fiori da funerale | Fiori da festa
+Testamento prevedibile | Testamento scioccante
+Eredità indesiderata | Eredità desiderata
+Reincarnazione sfigata | Reincarnazione da sogno
+Aldilà noioso | Aldilà divertente
+Fantasma innocuo | Fantasma terrificante
+Casa infestata accogliente | Casa infestata invivibile
+Cimitero tranquillo | Cimitero inquietante
+Cantina accogliente | Cantina da film horror
+Seduta spiritica divertente | Seduta spiritica da incubo
+Maledizione innocua | Maledizione terribile
+Oggetto antico innocuo | Oggetto antico maledetto
+Profezia ottimista | Profezia catastrofica
+Coincidenza innocua | Coincidenza inquietante
+Rumore notturno innocuo | Rumore notturno terrificante
+Incubo leggero | Incubo terrificante
+Bambola tenera | Bambola inquietante
+Clown simpatico | Clown terrificante
+Strega simpatica | Strega malvagia
+Vampiro affascinante | Vampiro ripugnante
+Zombie lento | Zombie velocissimo
+Rifugio anti-zombie pessimo | Rifugio anti-zombie perfetto
+Alleato per l'apocalisse inutile | Alleato per l'apocalisse perfetto
+Fine del mondo noiosa | Fine del mondo spettacolare
+Esperimento innocuo | Esperimento da scienziato pazzo
+Insetto innocuo | Insetto da incubo
+Visita dal dentista tranquilla | Visita dal dentista da incubo
+Volo tranquillo | Volo da incubo
+Disgrazia sopportabile | Disgrazia biblica
+Battuta macabra innocua | Battuta macabra imperdonabile
+Morte in un film prevedibile | Morte in un film sconvolgente
+Leggenda metropolitana credibile | Leggenda metropolitana assurda
+Cena con delitto noiosa | Cena con delitto avvincente
+Alibi debole | Alibi di ferro
+Faccia da innocente | Faccia da colpevole
+Testimone inaffidabile | Testimone credibile
+Giallo prevedibile | Giallo imprevedibile
+Indagine banale | Indagine impossibile
+Vicino di casa normale | Vicino di casa sospetto
+Scherzo di Halloween innocuo | Scherzo di Halloween crudele
+Costume di Halloween ridicolo | Costume di Halloween terrificante
+Storia di paura per bambini | Storia di paura da non dormire
+Gatto nero porta fortuna | Gatto nero porta sfortuna
+Specchio rotto innocuo | Specchio rotto catastrofico
+Mostro mitologico ridicolo | Mostro mitologico terrificante
+Sorpresa piacevole | Sorpresa agghiacciante
+Ospite che non se ne va mai | Ospite che sparisce nel nulla
+Cosa da trovare in soffitta innocua | Cosa da trovare in soffitta inquietante
 
 [Dopo Mezzanotte]
 # Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
@@ -1435,321 +1803,6 @@ Complimento fuori luogo | Complimento elegante
 Fuori controllo | In controllo
 Segreto | Di pubblico dominio
 Vizio | Virtù
-
-
-[Radio Paesello]
-# Nostalgia e italianità: infanzia anni '80-2000, cibo, dialetti, parenti e luoghi comuni
-
-Merendina dimenticata | Merendina leggendaria
-Gioco da cortile noioso | Gioco da cortile epico
-Giocattolo dimenticato | Giocattolo iconico
-Figurina comune | Figurina introvabile
-Gita scolastica noiosa | Gita scolastica epica
-Compiti delle vacanze leggeri | Compiti delle vacanze infiniti
-Ricordo d'infanzia sbiadito | Ricordo d'infanzia vivido
-Sogno da bambino realistico | Sogno da bambino impossibile
-Diario segreto noioso | Diario segreto esplosivo
-Videocassetta da buttare | Videocassetta da tenere
-Suoneria imbarazzante | Suoneria mitica
-Oggetto vintage inutile | Oggetto vintage da collezione
-Tormentone imbarazzante | Tormentone intramontabile
-Moda da dimenticare | Moda da far tornare
-Programma TV dimenticato | Programma TV leggendario
-Personaggio TV dimenticato | Personaggio TV leggendario
-Pubblicità dimenticabile | Pubblicità indimenticabile
-Jingle dimenticato | Jingle che canti ancora
-Canzone di Sanremo flop | Canzone di Sanremo cult
-Cantante italiano meteora | Cantante italiano leggenda
-Cinepanettone dimenticabile | Cinepanettone cult
-Canzone da karaoke facile | Canzone da karaoke impossibile
-Ballo di gruppo imbarazzante | Ballo di gruppo irresistibile
-Motorino sfigato | Motorino leggendario
-Campeggio da incubo | Campeggio da sogno
-Rito da spiaggia noioso | Rito da spiaggia irrinunciabile
-Pranzo della domenica leggero | Pranzo della domenica infinito
-Domanda dei parenti innocua | Domanda dei parenti imbarazzante
-Regola della nonna assurda | Regola della nonna sacrosanta
-Rimedio della nonna inutile | Rimedio della nonna miracoloso
-Ricetta della nonna semplice | Ricetta della nonna segreta
-Mamma italiana tranquilla | Mamma italiana apprensiva
-Gesto italiano offensivo | Gesto italiano affettuoso
-Dialetto incomprensibile | Dialetto chiarissimo
-Parola dialettale brutta | Parola dialettale bellissima
-Modo di dire antico | Modo di dire moderno
-Detto popolare falso | Detto popolare saggio
-Luogo comune falso | Luogo comune vero
-Pizza ortodossa | Pizza eretica
-Abbinamento tradizionale | Abbinamento eretico
-Formato di pasta sottovalutato | Formato di pasta sopravvalutato
-Piatto regionale sottovalutato | Piatto regionale sopravvalutato
-Gusto di gelato deludente | Gusto di gelato irrinunciabile
-Caffè fatto male | Caffè perfetto
-Bevanda da nonno | Bevanda da ragazzi
-Sagra noiosa | Sagra imperdibile
-Gioco da osteria noioso | Gioco da osteria appassionante
-Bar di paese | Locale alla moda
-Borgo sconosciuto | Borgo famosissimo
-Regione sottovalutata | Regione sopravvalutata
-Souvenir inutile | Souvenir prezioso
-Vacanza da italiano medio | Vacanza esotica
-Italiano illustre sottovalutato | Italiano illustre sopravvalutato
-Invenzione italiana minore | Invenzione italiana geniale
-Odore dell'infanzia brutto | Odore dell'infanzia bellissimo
-Festa di paese tranquilla | Festa di paese scatenata
-Tradizione di Natale noiosa | Tradizione di Natale imperdibile
-Lettera d'amore imbarazzante | Lettera d'amore indimenticabile
-Cosa da anni '90 | Cosa da anni 2000
-Gioco in scatola dimenticato | Gioco in scatola immortale
-
-
-[8-Bit FM]
-# Per nerd: videogiochi, fumetti, anime, giochi di ruolo, fantascienza e tecnologia
-
-Videogioco rilassante | Videogioco frustrante
-Boss finale ridicolo | Boss finale leggendario
-Console dimenticata | Console leggendaria
-Grafica pixellosa | Grafica realistica
-Colonna sonora dimenticabile | Colonna sonora epica
-Livello acquatico odioso | Livello acquatico bellissimo
-Missione secondaria noiosa | Missione secondaria imperdibile
-Tutorial inutile | Tutorial indispensabile
-Easter egg banale | Easter egg geniale
-Glitch fastidioso | Glitch leggendario
-Personaggio giocabile scarso | Personaggio giocabile fortissimo
-Compagno di squadra inutile | Compagno di squadra perfetto
-Arma da videogioco inutile | Arma da videogioco leggendaria
-Pozione inutile | Pozione miracolosa
-Mostro da primo livello | Mostro da ultimo livello
-Dungeon tranquillo | Dungeon infernale
-Gioco da sala giochi noioso | Gioco da sala giochi leggendario
-Remake inutile | Remake necessario
-Aggiornamento disastroso | Aggiornamento perfetto
-Connessione da lag | Connessione perfetta
-Nome utente imbarazzante | Nome utente epico
-Classe da GdR debole | Classe da GdR fortissima
-Tiro di dado disastroso | Tiro di dado critico
-Gioco da tavolo per principianti | Gioco da tavolo per esperti
-Incantesimo inutile | Incantesimo potentissimo
-Creatura magica innocua | Creatura magica letale
-Mondo immaginario da visitare | Mondo immaginario da evitare
-Cattivo dimenticabile | Cattivo iconico
-Finale deludente | Finale perfetto
-Sequel inutile | Sequel migliore dell'originale
-Saga da recuperare | Saga da abbandonare
-Trama semplice | Trama complicatissima
-Personaggio secondario inutile | Personaggio secondario che ruba la scena
-Personaggio da odiare | Personaggio da amare
-Teoria dei fan assurda | Teoria dei fan geniale
-Spoiler innocuo | Spoiler imperdonabile
-Anime per tutti | Anime per veri fan
-Fumetto per bambini | Fumetto per adulti
-Costume da supereroe ridicolo | Costume da supereroe iconico
-Cosplay facile | Cosplay difficilissimo
-Collezione normale | Collezione ossessiva
-Passione nerd moderata | Passione nerd estrema
-Gergo nerd comprensibile | Gergo nerd incomprensibile
-Robot amichevole | Robot minaccioso
-Alieno pacifico | Alieno invasore
-Pianeta abitabile | Pianeta infernale
-Astronave scassata | Astronave da sogno
-Paradosso temporale innocuo | Paradosso temporale catastrofico
-Tecnologia impossibile | Tecnologia in arrivo
-IA amichevole | IA inquietante
-Codice leggibile | Codice incomprensibile
-Bug innocuo | Bug catastrofico
-Password debole | Password inattaccabile
-Meme vecchio | Meme fresco
-Controller comodo | Controller scomodo
-Gioco per console | Gioco per computer
-Mappa minuscola | Mappa sterminata
-Armatura brutta ma utile | Armatura bella ma inutile
-Personaggio muto | Personaggio logorroico
-Gioco da maratona notturna | Gioco da cinque minuti
-
-
-[Prima Visione]
-# Cinema, serie TV, musica e star: lo spettacolo in tutte le sue forme
-
-Trailer noioso | Trailer irresistibile
-Locandina brutta | Locandina iconica
-Titolo italiano tradotto male | Titolo italiano azzeccato
-Doppiaggio terribile | Doppiaggio perfetto
-Film da vedere doppiato | Film da vedere in lingua originale
-Colpo di scena prevedibile | Colpo di scena sconvolgente
-Inizio lento | Inizio folgorante
-Film troppo corto | Film troppo lungo
-Film da popcorn | Film da festival
-Oscar meritato | Oscar rubato
-Cameo dimenticabile | Cameo leggendario
-Effetti speciali ridicoli | Effetti speciali spettacolari
-Horror che fa ridere | Horror che terrorizza
-Commedia romantica stucchevole | Commedia romantica perfetta
-Scena d'amore imbarazzante | Scena d'amore memorabile
-Citazione dimenticabile | Citazione leggendaria
-Vecchio film noioso | Vecchio film immortale
-Biopic noioso | Biopic emozionante
-Documentario soporifero | Documentario affascinante
-Musical insopportabile | Musical imperdibile
-Regista sottovalutato | Regista sopravvalutato
-Genere di film sottovalutato | Genere di film sopravvalutato
-Film da primo appuntamento sbagliato | Film da primo appuntamento perfetto
-Maratona di film stancante | Maratona di film epica
-Posto al cinema pessimo | Posto al cinema perfetto
-Vicino di poltrona educato | Vicino di poltrona insopportabile
-Snack da cinema deludente | Snack da cinema irrinunciabile
-Serie da mollare subito | Serie da divorare
-Episodio di riempimento | Episodio cult
-Spin-off inutile | Spin-off riuscito
-Reality insopportabile | Reality irresistibile
-Quiz TV facile | Quiz TV impossibile
-Programma di cucina noioso | Programma di cucina appassionante
-Conduttore antipatico | Conduttore amatissimo
-Premiazione noiosa | Premiazione memorabile
-Celebrità sottovalutata | Celebrità sopravvalutata
-Star antipatica | Star simpatica
-Coppia vip improbabile | Coppia vip perfetta
-Scandalo vip innocuo | Scandalo vip epocale
-Carriera finita presto | Carriera infinita
-Influencer utile | Influencer inutile
-Concerto da dimenticare | Concerto indimenticabile
-Band da garage | Band da stadio
-Album flop | Album capolavoro
-Ritornello che non ricordi | Ritornello che non ti esce dalla testa
-Videoclip dimenticabile | Videoclip iconico
-Canzone da doccia | Canzone da stadio
-Testo di canzone profondo | Testo di canzone senza senso
-Assolo noioso | Assolo leggendario
-Strumento facile da suonare | Strumento difficilissimo
-Duetto improbabile | Duetto perfetto
-Cover peggiore dell'originale | Cover migliore dell'originale
-Voce stonata | Voce celestiale
-Concerto in piccolo locale | Concerto in uno stadio
-Biglietto del concerto regalato | Biglietto del concerto carissimo
-Musica da ascensore | Musica da brividi
-Personaggio da fiction scontato | Personaggio da fiction originale
-Telefilm anni '90 dimenticato | Telefilm anni '90 indimenticabile
-
-
-[Onda Nera]
-# Umorismo nero e macabro, fantasmi, misteri e paure: per adulti, senza contenuti espliciti
-
-Morte ridicola | Morte epica
-Ultime parole dimenticabili | Ultime parole leggendarie
-Ultimo desiderio banale | Ultimo desiderio assurdo
-Ultimo pasto deludente | Ultimo pasto perfetto
-Funerale noioso | Funerale memorabile
-Epitaffio banale | Epitaffio geniale
-Necrologio sobrio | Necrologio esagerato
-Bara economica | Bara di lusso
-Fiori da funerale | Fiori da festa
-Testamento prevedibile | Testamento scioccante
-Eredità indesiderata | Eredità desiderata
-Reincarnazione sfigata | Reincarnazione da sogno
-Aldilà noioso | Aldilà divertente
-Fantasma innocuo | Fantasma terrificante
-Casa infestata accogliente | Casa infestata invivibile
-Cimitero tranquillo | Cimitero inquietante
-Cantina accogliente | Cantina da film horror
-Seduta spiritica divertente | Seduta spiritica da incubo
-Maledizione innocua | Maledizione terribile
-Oggetto antico innocuo | Oggetto antico maledetto
-Profezia ottimista | Profezia catastrofica
-Coincidenza innocua | Coincidenza inquietante
-Rumore notturno innocuo | Rumore notturno terrificante
-Incubo leggero | Incubo terrificante
-Bambola tenera | Bambola inquietante
-Clown simpatico | Clown terrificante
-Strega simpatica | Strega malvagia
-Vampiro affascinante | Vampiro ripugnante
-Zombie lento | Zombie velocissimo
-Rifugio anti-zombie pessimo | Rifugio anti-zombie perfetto
-Alleato per l'apocalisse inutile | Alleato per l'apocalisse perfetto
-Fine del mondo noiosa | Fine del mondo spettacolare
-Esperimento innocuo | Esperimento da scienziato pazzo
-Insetto innocuo | Insetto da incubo
-Visita dal dentista tranquilla | Visita dal dentista da incubo
-Volo tranquillo | Volo da incubo
-Disgrazia sopportabile | Disgrazia biblica
-Battuta macabra innocua | Battuta macabra imperdonabile
-Morte in un film prevedibile | Morte in un film sconvolgente
-Leggenda metropolitana credibile | Leggenda metropolitana assurda
-Cena con delitto noiosa | Cena con delitto avvincente
-Alibi debole | Alibi di ferro
-Faccia da innocente | Faccia da colpevole
-Testimone inaffidabile | Testimone credibile
-Giallo prevedibile | Giallo imprevedibile
-Indagine banale | Indagine impossibile
-Vicino di casa normale | Vicino di casa sospetto
-Scherzo di Halloween innocuo | Scherzo di Halloween crudele
-Costume di Halloween ridicolo | Costume di Halloween terrificante
-Storia di paura per bambini | Storia di paura da non dormire
-Gatto nero porta fortuna | Gatto nero porta sfortuna
-Specchio rotto innocuo | Specchio rotto catastrofico
-Mostro mitologico ridicolo | Mostro mitologico terrificante
-Sorpresa piacevole | Sorpresa agghiacciante
-Ospite che non se ne va mai | Ospite che sparisce nel nulla
-Cosa da trovare in soffitta innocua | Cosa da trovare in soffitta inquietante
-
-
-[Fuori Orario]
-# La vita lavorativa vista dal lato scomodo: capi, colleghi, riunioni e dopo-lavoro
-
-Riunione inutile | Riunione indispensabile
-Presentazione noiosa | Presentazione brillante
-Brainstorming inutile | Brainstorming produttivo
-Capo comprensivo | Capo tiranno
-Capo assente | Capo onnipresente
-Messaggio del capo innocuo | Messaggio del capo terrificante
-Commento sul capo innocuo | Commento sul capo da licenziamento
-Ascensore col capo silenzioso | Ascensore col capo imbarazzante
-Regalo per il capo azzeccato | Regalo per il capo imbarazzante
-Leccapiedi discreto | Leccapiedi sfacciato
-Collega silenzioso | Collega logorroico
-Pettegolezzo d'ufficio innocuo | Pettegolezzo d'ufficio esplosivo
-Flirt in ufficio innocuo | Flirt in ufficio pericoloso
-Storia tra colleghi segreta | Storia tra colleghi nota a tutti
-Email gentile | Email passivo-aggressiva
-Firma email sobria | Firma email esagerata
-Chat di lavoro tranquilla | Chat di lavoro infernale
-Videochiamata tranquilla | Videochiamata imbarazzante
-Smart working serio | Smart working in pigiama
-Lunedì mattina sopportabile | Lunedì mattina infernale
-Venerdì pomeriggio produttivo | Venerdì pomeriggio inutile
-Pausa caffè breve | Pausa caffè infinita
-Mensa aziendale deludente | Mensa aziendale stellata
-Furto dal frigo aziendale perdonabile | Furto dal frigo aziendale imperdonabile
-Scrivania ordinata | Scrivania esplosa
-Stampante collaborativa | Stampante diabolica
-Open space silenzioso | Open space infernale
-Pendolarismo breve | Pendolarismo infernale
-Ritardo giustificabile | Ritardo ingiustificabile
-Malattia credibile | Malattia inventata
-Scadenza comoda | Scadenza impossibile
-Multitasking riuscito | Multitasking disastroso
-Obiettivo aziendale realistico | Obiettivo aziendale delirante
-Gergo aziendale comprensibile | Gergo aziendale incomprensibile
-Team building divertente | Team building imbarazzante
-Cena aziendale noiosa | Cena aziendale leggendaria
-Festa aziendale sobria | Festa aziendale fuori controllo
-Aperitivo dopo il lavoro sobrio | Aperitivo dopo il lavoro epico
-Look da ufficio sobrio | Look da ufficio audace
-Battuta in riunione azzeccata | Battuta in riunione disastrosa
-Colloquio di lavoro disastroso | Colloquio di lavoro perfetto
-Domanda da colloquio facile | Domanda da colloquio impossibile
-Curriculum onesto | Curriculum gonfiato
-Primo giorno di lavoro tranquillo | Primo giorno di lavoro traumatico
-Aumento ridicolo | Aumento da sogno
-Straordinario pagato | Straordinario gratis
-Promozione meritata | Promozione immeritata
-Ferie vere | Ferie col portatile
-Cliente gentile | Cliente da incubo
-Reclamo ragionevole | Reclamo assurdo
-Dimissioni educate | Dimissioni plateali
-Licenziamento meritato | Licenziamento ingiusto
-Collega che fa tutto | Collega che non fa niente
-Riunione alle 9 del lunedì | Riunione alle 18 del venerdì
-Badge dimenticato | Badge perso per sempre
-Lavoro dei sogni da bambino | Lavoro attuale
 </script>
 <div class="app" id="app" data-schermata="schermata-inizio">
   <canvas id="onde" aria-hidden="true"></canvas>
@@ -1886,41 +1939,44 @@ Lavoro dei sogni da bambino | Lavoro attuale
               <span class="led"></span>
               <span class="descr"><span class="motto">Concetti astratti e sfumati</span><span class="conteggio">Più impegnativa</span></span>
             </button>
-            <button class="tasto" data-stazione="paesello" data-banda="fm" aria-pressed="false" style="--k:0; --colore:var(--zona-oro)">
+            <button class="tasto decorato" data-stazione="paesello" data-banda="fm" aria-pressed="false" style="--k:0; --colore:var(--zona-oro)">
+              <span class="sfondo" aria-hidden="true"><svg class="deco-festone" viewBox="0 0 300 50"><path class="corda" d="M300 2Q248 30 196 2M196 2Q144 30 92 2M92 2Q40 30 -12 2M-12 2Q-64 30 -116 2"/><g transform="translate(285.4 8.7) rotate(-21.2)"><path class="bandierina rossa" style="--i:0" d="M-6 0H6L0 13Z"/></g><g transform="translate(266.7 14.2) rotate(-11)"><path class="bandierina bianca" style="--i:1" d="M-6 0H6L0 13Z"/></g><g transform="translate(248 16) rotate(-0)"><path class="bandierina verde" style="--i:2" d="M-6 0H6L0 13Z"/></g><g transform="translate(229.3 14.2) rotate(11)"><path class="bandierina rossa" style="--i:3" d="M-6 0H6L0 13Z"/></g><g transform="translate(210.6 8.7) rotate(21.2)"><path class="bandierina bianca" style="--i:4" d="M-6 0H6L0 13Z"/></g><g transform="translate(181.4 8.7) rotate(-21.2)"><path class="bandierina verde" style="--i:5" d="M-6 0H6L0 13Z"/></g><g transform="translate(162.7 14.2) rotate(-11)"><path class="bandierina rossa" style="--i:6" d="M-6 0H6L0 13Z"/></g><g transform="translate(144 16) rotate(-0)"><path class="bandierina bianca" style="--i:7" d="M-6 0H6L0 13Z"/></g><g transform="translate(125.3 14.2) rotate(11)"><path class="bandierina verde" style="--i:8" d="M-6 0H6L0 13Z"/></g><g transform="translate(106.6 8.7) rotate(21.2)"><path class="bandierina rossa" style="--i:9" d="M-6 0H6L0 13Z"/></g><g transform="translate(77.4 8.7) rotate(-21.2)"><path class="bandierina bianca" style="--i:10" d="M-6 0H6L0 13Z"/></g><g transform="translate(58.7 14.2) rotate(-11)"><path class="bandierina verde" style="--i:11" d="M-6 0H6L0 13Z"/></g><g transform="translate(40 16) rotate(-0)"><path class="bandierina rossa" style="--i:12" d="M-6 0H6L0 13Z"/></g><g transform="translate(21.3 14.2) rotate(11)"><path class="bandierina bianca" style="--i:13" d="M-6 0H6L0 13Z"/></g><g transform="translate(2.6 8.7) rotate(21.2)"><path class="bandierina verde" style="--i:14" d="M-6 0H6L0 13Z"/></g><g transform="translate(-26.6 8.7) rotate(-21.2)"><path class="bandierina rossa" style="--i:15" d="M-6 0H6L0 13Z"/></g><g transform="translate(-45.3 14.2) rotate(-11)"><path class="bandierina bianca" style="--i:16" d="M-6 0H6L0 13Z"/></g><g transform="translate(-64 16) rotate(-0)"><path class="bandierina verde" style="--i:17" d="M-6 0H6L0 13Z"/></g><g transform="translate(-82.7 14.2) rotate(11)"><path class="bandierina rossa" style="--i:18" d="M-6 0H6L0 13Z"/></g><g transform="translate(-101.4 8.7) rotate(21.2)"><path class="bandierina bianca" style="--i:19" d="M-6 0H6L0 13Z"/></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 44V19l7-11 7 11v25"/><path d="M12 44h24M21 31a3 3 0 0 1 6 0v6h-6z"/><path d="M21 22h6"/></svg>
-              <span class="titolo">Radio Paesello</span>
+              <span class="titolo">Amarcord Radio</span>
               <span class="led"></span>
-              <span class="descr"><span class="motto">Ricordi e manie d'Italia</span><span class="conteggio">Nostalgia italiana</span></span>
+              <span class="descr"><span class="motto">Ricordi, tradizioni e mode</span><span class="conteggio">Nostalgia italiana</span></span>
             </button>
-            <button class="tasto" data-stazione="ottobit" data-banda="fm" aria-pressed="false" style="--k:1; --colore:var(--viola)">
+            <button class="tasto decorato" data-stazione="ottobit" data-banda="fm" aria-pressed="false" style="--k:1; --colore:var(--viola)">
+              <span class="sfondo" aria-hidden="true"><svg class="deco-stelle"><svg x="6%" y="16%" overflow="visible"><path class="stella-pixel" style="--i:0" d="M-1.5-4.5h3v3h3v3h-3v3h-3v-3h-3v-3h3z"/></svg><svg x="21%" y="58%" overflow="visible"><path class="stella-pixel" style="--i:1" d="M-1.5-1.5h3v3h-3z"/></svg><svg x="34%" y="22%" overflow="visible"><path class="stella-pixel" style="--i:2" d="M-1.5-1.5h3v3h-3z"/></svg><svg x="47%" y="44%" overflow="visible"><path class="stella-pixel" style="--i:3" d="M-1.5-4.5h3v3h3v3h-3v3h-3v-3h-3v-3h3z"/></svg><svg x="60%" y="10%" overflow="visible"><path class="stella-pixel" style="--i:4" d="M-1.5-1.5h3v3h-3z"/></svg><svg x="72%" y="64%" overflow="visible"><path class="stella-pixel" style="--i:5" d="M-1.5-1.5h3v3h-3z"/></svg><svg x="84%" y="30%" overflow="visible"><path class="stella-pixel" style="--i:6" d="M-1.5-4.5h3v3h3v3h-3v3h-3v-3h-3v-3h3z"/></svg><svg x="14%" y="80%" overflow="visible"><path class="stella-pixel" style="--i:7" d="M-1.5-1.5h3v3h-3z"/></svg><svg x="54%" y="84%" overflow="visible"><path class="stella-pixel" style="--i:8" d="M-1.5-1.5h3v3h-3z"/></svg><svg x="92%" y="72%" overflow="visible"><path class="stella-pixel" style="--i:9" d="M-1.5-1.5h3v3h-3z"/></svg><svg x="40%" y="70%" overflow="visible"><path class="stella-pixel" style="--i:10" d="M-1.5-1.5h3v3h-3z"/></svg><svg x="78%" y="6%" overflow="visible"><path class="stella-pixel" style="--i:11" d="M-1.5-1.5h3v3h-3z"/></svg></svg><svg class="deco-astronave" viewBox="0 0 13 5"><rect class="scafo" x="4" y="0" width="1" height="1"/><rect class="scafo" x="5" y="0" width="1" height="1"/><rect class="scafo" x="6" y="0" width="1" height="1"/><rect class="scafo" x="2" y="1" width="1" height="1"/><rect class="scafo" x="3" y="1" width="1" height="1"/><rect class="scafo" x="4" y="1" width="1" height="1"/><rect class="scafo" x="5" y="1" width="1" height="1"/><rect class="scafo" x="6" y="1" width="1" height="1"/><rect class="scafo" x="7" y="1" width="1" height="1"/><rect class="scafo" x="8" y="1" width="1" height="1"/><rect class="scafo" x="0" y="2" width="1" height="1"/><rect class="scafo" x="1" y="2" width="1" height="1"/><rect class="oblo" x="2" y="2" width="1" height="1"/><rect class="oblo" x="3" y="2" width="1" height="1"/><rect class="oblo" x="4" y="2" width="1" height="1"/><rect class="scafo" x="5" y="2" width="1" height="1"/><rect class="scafo" x="6" y="2" width="1" height="1"/><rect class="scafo" x="7" y="2" width="1" height="1"/><rect class="scafo" x="8" y="2" width="1" height="1"/><rect class="scafo" x="9" y="2" width="1" height="1"/><rect class="scafo" x="10" y="2" width="1" height="1"/><rect class="scafo" x="2" y="3" width="1" height="1"/><rect class="scafo" x="3" y="3" width="1" height="1"/><rect class="scafo" x="4" y="3" width="1" height="1"/><rect class="scafo" x="5" y="3" width="1" height="1"/><rect class="scafo" x="6" y="3" width="1" height="1"/><rect class="scafo" x="7" y="3" width="1" height="1"/><rect class="scafo" x="8" y="3" width="1" height="1"/><rect class="scafo" x="4" y="4" width="1" height="1"/><rect class="scafo" x="5" y="4" width="1" height="1"/><rect class="scafo" x="6" y="4" width="1" height="1"/><g class="fiamma"><rect x="11" y="1" width="1" height="3"/><rect x="12" y="2" width="1" height="1"/></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="15" width="38" height="20" rx="10"/><path d="M15 20v10M10 25h10"/><path d="M31 23h.01M36 27h.01" stroke-width="5"/></svg>
               <span class="titolo">8-Bit FM</span>
               <span class="led"></span>
               <span class="descr"><span class="motto">Videogiochi, fumetti e fantascienza</span><span class="conteggio">Per nerd</span></span>
             </button>
-            <button class="tasto" data-stazione="primavisione" data-banda="fm" aria-pressed="false" style="--k:2; --colore:var(--zona-2)">
+            <button class="tasto decorato" data-stazione="primavisione" data-banda="fm" aria-pressed="false" style="--k:2; --colore:var(--zona-2)">
+              <span class="sfondo" aria-hidden="true"><svg class="deco-pellicola" viewBox="0 0 200 80" preserveAspectRatio="xMidYMin slice"><g transform="rotate(-9 100 32)"><line class="pellicola" x1="-40" y1="32" x2="240" y2="32"/><line class="fotogrammi" x1="-40" y1="32" x2="240" y2="32"/><line class="perforazioni" x1="-40" y1="22.6" x2="240" y2="22.6"/><line class="perforazioni" x1="-40" y1="41.4" x2="240" y2="41.4"/></g><path class="stellina" style="--i:0" d="M22 60Q23.7 64.3 28 66Q23.7 67.7 22 72Q20.3 67.7 16 66Q20.3 64.3 22 60Z"/><path class="stellina" style="--i:1" d="M160 57.5Q161.3 60.7 164.5 62Q161.3 63.3 160 66.5Q158.7 63.3 155.5 62Q158.7 60.7 160 57.5Z"/><path class="stellina" style="--i:2" d="M120 3.5Q121 6 123.5 7Q121 8 120 10.5Q119 8 116.5 7Q119 6 120 3.5Z"/></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 22h34v18a3 3 0 0 1-3 3H10a3 3 0 0 1-3-3z"/><path d="M6 15l32-8 2 7-32 8z"/><path d="M15 12.5l5 6M24 10l5 6M33 8l5 6"/></svg>
               <span class="titolo">Prima Visione</span>
               <span class="led"></span>
-              <span class="descr"><span class="motto">Cinema, serie TV, musica e star</span><span class="conteggio">Per tutti</span></span>
+              <span class="descr"><span class="motto">Cinema, serie TV, musica e star</span><span class="conteggio">Per appassionati</span></span>
             </button>
-            <button class="tasto" data-stazione="ondanera" data-banda="pirata" aria-pressed="false" style="--k:0; --colore:var(--viola)">
+            <button class="tasto" data-stazione="fuoriorario" data-banda="pirata" aria-pressed="false" style="--k:0; --colore:var(--ambra)">
+              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="16" width="36" height="25" rx="3"/><path d="M18 16v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M6 27h36M24 25v4"/></svg>
+              <span class="titolo">Fuori Orario</span>
+              <span class="led"></span>
+              <span class="descr"><span class="motto">Lavoro, colleghi e dopo-lavoro</span><span class="conteggio">Solo 18+</span></span>
+            </button>
+            <button class="tasto" data-stazione="ondanera" data-banda="pirata" aria-pressed="false" style="--k:1; --colore:var(--viola)">
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 42V22a12 12 0 0 1 24 0v20l-4-4-4 4-4-4-4 4-4-4z"/><path d="M19 21h.01M29 21h.01" stroke-width="5"/></svg>
               <span class="titolo">Onda Nera</span>
               <span class="led"></span>
               <span class="descr"><span class="motto">Umorismo nero e macabro</span><span class="conteggio">Solo 18+</span></span>
             </button>
-            <button class="tasto" data-stazione="mezzanotte" aria-pressed="false" data-banda="pirata" style="--k:1; --colore:var(--corallo)">
+            <button class="tasto" data-stazione="mezzanotte" aria-pressed="false" data-banda="pirata" style="--k:2; --colore:var(--corallo)">
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M33 35A15 15 0 0 1 19 8a15 15 0 1 0 14 27z"/><path d="M36 9l1.5 3 3 1.5-3 1.5-1.5 3-1.5-3-3-1.5 3-1.5z"/></svg>
               <span class="titolo">Dopo Mezzanotte</span>
               <span class="led"></span>
               <span class="descr"><span class="motto">Temi piccanti per adulti</span><span class="conteggio">Solo 18+</span></span>
-            </button>
-            <button class="tasto" data-stazione="fuoriorario" data-banda="pirata" aria-pressed="false" style="--k:2; --colore:var(--ambra)">
-              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="16" width="36" height="25" rx="3"/><path d="M18 16v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M6 27h36M24 25v4"/></svg>
-              <span class="titolo">Fuori Orario</span>
-              <span class="led"></span>
-              <span class="descr"><span class="motto">Lavoro, colleghi e dopo-lavoro</span><span class="conteggio">Solo 18+</span></span>
             </button>
             <div class="tasto banda" id="selettore-banda" role="slider" tabindex="0" aria-label="Gamma d'onda" aria-valuetext="AM" style="--k:3">
               <span class="titolo"><span class="ascolto-etichetta">In ascolto:</span> <span class="ascolto-nome" id="ascolto-nome">Hit Parade</span></span>
@@ -2431,7 +2487,7 @@ Lavoro dei sogni da bambino | Lavoro attuale
       if (tonfo) tono({ f: tonfo, f2: tonfo * 0.6, t, dur: 0.06, vol: vol * 0.8, att: 0.002, pan });
     }
     // una voce lontana che borbotta tra una stazione e l'altra
-    function voce({ t = 0, dur = 0.3, f = 130, vol = 0.05 }) {
+    function voce({ t = 0, dur = 0.3, f = 130, vol = 0.05, dest = radio }) {
       const T = ctx.currentTime + t;
       const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f;
       const w = ctx.createOscillator(), wg = ctx.createGain(); w.frequency.value = 4; wg.gain.value = f * 0.15;
@@ -2442,8 +2498,68 @@ Lavoro dei sogni da bambino | Lavoro attuale
       const sl = ctx.createOscillator(), slg = ctx.createGain(); sl.frequency.value = 7; slg.gain.value = 0.5;
       sl.connect(slg); slg.connect(sill.gain);
       const g = ctx.createGain(); inviluppo(g.gain, T, 0.03, vol, dur);
-      o.connect(f1); o.connect(f2); f1.connect(sill); f2.connect(sill); sill.connect(g); g.connect(radio);
+      o.connect(f1); o.connect(f2); f1.connect(sill); f2.connect(sill); sill.connect(g); g.connect(dest);
       [o, w, sl].forEach(x => { x.start(T); x.stop(T + dur + 0.05); });
+    }
+    // Cambio di stazione: la radio cerca la nuova frequenza per un secondo e mezzo.
+    // Il fruscio segue una lancetta che corre, supera la frequenza, torna indietro e ci si ferma sopra;
+    // intanto passano scariche, fischi e frammenti di altre stazioni, poi il segnale si aggancia.
+    const SINTONIA = 1.5;
+    let ricerca = null, ricercaFino = 0;
+    function rumoreSostenuto(dest, { dur, vol, f = 1800, curva, q = 1, tremolio = 0 }) {
+      const T = ctx.currentTime;
+      const s = ctx.createBufferSource(); s.buffer = rumoreBuf; s.loop = true;
+      const fl = ctx.createBiquadFilter(); fl.type = 'bandpass'; fl.Q.value = q;
+      fl.frequency.setValueAtTime(curva ? curva[0] : f, T);
+      if (curva) fl.frequency.setValueCurveAtTime(curva, T, dur);
+      const g = ctx.createGain(); g.gain.value = vol;
+      if (tremolio) {                                   // il segnale "respira", va e viene
+        const l = ctx.createOscillator(), lg = ctx.createGain();
+        l.frequency.value = tremolio; lg.gain.value = vol * 0.45;
+        l.connect(lg); lg.connect(g.gain); l.start(T); l.stop(T + dur + 0.05);
+      }
+      s.connect(fl); fl.connect(g); g.connect(dest);
+      s.start(T, Math.random() * 1.5); s.stop(T + dur + 0.05);
+    }
+    function ricercaStazione() {
+      const T = ctx.currentTime, D = SINTONIA, caso = (a, b) => a + Math.random() * (b - a);
+      if (ricerca) {                                    // una ricerca ancora in corso si interrompe
+        const vecchia = ricerca;
+        vecchia.gain.cancelScheduledValues(T); vecchia.gain.setTargetAtTime(0.0001, T, 0.03);
+        setTimeout(() => { try { vecchia.disconnect(); } catch (e) {} }, 300);
+      }
+      const bus = ctx.createGain(); bus.connect(radio); ricerca = bus; ricercaFino = T + D;
+      bus.gain.setValueAtTime(0.0001, T);
+      bus.gain.linearRampToValueAtTime(1, T + 0.04);
+      bus.gain.setValueAtTime(1, T + D * 0.6);
+      bus.gain.exponentialRampToValueAtTime(0.0001, T + D);
+      setTimeout(() => { if (ricerca === bus) ricerca = null; try { bus.disconnect(); } catch (e) {} }, (D + 0.5) * 1000);
+      // la lancetta: oscillazione smorzata attorno alla nuova frequenza, ogni volta un po' diversa
+      const N = 72, curva = new Float32Array(N), giri = caso(1.3, 2.1), fase = caso(0, 0.7), base = caso(320, 480);
+      for (let i = 0; i < N; i++) {
+        const x = i / (N - 1);
+        const p = 1 - Math.exp(-3 * x) * Math.cos(Math.PI * 2 * giri * x + fase);
+        curva[i] = base * Math.pow(9, Math.max(0, Math.min(1.3, p)));
+      }
+      rumoreSostenuto(bus, { dur: D, vol: 0.12, curva, q: 4.5, tremolio: caso(6, 9) });
+      rumoreSostenuto(bus, { dur: D, vol: 0.03, f: 2600, q: 0.45 });
+      // scariche
+      const scariche = 6 + Math.floor(Math.random() * 4);
+      for (let i = 0; i < scariche; i++) {
+        fruscio({ t: caso(0.06, D * 0.72), dur: caso(0.01, 0.035), vol: caso(0.12, 0.24), f: caso(1500, 5500), q: 1.2, att: 0.001, dest: bus, pan: caso(-0.4, 0.4) });
+      }
+      // fischi di eterodina mentre la lancetta passa sopra altre stazioni
+      tono({ f: caso(2200, 3100), f2: caso(650, 950), t: caso(0.08, 0.2), dur: 0.38, vol: 0.022, dest: bus });
+      tono({ f: caso(450, 650), f2: caso(1500, 2100), t: caso(0.55, 0.7), dur: 0.3, vol: 0.018, dest: bus });
+      // frammenti di stazioni lontane: una voce e un accordo che spariscono subito
+      voce({ t: caso(0.3, 0.45), dur: caso(0.2, 0.3), f: caso(110, 180), vol: 0.05, dest: bus });
+      const n = 55 + Math.floor(Math.random() * 10), tAcc = caso(0.72, 0.86);
+      [n, n + 4, n + 7].forEach(k => tono({ f: NOTA(k), tipo: 'triangle', t: tAcc, dur: 0.18, vol: 0.026, att: 0.015, dest: bus }));
+      if (Math.random() < 0.5) voce({ t: caso(0.95, 1.05), dur: 0.16, f: caso(150, 210), vol: 0.035, dest: bus });
+      // aggancio: due fischi che convergono fino a coincidere, mentre il fruscio si chiude
+      const fa = caso(850, 1000);
+      tono({ f: fa, t: D * 0.66, dur: 0.42, vol: 0.016, att: 0.06, dest: bus });
+      tono({ f: fa * 1.09, f2: fa, t: D * 0.66, dur: 0.42, vol: 0.016, att: 0.06, dest: bus });
     }
     // sciame che si allinea: ogni ape parte su una nota a caso e scivola sull'accordo finale
     function sciameAllineato({ t = 0, dur = 3.6, allinea = 1.2, note = [48, 55, 60, 64, 67, 72], vol = 0.02 }) {
@@ -2498,6 +2614,7 @@ Lavoro dei sogni da bambino | Lavoro attuale
       finestraGiu() { tono({ f: 640, f2: 320, dur: 0.14, vol: 0.12, dest: radio }); },
       // avviso per adulti: il "biiip" della censura, preceduto da uno scatto di fruscio
       // selettore di banda AM/FM: scatto, fruscio che scorre tra le frequenze e un bip
+      cercaStazione() { ricercaStazione(); },
       cambioBanda(o) {
         scatto({ vol: 0.3, f: 1500, tonfo: 100 });
         fruscio({ t: 0.03, dur: 0.45, vol: 0.09, f: o.fm ? 600 : 3200, f2: o.fm ? 3200 : 600, q: 4, att: 0.02 });
@@ -2765,7 +2882,8 @@ Lavoro dei sogni da bambino | Lavoro attuale
       if (!musica) return;
       const g = musica.bus.gain, T = ctx.currentTime;
       g.cancelScheduledValues(T);
-      g.setTargetAtTime(livelloBase, T, 0.5);
+      // se la stazione sta ancora per agganciarsi, il volume sale solo quando arriva
+      g.setTargetAtTime(livelloBase, Math.max(T, musica.inizio - 0.05), 0.5);
     }
     const dopoTra = T => Math.max(0, T - ctx.currentTime);
     // ance della fisarmonica: due voci appena scordate fanno il tremolo "musette" del liscio
@@ -2823,7 +2941,7 @@ Lavoro dei sogni da bambino | Lavoro attuale
       rullanteMorbido: (n, T, d, bus) => { fruscio({ t: dopoTra(T), dur: 0.1, vol: 0.05, f: 2000, q: 0.8, att: 0.003, dest: bus }); tono({ f: 210, t: dopoTra(T), dur: 0.05, vol: 0.025, att: 0.002, dest: bus }); },
       charlestonForte: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.035, vol: 0.035, tipo: 'highpass', f: 7000, q: 0.7, att: 0.002, dest: bus }),
       charlestonAperto: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.22, vol: 0.03, tipo: 'highpass', f: 6500, q: 0.7, att: 0.004, dest: bus }),
-      // Radio Paesello: liscio romagnolo con fisarmonica, mandolino e basso "zum-pa-pa"
+      // Amarcord Radio: liscio romagnolo con fisarmonica, mandolino e basso "zum-pa-pa"
       fisarmonica: (n, T, d, bus) => ance(n, T, d * 0.95, 0.038, bus),
       accordoValzer: (n, T, d, bus) => ance(n, T, 0.16, 0.017, bus),
       mandolino: (n, T, d, bus) => {
@@ -3056,17 +3174,26 @@ Lavoro dei sogni da bambino | Lavoro attuale
       if (!prepara() || !BRANI[id]) return;
       if (musica && musica.id === id) return;
       const cambio = !!musica;
-      fermaMusica(0.35);
-      // un attimo di fruscio, come quando si gira la manopola su un'altra stazione
-      fruscio({ dur: cambio ? 0.45 : 0.3, vol: 0.06, f: 900, f2: 3000, q: 3, att: 0.02 });
+      const T = ctx.currentTime;
+      // se la radio sta cercando la frequenza, la nuova stazione arriva quando la ricerca si aggancia
+      const cercando = ricercaFino > T + 0.3;
+      fermaMusica(cercando ? 0.25 : 0.35, cercando);
+      // altrimenti basta un attimo di fruscio, come quando si gira la manopola su un'altra stazione
+      if (!cercando) fruscio({ dur: cambio ? 0.45 : 0.3, vol: 0.06, f: 900, f2: 3000, q: 3, att: 0.02 });
+      const inizio = cercando ? ricercaFino - 0.3 : T + 0.35;
       const filtroBasso = ctx.createBiquadFilter(); filtroBasso.type = 'highpass'; filtroBasso.frequency.value = 90;
       const filtroAlto = ctx.createBiquadFilter(); filtroAlto.type = 'lowpass'; filtroAlto.frequency.value = 5200;
+      if (cercando) {                       // il segnale entra ovattato e si apre in mezzo secondo
+        filtroAlto.frequency.setValueAtTime(700, T); filtroAlto.frequency.setValueAtTime(700, inizio);
+        filtroAlto.frequency.exponentialRampToValueAtTime(5200, inizio + 0.6);
+        filtroBasso.frequency.setValueAtTime(380, T); filtroBasso.frequency.setValueAtTime(380, inizio);
+        filtroBasso.frequency.exponentialRampToValueAtTime(90, inizio + 0.5);
+      }
       const bus = ctx.createGain();
-      const T = ctx.currentTime;
       bus.gain.setValueAtTime(0.0001, T);
-      bus.gain.setTargetAtTime(livelloBase, T + 0.3, 0.35);
+      bus.gain.setTargetAtTime(livelloBase, inizio - 0.05, cercando ? 0.22 : 0.35);
       bus.connect(filtroBasso); filtroBasso.connect(filtroAlto); filtroAlto.connect(master);
-      musica = { id, bus, uscita: filtroAlto, brano: BRANI[id], passo: 0, prossimo: T + 0.35 };
+      musica = { id, bus, uscita: filtroAlto, brano: BRANI[id], passo: 0, prossimo: inizio, inizio };
       musica.timer = setInterval(programma, 50);
       programma();
     }
@@ -3084,11 +3211,13 @@ Lavoro dei sogni da bambino | Lavoro attuale
         m.passo++;
       }
     }
-    function fermaMusica(sfuma = 0.6) {
+    function fermaMusica(sfuma = 0.6, sfuoca = false) {
       if (!musica || !ctx) return;
       const m = musica; musica = null;
       clearInterval(m.timer);
       const T = ctx.currentTime;
+      // cambiando stazione la vecchia si "sfuoca": perde gli acuti mentre svanisce
+      if (sfuoca) m.uscita.frequency.setTargetAtTime(500, T, 0.08);
       m.bus.gain.cancelScheduledValues(T);
       m.bus.gain.setTargetAtTime(0.0001, T, sfuma / 4);
       setTimeout(() => { try { m.uscita.disconnect(); } catch (e) {} }, (sfuma + 0.6) * 1000);
@@ -3412,6 +3541,15 @@ Lavoro dei sogni da bambino | Lavoro attuale
   const NOME_BANDA = { am: 'AM · 530–1600 kHz', fm: 'FM · 88–108 MHz', pirata: 'Frequenze Pirata' };
   let bandaVisibile = 'am';
   function ruotaManopola(gradi) { corpoManopola.style.transform = `rotate(${gradi}deg)`; }
+  // gli sfondi a tema sfumano appena sopra il titolo: qui si misura dove comincia in ogni tasto
+  function misuraTitoli() {
+    tastiStazione.forEach(b => {
+      if (!b.classList.contains('decorato') || !b.offsetParent) return;
+      b.style.setProperty('--testo', (b.querySelector('.titolo').offsetTop - 3) + 'px');
+    });
+  }
+  if (window.ResizeObserver) new ResizeObserver(misuraTitoli).observe(document.getElementById('tasti-stazioni'));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(misuraTitoli);
   function mostraStazione() {
     tastiStazione.forEach(b => {
       const scelto = b.dataset.stazione === stazioneScelta;
@@ -3425,6 +3563,7 @@ Lavoro dei sogni da bambino | Lavoro attuale
     selettore.setAttribute('aria-valuetext', NOME_BANDA[bandaVisibile]);
     document.getElementById('banda-chip').textContent = NOME_BANDA[bandaVisibile];
     document.getElementById('ascolto-nome').textContent = nomeStazione(stazioneScelta);
+    misuraTitoli();
   }
   function impostaBanda(nuova) {
     if (nuova === bandaVisibile) { ruotaManopola(ANGOLO[nuova]); return; }
@@ -3483,10 +3622,19 @@ Lavoro dei sogni da bambino | Lavoro attuale
     if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { impostaBanda(BANDE[Math.min(i + 1, 2)]); e.preventDefault(); }
     if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { impostaBanda(BANDE[Math.max(i - 1, 0)]); e.preventDefault(); }
   });
+  let fineRicerca = 0;
   function scegliStazione(id) {
+    if (id === stazioneScelta) return;
     stazioneScelta = id;
+    suona('cercaStazione');
     mostraStazione();
     aggiornaMusica();
+    // il led della stazione e il nome sul display tremolano finché il segnale non si aggancia
+    clearTimeout(fineRicerca);
+    document.querySelectorAll('.cerca').forEach(x => x.classList.remove('cerca'));
+    const tasto = tastiStazione.find(b => b.dataset.stazione === id);
+    [tasto, selettore].forEach(x => { void x.offsetWidth; x.classList.add('cerca'); });
+    fineRicerca = setTimeout(() => document.querySelectorAll('.cerca').forEach(x => x.classList.remove('cerca')), 1500);
   }
   tastiStazione.forEach(b => b.addEventListener('click', () => {
     scegliStazione(b.dataset.stazione);
@@ -3736,12 +3884,12 @@ Lavoro dei sogni da bambino | Lavoro attuale
     { id: 'merenda', nome: 'Radio Merenda' },
     { id: 'hitparade', nome: 'Hit Parade' },
     { id: 'cerebrali', nome: 'Onde Cerebrali' },
-    { id: 'mezzanotte', nome: 'Dopo Mezzanotte' },
-    { id: 'paesello', nome: 'Radio Paesello' },
+    { id: 'paesello', nome: 'Amarcord Radio', vecchiNomi: ['Radio Paesello'] },
     { id: 'ottobit', nome: '8-Bit FM' },
     { id: 'primavisione', nome: 'Prima Visione' },
+    { id: 'fuoriorario', nome: 'Fuori Orario' },
     { id: 'ondanera', nome: 'Onda Nera' },
-    { id: 'fuoriorario', nome: 'Fuori Orario' }
+    { id: 'mezzanotte', nome: 'Dopo Mezzanotte' }
   ];
   const chiaveStazione = t => t.toLowerCase().replace(/[^a-z0-9]/g, '');
   const maiuscolaIniziale = t => t.charAt(0).toLocaleUpperCase('it') + t.slice(1);
@@ -3753,7 +3901,7 @@ Lavoro dei sogni da bambino | Lavoro attuale
       if (!riga || riga.startsWith('#')) return;
       const sezione = riga.match(/^\[(.+)\]$/);
       if (sezione) {
-        const s = STAZIONI.find(x => chiaveStazione(x.nome) === chiaveStazione(sezione[1]));
+        const s = STAZIONI.find(x => [x.nome, ...(x.vecchiNomi || [])].some(n => chiaveStazione(n) === chiaveStazione(sezione[1])));
         attuale = s ? s.id : null;
         return;
       }
