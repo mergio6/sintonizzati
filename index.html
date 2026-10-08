@@ -247,7 +247,7 @@
   /* ---------- Schermata di gioco ---------- */
   .gioco {
     --padx: clamp(14px, 3vw, 28px); --padx: clamp(14px, 3cqw, 28px);
-    display: grid; grid-template-rows: auto minmax(0, 1fr) auto; width: 100%; height: 100%;
+    display: grid; grid-template-rows: auto minmax(0, 1fr) auto; grid-template-columns: minmax(0, 1fr); width: 100%; height: 100%;
     padding: 10px var(--padx) 12px;
   }
   .barra { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -1052,10 +1052,15 @@
   .chip-stazione {
     margin-left: 4px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--bordo);
     font: 600 12px/1.2 "Bricolage Grotesque", system-ui, sans-serif; color: var(--tenue); white-space: nowrap;
+    min-width: 0; overflow: hidden; text-overflow: ellipsis;
   }
+  #schermata-gioco .marchio { min-width: 0; }
+  #schermata-gioco .marchio svg, #schermata-gioco .marchio-testo { flex: none; }
+  #schermata-gioco .barra .azioni { flex: none; }
+  /* sugli schermi stretti resta il nome della stazione con la sua tematica, senza "Sintonizzati su" */
+  @media (max-width: 760px) { #schermata-gioco .marchio-nome, #schermata-gioco .in-onda .su { display: none; } }
+  @container app (max-width: 760px) { #schermata-gioco .marchio-nome, #schermata-gioco .in-onda .su { display: none; } }
   .chip-stazione:empty { display: none; }
-  @media (max-width: 720px) { #schermata-gioco .marchio-nome { display: none; } }
-  @container app (max-width: 720px) { #schermata-gioco .marchio-nome { display: none; } }
 
   /* ---------- Firma ---------- */
   .credito {
@@ -2519,7 +2524,7 @@ Silenzio d'oro | Silenzio imbarazzante
 <g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
 <g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
 </g>
-</svg><span class="marchio-nome">Sintonizzati</span><span class="chip-stazione" id="chip-stazione"></span></div>
+</svg><span class="marchio-testo"><span class="marchio-nome">Sintonizzati</span><span class="in-onda"><span class="su">su</span><span class="nome-onda" id="gioco-stazione"></span></span></span><span class="chip-stazione" id="chip-stazione"></span></div>
         <div class="azioni">
           <button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
           <button class="btn-piccolo" id="esci">Esci</button>
@@ -4610,7 +4615,7 @@ Silenzio d'oro | Silenzio imbarazzante
     // dove va ogni numero: fuori dallo spicchio, ma dentro il vetro della radio
     const posti = valori.map((v, i) => {
       const medio = centro + (BORDI[i] + BORDI[i + 1]) / 2;
-      if (Math.abs(medio) >= 90) return null;            // spicchio fuori dalla radio: niente numero
+      if (Math.abs(medio) >= 88.5) return null;          // spicchio fuori dalla radio o rasente al fondo: niente numero
       const s = Math.abs(Math.sin(medio * Math.PI / 180));
       const mezzo = v.length > 1 ? 10 : 5;               // metà larghezza del numero
       const stretto = Math.min(190, (181 - mezzo) / Math.max(s, 0.01)) < 186;
@@ -4618,15 +4623,18 @@ Silenzio d'oro | Silenzio imbarazzante
       const scala = stretto ? Math.max(0.6, Math.min(0.78, (186 - 177 * s) / (mezzo * (1 + s)))) : 1;
       return { medio, s, mezzo, stretto, scala };
     });
-    // tutti i numeri dello stesso bersaglio hanno la stessa grandezza
-    const scala = Math.min(1, ...posti.filter(Boolean).map(p => p.scala));
+    // tutti i numeri dello stesso bersaglio hanno la stessa grandezza e, se anche uno solo deve stare
+    // vicino agli spicchi, stanno tutti alla stessa distanza dalla punta: niente numeri staccati
+    const visibili = posti.filter(Boolean);
+    const scala = Math.min(1, ...visibili.map(p => p.scala));
+    const vicini = visibili.some(p => p.stretto);
     valori.forEach((v, i) => {
       const forma = spicchio(centro + BORDI[i], centro + BORDI[i + 1], 40, 176);
       ventaglio.append(svg('path', { d: forma, class: 'zona ' + classi[i] }));
       if (classi[i] === 'z-oro') formaOro = forma;
       const p = posti[i];
       if (!p) return;
-      const r = p.stretto ? 177 + p.mezzo * scala : Math.min(190, (181 - p.mezzo * scala) / Math.max(p.s, 0.01));
+      const r = vicini ? 177 + p.mezzo * scala : Math.min(190, (181 - p.mezzo * scala) / Math.max(p.s, 0.01));
       const [x, y] = punto(p.medio, r);
       const t = svg('text', { x, y: y + 4 * scala, 'text-anchor': 'middle', class: 'valore' + (classi[i] === 'z-oro' ? ' oro' : '') });
       if (scala < 1) t.style.fontSize = (12 * scala).toFixed(1) + 'px';
@@ -4691,7 +4699,10 @@ Silenzio d'oro | Silenzio imbarazzante
 
   /* ---------- Entrata in partita: la radio si accende ---------- */
   function entraInPartita(poi) {
-    document.getElementById('chip-stazione').textContent = nomeStazione(stazioneScelta);
+    // in alto: "Sintonizzati su [stazione]" e, nella pillola, la tematica da ricordare ai giocatori
+    document.getElementById('gioco-stazione').textContent = nomeStazione(stazioneScelta);
+    const tastoScelto = tastiStazione.find(b => b.dataset.stazione === stazioneScelta);
+    document.getElementById('chip-stazione').textContent = tastoScelto ? tastoScelto.querySelector('.motto').textContent : '';
     // la scala segue la stazione: AM e kHz per le AM, FM e MHz per le altre, e un teschio per le pirata
     const banda = bandaDi(stazioneScelta);
     document.getElementById('dial-banda').textContent = banda === 'am' ? 'AM' : 'FM';
