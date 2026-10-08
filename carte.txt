@@ -106,6 +106,22 @@ Rigido | Flessibile
 Colore piacevole | Colore spiacevole
 Animale da compagnia comune | Animale da compagnia insolito
 
+# --- copie da altre stazioni (ottobre 2026) ---
+Superpotere inutile | Superpotere utile
+Pigro | Instancabile
+Fortunato | Sfortunato
+Mezzo lento | Mezzo veloce
+Croccante | Molle
+Snack sano | Snack spazzatura
+Invenzione inutile | Invenzione geniale
+Robot amichevole | Robot minaccioso
+Alieno pacifico | Alieno invasore
+Videogioco rilassante | Videogioco frustrante
+Costume da supereroe ridicolo | Costume da supereroe iconico
+Gusto di gelato deludente | Gusto di gelato irrinunciabile
+Strega simpatica | Strega malvagia
+Costume di Halloween ridicolo | Costume di Halloween terrificante
+
 [Hit Parade]
 # Il mazzo standard: i grandi classici per tutti
 
@@ -339,6 +355,20 @@ Innocuo | Pericoloso
 Film triste | Film allegro
 Pessimo genere musicale | Ottimo genere musicale
 
+# --- copie da altre stazioni (ottobre 2026) ---
+Galleggia | Affonda
+Timido | Coraggioso
+Ordinato | Disordinato
+Facile da mangiare | Difficile da mangiare
+Cibo con cui ti sporchi | Cibo con cui non ti sporchi
+Amico | Nemico
+È difficile sederci sopra | È facile sederci sopra
+Da non abbracciare | Da abbracciare
+Nome da cane | Nome da gatto
+Animale di casa | Animale selvatico
+Animale da compagnia comune | Animale da compagnia insolito
+Esiste davvero | È inventato
+
 [Onde Cerebrali]
 # Concetti astratti e sfumati: per chi vuole ragionarci su
 
@@ -520,6 +550,31 @@ Lettera d'amore imbarazzante | Lettera d'amore indimenticabile
 Cosa da anni '90 | Cosa da anni 2000
 Gioco in scatola dimenticato | Gioco in scatola immortale
 
+# --- copie da altre stazioni (ottobre 2026) ---
+Si fa al mare | Si fa in montagna
+Cibo da merenda | Cibo da cena
+Cartone per piccoli | Cartone per grandi
+Primo della classe | Asino
+Pessima caramella | Ottima caramella
+Materia semplice | Materia difficile
+Hobby da nonni | Hobby da ragazzi
+Da città | Da campagna
+Fuori moda | Di moda
+Poco italiano | Italianissimo
+Regalo da riciclare | Regalo da tenere
+Nome antico | Nome moderno
+Vecchio stile | All'avanguardia
+Cosa da boomer | Cosa da Gen Z
+Fatto in casa | Industriale
+Piatto del nord | Piatto del sud
+Superstizione assurda | Superstizione sensata
+Anni '80 | Anni '90
+Tamarro | Chic
+Pessimo personaggio dei cartoni | Ottimo personaggio dei cartoni
+Tradizione | Progresso
+Nostalgico | Visionario
+Ricordo | Rimpianto
+
 [8-Bit FM]
 # Per nerd: videogiochi, fumetti, anime, giochi di ruolo, fantascienza e tecnologia
 
@@ -584,6 +639,30 @@ Armatura brutta ma utile | Armatura bella ma inutile
 Personaggio muto | Personaggio logorroico
 Gioco da maratona notturna | Gioco da cinque minuti
 
+# --- copie da altre stazioni (ottobre 2026) ---
+Pokémon potente | Pokémon scarso
+Supereroe debole | Supereroe fortissimo
+Ding | Boom
+Superpotere inutile | Superpotere utile
+Invenzione inutile | Invenzione geniale
+App inutile | App indispensabile
+Eroe | Cattivo
+Tecnologia vecchia | Tecnologia futuristica
+Divinità meno potente | Divinità più potente
+Facile da eliminare | Difficile da eliminare
+Richiede fortuna | Richiede abilità
+Star Wars | Star Trek
+Difficile da usare | Facile da usare
+Grifondoro | Serpeverde
+Gioco sottovalutato | Gioco sopravvalutato
+Lato chiaro della Forza | Lato oscuro della Forza
+Peggior epoca per viaggiare nel tempo | Miglior epoca per viaggiare nel tempo
+Fantasy | Fantascienza
+Utopia | Distopia
+Mainstream | Di nicchia
+Reale | Immaginario
+Inerme | Potente
+
 [Prima Visione]
 # Cinema, serie TV, musica e star: lo spettacolo in tutte le sue forme
 
@@ -646,6 +725,39 @@ Musica da ascensore | Musica da brividi
 Personaggio da fiction scontato | Personaggio da fiction originale
 Telefilm anni '90 dimenticato | Telefilm anni '90 indimenticabile
 
+# --- copie da altre stazioni (ottobre 2026) ---
+Fa ridere | Fa piangere
+Cartone per piccoli | Cartone per grandi
+Personaggio buono | Personaggio cattivo
+Film per bambini | Film per adulti
+Film brutto | Film capolavoro
+Film sottovalutato | Film sopravvalutato
+Film triste | Film allegro
+Comico | Drammatico
+Meglio il libro | Meglio il film
+Film che Godzilla rovinerebbe | Film che Godzilla migliorerebbe
+Pessimo attore | Ottimo attore
+Attore sottovalutato | Attore sopravvalutato
+Fenomeno passeggero | Stella internazionale
+Privo di talento | Talentuoso
+Programma trash | Programma colto
+Pessimo programma TV | Ottimo programma TV
+Canzone brutta | Canzone bellissima
+Canzone triste | Canzone allegra
+Tormentone estivo | Grande classico
+Musicista sottovalutato | Musicista sopravvalutato
+Pessimo genere musicale | Ottimo genere musicale
+Star Wars | Star Trek
+Grifondoro | Serpeverde
+Lato chiaro della Forza | Lato oscuro della Forza
+Fantasy | Fantascienza
+Film d'azione | Film d'avventura
+Arte | Non arte
+Mainstream | Di nicchia
+Ispirazione | Plagio
+Invecchia bene | Invecchia male
+Autentico | Costruito
+
 [Fuori Orario]
 # La vita lavorativa vista dal lato scomodo: capi, colleghi, riunioni e dopo-lavoro
 
@@ -706,6 +818,40 @@ Riunione alle 9 del lunedì | Riunione alle 18 del venerdì
 Badge dimenticato | Badge perso per sempre
 Lavoro dei sogni da bambino | Lavoro attuale
 
+# --- copie da altre stazioni (ottobre 2026) ---
+Mestiere facile | Mestiere difficile
+Amico | Nemico
+Rigido | Flessibile
+Lavoro noioso | Lavoro da sogno
+Lavoro manuale | Lavoro intellettuale
+Mestiere sottopagato | Mestiere strapagato
+Mestiere sicuro | Mestiere pericoloso
+Mestiere sopravvalutato | Mestiere sottovalutato
+Laurea inutile | Laurea utile
+Si fa al lavoro | Si fa in vacanza
+Rilassante | Stressante
+Pigro | Instancabile
+Puntuale | Ritardatario
+Inaffidabile | Affidabile
+Insostituibile | Sostituibile
+Persona genuina | Persona falsa
+Casual | Elegante
+Fisso | Mobile
+Facoltativo | Obbligatorio
+Perdita di tempo | Tempo ben impiegato
+Scusa credibile | Scusa ridicola
+Regola stupida | Regola sacrosanta
+App inutile | App indispensabile
+Merito | Raccomandazione
+Lavoro | Vocazione
+Ambizione sana | Ambizione tossica
+Successo | Realizzazione
+Tempo libero | Tempo perso
+Fallimento | Lezione
+Amicizia | Convenienza
+Persona senza scrupoli | Persona scrupolosa
+Azienda eticamente scorretta | Azienda eticamente corretta
+
 [Onda Nera]
 # Umorismo nero e macabro, fantasmi, misteri e paure: per adulti, senza contenuti espliciti
 
@@ -765,6 +911,32 @@ Mostro mitologico ridicolo | Mostro mitologico terrificante
 Sorpresa piacevole | Sorpresa agghiacciante
 Ospite che non se ne va mai | Ospite che sparisce nel nulla
 Cosa da trovare in soffitta innocua | Cosa da trovare in soffitta inquietante
+
+# --- copie da altre stazioni (ottobre 2026) ---
+Spaventoso | Coccoloso
+Esiste davvero | È inventato
+Posto sicuro | Posto pericoloso
+Da non abbracciare | Da abbracciare
+Inquietante | Rassicurante
+Innocuo | Pericoloso
+Animale innocuo | Animale letale
+Fortunato | Sfortunato
+Superstizione assurda | Superstizione sensata
+Bufala | Verità
+Vita breve | Vita lunga
+Non vivrà fino a cent'anni | Vivrà fino a cent'anni
+Succede lentamente | Succede improvvisamente
+Inutile in un'emergenza | Utile in un'emergenza
+Arma efficace | Arma non efficace
+Cibo di sopravvivenza | Alta cucina
+Destino | Caso
+Sacro | Profano
+Genialità | Follia
+Giustizia | Vendetta
+Satira | Offesa
+Elettrizzante | Terrificante
+Fobia irragionevole | Fobia ragionevole
+Scienza | Pseudoscienza
 
 [Dopo Mezzanotte]
 # Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
@@ -834,3 +1006,25 @@ Complimento fuori luogo | Complimento elegante
 Fuori controllo | In controllo
 Segreto | Di pubblico dominio
 Vizio | Virtù
+
+# --- copie da altre stazioni (ottobre 2026) ---
+Da fare di giorno | Da fare di notte
+Cibo con cui ti sporchi | Cibo con cui non ti sporchi
+Orizzontale | Verticale
+Troppo piccolo | Troppo grande
+Non peloso | Peloso
+Per niente piccante | Piccantissimo
+Per niente romantico | Romanticissimo
+Da fare da soli | Da fare in compagnia
+Non lo fa nessuno | Lo fanno tutti
+Proibito | Consigliabile
+Fa bene | Fa male
+Tirchio | Spendaccione
+Conversazione leggera | Conversazione pesante
+Imbarazzante | Da vantarsi
+Poco tatuato | Molto tatuato
+Non addomesticabile | Addomesticabile
+Amore | Abitudine
+Fatto per amore | Fatto per soldi
+Verità scomoda | Bugia comoda
+Silenzio d'oro | Silenzio imbarazzante
