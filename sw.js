@@ -2,7 +2,7 @@
    La pagina e le carte (carte.txt) vengono sempre chieste prima alla rete, così ogni
    aggiornamento caricato su GitHub arriva subito; se manca la connessione si usa la copia salvata.
    Se cambi le icone o il manifest, aumenta il numero di VERSIONE. */
-const VERSIONE = 'sintonizzati-v2';
+const VERSIONE = 'sintonizzati-v3';
 const FILE = [
   './',
   './index.html',
@@ -32,16 +32,22 @@ self.addEventListener('fetch', evento => {
   const richiesta = evento.request;
   if (richiesta.method !== 'GET') return;
 
-  // La pagina del gioco: prima la rete, poi la copia salvata
+  // La pagina del gioco: prima la rete, ma se la connessione è lenta (oltre 4 secondi)
+  // si apre subito la copia salvata, così l'app non resta bloccata sulla schermata del logo
   if (richiesta.mode === 'navigate') {
+    const dallaRete = fetch(richiesta).then(risposta => {
+      if (risposta.ok) {                           // si salva solo una pagina valida
+        const copia = risposta.clone();
+        caches.open(VERSIONE).then(cache => cache.put('./index.html', copia));
+      }
+      return risposta;
+    });
+    const salvata = () => caches.match('./index.html');
+    const attesa = new Promise(fine => setTimeout(fine, 4000)).then(salvata);
     evento.respondWith(
-      fetch(richiesta)
-        .then(risposta => {
-          const copia = risposta.clone();
-          caches.open(VERSIONE).then(cache => cache.put('./index.html', copia));
-          return risposta;
-        })
-        .catch(() => caches.match('./index.html'))
+      Promise.race([dallaRete.catch(salvata), attesa.then(r => r || dallaRete)])
+        .then(r => r || dallaRete)
+        .catch(salvata)
     );
     return;
   }
