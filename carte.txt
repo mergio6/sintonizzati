@@ -5,9 +5,10 @@
 #  - una carta per riga: estremo di sinistra | estremo di destra
 #  - le righe che iniziano con # sono note e vengono ignorate
 #  - [Nome della stazione] indica a quale mazzo appartengono le carte sotto
-#  - le sei stazioni sono, in banda AM: [Radio Merenda], [Hit Parade],
-#    [Onde Cerebrali]; in banda FM: [Radio Paesello], [8-Bit FM]
-#    e [Dopo Mezzanotte]
+#  - le nove stazioni sono divise in tre gamme d'onda:
+#    AM: [Radio Merenda], [Hit Parade], [Onde Cerebrali]
+#    FM: [Radio Paesello], [8-Bit FM], [Prima Visione]
+#    Frequenze Pirata (solo 18+): [Onda Nera], [Dopo Mezzanotte], [Fuori Orario]
 #  - se una riga è scritta male, il gioco la salta e usa tutte le altre
 #  - tieni gli estremi brevi (massimo una ventina di caratteri)
 # =====================================================================
@@ -656,3 +657,188 @@ Mappa minuscola | Mappa sterminata
 Armatura brutta ma utile | Armatura bella ma inutile
 Personaggio muto | Personaggio logorroico
 Gioco da maratona notturna | Gioco da cinque minuti
+
+
+[Prima Visione]
+# Cinema, serie TV, musica e star: lo spettacolo in tutte le sue forme
+
+Trailer noioso | Trailer irresistibile
+Locandina brutta | Locandina iconica
+Titolo italiano tradotto male | Titolo italiano azzeccato
+Doppiaggio terribile | Doppiaggio perfetto
+Film da vedere doppiato | Film da vedere in lingua originale
+Colpo di scena prevedibile | Colpo di scena sconvolgente
+Inizio lento | Inizio folgorante
+Film troppo corto | Film troppo lungo
+Film da popcorn | Film da festival
+Oscar meritato | Oscar rubato
+Cameo dimenticabile | Cameo leggendario
+Effetti speciali ridicoli | Effetti speciali spettacolari
+Horror che fa ridere | Horror che terrorizza
+Commedia romantica stucchevole | Commedia romantica perfetta
+Scena d'amore imbarazzante | Scena d'amore memorabile
+Citazione dimenticabile | Citazione leggendaria
+Vecchio film noioso | Vecchio film immortale
+Biopic noioso | Biopic emozionante
+Documentario soporifero | Documentario affascinante
+Musical insopportabile | Musical imperdibile
+Regista sottovalutato | Regista sopravvalutato
+Genere di film sottovalutato | Genere di film sopravvalutato
+Film da primo appuntamento sbagliato | Film da primo appuntamento perfetto
+Maratona di film stancante | Maratona di film epica
+Posto al cinema pessimo | Posto al cinema perfetto
+Vicino di poltrona educato | Vicino di poltrona insopportabile
+Snack da cinema deludente | Snack da cinema irrinunciabile
+Serie da mollare subito | Serie da divorare
+Episodio di riempimento | Episodio cult
+Spin-off inutile | Spin-off riuscito
+Reality insopportabile | Reality irresistibile
+Quiz TV facile | Quiz TV impossibile
+Programma di cucina noioso | Programma di cucina appassionante
+Conduttore antipatico | Conduttore amatissimo
+Premiazione noiosa | Premiazione memorabile
+Celebrità sottovalutata | Celebrità sopravvalutata
+Star antipatica | Star simpatica
+Coppia vip improbabile | Coppia vip perfetta
+Scandalo vip innocuo | Scandalo vip epocale
+Carriera finita presto | Carriera infinita
+Influencer utile | Influencer inutile
+Concerto da dimenticare | Concerto indimenticabile
+Band da garage | Band da stadio
+Album flop | Album capolavoro
+Ritornello che non ricordi | Ritornello che non ti esce dalla testa
+Videoclip dimenticabile | Videoclip iconico
+Canzone da doccia | Canzone da stadio
+Testo di canzone profondo | Testo di canzone senza senso
+Assolo noioso | Assolo leggendario
+Strumento facile da suonare | Strumento difficilissimo
+Duetto improbabile | Duetto perfetto
+Cover peggiore dell'originale | Cover migliore dell'originale
+Voce stonata | Voce celestiale
+Concerto in piccolo locale | Concerto in uno stadio
+Biglietto del concerto regalato | Biglietto del concerto carissimo
+Musica da ascensore | Musica da brividi
+Personaggio da fiction scontato | Personaggio da fiction originale
+Telefilm anni '90 dimenticato | Telefilm anni '90 indimenticabile
+
+
+[Onda Nera]
+# Umorismo nero e macabro, fantasmi, misteri e paure: per adulti, senza contenuti espliciti
+
+Morte ridicola | Morte epica
+Ultime parole dimenticabili | Ultime parole leggendarie
+Ultimo desiderio banale | Ultimo desiderio assurdo
+Ultimo pasto deludente | Ultimo pasto perfetto
+Funerale noioso | Funerale memorabile
+Epitaffio banale | Epitaffio geniale
+Necrologio sobrio | Necrologio esagerato
+Bara economica | Bara di lusso
+Fiori da funerale | Fiori da festa
+Testamento prevedibile | Testamento scioccante
+Eredità indesiderata | Eredità desiderata
+Reincarnazione sfigata | Reincarnazione da sogno
+Aldilà noioso | Aldilà divertente
+Fantasma innocuo | Fantasma terrificante
+Casa infestata accogliente | Casa infestata invivibile
+Cimitero tranquillo | Cimitero inquietante
+Cantina accogliente | Cantina da film horror
+Seduta spiritica divertente | Seduta spiritica da incubo
+Maledizione innocua | Maledizione terribile
+Oggetto antico innocuo | Oggetto antico maledetto
+Profezia ottimista | Profezia catastrofica
+Coincidenza innocua | Coincidenza inquietante
+Rumore notturno innocuo | Rumore notturno terrificante
+Incubo leggero | Incubo terrificante
+Bambola tenera | Bambola inquietante
+Clown simpatico | Clown terrificante
+Strega simpatica | Strega malvagia
+Vampiro affascinante | Vampiro ripugnante
+Zombie lento | Zombie velocissimo
+Rifugio anti-zombie pessimo | Rifugio anti-zombie perfetto
+Alleato per l'apocalisse inutile | Alleato per l'apocalisse perfetto
+Fine del mondo noiosa | Fine del mondo spettacolare
+Esperimento innocuo | Esperimento da scienziato pazzo
+Insetto innocuo | Insetto da incubo
+Visita dal dentista tranquilla | Visita dal dentista da incubo
+Volo tranquillo | Volo da incubo
+Disgrazia sopportabile | Disgrazia biblica
+Battuta macabra innocua | Battuta macabra imperdonabile
+Morte in un film prevedibile | Morte in un film sconvolgente
+Leggenda metropolitana credibile | Leggenda metropolitana assurda
+Cena con delitto noiosa | Cena con delitto avvincente
+Alibi debole | Alibi di ferro
+Faccia da innocente | Faccia da colpevole
+Testimone inaffidabile | Testimone credibile
+Giallo prevedibile | Giallo imprevedibile
+Indagine banale | Indagine impossibile
+Vicino di casa normale | Vicino di casa sospetto
+Scherzo di Halloween innocuo | Scherzo di Halloween crudele
+Costume di Halloween ridicolo | Costume di Halloween terrificante
+Storia di paura per bambini | Storia di paura da non dormire
+Gatto nero porta fortuna | Gatto nero porta sfortuna
+Specchio rotto innocuo | Specchio rotto catastrofico
+Mostro mitologico ridicolo | Mostro mitologico terrificante
+Sorpresa piacevole | Sorpresa agghiacciante
+Ospite che non se ne va mai | Ospite che sparisce nel nulla
+Cosa da trovare in soffitta innocua | Cosa da trovare in soffitta inquietante
+
+
+[Fuori Orario]
+# La vita lavorativa vista dal lato scomodo: capi, colleghi, riunioni e dopo-lavoro
+
+Riunione inutile | Riunione indispensabile
+Presentazione noiosa | Presentazione brillante
+Brainstorming inutile | Brainstorming produttivo
+Capo comprensivo | Capo tiranno
+Capo assente | Capo onnipresente
+Messaggio del capo innocuo | Messaggio del capo terrificante
+Commento sul capo innocuo | Commento sul capo da licenziamento
+Ascensore col capo silenzioso | Ascensore col capo imbarazzante
+Regalo per il capo azzeccato | Regalo per il capo imbarazzante
+Leccapiedi discreto | Leccapiedi sfacciato
+Collega silenzioso | Collega logorroico
+Pettegolezzo d'ufficio innocuo | Pettegolezzo d'ufficio esplosivo
+Flirt in ufficio innocuo | Flirt in ufficio pericoloso
+Storia tra colleghi segreta | Storia tra colleghi nota a tutti
+Email gentile | Email passivo-aggressiva
+Firma email sobria | Firma email esagerata
+Chat di lavoro tranquilla | Chat di lavoro infernale
+Videochiamata tranquilla | Videochiamata imbarazzante
+Smart working serio | Smart working in pigiama
+Lunedì mattina sopportabile | Lunedì mattina infernale
+Venerdì pomeriggio produttivo | Venerdì pomeriggio inutile
+Pausa caffè breve | Pausa caffè infinita
+Mensa aziendale deludente | Mensa aziendale stellata
+Furto dal frigo aziendale perdonabile | Furto dal frigo aziendale imperdonabile
+Scrivania ordinata | Scrivania esplosa
+Stampante collaborativa | Stampante diabolica
+Open space silenzioso | Open space infernale
+Pendolarismo breve | Pendolarismo infernale
+Ritardo giustificabile | Ritardo ingiustificabile
+Malattia credibile | Malattia inventata
+Scadenza comoda | Scadenza impossibile
+Multitasking riuscito | Multitasking disastroso
+Obiettivo aziendale realistico | Obiettivo aziendale delirante
+Gergo aziendale comprensibile | Gergo aziendale incomprensibile
+Team building divertente | Team building imbarazzante
+Cena aziendale noiosa | Cena aziendale leggendaria
+Festa aziendale sobria | Festa aziendale fuori controllo
+Aperitivo dopo il lavoro sobrio | Aperitivo dopo il lavoro epico
+Look da ufficio sobrio | Look da ufficio audace
+Battuta in riunione azzeccata | Battuta in riunione disastrosa
+Colloquio di lavoro disastroso | Colloquio di lavoro perfetto
+Domanda da colloquio facile | Domanda da colloquio impossibile
+Curriculum onesto | Curriculum gonfiato
+Primo giorno di lavoro tranquillo | Primo giorno di lavoro traumatico
+Aumento ridicolo | Aumento da sogno
+Straordinario pagato | Straordinario gratis
+Promozione meritata | Promozione immeritata
+Ferie vere | Ferie col portatile
+Cliente gentile | Cliente da incubo
+Reclamo ragionevole | Reclamo assurdo
+Dimissioni educate | Dimissioni plateali
+Licenziamento meritato | Licenziamento ingiusto
+Collega che fa tutto | Collega che non fa niente
+Riunione alle 9 del lunedì | Riunione alle 18 del venerdì
+Badge dimenticato | Badge perso per sempre
+Lavoro dei sogni da bambino | Lavoro attuale

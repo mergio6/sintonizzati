@@ -725,22 +725,37 @@
   .stazioni .tasto .titolo { font-size: clamp(15px, 4.4vh, 19px); font-size: clamp(15px, 4.4cqh, 19px); }
   .stazioni .tasto .motto { font-size: clamp(12px, 3.6vh, 15px); font-size: clamp(12px, 3.6cqh, 15px); }
   .stazioni .tasto .descr { gap: 6px; }
-  @media (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } .stazioni .tasto.banda { grid-template-areas: "titolo titolo" "descr descr"; } }
-  @container app (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } .stazioni .tasto.banda { grid-template-areas: "titolo titolo" "descr descr"; } }
-  /* due bande: si vedono solo le tre stazioni della banda attiva, più il selettore */
-  .stazioni[data-banda="am"] .tasto[data-banda="fm"], .stazioni[data-banda="fm"] .tasto[data-banda="am"] { display: none; }
-  .stazioni.cambio .tasto { animation: tasto-su .45s cubic-bezier(.2, .9, .3, 1.2) both; animation-delay: calc(var(--k) * 70ms); }
-  /* il selettore di banda ha l'aspetto del vetro del display */
+  @media (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } .stazioni .tasto.banda .motto { display: none; } }
+  @container app (max-height: 430px) { .stazioni .tasto .icona { display: none; } .stazioni .tasto { grid-template-areas: "titolo led" "descr descr"; } .stazioni .tasto.banda .motto { display: none; } }
+  /* tre gamme d'onda: si vedono solo le tre stazioni della gamma attiva, più la manopola */
+  .stazioni[data-banda="am"] .tasto[data-banda]:not([data-banda="am"]),
+  .stazioni[data-banda="fm"] .tasto[data-banda]:not([data-banda="fm"]),
+  .stazioni[data-banda="pirata"] .tasto[data-banda]:not([data-banda="pirata"]) { display: none; }
+  .stazioni.cambio .tasto:not(.banda) { animation: tasto-su .45s cubic-bezier(.2, .9, .3, 1.2) both; animation-delay: calc(var(--k) * 70ms); }
+  /* il selettore ha l'aspetto del vetro del display, con una manopola che gira */
   .stazioni .tasto.banda {
+    display: flex; flex-direction: column; align-items: stretch; gap: 2px; cursor: default; touch-action: none;
     background: var(--vetro); color: var(--vetro-segni); text-shadow: var(--lcd-ombra);
     box-shadow: inset 0 0 0 2px var(--corpo), 0 6px 0 var(--tasto-ombra);
-    grid-template-areas: "icona icona" "titolo titolo" "descr descr";
   }
-  .stazioni .tasto.banda:active { box-shadow: inset 0 0 0 2px var(--corpo), 0 1px 0 var(--tasto-ombra); }
+  .stazioni .tasto.banda:active { transform: none; box-shadow: inset 0 0 0 2px var(--corpo), 0 6px 0 var(--tasto-ombra); }
+  .stazioni .tasto.banda .titolo { font-size: clamp(12px, 3.4vh, 14px); font-size: clamp(12px, 3.4cqh, 14px); font-weight: 700; opacity: .85; }
   .stazioni .tasto.banda .motto, .stazioni .tasto.banda .conteggio { color: var(--vetro-segni); }
-  .stazioni .tasto.banda .icona { justify-self: start; }
-  .stazioni .tasto.banda .cursore-banda { transition: transform .3s cubic-bezier(.3, 1.4, .5, 1); }
-  .stazioni[data-banda="fm"] .tasto.banda .cursore-banda { transform: translateX(20px); }
+  .manopola { display: block; width: 100%; height: auto; max-height: 92px; flex: 1 1 auto; min-height: 0; cursor: grab; touch-action: none; }
+  .manopola:active { cursor: grabbing; }
+  .tacche-banda line { stroke: var(--vetro-segni); stroke-width: 1.4; stroke-linecap: round; opacity: .7; }
+  .etichetta-banda { font: 11px "Michroma", Verdana, sans-serif; fill: var(--vetro-segni); opacity: .55; transition: opacity .2s; cursor: pointer; }
+  .zona-pirata { fill: none; stroke: var(--corallo); stroke-width: 5; stroke-linecap: round; opacity: .55; }
+  .lucchetto { fill: var(--corallo); stroke: var(--corallo); stroke-width: 1.6; opacity: .7; cursor: pointer; }
+  .lucchetto rect { stroke: none; }
+  .stazioni[data-banda="am"] .etichetta-banda[data-pos="am"], .stazioni[data-banda="fm"] .etichetta-banda[data-pos="fm"] { opacity: 1; }
+  .stazioni[data-banda="pirata"] .lucchetto { opacity: 1; }
+  #manopola-corpo { transform-origin: 60px 58px; transition: transform .28s cubic-bezier(.3, 1.4, .5, 1); }
+  .manopola.trascina #manopola-corpo { transition: none; }
+  .corpo-manopola { fill: var(--corpo); }
+  .ghiera { fill: none; stroke: var(--griglia); stroke-width: 1.5; stroke-dasharray: 2 2.4; }
+  .indice { stroke: var(--ambra); stroke-width: 3; stroke-linecap: round; }
+  .stazioni[data-banda="pirata"] .indice { stroke: var(--corallo); }
   .stazioni .tasto.scelto {
     transform: translateY(5px);
     box-shadow: inset 0 0 0 3px var(--colore), 0 1px 0 var(--tasto-ombra);
@@ -820,7 +835,8 @@
 
 
   @media (prefers-reduced-motion: reduce) {
-    .riflesso, .scintilla, .alone, .bordo-oro, .stazioni.cambio .tasto { animation: none !important; } .scintilla { opacity: 0; }
+    .riflesso, .scintilla, .alone, .bordo-oro, .stazioni.cambio .tasto { animation: none !important; }
+    #manopola-corpo { transition: none; } .scintilla { opacity: 0; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
@@ -838,9 +854,10 @@
 #  - una carta per riga: estremo di sinistra | estremo di destra
 #  - le righe che iniziano con # sono note e vengono ignorate
 #  - [Nome della stazione] indica a quale mazzo appartengono le carte sotto
-#  - le sei stazioni sono, in banda AM: [Radio Merenda], [Hit Parade],
-#    [Onde Cerebrali]; in banda FM: [Radio Paesello], [8-Bit FM]
-#    e [Dopo Mezzanotte]
+#  - le nove stazioni sono divise in tre gamme d'onda:
+#    AM: [Radio Merenda], [Hit Parade], [Onde Cerebrali]
+#    FM: [Radio Paesello], [8-Bit FM], [Prima Visione]
+#    Frequenze Pirata (solo 18+): [Onda Nera], [Dopo Mezzanotte], [Fuori Orario]
 #  - se una riga è scritta male, il gioco la salta e usa tutte le altre
 #  - tieni gli estremi brevi (massimo una ventina di caratteri)
 # =====================================================================
@@ -1489,6 +1506,191 @@ Mappa minuscola | Mappa sterminata
 Armatura brutta ma utile | Armatura bella ma inutile
 Personaggio muto | Personaggio logorroico
 Gioco da maratona notturna | Gioco da cinque minuti
+
+
+[Prima Visione]
+# Cinema, serie TV, musica e star: lo spettacolo in tutte le sue forme
+
+Trailer noioso | Trailer irresistibile
+Locandina brutta | Locandina iconica
+Titolo italiano tradotto male | Titolo italiano azzeccato
+Doppiaggio terribile | Doppiaggio perfetto
+Film da vedere doppiato | Film da vedere in lingua originale
+Colpo di scena prevedibile | Colpo di scena sconvolgente
+Inizio lento | Inizio folgorante
+Film troppo corto | Film troppo lungo
+Film da popcorn | Film da festival
+Oscar meritato | Oscar rubato
+Cameo dimenticabile | Cameo leggendario
+Effetti speciali ridicoli | Effetti speciali spettacolari
+Horror che fa ridere | Horror che terrorizza
+Commedia romantica stucchevole | Commedia romantica perfetta
+Scena d'amore imbarazzante | Scena d'amore memorabile
+Citazione dimenticabile | Citazione leggendaria
+Vecchio film noioso | Vecchio film immortale
+Biopic noioso | Biopic emozionante
+Documentario soporifero | Documentario affascinante
+Musical insopportabile | Musical imperdibile
+Regista sottovalutato | Regista sopravvalutato
+Genere di film sottovalutato | Genere di film sopravvalutato
+Film da primo appuntamento sbagliato | Film da primo appuntamento perfetto
+Maratona di film stancante | Maratona di film epica
+Posto al cinema pessimo | Posto al cinema perfetto
+Vicino di poltrona educato | Vicino di poltrona insopportabile
+Snack da cinema deludente | Snack da cinema irrinunciabile
+Serie da mollare subito | Serie da divorare
+Episodio di riempimento | Episodio cult
+Spin-off inutile | Spin-off riuscito
+Reality insopportabile | Reality irresistibile
+Quiz TV facile | Quiz TV impossibile
+Programma di cucina noioso | Programma di cucina appassionante
+Conduttore antipatico | Conduttore amatissimo
+Premiazione noiosa | Premiazione memorabile
+Celebrità sottovalutata | Celebrità sopravvalutata
+Star antipatica | Star simpatica
+Coppia vip improbabile | Coppia vip perfetta
+Scandalo vip innocuo | Scandalo vip epocale
+Carriera finita presto | Carriera infinita
+Influencer utile | Influencer inutile
+Concerto da dimenticare | Concerto indimenticabile
+Band da garage | Band da stadio
+Album flop | Album capolavoro
+Ritornello che non ricordi | Ritornello che non ti esce dalla testa
+Videoclip dimenticabile | Videoclip iconico
+Canzone da doccia | Canzone da stadio
+Testo di canzone profondo | Testo di canzone senza senso
+Assolo noioso | Assolo leggendario
+Strumento facile da suonare | Strumento difficilissimo
+Duetto improbabile | Duetto perfetto
+Cover peggiore dell'originale | Cover migliore dell'originale
+Voce stonata | Voce celestiale
+Concerto in piccolo locale | Concerto in uno stadio
+Biglietto del concerto regalato | Biglietto del concerto carissimo
+Musica da ascensore | Musica da brividi
+Personaggio da fiction scontato | Personaggio da fiction originale
+Telefilm anni '90 dimenticato | Telefilm anni '90 indimenticabile
+
+
+[Onda Nera]
+# Umorismo nero e macabro, fantasmi, misteri e paure: per adulti, senza contenuti espliciti
+
+Morte ridicola | Morte epica
+Ultime parole dimenticabili | Ultime parole leggendarie
+Ultimo desiderio banale | Ultimo desiderio assurdo
+Ultimo pasto deludente | Ultimo pasto perfetto
+Funerale noioso | Funerale memorabile
+Epitaffio banale | Epitaffio geniale
+Necrologio sobrio | Necrologio esagerato
+Bara economica | Bara di lusso
+Fiori da funerale | Fiori da festa
+Testamento prevedibile | Testamento scioccante
+Eredità indesiderata | Eredità desiderata
+Reincarnazione sfigata | Reincarnazione da sogno
+Aldilà noioso | Aldilà divertente
+Fantasma innocuo | Fantasma terrificante
+Casa infestata accogliente | Casa infestata invivibile
+Cimitero tranquillo | Cimitero inquietante
+Cantina accogliente | Cantina da film horror
+Seduta spiritica divertente | Seduta spiritica da incubo
+Maledizione innocua | Maledizione terribile
+Oggetto antico innocuo | Oggetto antico maledetto
+Profezia ottimista | Profezia catastrofica
+Coincidenza innocua | Coincidenza inquietante
+Rumore notturno innocuo | Rumore notturno terrificante
+Incubo leggero | Incubo terrificante
+Bambola tenera | Bambola inquietante
+Clown simpatico | Clown terrificante
+Strega simpatica | Strega malvagia
+Vampiro affascinante | Vampiro ripugnante
+Zombie lento | Zombie velocissimo
+Rifugio anti-zombie pessimo | Rifugio anti-zombie perfetto
+Alleato per l'apocalisse inutile | Alleato per l'apocalisse perfetto
+Fine del mondo noiosa | Fine del mondo spettacolare
+Esperimento innocuo | Esperimento da scienziato pazzo
+Insetto innocuo | Insetto da incubo
+Visita dal dentista tranquilla | Visita dal dentista da incubo
+Volo tranquillo | Volo da incubo
+Disgrazia sopportabile | Disgrazia biblica
+Battuta macabra innocua | Battuta macabra imperdonabile
+Morte in un film prevedibile | Morte in un film sconvolgente
+Leggenda metropolitana credibile | Leggenda metropolitana assurda
+Cena con delitto noiosa | Cena con delitto avvincente
+Alibi debole | Alibi di ferro
+Faccia da innocente | Faccia da colpevole
+Testimone inaffidabile | Testimone credibile
+Giallo prevedibile | Giallo imprevedibile
+Indagine banale | Indagine impossibile
+Vicino di casa normale | Vicino di casa sospetto
+Scherzo di Halloween innocuo | Scherzo di Halloween crudele
+Costume di Halloween ridicolo | Costume di Halloween terrificante
+Storia di paura per bambini | Storia di paura da non dormire
+Gatto nero porta fortuna | Gatto nero porta sfortuna
+Specchio rotto innocuo | Specchio rotto catastrofico
+Mostro mitologico ridicolo | Mostro mitologico terrificante
+Sorpresa piacevole | Sorpresa agghiacciante
+Ospite che non se ne va mai | Ospite che sparisce nel nulla
+Cosa da trovare in soffitta innocua | Cosa da trovare in soffitta inquietante
+
+
+[Fuori Orario]
+# La vita lavorativa vista dal lato scomodo: capi, colleghi, riunioni e dopo-lavoro
+
+Riunione inutile | Riunione indispensabile
+Presentazione noiosa | Presentazione brillante
+Brainstorming inutile | Brainstorming produttivo
+Capo comprensivo | Capo tiranno
+Capo assente | Capo onnipresente
+Messaggio del capo innocuo | Messaggio del capo terrificante
+Commento sul capo innocuo | Commento sul capo da licenziamento
+Ascensore col capo silenzioso | Ascensore col capo imbarazzante
+Regalo per il capo azzeccato | Regalo per il capo imbarazzante
+Leccapiedi discreto | Leccapiedi sfacciato
+Collega silenzioso | Collega logorroico
+Pettegolezzo d'ufficio innocuo | Pettegolezzo d'ufficio esplosivo
+Flirt in ufficio innocuo | Flirt in ufficio pericoloso
+Storia tra colleghi segreta | Storia tra colleghi nota a tutti
+Email gentile | Email passivo-aggressiva
+Firma email sobria | Firma email esagerata
+Chat di lavoro tranquilla | Chat di lavoro infernale
+Videochiamata tranquilla | Videochiamata imbarazzante
+Smart working serio | Smart working in pigiama
+Lunedì mattina sopportabile | Lunedì mattina infernale
+Venerdì pomeriggio produttivo | Venerdì pomeriggio inutile
+Pausa caffè breve | Pausa caffè infinita
+Mensa aziendale deludente | Mensa aziendale stellata
+Furto dal frigo aziendale perdonabile | Furto dal frigo aziendale imperdonabile
+Scrivania ordinata | Scrivania esplosa
+Stampante collaborativa | Stampante diabolica
+Open space silenzioso | Open space infernale
+Pendolarismo breve | Pendolarismo infernale
+Ritardo giustificabile | Ritardo ingiustificabile
+Malattia credibile | Malattia inventata
+Scadenza comoda | Scadenza impossibile
+Multitasking riuscito | Multitasking disastroso
+Obiettivo aziendale realistico | Obiettivo aziendale delirante
+Gergo aziendale comprensibile | Gergo aziendale incomprensibile
+Team building divertente | Team building imbarazzante
+Cena aziendale noiosa | Cena aziendale leggendaria
+Festa aziendale sobria | Festa aziendale fuori controllo
+Aperitivo dopo il lavoro sobrio | Aperitivo dopo il lavoro epico
+Look da ufficio sobrio | Look da ufficio audace
+Battuta in riunione azzeccata | Battuta in riunione disastrosa
+Colloquio di lavoro disastroso | Colloquio di lavoro perfetto
+Domanda da colloquio facile | Domanda da colloquio impossibile
+Curriculum onesto | Curriculum gonfiato
+Primo giorno di lavoro tranquillo | Primo giorno di lavoro traumatico
+Aumento ridicolo | Aumento da sogno
+Straordinario pagato | Straordinario gratis
+Promozione meritata | Promozione immeritata
+Ferie vere | Ferie col portatile
+Cliente gentile | Cliente da incubo
+Reclamo ragionevole | Reclamo assurdo
+Dimissioni educate | Dimissioni plateali
+Licenziamento meritato | Licenziamento ingiusto
+Collega che fa tutto | Collega che non fa niente
+Riunione alle 9 del lunedì | Riunione alle 18 del venerdì
+Badge dimenticato | Badge perso per sempre
+Lavoro dei sogni da bambino | Lavoro attuale
 </script>
 <div class="app" id="app" data-schermata="schermata-inizio">
   <canvas id="onde" aria-hidden="true"></canvas>
@@ -1634,17 +1836,46 @@ Gioco da maratona notturna | Gioco da cinque minuti
               <span class="led"></span>
               <span class="descr"><span class="motto">Videogiochi, fumetti e fantascienza</span><span class="conteggio">Per nerd</span></span>
             </button>
-            <button class="tasto" data-stazione="mezzanotte" aria-pressed="false" data-banda="fm" style="--k:2; --colore:var(--corallo)">
+            <button class="tasto" data-stazione="primavisione" data-banda="fm" aria-pressed="false" style="--k:2; --colore:var(--zona-2)">
+              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 22h34v18a3 3 0 0 1-3 3H10a3 3 0 0 1-3-3z"/><path d="M6 15l32-8 2 7-32 8z"/><path d="M15 12.5l5 6M24 10l5 6M33 8l5 6"/></svg>
+              <span class="titolo">Prima Visione</span>
+              <span class="led"></span>
+              <span class="descr"><span class="motto">Cinema, serie TV, musica e star</span><span class="conteggio">Per tutti</span></span>
+            </button>
+            <button class="tasto" data-stazione="ondanera" data-banda="pirata" aria-pressed="false" style="--k:0; --colore:var(--viola)">
+              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 42V22a12 12 0 0 1 24 0v20l-4-4-4 4-4-4-4 4-4-4z"/><path d="M19 21h.01M29 21h.01" stroke-width="5"/></svg>
+              <span class="titolo">Onda Nera</span>
+              <span class="led"></span>
+              <span class="descr"><span class="motto">Umorismo nero e macabro</span><span class="conteggio">Solo 18+</span></span>
+            </button>
+            <button class="tasto" data-stazione="mezzanotte" aria-pressed="false" data-banda="pirata" style="--k:1; --colore:var(--corallo)">
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M33 35A15 15 0 0 1 19 8a15 15 0 1 0 14 27z"/><path d="M36 9l1.5 3 3 1.5-3 1.5-1.5 3-1.5-3-3-1.5 3-1.5z"/></svg>
               <span class="titolo">Dopo Mezzanotte</span>
               <span class="led"></span>
               <span class="descr"><span class="motto">Temi piccanti per adulti</span><span class="conteggio">Solo 18+</span></span>
             </button>
-            <button class="tasto banda" id="cambia-banda" style="--k:3">
-              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="17" width="38" height="14" rx="7"/><circle class="cursore-banda" cx="14" cy="24" r="4.5" fill="currentColor"/></svg>
-              <span class="titolo" id="banda-titolo">Passa alle stazioni FM</span>
-              <span class="descr"><span class="motto" id="banda-motto">Altre tre stazioni</span><span class="conteggio" id="banda-chip">FM · 88–108 MHz</span></span>
+            <button class="tasto" data-stazione="fuoriorario" data-banda="pirata" aria-pressed="false" style="--k:2; --colore:var(--ambra)">
+              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="16" width="36" height="25" rx="3"/><path d="M18 16v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M6 27h36M24 25v4"/></svg>
+              <span class="titolo">Fuori Orario</span>
+              <span class="led"></span>
+              <span class="descr"><span class="motto">Lavoro, colleghi e dopo-lavoro</span><span class="conteggio">Solo 18+</span></span>
             </button>
+            <div class="tasto banda" id="selettore-banda" role="slider" tabindex="0" aria-label="Gamma d'onda" aria-valuetext="AM" style="--k:3">
+              <span class="titolo">Gamma d'onda</span>
+              <svg class="manopola" id="manopola" viewBox="16 6 88 72" aria-hidden="true">
+                <path class="zona-pirata" d="M80.7 35.0 A31 31 0 0 1 89.1 47.4"/>
+                <g class="tacche-banda"><line x1="37.4" y1="49.8" x2="33.7" y2="48.4"/><line x1="39.2" y1="46.0" x2="35.8" y2="44.0"/><line x1="41.6" y1="42.6" x2="38.6" y2="40.0"/><line x1="44.6" y1="39.6" x2="42.0" y2="36.6"/><line x1="48.0" y1="37.2" x2="46.0" y2="33.8"/><line x1="51.8" y1="35.4" x2="50.4" y2="31.7"/><line x1="55.8" y1="34.4" x2="55.1" y2="30.4"/><line x1="60.0" y1="34.0" x2="60.0" y2="28.0"/><line x1="64.2" y1="34.4" x2="64.9" y2="30.4"/><line x1="68.2" y1="35.4" x2="69.6" y2="31.7"/><line x1="72.0" y1="37.2" x2="74.0" y2="33.8"/><line x1="75.4" y1="39.6" x2="78.0" y2="36.6"/><line x1="78.4" y1="42.6" x2="81.4" y2="40.0"/><line x1="80.8" y1="46.0" x2="84.2" y2="44.0"/><line x1="82.6" y1="49.8" x2="86.3" y2="48.4"/></g>
+                <text class="etichetta-banda" data-pos="am" x="28.1" y="39.6" text-anchor="middle">AM</text>
+                <text class="etichetta-banda" data-pos="fm" x="60.0" y="21.0" text-anchor="middle">FM</text>
+                <g class="lucchetto" transform="translate(91.9 35.6)"><rect x="-5" y="-2" width="10" height="8" rx="1.5"/><path d="M-3-2v-2.5a3 3 0 0 1 6 0V-2" fill="none"/></g>
+                <g id="manopola-corpo">
+                  <circle cx="60" cy="58" r="17" class="corpo-manopola"/>
+                  <circle cx="60" cy="58" r="12" class="ghiera"/>
+                  <line x1="60" y1="54" x2="60" y2="43" class="indice"/>
+                </g>
+              </svg>
+              <span class="descr"><span class="motto" id="banda-motto">Gira la manopola</span><span class="conteggio" id="banda-chip">AM · 530–1600 kHz</span></span>
+            </div>
           </div>
         </div>
         <div class="piede">
@@ -1896,8 +2127,8 @@ Gioco da maratona notturna | Gioco da cinque minuti
   <!-- Conferma per la stazione per adulti -->
   <div class="dialogo" id="dialogo-adulti" hidden>
     <div class="pannello" role="alertdialog" aria-modal="true" aria-labelledby="adulti-titolo" aria-describedby="adulti-testo">
-      <div class="lcd"><h2 id="adulti-titolo">Dopo Mezzanotte</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
-      <p id="adulti-testo">Questa stazione ha carte con temi per adulti.<br>Siete tutti maggiorenni?</p>
+      <div class="lcd"><h2 id="adulti-titolo">Frequenze Pirata</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
+      <p id="adulti-testo">Queste stazioni hanno carte con temi per adulti.<br>Siete tutti maggiorenni?</p>
       <div class="dialogo-azioni">
         <button class="tastino" id="adulti-no">No, torna indietro</button>
         <button class="tastino ambra" id="adulti-si">Sì, siamo maggiorenni</button>
@@ -2544,7 +2775,69 @@ Gioco da maratona notturna | Gioco da cinque minuti
       chipBasso: (n, T, d, bus) => tono({ f: NOTA(n), tipo: 'triangle', t: dopoTra(T), dur: d * 0.85, vol: 0.12, att: 0.003, dest: bus }),
       chipCassa: (n, T, d, bus) => tono({ f: 170, f2: 50, tipo: 'square', t: dopoTra(T), dur: 0.07, vol: 0.045, att: 0.002, lp: 900, dest: bus }),
       chipRullante: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.08, vol: 0.055, tipo: 'highpass', f: 1500, q: 0.6, att: 0.002, dest: bus }),
-      chipHat: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.025, vol: 0.022, tipo: 'highpass', f: 7000, q: 0.6, att: 0.001, dest: bus })
+      chipHat: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.025, vol: 0.022, tipo: 'highpass', f: 7000, q: 0.6, att: 0.001, dest: bus }),
+      // Prima Visione: tema da film, con archi, ottoni e timpani
+      archi: (n, T, d, bus) => {
+        const T0 = ctx.currentTime + dopoTra(T);
+        const fl = ctx.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = 1800;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, T0); g.gain.linearRampToValueAtTime(0.01, T0 + 0.35);
+        g.gain.setValueAtTime(0.01, T0 + Math.max(d - 0.3, 0.36)); g.gain.linearRampToValueAtTime(0.0001, T0 + d + 0.2);
+        [-12, 0, 12].forEach(det => {
+          const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = NOTA(n); o.detune.value = det;
+          o.connect(fl); o.start(T0); o.stop(T0 + d + 0.3);
+        });
+        fl.connect(g); g.connect(bus);
+      },
+      ottoniFilm: (n, T, d, bus) => {
+        const T0 = ctx.currentTime + dopoTra(T);
+        const fl = ctx.createBiquadFilter(); fl.type = 'lowpass'; fl.Q.value = 1.5;
+        fl.frequency.setValueAtTime(500, T0); fl.frequency.linearRampToValueAtTime(2600, T0 + 0.08); fl.frequency.exponentialRampToValueAtTime(1200, T0 + d);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, T0); g.gain.linearRampToValueAtTime(0.03, T0 + 0.04);
+        g.gain.setValueAtTime(0.03, T0 + Math.max(d * 0.8, 0.05)); g.gain.exponentialRampToValueAtTime(0.0001, T0 + d + 0.12);
+        [-6, 6].forEach(det => {
+          const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = NOTA(n); o.detune.value = det;
+          o.connect(fl); o.start(T0); o.stop(T0 + d + 0.2);
+        });
+        fl.connect(g); g.connect(bus);
+      },
+      timpano: (n, T, d, bus) => {
+        tono({ f: NOTA(n), f2: NOTA(n) * 0.97, t: dopoTra(T), dur: 0.7, vol: 0.16, att: 0.004, dest: bus });
+        fruscio({ t: dopoTra(T), dur: 0.12, vol: 0.05, tipo: 'lowpass', f: 400, q: 0.7, att: 0.002, dest: bus });
+      },
+      // Onda Nera: theremin che scivola tra le note, organo da chiesa sconsacrata, orologio a pendolo
+      theremin: (n, T, d, bus, ev) => {
+        const T0 = ctx.currentTime + dopoTra(T);
+        const o = ctx.createOscillator(); o.type = 'sine';
+        o.frequency.setValueAtTime(NOTA(ev && ev.scivola ? ev.scivola : n), T0);
+        o.frequency.exponentialRampToValueAtTime(NOTA(n), T0 + 0.18);
+        const l = ctx.createOscillator(), lg = ctx.createGain(); l.frequency.value = 5.5; lg.gain.value = NOTA(n) * 0.012;
+        l.connect(lg); lg.connect(o.frequency);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, T0); g.gain.linearRampToValueAtTime(0.034, T0 + 0.12);
+        g.gain.setValueAtTime(0.034, T0 + Math.max(d - 0.15, 0.13)); g.gain.linearRampToValueAtTime(0.0001, T0 + d);
+        o.connect(g); g.connect(bus);
+        [o, l].forEach(x => { x.start(T0); x.stop(T0 + d + 0.05); });
+      },
+      organo: (n, T, d, bus) => {
+        const T0 = ctx.currentTime + dopoTra(T);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, T0); g.gain.linearRampToValueAtTime(0.009, T0 + 0.25);
+        g.gain.setValueAtTime(0.009, T0 + Math.max(d - 0.2, 0.26)); g.gain.linearRampToValueAtTime(0.0001, T0 + d + 0.15);
+        [[1, 1], [2, 0.5], [3, 0.3]].forEach(([m, v]) => {
+          const o = ctx.createOscillator(), og = ctx.createGain(); o.type = 'sine'; o.frequency.value = NOTA(n) * m; og.gain.value = v;
+          o.connect(og); og.connect(g); o.start(T0); o.stop(T0 + d + 0.2);
+        });
+        g.connect(bus);
+      },
+      pendolo: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.03, vol: 0.05, f: n ? 2600 : 1900, q: 6, att: 0.001, dest: bus }),
+      // Fuori Orario: bossa nova da ascensore, con piano elettrico, flauto e shaker
+      flauto: (n, T, d, bus) => tono({ f: NOTA(n), tipo: 'sine', t: dopoTra(T), dur: d * 0.95, vol: 0.05, att: 0.05, vibrato: 3, dest: bus }),
+      pianoBossa: (n, T, d, bus) => campana({ f: NOTA(n), t: dopoTra(T), dur: 0.5, vol: 0.026, rapporto: 1, indice: 1, dest: bus }),
+      bassoBossa: (n, T, d, bus) => tono({ f: NOTA(n), tipo: 'triangle', t: dopoTra(T), dur: d * 0.9, vol: 0.13, att: 0.01, dest: bus }),
+      shaker: (n, T, d, bus) => fruscio({ t: dopoTra(T), dur: 0.04, vol: n ? 0.03 : 0.018, tipo: 'highpass', f: 6000, q: 0.7, att: 0.008, dest: bus }),
+      legnetto: (n, T, d, bus) => tono({ f: 1700, f2: 1500, t: dopoTra(T), dur: 0.04, vol: 0.05, att: 0.001, dest: bus })
     };
     // ogni nota: [passo, nota MIDI o accordo, durata in passi]
     const ripeti = (passi, ogni, da = 0) => Array.from({ length: Math.ceil((passi - da) / ogni) }, (_, i) => [da + i * ogni]);
@@ -2645,6 +2938,46 @@ Gioco da maratona notturna | Gioco da cinque minuti
             chipCassa: battute(b => [[b * 16], [b * 16 + 8], [b * 16 + 10]]),
             chipRullante: battute(b => [[b * 16 + 4], [b * 16 + 12]]),
             chipHat: battute(b => [2, 6, 10, 14].map(i => [b * 16 + i]))
+          }
+        };
+      })(),
+      // tema da film in re minore: archi che sostengono, ottoni eroici, timpani
+      primavisione: (() => {
+        const ACC = [[50, 57, 62, 65], [46, 53, 58, 62], [41, 53, 57, 60], [48, 55, 60, 64]];   // re-, si bemolle, fa, do
+        return {
+          passo: 60 / 92 / 2, passi: 32,
+          tracce: {
+            archi: ACC.map((acc, b) => [b * 8, acc, 8]),
+            ottoniFilm: [[0, 62, 3], [3, 57, 1], [4, 62, 2], [6, 64, 2], [8, 65, 4], [12, 64, 2], [14, 62, 2],
+              [16, 60, 3], [19, 57, 1], [20, 60, 2], [22, 62, 2], [24, 64, 6], [30, 69, 2]],
+            timpano: [[0, 38], [4, 45], [8, 34], [12, 41], [16, 41], [20, 36], [24, 36], [28, 43], [30, 43]]
+          }
+        };
+      })(),
+      // valzer lento in la minore: theremin che scivola, organo e pendolo che ticchetta
+      ondanera: {
+        passo: 60 / 72, passi: 24,
+        tracce: {
+          organo: [[0, [57, 60, 64], 6], [6, [50, 57, 62], 6], [12, [52, 56, 59, 62], 6], [18, [57, 60, 64], 6]],
+          theremin: [[0, 69, 2, 64], [2, 72, 1, 69], [3, 71, 3, 72], [6, 74, 2, 71], [8, 72, 1, 74], [9, 69, 3, 72],
+            [12, 68, 2, 69], [14, 71, 1, 68], [15, 74, 3, 71], [18, 72, 2, 74], [20, 71, 1, 72], [21, 69, 3, 71]],
+          pendolo: Array.from({ length: 24 }, (_, i) => [i, i % 2 ? 0 : 1])
+        }
+      },
+      // bossa nova in fa maggiore, da ascensore di un ufficio dopo l'orario di chiusura
+      fuoriorario: (() => {
+        const ACC = [[53, 57, 60, 64], [55, 58, 62, 65], [57, 60, 64, 67], [55, 58, 60, 64]];   // fa7+, sol-7, la-7, do7
+        const RAD = [[41, 48], [43, 50], [45, 52], [36, 43]];
+        const battute = fn => [0, 1, 2, 3].flatMap(fn);
+        return {
+          passo: 60 / 128 / 4, passi: 64,
+          tracce: {
+            pianoBossa: battute(b => [0, 3, 6, 10, 12].map(p => [b * 16 + p, ACC[b]])),
+            bassoBossa: battute(b => [[b * 16, RAD[b][0], 5], [b * 16 + 6, RAD[b][1], 2], [b * 16 + 8, RAD[b][0], 5], [b * 16 + 14, RAD[b][1], 2]]),
+            flauto: [[2, 72, 3], [6, 69, 2], [8, 67, 6], [18, 70, 3], [22, 69, 2], [24, 65, 6],
+              [34, 72, 2], [36, 76, 4], [40, 74, 2], [42, 72, 4], [50, 70, 2], [52, 69, 2], [54, 67, 2], [56, 65, 8]],
+            shaker: battute(b => Array.from({ length: 16 }, (_, i) => [b * 16 + i, i % 2 ? 0 : 1])),
+            legnetto: battute(b => [3, 6, 10, 12].map(p => [b * 16 + p]))
           }
         };
       })()
@@ -3007,9 +3340,16 @@ Gioco da maratona notturna | Gioco da cinque minuti
   const tastiStazione = [...document.querySelectorAll('.tasto[data-stazione]')];
   const contaCarte = document.getElementById('conta-carte');
   const griglia = document.getElementById('tasti-stazioni');
-  const tastoBanda = document.getElementById('cambia-banda');
+  const selettore = document.getElementById('selettore-banda');
+  const manopola = document.getElementById('manopola');
+  const corpoManopola = document.getElementById('manopola-corpo');
   const bandaDi = id => (tastiStazione.find(b => b.dataset.stazione === id) || {}).dataset?.banda || 'am';
+  // la manopola ha tre posizioni: AM, FM e la zona nascosta delle Frequenze Pirata
+  const BANDE = ['am', 'fm', 'pirata'];
+  const ANGOLO = { am: -55, fm: 0, pirata: 55 };
+  const NOME_BANDA = { am: 'AM · 530–1600 kHz', fm: 'FM · 88–108 MHz', pirata: 'Frequenze Pirata · 18+' };
   let bandaVisibile = 'am';
+  function ruotaManopola(gradi) { corpoManopola.style.transform = `rotate(${gradi}deg)`; }
   function mostraStazione() {
     tastiStazione.forEach(b => {
       const scelto = b.dataset.stazione === stazioneScelta;
@@ -3018,53 +3358,100 @@ Gioco da maratona notturna | Gioco da cinque minuti
     });
     const n = (MAZZI[stazioneScelta] || []).length;
     contaCarte.textContent = `${n} carte`;
-    // il selettore mostra la banda opposta e, se serve, quale stazione è in ascolto
-    const altra = bandaVisibile === 'am' ? 'fm' : 'am';
     griglia.dataset.banda = bandaVisibile;
-    document.getElementById('banda-titolo').textContent = `Passa alle stazioni ${altra.toUpperCase()}`;
+    ruotaManopola(ANGOLO[bandaVisibile]);
+    selettore.setAttribute('aria-valuetext', NOME_BANDA[bandaVisibile]);
+    document.getElementById('banda-chip').textContent = NOME_BANDA[bandaVisibile];
     document.getElementById('banda-motto').textContent = bandaDi(stazioneScelta) === bandaVisibile
-      ? 'Altre tre stazioni' : `In ascolto: ${nomeStazione(stazioneScelta)}`;
-    document.getElementById('banda-chip').textContent = altra === 'fm' ? 'FM · 88–108 MHz' : 'AM · 530–1600 kHz';
+      ? 'Gira la manopola' : `In ascolto: ${nomeStazione(stazioneScelta)}`;
   }
-  tastoBanda.addEventListener('click', () => {
-    bandaVisibile = bandaVisibile === 'am' ? 'fm' : 'am';
-    suona('cambioBanda', { fm: bandaVisibile === 'fm' });
+  function impostaBanda(nuova) {
+    if (nuova === bandaVisibile) { ruotaManopola(ANGOLO[nuova]); return; }
+    // per entrare nelle Frequenze Pirata serve la conferma dei maggiorenni
+    if (nuova === 'pirata' && !maggiorenni()) { ruotaManopola(ANGOLO.pirata); chiediMaggiorenni(); return; }
+    bandaVisibile = nuova;
+    suona('cambioBanda', { fm: nuova !== 'am' });
     mostraStazione();
     griglia.classList.remove('cambio'); void griglia.offsetWidth; griglia.classList.add('cambio');
+  }
+  griglia.addEventListener('animationend', () => griglia.classList.remove('cambio'));
+
+  // la manopola si gira trascinando, oppure si tocca un'etichetta (o la manopola, che scatta alla posizione successiva)
+  function puntoManopola(e) {
+    const pt = manopola.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    return pt.matrixTransform(manopola.getScreenCTM().inverse());
+  }
+  const bandaVicina = g => BANDE.reduce((m, b) => Math.abs(ANGOLO[b] - g) < Math.abs(ANGOLO[m] - g) ? b : m, 'am');
+  let presa = null;
+  manopola.addEventListener('pointerdown', e => {
+    const q = puntoManopola(e);
+    presa = { x: q.x, y: q.y, trascinata: false, ultima: bandaVisibile };
+    manopola.setPointerCapture(e.pointerId);
   });
-  griglia.addEventListener('animationend', e => { if (e.target === tastoBanda) griglia.classList.remove('cambio'); });
+  manopola.addEventListener('pointermove', e => {
+    if (!presa) return;
+    const q = puntoManopola(e);
+    if (!presa.trascinata && Math.hypot(q.x - presa.x, q.y - presa.y) < 4) return;
+    presa.trascinata = true;
+    manopola.classList.add('trascina');
+    const g = Math.max(-72, Math.min(72, Math.atan2(q.x - 60, Math.max(58 - q.y, 0.001)) * 180 / Math.PI));
+    ruotaManopola(g);
+    const vicina = bandaVicina(g);
+    if (vicina !== presa.ultima) { presa.ultima = vicina; suona('tacca', { pan: g / 90 }); }
+  });
+  function lascia(e) {
+    if (!presa) return;
+    manopola.classList.remove('trascina');
+    const q = puntoManopola(e);
+    let scelta;
+    if (presa.trascinata) {
+      scelta = bandaVicina(Math.atan2(q.x - 60, Math.max(58 - q.y, 0.001)) * 180 / Math.PI);
+    } else {
+      // tocco: sull'etichetta vicina, altrimenti avanti di una posizione
+      const etichette = { am: [27.9, 35.6], fm: [60, 17], pirata: [92.1, 35.6] };
+      const toccata = BANDE.find(b => Math.hypot(q.x - etichette[b][0], q.y - etichette[b][1]) < 14);
+      scelta = toccata || BANDE[(BANDE.indexOf(bandaVisibile) + 1) % BANDE.length];
+    }
+    presa = null;
+    impostaBanda(scelta);
+  }
+  manopola.addEventListener('pointerup', lascia);
+  manopola.addEventListener('pointercancel', () => { presa = null; manopola.classList.remove('trascina'); ruotaManopola(ANGOLO[bandaVisibile]); });
+  selettore.addEventListener('keydown', e => {
+    const i = BANDE.indexOf(bandaVisibile);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { impostaBanda(BANDE[Math.min(i + 1, 2)]); e.preventDefault(); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { impostaBanda(BANDE[Math.max(i - 1, 0)]); e.preventDefault(); }
+  });
   function scegliStazione(id) {
     stazioneScelta = id;
     mostraStazione();
     aggiornaMusica();
   }
   tastiStazione.forEach(b => b.addEventListener('click', () => {
-    const id = b.dataset.stazione;
-    if (id === 'mezzanotte' && !maggiorenni()) { chiediMaggiorenni(); return; }
-    scegliStazione(id);
+    scegliStazione(b.dataset.stazione);
   }));
   document.getElementById('avanti-stazione').addEventListener('click', () => vai(SCHERMATA_DI[modoScelto]));
 
-  // Dopo Mezzanotte: la conferma vale solo finché si resta in questa schermata.
+  // Frequenze Pirata: la conferma dei maggiorenni vale solo finché si resta in questa schermata.
   // Ogni volta che si (ri)entra nelle stazioni va data di nuovo, e se era rimasta
-  // selezionata Dopo Mezzanotte si torna su Hit Parade.
+  // selezionata una stazione pirata si torna su Hit Parade.
   const dialogoAdulti = document.getElementById('dialogo-adulti');
   let maggiorenniConfermato = false;
   try { localStorage.removeItem('sintonizzati-maggiorenni'); } catch (e) {}
   function maggiorenni() { return maggiorenniConfermato; }
   function entraInStazioni() {
     maggiorenniConfermato = false;
-    if (stazioneScelta === 'mezzanotte') stazioneScelta = 'hitparade';
+    if (bandaDi(stazioneScelta) === 'pirata') stazioneScelta = 'hitparade';
     bandaVisibile = bandaDi(stazioneScelta);         // si apre sulla banda della stazione scelta
     mostraStazione();
   }
   function chiediMaggiorenni() { dialogoAdulti.hidden = false; suona('avvisoAdulti'); document.getElementById('adulti-no').focus({ preventScroll: true }); aggiornaGuardia(); }
-  function chiudiAdulti() { dialogoAdulti.hidden = true; suona('finestraGiu'); aggiornaGuardia(); }
+  function chiudiAdulti() { dialogoAdulti.hidden = true; suona('finestraGiu'); ruotaManopola(ANGOLO[bandaVisibile]); aggiornaGuardia(); }
   document.getElementById('adulti-no').addEventListener('click', chiudiAdulti);
   document.getElementById('adulti-si').addEventListener('click', () => {
     maggiorenniConfermato = true;
     chiudiAdulti();
-    scegliStazione('mezzanotte');
+    impostaBanda('pirata');
   });
   dialogoAdulti.addEventListener('click', e => { if (e.target === dialogoAdulti) chiudiAdulti(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !dialogoAdulti.hidden) chiudiAdulti(); });
@@ -3290,7 +3677,10 @@ Gioco da maratona notturna | Gioco da cinque minuti
     { id: 'cerebrali', nome: 'Onde Cerebrali' },
     { id: 'mezzanotte', nome: 'Dopo Mezzanotte' },
     { id: 'paesello', nome: 'Radio Paesello' },
-    { id: 'ottobit', nome: '8-Bit FM' }
+    { id: 'ottobit', nome: '8-Bit FM' },
+    { id: 'primavisione', nome: 'Prima Visione' },
+    { id: 'ondanera', nome: 'Onda Nera' },
+    { id: 'fuoriorario', nome: 'Fuori Orario' }
   ];
   const chiaveStazione = t => t.toLowerCase().replace(/[^a-z0-9]/g, '');
   const maiuscolaIniziale = t => t.charAt(0).toLocaleUpperCase('it') + t.slice(1);
