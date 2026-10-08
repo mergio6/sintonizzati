@@ -5,8 +5,9 @@
 #  - una carta per riga: estremo di sinistra | estremo di destra
 #  - le righe che iniziano con # sono note e vengono ignorate
 #  - [Nome della stazione] indica a quale mazzo appartengono le carte sotto
-#  - le quattro stazioni sono: [Radio Merenda], [Hit Parade],
-#    [Onde Cerebrali] e [Dopo Mezzanotte]
+#  - le sei stazioni sono, in banda AM: [Radio Merenda], [Hit Parade],
+#    [Onde Cerebrali]; in banda FM: [Radio Paesello], [8-Bit FM]
+#    e [Dopo Mezzanotte]
 #  - se una riga è scritta male, il gioco la salta e usa tutte le altre
 #  - tieni gli estremi brevi (massimo una ventina di caratteri)
 # =====================================================================
@@ -525,3 +526,133 @@ Complimento fuori luogo | Complimento elegante
 Fuori controllo | In controllo
 Segreto | Di pubblico dominio
 Vizio | Virtù
+
+
+[Radio Paesello]
+# Nostalgia e italianità: infanzia anni '80-2000, cibo, dialetti, parenti e luoghi comuni
+
+Merendina dimenticata | Merendina leggendaria
+Gioco da cortile noioso | Gioco da cortile epico
+Giocattolo dimenticato | Giocattolo iconico
+Figurina comune | Figurina introvabile
+Gita scolastica noiosa | Gita scolastica epica
+Compiti delle vacanze leggeri | Compiti delle vacanze infiniti
+Ricordo d'infanzia sbiadito | Ricordo d'infanzia vivido
+Sogno da bambino realistico | Sogno da bambino impossibile
+Diario segreto noioso | Diario segreto esplosivo
+Videocassetta da buttare | Videocassetta da tenere
+Suoneria imbarazzante | Suoneria mitica
+Oggetto vintage inutile | Oggetto vintage da collezione
+Tormentone imbarazzante | Tormentone intramontabile
+Moda da dimenticare | Moda da far tornare
+Programma TV dimenticato | Programma TV leggendario
+Personaggio TV dimenticato | Personaggio TV leggendario
+Pubblicità dimenticabile | Pubblicità indimenticabile
+Jingle dimenticato | Jingle che canti ancora
+Canzone di Sanremo flop | Canzone di Sanremo cult
+Cantante italiano meteora | Cantante italiano leggenda
+Cinepanettone dimenticabile | Cinepanettone cult
+Canzone da karaoke facile | Canzone da karaoke impossibile
+Ballo di gruppo imbarazzante | Ballo di gruppo irresistibile
+Motorino sfigato | Motorino leggendario
+Campeggio da incubo | Campeggio da sogno
+Rito da spiaggia noioso | Rito da spiaggia irrinunciabile
+Pranzo della domenica leggero | Pranzo della domenica infinito
+Domanda dei parenti innocua | Domanda dei parenti imbarazzante
+Regola della nonna assurda | Regola della nonna sacrosanta
+Rimedio della nonna inutile | Rimedio della nonna miracoloso
+Ricetta della nonna semplice | Ricetta della nonna segreta
+Mamma italiana tranquilla | Mamma italiana apprensiva
+Gesto italiano offensivo | Gesto italiano affettuoso
+Dialetto incomprensibile | Dialetto chiarissimo
+Parola dialettale brutta | Parola dialettale bellissima
+Modo di dire antico | Modo di dire moderno
+Detto popolare falso | Detto popolare saggio
+Luogo comune falso | Luogo comune vero
+Pizza ortodossa | Pizza eretica
+Abbinamento tradizionale | Abbinamento eretico
+Formato di pasta sottovalutato | Formato di pasta sopravvalutato
+Piatto regionale sottovalutato | Piatto regionale sopravvalutato
+Gusto di gelato deludente | Gusto di gelato irrinunciabile
+Caffè fatto male | Caffè perfetto
+Bevanda da nonno | Bevanda da ragazzi
+Sagra noiosa | Sagra imperdibile
+Gioco da osteria noioso | Gioco da osteria appassionante
+Bar di paese | Locale alla moda
+Borgo sconosciuto | Borgo famosissimo
+Regione sottovalutata | Regione sopravvalutata
+Souvenir inutile | Souvenir prezioso
+Vacanza da italiano medio | Vacanza esotica
+Italiano illustre sottovalutato | Italiano illustre sopravvalutato
+Invenzione italiana minore | Invenzione italiana geniale
+Odore dell'infanzia brutto | Odore dell'infanzia bellissimo
+Festa di paese tranquilla | Festa di paese scatenata
+Tradizione di Natale noiosa | Tradizione di Natale imperdibile
+Lettera d'amore imbarazzante | Lettera d'amore indimenticabile
+Cosa da anni '90 | Cosa da anni 2000
+Gioco in scatola dimenticato | Gioco in scatola immortale
+
+
+[8-Bit FM]
+# Per nerd: videogiochi, fumetti, anime, giochi di ruolo, fantascienza e tecnologia
+
+Videogioco rilassante | Videogioco frustrante
+Boss finale ridicolo | Boss finale leggendario
+Console dimenticata | Console leggendaria
+Grafica pixellosa | Grafica realistica
+Colonna sonora dimenticabile | Colonna sonora epica
+Livello acquatico odioso | Livello acquatico bellissimo
+Missione secondaria noiosa | Missione secondaria imperdibile
+Tutorial inutile | Tutorial indispensabile
+Easter egg banale | Easter egg geniale
+Glitch fastidioso | Glitch leggendario
+Personaggio giocabile scarso | Personaggio giocabile fortissimo
+Compagno di squadra inutile | Compagno di squadra perfetto
+Arma da videogioco inutile | Arma da videogioco leggendaria
+Pozione inutile | Pozione miracolosa
+Mostro da primo livello | Mostro da ultimo livello
+Dungeon tranquillo | Dungeon infernale
+Gioco da sala giochi noioso | Gioco da sala giochi leggendario
+Remake inutile | Remake necessario
+Aggiornamento disastroso | Aggiornamento perfetto
+Connessione da lag | Connessione perfetta
+Nome utente imbarazzante | Nome utente epico
+Classe da GdR debole | Classe da GdR fortissima
+Tiro di dado disastroso | Tiro di dado critico
+Gioco da tavolo per principianti | Gioco da tavolo per esperti
+Incantesimo inutile | Incantesimo potentissimo
+Creatura magica innocua | Creatura magica letale
+Mondo immaginario da visitare | Mondo immaginario da evitare
+Cattivo dimenticabile | Cattivo iconico
+Finale deludente | Finale perfetto
+Sequel inutile | Sequel migliore dell'originale
+Saga da recuperare | Saga da abbandonare
+Trama semplice | Trama complicatissima
+Personaggio secondario inutile | Personaggio secondario che ruba la scena
+Personaggio da odiare | Personaggio da amare
+Teoria dei fan assurda | Teoria dei fan geniale
+Spoiler innocuo | Spoiler imperdonabile
+Anime per tutti | Anime per veri fan
+Fumetto per bambini | Fumetto per adulti
+Costume da supereroe ridicolo | Costume da supereroe iconico
+Cosplay facile | Cosplay difficilissimo
+Collezione normale | Collezione ossessiva
+Passione nerd moderata | Passione nerd estrema
+Gergo nerd comprensibile | Gergo nerd incomprensibile
+Robot amichevole | Robot minaccioso
+Alieno pacifico | Alieno invasore
+Pianeta abitabile | Pianeta infernale
+Astronave scassata | Astronave da sogno
+Paradosso temporale innocuo | Paradosso temporale catastrofico
+Tecnologia impossibile | Tecnologia in arrivo
+IA amichevole | IA inquietante
+Codice leggibile | Codice incomprensibile
+Bug innocuo | Bug catastrofico
+Password debole | Password inattaccabile
+Meme vecchio | Meme fresco
+Controller comodo | Controller scomodo
+Gioco per console | Gioco per computer
+Mappa minuscola | Mappa sterminata
+Armatura brutta ma utile | Armatura bella ma inutile
+Personaggio muto | Personaggio logorroico
+Gioco da maratona notturna | Gioco da cinque minuti
