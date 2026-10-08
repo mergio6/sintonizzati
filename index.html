@@ -741,12 +741,16 @@
   .stazioni .tasto.banda:active { transform: none; box-shadow: inset 0 0 0 2px var(--corpo), 0 6px 0 var(--tasto-ombra); }
   .stazioni .tasto.banda .titolo { display: block; font-size: clamp(12px, 3.6vh, 15px); font-size: clamp(12px, 3.6cqh, 15px); font-weight: 800; line-height: 1.15; }
   .stazioni .tasto.banda .ascolto-etichetta { display: block; font-size: .78em; font-weight: 600; opacity: .75; }
-  .stazioni .tasto.banda .conteggio { color: var(--vetro-segni); white-space: nowrap; align-self: flex-start; }
+  .stazioni .tasto.banda { container-type: inline-size; }
+  .stazioni .tasto.banda .conteggio { color: var(--vetro-segni); white-space: nowrap; align-self: flex-start; letter-spacing: 0; padding: 5px 7px;
+    font-size: clamp(8px, 2.5vh, 10px); font-size: clamp(7px, min(2.5cqh, calc((100cqi - 20px) / 13.1)), 10px); }
   .manopola { display: block; width: 100%; height: auto; max-height: 92px; flex: 1 1 auto; min-height: 0; cursor: grab; touch-action: none; }
   .manopola:active { cursor: grabbing; }
-  .tacche-banda line { stroke: var(--vetro-segni); stroke-width: 1.3; stroke-linecap: round; opacity: .6; }
-  .tacche-banda line.lunga { stroke-width: 2; opacity: .9; }
-  .etichetta-banda { font: 11px "Michroma", Verdana, sans-serif; fill: var(--vetro-segni); opacity: .55; transition: opacity .2s; cursor: pointer; }
+  .tacche-banda line { stroke: var(--vetro-segni); stroke-width: 1.3; stroke-linecap: round; opacity: .55; }
+  .tacche-banda line.lunga { stroke-width: 2.2; opacity: .7; transition: opacity .2s, stroke .2s; }
+  .stazioni[data-banda="am"] .lunga[data-pos="am"], .stazioni[data-banda="fm"] .lunga[data-pos="fm"] { opacity: 1; }
+  .stazioni[data-banda="pirata"] .lunga[data-pos="pirata"] { opacity: 1; stroke: var(--corallo); }
+  .etichetta-banda { font: 9.5px "Michroma", Verdana, sans-serif; fill: var(--vetro-segni); opacity: .55; transition: opacity .2s; cursor: pointer; }
   .zona-pirata { fill: none; stroke: var(--corallo); stroke-width: 3.5; stroke-linecap: round; opacity: .55; }
   .lucchetto { fill: var(--corallo); stroke: var(--corallo); stroke-width: 1.6; opacity: .7; cursor: pointer; }
   .lucchetto rect { stroke: none; }
@@ -772,6 +776,44 @@
     @media (max-height: 430px) { .stazioni .tasto:not(.banda) { grid-template-areas: ". led" "titolo titolo" "motto motto" "chip chip"; } }
     @container app (max-height: 430px) { .stazioni .tasto:not(.banda) { grid-template-areas: ". led" "titolo titolo" "motto motto" "chip chip"; } }
   }
+  /* Sfondi a tema: un disegno leggero nella parte alta del tasto, che si anima quando la stazione è scelta */
+  .stazioni .tasto.decorato { position: relative; isolation: isolate; }
+  .stazioni .tasto.decorato .icona { display: none; }
+  .sfondo { position: absolute; inset: 3px; z-index: -1; overflow: hidden; border-radius: 9px; pointer-events: none; }
+  .sfondo svg { position: absolute; display: block; overflow: visible; }
+  .sfondo svg * { transform-box: fill-box; }
+  /* Radio Merenda: codette colorate che scendono piano */
+  [data-stazione="merenda"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 14%, transparent 46%); mask-image: linear-gradient(to bottom, #000 0, #000 14%, transparent 46%); }
+  .deco-codette { inset: 0; width: 100%; height: 100%; }
+  .deco-codette line { stroke-width: 3.4; stroke-linecap: round; opacity: .55; }
+  .deco-codette .c1 { stroke: var(--menta); } .deco-codette .c2 { stroke: var(--ambra); } .deco-codette .c3 { stroke: var(--corallo); }
+  .deco-codette .c4 { stroke: var(--zona-2); } .deco-codette .c5 { stroke: var(--viola); }
+  .tasto.scelto .pioggia { animation: codette 7s linear infinite; }
+  @keyframes codette { to { transform: translateY(70px); } }
+  /* Hit Parade: un vinile che ha il led come perno e gira quando la stazione è scelta */
+  [data-stazione="hitparade"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 34%, transparent 62%); mask-image: linear-gradient(to bottom, #000 0, #000 34%, transparent 62%); }
+  .deco-vinile {
+    width: 30vh; width: 30cqh; height: 30vh; height: 30cqh; right: 16px; transform: translate(50%, -50%);
+    top: calc(clamp(10px, 2.8vh, 16px) + 6px); top: calc(clamp(10px, 2.8cqh, 16px) + 6px);
+  }
+  .vinile-corpo { fill: var(--tasto-ombra); opacity: .3; }
+  .solco { fill: none; stroke: var(--su-tasto); stroke-width: .7; opacity: .16; }
+  .vinile-etichetta { fill: var(--colore); opacity: .55; }
+  .vinile-scritta { fill: none; stroke: var(--tasto); stroke-width: 1.5; stroke-linecap: round; opacity: .8; }
+  .vinile-bordo { fill: none; stroke: var(--tasto); stroke-width: .6; opacity: .5; }
+  .disco { transform-origin: center; }
+  .tasto.scelto .disco { animation: vinile 4s linear infinite; }
+  @keyframes vinile { to { transform: rotate(360deg); } }
+  /* Onde Cerebrali: tre tracce di onde cerebrali, lente, medie e veloci */
+  [data-stazione="cerebrali"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 26%, transparent 52%); mask-image: linear-gradient(to bottom, #000 0, #000 26%, transparent 52%); }
+  .deco-onde { left: 0; top: 4%; width: 100%; height: 40%; }
+  .traccia path { fill: none; stroke: var(--colore); stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .t1 path { stroke-width: 2.2; opacity: .55; } .t2 path { stroke-width: 1.7; opacity: .45; } .t3 path { stroke-width: 1.2; opacity: .32; }
+  .tasto.scelto .t1 { animation: traccia 14s linear infinite; }
+  .tasto.scelto .t2 { animation: traccia 9s linear infinite; }
+  .tasto.scelto .t3 { animation: traccia 5.5s linear infinite; }
+  .sfondo .traccia { transform-box: view-box; }
+  @keyframes traccia { to { transform: translateX(-200px); } }
   .stazioni .tasto.scelto {
     transform: translateY(5px);
     box-shadow: inset 0 0 0 3px var(--colore), 0 1px 0 var(--tasto-ombra);
@@ -853,6 +895,7 @@
   @media (prefers-reduced-motion: reduce) {
     .riflesso, .scintilla, .alone, .bordo-oro, .stazioni.cambio .tasto { animation: none !important; }
     #manopola-corpo { transition: none; } .scintilla { opacity: 0; }
+    .sfondo * { animation: none !important; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
@@ -1822,19 +1865,22 @@ Lavoro dei sogni da bambino | Lavoro attuale
         <div class="pannello">
           <div class="lcd"><h2>Su che stazione giocate?</h2><span class="contatore" id="conta-carte"></span></div>
           <div class="tasti stazioni" id="tasti-stazioni" data-banda="am">
-            <button class="tasto" data-stazione="merenda" data-banda="am" aria-pressed="false" style="--k:0; --colore:var(--menta)">
+            <button class="tasto decorato" data-stazione="merenda" data-banda="am" aria-pressed="false" style="--k:0; --colore:var(--menta)">
+              <span class="sfondo" aria-hidden="true"><svg class="deco-codette"><defs><pattern id="codette" width="100" height="70" patternUnits="userSpaceOnUse"><line class="c1" x1="4.9" y1="11.8" x2="11.1" y2="8.2"/><line class="c2" x1="25.8" y1="20.6" x2="28.2" y2="27.4"/><line class="c3" x1="40.6" y1="6.8" x2="47.4" y2="9.2"/><line class="c4" x1="64.2" y1="21.1" x2="67.8" y2="14.9"/><line class="c5" x1="81.1" y1="3.9" x2="86.9" y2="8.1"/><line class="c3" x1="10.5" y1="37.1" x2="17.5" y2="38.9"/><line class="c5" x1="37.1" y1="47.5" x2="38.9" y2="40.5"/><line class="c1" x1="55.7" y1="33.2" x2="60.3" y2="38.8"/><line class="c2" x1="76.6" y1="47.2" x2="83.4" y2="44.8"/><line class="c3" x1="95.4" y1="26.5" x2="96.6" y2="33.5"/><line class="c4" x1="1.7" y1="60.8" x2="6.3" y2="55.2"/><line class="c1" x1="22.9" y1="60.2" x2="29.1" y2="63.8"/><line class="c2" x1="46.5" y1="58.6" x2="53.5" y2="57.4"/><line class="c5" x1="70.5" y1="60.7" x2="73.5" y2="67.3"/><line class="c1" x1="89.2" y1="64.3" x2="94.8" y2="59.7"/></pattern></defs><g class="pioggia"><rect y="-70" width="100%" height="300%" fill="url(#codette)"/></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="18" r="11"/><path d="M24 29v15M18.5 18a5.5 5.5 0 0 1 11 0 3 3 0 0 1-6 0"/></svg>
               <span class="titolo">Radio Merenda</span>
               <span class="led"></span>
               <span class="descr"><span class="motto">Parole semplici per i più piccoli</span><span class="conteggio">Per bambini</span></span>
             </button>
-            <button class="tasto" data-stazione="hitparade" data-banda="am" aria-pressed="false" style="--k:1; --colore:var(--ambra)">
+            <button class="tasto decorato" data-stazione="hitparade" data-banda="am" aria-pressed="false" style="--k:1; --colore:var(--ambra)">
+              <span class="sfondo" aria-hidden="true"><svg class="deco-vinile" viewBox="-50 -50 100 100"><g class="disco"><circle r="49" class="vinile-corpo"/><circle r="45" class="solco" style="stroke-dasharray:70 4 30 3"/><circle r="41" class="solco" style="stroke-dasharray:50 3"/><circle r="37" class="solco" style="stroke-dasharray:90 5"/><circle r="33" class="solco" style="stroke-dasharray:40 3 20 2"/><circle r="29" class="solco" style="stroke-dasharray:60 4"/><circle r="25" class="solco" style="stroke-dasharray:30 3"/><circle r="16" class="vinile-etichetta"/><circle r="13" class="vinile-bordo"/><path class="vinile-scritta" d="M-8.36 -5.85A10.2 10.2 0 0 1 8.36 -5.85M-4.68 -5.99A7.6 7.6 0 0 1 4.68 -5.99"/></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 36V11l20-5v25"/><circle cx="13" cy="36" r="5"/><circle cx="33" cy="31" r="5"/></svg>
               <span class="titolo">Hit Parade</span>
               <span class="led"></span>
               <span class="descr"><span class="motto">I grandi classici per tutti</span><span class="conteggio">Per tutti</span></span>
             </button>
-            <button class="tasto" data-stazione="cerebrali" data-banda="am" aria-pressed="false" style="--k:2; --colore:var(--zona-2)">
+            <button class="tasto decorato" data-stazione="cerebrali" data-banda="am" aria-pressed="false" style="--k:2; --colore:var(--zona-2)">
+              <span class="sfondo" aria-hidden="true"><svg class="deco-onde" viewBox="0 0 200 60" preserveAspectRatio="none"><g class="traccia t1"><path d="M0 18.3 L2 19.6 L4 20.5 L6 21.1 L8 21.5 L10 21.6 L12 21.7 L14 21.9 L16 22.2 L18 22.7 L20 23.4 L22 24.2 L24 25.0 L26 25.7 L28 26.1 L30 26.2 L32 25.8 L34 25.1 L36 23.9 L38 22.6 L40 21.1 L42 19.7 L44 18.4 L46 17.4 L48 16.6 L50 16.1 L52 15.8 L54 15.5 L56 15.1 L58 14.6 L60 13.9 L62 12.9 L64 11.8 L66 10.6 L68 9.4 L70 8.4 L72 7.7 L74 7.4 L76 7.6 L78 8.1 L80 9.0 L82 10.1 L84 11.2 L86 12.2 L88 13.1 L90 13.8 L92 14.2 L94 14.6 L96 14.8 L98 15.1 L100 15.7 L102 16.4 L104 17.5 L106 18.8 L108 20.3 L110 21.8 L112 23.2 L114 24.5 L116 25.3 L118 25.8 L120 25.8 L122 25.5 L124 25.0 L126 24.3 L128 23.6 L130 23.1 L132 22.7 L134 22.5 L136 22.4 L138 22.4 L140 22.3 L142 22.0 L144 21.5 L146 20.6 L148 19.4 L150 17.9 L152 16.2 L154 14.5 L156 13.0 L158 11.7 L160 10.7 L162 10.1 L164 9.9 L166 9.9 L168 10.2 L170 10.4 L172 10.6 L174 10.6 L176 10.5 L178 10.2 L180 9.8 L182 9.5 L184 9.3 L186 9.4 L188 9.9 L190 10.8 L192 12.0 L194 13.6 L196 15.2 L198 16.8 L200 18.3 L202 19.6 L204 20.5 L206 21.1 L208 21.5 L210 21.6 L212 21.7 L214 21.9 L216 22.2 L218 22.7 L220 23.4 L222 24.2 L224 25.0 L226 25.7 L228 26.1 L230 26.2 L232 25.8 L234 25.1 L236 23.9 L238 22.6 L240 21.1 L242 19.7 L244 18.4 L246 17.4 L248 16.6 L250 16.1 L252 15.8 L254 15.5 L256 15.1 L258 14.6 L260 13.9 L262 12.9 L264 11.8 L266 10.6 L268 9.4 L270 8.4 L272 7.7 L274 7.4 L276 7.6 L278 8.1 L280 9.0 L282 10.1 L284 11.2 L286 12.2 L288 13.1 L290 13.8 L292 14.2 L294 14.6 L296 14.8 L298 15.1 L300 15.7 L302 16.4 L304 17.5 L306 18.8 L308 20.3 L310 21.8 L312 23.2 L314 24.5 L316 25.3 L318 25.8 L320 25.8 L322 25.5 L324 25.0 L326 24.3 L328 23.6 L330 23.1 L332 22.7 L334 22.5 L336 22.4 L338 22.4 L340 22.3 L342 22.0 L344 21.5 L346 20.6 L348 19.4 L350 17.9 L352 16.2 L354 14.5 L356 13.0 L358 11.7 L360 10.7 L362 10.1 L364 9.9 L366 9.9 L368 10.2 L370 10.4 L372 10.6 L374 10.6 L376 10.5 L378 10.2 L380 9.8 L382 9.5 L384 9.3 L386 9.4 L388 9.9 L390 10.8 L392 12.0 L394 13.6 L396 15.2 L398 16.8 L400 18.3"/></g><g class="traccia t2"><path d="M0 36.1 L2 37.8 L4 38.7 L6 39.0 L8 38.4 L10 37.1 L12 35.2 L14 32.9 L16 30.4 L18 28.1 L20 26.0 L22 24.5 L24 23.7 L26 23.5 L28 24.2 L30 25.4 L32 27.2 L34 29.3 L36 31.5 L38 33.6 L40 35.3 L42 36.5 L44 37.2 L46 37.2 L48 36.6 L50 35.5 L52 34.0 L54 32.3 L56 30.6 L58 29.0 L60 27.7 L62 26.8 L64 26.3 L66 26.3 L68 26.8 L70 27.6 L72 28.7 L74 30.0 L76 31.3 L78 32.5 L80 33.4 L82 34.1 L84 34.5 L86 34.5 L88 34.1 L90 33.5 L92 32.7 L94 31.8 L96 30.8 L98 29.8 L100 29.0 L102 28.4 L104 28.1 L106 28.0 L108 28.2 L110 28.7 L112 29.4 L114 30.3 L116 31.2 L118 32.2 L120 33.1 L122 33.8 L124 34.3 L126 34.5 L128 34.4 L130 33.8 L132 33.0 L134 31.9 L136 30.7 L138 29.4 L140 28.2 L142 27.2 L144 26.5 L146 26.2 L148 26.4 L150 27.1 L152 28.2 L154 29.7 L156 31.4 L158 33.1 L160 34.8 L162 36.1 L164 37.0 L166 37.3 L168 37.0 L170 36.0 L172 34.6 L174 32.6 L176 30.5 L178 28.3 L180 26.3 L182 24.8 L184 23.8 L186 23.5 L188 23.9 L190 25.1 L192 26.9 L194 29.1 L196 31.6 L198 34.0 L200 36.1 L202 37.8 L204 38.7 L206 39.0 L208 38.4 L210 37.1 L212 35.2 L214 32.9 L216 30.4 L218 28.1 L220 26.0 L222 24.5 L224 23.7 L226 23.5 L228 24.2 L230 25.4 L232 27.2 L234 29.3 L236 31.5 L238 33.6 L240 35.3 L242 36.5 L244 37.2 L246 37.2 L248 36.6 L250 35.5 L252 34.0 L254 32.3 L256 30.6 L258 29.0 L260 27.7 L262 26.8 L264 26.3 L266 26.3 L268 26.8 L270 27.6 L272 28.7 L274 30.0 L276 31.3 L278 32.5 L280 33.4 L282 34.1 L284 34.5 L286 34.5 L288 34.1 L290 33.5 L292 32.7 L294 31.8 L296 30.8 L298 29.8 L300 29.0 L302 28.4 L304 28.1 L306 28.0 L308 28.2 L310 28.7 L312 29.4 L314 30.3 L316 31.2 L318 32.2 L320 33.1 L322 33.8 L324 34.3 L326 34.5 L328 34.4 L330 33.8 L332 33.0 L334 31.9 L336 30.7 L338 29.4 L340 28.2 L342 27.2 L344 26.5 L346 26.2 L348 26.4 L350 27.1 L352 28.2 L354 29.7 L356 31.4 L358 33.1 L360 34.8 L362 36.1 L364 37.0 L366 37.3 L368 37.0 L370 36.0 L372 34.6 L374 32.6 L376 30.5 L378 28.3 L380 26.3 L382 24.8 L384 23.8 L386 23.5 L388 23.9 L390 25.1 L392 26.9 L394 29.1 L396 31.6 L398 34.0 L400 36.1"/></g><g class="traccia t3"><path d="M0 45.8 L2 45.4 L4 42.6 L6 42.1 L8 43.7 L10 43.7 L12 43.8 L14 45.8 L16 45.8 L18 43.3 L20 42.8 L22 43.7 L24 42.9 L26 43.2 L28 45.6 L30 45.9 L32 43.9 L34 43.6 L36 43.8 L38 42.2 L40 42.5 L42 45.2 L44 45.9 L46 44.5 L48 44.7 L50 44.2 L52 41.8 L54 41.6 L56 44.4 L58 45.3 L60 45.1 L62 46.0 L64 45.2 L66 41.9 L68 41.0 L70 43.1 L72 44.0 L74 44.9 L76 47.1 L78 46.6 L80 42.9 L82 41.2 L84 42.0 L86 42.2 L88 43.8 L90 47.4 L92 47.8 L94 44.6 L96 42.6 L98 41.7 L100 40.4 L102 42.0 L104 46.5 L106 48.1 L108 46.2 L110 44.7 L112 42.8 L114 39.7 L116 40.3 L118 44.6 L120 47.0 L122 46.9 L124 46.9 L126 44.7 L128 40.4 L130 39.6 L132 42.6 L134 44.8 L136 46.2 L138 48.0 L140 46.6 L142 42.1 L144 40.3 L146 41.6 L148 42.6 L150 44.5 L152 47.7 L154 47.6 L156 44.0 L158 42.1 L160 42.0 L162 41.3 L164 42.7 L166 46.5 L168 47.3 L170 45.0 L172 44.0 L174 43.1 L176 41.1 L178 41.7 L180 45.1 L182 46.2 L184 45.1 L186 45.2 L188 44.5 L190 41.7 L192 41.6 L194 44.1 L196 44.8 L198 44.5 L200 45.8 L202 45.4 L204 42.6 L206 42.1 L208 43.7 L210 43.7 L212 43.8 L214 45.8 L216 45.8 L218 43.3 L220 42.8 L222 43.7 L224 42.9 L226 43.2 L228 45.6 L230 45.9 L232 43.9 L234 43.6 L236 43.8 L238 42.2 L240 42.5 L242 45.2 L244 45.9 L246 44.5 L248 44.7 L250 44.2 L252 41.8 L254 41.6 L256 44.4 L258 45.3 L260 45.1 L262 46.0 L264 45.2 L266 41.9 L268 41.0 L270 43.1 L272 44.0 L274 44.9 L276 47.1 L278 46.6 L280 42.9 L282 41.2 L284 42.0 L286 42.2 L288 43.8 L290 47.4 L292 47.8 L294 44.6 L296 42.6 L298 41.7 L300 40.4 L302 42.0 L304 46.5 L306 48.1 L308 46.2 L310 44.7 L312 42.8 L314 39.7 L316 40.3 L318 44.6 L320 47.0 L322 46.9 L324 46.9 L326 44.7 L328 40.4 L330 39.6 L332 42.6 L334 44.8 L336 46.2 L338 48.0 L340 46.6 L342 42.1 L344 40.3 L346 41.6 L348 42.6 L350 44.5 L352 47.7 L354 47.6 L356 44.0 L358 42.1 L360 42.0 L362 41.3 L364 42.7 L366 46.5 L368 47.3 L370 45.0 L372 44.0 L374 43.1 L376 41.1 L378 41.7 L380 45.1 L382 46.2 L384 45.1 L386 45.2 L388 44.5 L390 41.7 L392 41.6 L394 44.1 L396 44.8 L398 44.5 L400 45.8"/></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 31a12 12 0 1 1 14 0v5H17z"/><path d="M19 41h10M21 45h6M24 22v-5M20 19l4 3 4-3"/></svg>
               <span class="titolo">Onde Cerebrali</span>
               <span class="led"></span>
@@ -1878,12 +1924,12 @@ Lavoro dei sogni da bambino | Lavoro attuale
             </button>
             <div class="tasto banda" id="selettore-banda" role="slider" tabindex="0" aria-label="Gamma d'onda" aria-valuetext="AM" style="--k:3">
               <span class="titolo"><span class="ascolto-etichetta">In ascolto:</span> <span class="ascolto-nome" id="ascolto-nome">Hit Parade</span></span>
-              <svg class="manopola" id="manopola" viewBox="14 6 92 72" aria-hidden="true">
-                <path class="zona-pirata" d="M80.0 35.0 A30.5 30.5 0 0 1 89.0 48.6"/>
-                <g class="tacche-banda"><line x1="40.7" y1="51.0" x2="37.4" y2="49.8"/><line x1="42.2" y1="47.8" x2="39.2" y2="46.0"/><line x1="44.3" y1="44.8" x2="41.6" y2="42.6"/><line x1="46.8" y1="42.3" x2="44.6" y2="39.6"/><line x1="49.8" y1="40.2" x2="48.0" y2="37.2"/><line x1="53.0" y1="38.7" x2="51.8" y2="35.4"/><line x1="56.4" y1="37.8" x2="55.8" y2="34.4"/><line x1="60.0" y1="37.5" x2="60.0" y2="34.0"/><line x1="63.6" y1="37.8" x2="64.2" y2="34.4"/><line x1="67.0" y1="38.7" x2="68.2" y2="35.4"/><line x1="70.2" y1="40.2" x2="72.0" y2="37.2"/><line x1="73.2" y1="42.3" x2="75.4" y2="39.6"/><line x1="75.7" y1="44.8" x2="78.4" y2="42.6"/><line x1="77.8" y1="47.8" x2="80.8" y2="46.0"/><line x1="79.3" y1="51.0" x2="82.6" y2="49.8"/><line class="lunga" x1="43.2" y1="46.2" x2="37.9" y2="42.5"/><line class="lunga" x1="60.0" y1="37.5" x2="60.0" y2="31.0"/><line class="lunga" x1="76.8" y1="46.2" x2="82.1" y2="42.5"/></g>
-                <text class="etichetta-banda" data-pos="am" x="26.5" y="40.2" text-anchor="middle">AM</text>
-                <text class="etichetta-banda" data-pos="fm" x="60.0" y="22.0" text-anchor="middle">FM</text>
-                <g class="lucchetto" transform="translate(94.4 35.7)"><rect x="-5" y="-2" width="10" height="8" rx="1.5"/><path d="M-3-2v-2.5a3 3 0 0 1 6 0V-2" fill="none"/></g>
+              <svg class="manopola" id="manopola" viewBox="10 6 100 72" aria-hidden="true">
+                <path class="zona-pirata" d="M81.4 34.2 A32 32 0 0 1 90.4 48.1"/>
+                <g class="tacche-banda"><line x1="41.3" y1="49.7" x2="38.1" y2="48.2"/><line class="lunga" data-pos="am" x1="43.2" y1="46.2" x2="37.5" y2="42.2"/><line x1="45.8" y1="43.3" x2="43.3" y2="40.7"/><line x1="48.8" y1="40.8" x2="46.9" y2="37.9"/><line x1="52.3" y1="39.0" x2="51.0" y2="35.7"/><line x1="56.1" y1="37.9" x2="55.4" y2="34.4"/><line class="lunga" data-pos="fm" x1="60.0" y1="37.5" x2="60.0" y2="30.5"/><line x1="63.9" y1="37.9" x2="64.6" y2="34.4"/><line x1="67.7" y1="39.0" x2="69.0" y2="35.7"/><line x1="71.2" y1="40.8" x2="73.1" y2="37.9"/><line x1="74.2" y1="43.3" x2="76.7" y2="40.7"/><line class="lunga" data-pos="pirata" x1="76.8" y1="46.2" x2="82.5" y2="42.2"/><line x1="78.7" y1="49.7" x2="81.9" y2="48.2"/></g>
+                <text class="etichetta-banda" data-pos="am" x="34" y="43.5" text-anchor="end">AM</text>
+                <text class="etichetta-banda" data-pos="fm" x="60" y="23" text-anchor="middle">FM</text>
+                <g class="lucchetto" transform="translate(98.5 36.7)"><rect x="-5" y="-2" width="10" height="8" rx="1.5"/><path d="M-3-2v-2.5a3 3 0 0 1 6 0V-2" fill="none"/></g>
                 <g id="manopola-corpo">
                   <circle cx="60" cy="58" r="17" class="corpo-manopola"/>
                   <circle cx="60" cy="58" r="12" class="ghiera"/>
@@ -3423,7 +3469,7 @@ Lavoro dei sogni da bambino | Lavoro attuale
       scelta = bandaVicina(Math.atan2(q.x - 60, Math.max(58 - q.y, 0.001)) * 180 / Math.PI);
     } else {
       // tocco: sull'etichetta vicina, altrimenti avanti di una posizione
-      const etichette = { am: [26.5, 36.2], fm: [60.0, 18.0], pirata: [94.4, 35.7] };
+      const etichette = { am: [23, 40], fm: [60, 19.5], pirata: [98.5, 36.7] };
       const toccata = BANDE.find(b => Math.hypot(q.x - etichette[b][0], q.y - etichette[b][1]) < 14);
       scelta = toccata || BANDE[(BANDE.indexOf(bandaVisibile) + 1) % BANDE.length];
     }
