@@ -592,6 +592,22 @@
   .turno .guadagno { font: clamp(30px, 11cqh, 48px)/1.1 "Michroma", Verdana, sans-serif; color: var(--ambra-testo); margin: 4px 0; }
   .turno .guadagno.zero { color: var(--tenue); }
 
+  /* schermi bassi: la schermata delle regole si compatta per far stare anche il tasto Inizia */
+  @container app (max-height: 400px) {
+    #schermata-collab .setup { padding-top: 6px; padding-bottom: 8px; }
+    #schermata-collab .contenuto { gap: 8px; padding-top: 4px; }
+    #schermata-collab .pannello { padding: 10px; gap: 8px; }
+    #schermata-collab .lcd { padding-block: 6px; }
+    #schermata-collab .scheda { padding: 7px 10px; }
+    #schermata-collab .scheda h3 { margin-bottom: 4px; font-size: 13px; }
+    #schermata-collab .regole { gap: 6px; }
+    #schermata-collab .regole li { font-size: 12.5px; line-height: 1.25; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; }
+    #schermata-collab .segno { width: 26px; height: 26px; font-size: 12px; }
+    #schermata-collab .segno svg { width: 16px; height: 16px; }
+    #schermata-collab .livelli li { padding-block: 2px; font-size: 12.5px; }
+    #schermata-collab .tasto-ambra { height: 46px; }
+  }
+
   /* ---------- Fine partita ---------- */
   .podio { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 3px; max-width: 460px; }
   .podio li {
@@ -1475,16 +1491,16 @@ Vizio | Virtù
             <div class="scheda">
               <h3>Come funziona</h3>
               <ul class="regole">
-                <li><span class="segno">7</span><span>Turni di gioco. Le carte indizio non si possono cambiare.</span></li>
-                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22 7.5 3.5h9z" style="fill:var(--zona-oro)"/><path d="M12 22 3 6l4.5-2.5zM12 22l9-16-4.5-2.5z" style="fill:var(--zona-3)"/></svg></span><span>Lo spicchio centrale vale 3 punti, ma se lo centrate guadagnate un turno in più.</span></li>
+                <li><span class="segno">7</span><span>Avete 7 turni disponibili. La carta indizio si può cambiare una sola volta!</span></li>
+                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22 7.5 3.5h9z" style="fill:var(--zona-oro)"/><path d="M12 22 3 6l4.5-2.5zM12 22l9-16-4.5-2.5z" style="fill:var(--zona-3)"/></svg></span><span>Lo spicchio dorato centrale vale 3 punti ma vi fa guadagnare un turno extra.</span></li>
               </ul>
             </div>
             <div class="scheda">
-              <h3>Quanto siete sintonizzati</h3>
+              <h3>Verifica della connessione in corso…</h3>
               <ol class="livelli">
-                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity=".25"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>0–14</b><span>Non siete sintonizzati</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity=".25"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>0–14</b><span>Errore 404: frequenza non trovata</span></li>
                   <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>15–19</b><span>Sintonizzazione avvenuta correttamente</span></li>
-                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>20–23</b><span>Avete una sintonia fuori dal comune!</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>20–23</b><span>Avete un’intesa fuori dal comune!</span></li>
                   <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity="1"/></svg><b>24+</b><span>Mente alveare</span></li>
               </ol>
             </div>
@@ -3510,16 +3526,17 @@ Vizio | Virtù
      ===================================================================== */
   const TURNI_COLLAB = 7;
   const LIVELLI = [
-    { min: 0, testo: 'Non siete sintonizzati' },
+    { min: 0, testo: 'Errore 404: frequenza non trovata' },
     { min: 15, testo: 'Sintonizzazione avvenuta correttamente' },
-    { min: 20, testo: 'Avete una sintonia fuori dal comune!' },
+    { min: 20, testo: 'Avete un\u2019intesa fuori dal comune!' },
     { min: 24, testo: 'Mente alveare' }
   ];
   function livelloCollab(punti) { let l = 0; LIVELLI.forEach((v, i) => { if (punti >= v.min) l = i; }); return l; }
 
   function avviaCollab() {
     ultimaPartita = { modo: 'collab' };
-    partita = { modo: 'collab', punti: 0, turno: 1, totale: TURNI_COLLAB, carta: pesca(), cartaPronta: true, fase: 'accensione' };
+    // un solo cambio di carta per tutta la partita (non si ricarica a ogni turno)
+    partita = { modo: 'collab', punti: 0, turno: 1, totale: TURNI_COLLAB, cambiRimasti: 1, carta: pesca(), cartaPronta: true, fase: 'accensione' };
     entraInPartita(turnoCollab);
   }
 
@@ -3610,9 +3627,9 @@ Vizio | Virtù
     if (!p) return;
     if (p.carta) { estremoSx.textContent = p.carta[0]; estremoDx.textContent = p.carta[1]; }
     const cambiRimasti = p.cambiRimasti ?? 0;
-    mescola.disabled = p.fase !== 'segreto' || p.modo === 'collab' || cambiRimasti <= 0;
-    mescola.style.visibility = p.modo === 'collab' ? 'hidden' : '';
-    cambi.hidden = p.fase !== 'segreto' || p.modo === 'collab';
+    mescola.disabled = p.fase !== 'segreto' || cambiRimasti <= 0;
+    mescola.style.visibility = '';
+    cambi.hidden = p.fase !== 'segreto';
     cambi.textContent = cambiRimasti;
     cambi.classList.toggle('esauriti', cambiRimasti <= 0);
     mescola.setAttribute('aria-label', cambiRimasti > 0 ? `Cambia carta, ancora ${cambiRimasti} ${cambiRimasti === 1 ? 'cambio' : 'cambi'}` : 'Nessun cambio di carta rimasto');
