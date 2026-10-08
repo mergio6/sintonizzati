@@ -1734,9 +1734,9 @@ Vizio | Virtù
   <div class="dialogo" id="dialogo-adulti" hidden>
     <div class="pannello" role="alertdialog" aria-modal="true" aria-labelledby="adulti-titolo" aria-describedby="adulti-testo">
       <div class="lcd"><h2 id="adulti-titolo">Dopo Mezzanotte</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
-      <p id="adulti-testo">Questa stazione ha carte con temi per adulti. Siete tutti maggiorenni?</p>
+      <p id="adulti-testo">Questa stazione ha carte con temi per adulti.<br>Siete tutti maggiorenni?</p>
       <div class="dialogo-azioni">
-        <button class="tastino" id="adulti-no">Annulla</button>
+        <button class="tastino" id="adulti-no">No, torna indietro</button>
         <button class="tastino ambra" id="adulti-si">Sì, siamo maggiorenni</button>
       </div>
     </div>
@@ -2040,6 +2040,12 @@ Vizio | Virtù
       },
       finestra() { tono({ f: 320, f2: 640, dur: 0.14, vol: 0.14, dest: radio }); },
       finestraGiu() { tono({ f: 640, f2: 320, dur: 0.14, vol: 0.12, dest: radio }); },
+      // avviso per adulti: il "biiip" della censura, preceduto da uno scatto di fruscio
+      avvisoAdulti() {
+        fruscio({ dur: 0.08, vol: 0.08, f: 2500, q: 1, att: 0.003 });
+        tono({ f: 1000, t: 0.06, dur: 0.42, vol: 0.09, att: 0.006, dest: radio });
+        tono({ f: 1000, t: 0.56, dur: 0.14, vol: 0.09, att: 0.006, dest: radio });
+      },
       led(o) { tono({ f: o.spento ? 700 : 1400, dur: 0.07, vol: 0.13, dest: radio }); },
       errore() {
         tono({ f: 150, dur: 0.1, vol: 0.045, tipo: 'square', dest: radio });
@@ -2632,7 +2638,7 @@ Vizio | Virtù
     app.dataset.schermata = id;
     // prima della partita le onde si separano, tornando alla scelta si riuniscono
     if (SCHERMATE_PREPARTITA.includes(id)) {
-      if (id === 'schermata-stazione') mostraStazione(); else preparaNomi(id);
+      if (id === 'schermata-stazione') entraInStazioni(); else preparaNomi(id);
       const giaSeparate = animOnde ? animOnde.meta === 0 : progresso < 0.02;
       if (!giaSeparate) separaOnde();
     }
@@ -2786,14 +2792,23 @@ Vizio | Virtù
   }));
   document.getElementById('avanti-stazione').addEventListener('click', () => vai(SCHERMATA_DI[modoScelto]));
 
-  // Dopo Mezzanotte: si chiede una volta sola se sono tutti maggiorenni
+  // Dopo Mezzanotte: la conferma vale solo finché si resta in questa schermata.
+  // Ogni volta che si (ri)entra nelle stazioni va data di nuovo, e se era rimasta
+  // selezionata Dopo Mezzanotte si torna su Hit Parade.
   const dialogoAdulti = document.getElementById('dialogo-adulti');
-  function maggiorenni() { try { return localStorage.getItem('sintonizzati-maggiorenni') === 'si'; } catch (e) { return false; } }
-  function chiediMaggiorenni() { dialogoAdulti.hidden = false; suona('finestra'); document.getElementById('adulti-no').focus({ preventScroll: true }); aggiornaGuardia(); }
+  let maggiorenniConfermato = false;
+  try { localStorage.removeItem('sintonizzati-maggiorenni'); } catch (e) {}
+  function maggiorenni() { return maggiorenniConfermato; }
+  function entraInStazioni() {
+    maggiorenniConfermato = false;
+    if (stazioneScelta === 'mezzanotte') stazioneScelta = 'hitparade';
+    mostraStazione();
+  }
+  function chiediMaggiorenni() { dialogoAdulti.hidden = false; suona('avvisoAdulti'); document.getElementById('adulti-no').focus({ preventScroll: true }); aggiornaGuardia(); }
   function chiudiAdulti() { dialogoAdulti.hidden = true; suona('finestraGiu'); aggiornaGuardia(); }
   document.getElementById('adulti-no').addEventListener('click', chiudiAdulti);
   document.getElementById('adulti-si').addEventListener('click', () => {
-    try { localStorage.setItem('sintonizzati-maggiorenni', 'si'); } catch (e) {}
+    maggiorenniConfermato = true;
     chiudiAdulti();
     scegliStazione('mezzanotte');
   });
