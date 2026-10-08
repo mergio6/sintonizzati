@@ -514,6 +514,27 @@
   .passaggio .avviso[hidden] { display: none; }
   .passaggio .avviso svg { width: 18px; height: 18px; flex: none; }
   .passaggio .tasto-ambra { margin-top: 4px; }
+  /* zapping: la stazione in onda all'inizio del turno, nello stile della targhetta della scala */
+  .zap-onda {
+    margin: 0 0 2px; display: inline-flex; align-items: center; gap: 9px; max-width: 100%;
+    padding: 4px 4px 4px 12px; border-radius: 12px; background: var(--corpo);
+  }
+  .zap-onda[hidden] { display: none; }
+  .zap-etichetta { flex: none; font: 9px "Michroma", Verdana, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--vetro); opacity: .8; }
+  .zap-display {
+    display: flex; align-items: baseline; gap: 8px; min-width: 0; padding: 4px 12px 4px 10px; border-radius: 8px;
+    background: var(--vetro); color: var(--vetro-segni); text-shadow: var(--lcd-ombra); box-shadow: inset 0 1px 4px rgba(0, 0, 0, .28);
+    white-space: nowrap;
+  }
+  .zap-display::before {
+    content: ""; flex: none; align-self: center; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--colore-tema, var(--ambra)); box-shadow: 0 0 0 1px rgba(0, 0, 0, .18), 0 0 7px var(--colore-tema, var(--ambra));
+  }
+  .zap-nome { flex: none; font-weight: 800; font-size: 15px; font-size: clamp(14px, 4.2cqh, 16px); }
+  .zap-tema { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-weight: 600; font-size: 13px; font-size: clamp(12px, 3.6cqh, 14px); opacity: .8; }
+  .zap-onda.cerca .zap-nome, .zap-onda.cerca .zap-tema { animation: cerca-nome 1.5s linear both; }
+  .zap-onda.cerca .zap-display::before { animation: cerca-led 1.5s linear both; }
+  .targhetta.cerca .tema-testo { animation: cerca-nome 1.5s linear both; }
 
   /* Modalità a squadre */
   .lato { min-width: 0; }
@@ -547,6 +568,25 @@
   .lato-btn[aria-pressed="true"].a { background: var(--ambra); color: #2A1C00; border-color: transparent; }
   .lato-btn[aria-pressed="true"].b { background: var(--squadra-b); color: var(--su-colore); border-color: transparent; }
   .scelta-lato + .tasto-ambra.piccolo { margin-top: 8px; }
+  /* Se i pannelli ai lati della scala non ci stanno in altezza (schermi bassi, tanti giocatori)
+     si stringono un poco (compatto), e se non basta anche le scritte (compattissimo): mai sopra la carta */
+  .campo.compatto .turno .tasto-ambra.piccolo { margin-top: 6px; height: 40px; }
+  .campo.compatto .risultati { margin-top: 3px; gap: 0; }
+  .campo.compatto .classifica li, .campo.compatto .risultati li { padding-block: 2px; }
+  .campo.compatto .risultati li.indizio { margin-top: 2px; padding-top: 3px; }
+  .campo.compatto .turno .esito { margin-top: 2px; }
+  .campo.compatto .classifica { gap: 2px; }
+  .campo.compatto .tabellone { gap: 6px; } .campo.compatto .tabellone li { padding: 5px 10px 4px; }
+  .campo.compatto .scelta-lato { margin-top: 6px; } .campo.compatto .lato-btn { height: 42px; }
+  .campo.compattissimo .turno .etichetta, .campo.compattissimo .turno .ruolo, .campo.compattissimo .turno .esito { font-size: 12px; line-height: 1.2; }
+  .campo.compattissimo .classifica li, .campo.compattissimo .risultati li { font-size: 13px; gap: 6px; }
+  .campo.compattissimo .num { width: 17px; height: 17px; font-size: 9px; }
+  .campo.compattissimo .risultati li.indizio span { font-size: 11.5px; }
+  .campo.compattissimo .turno .chi { font-size: 22px; }
+  .campo.compattissimo .turno .guadagno { font-size: 26px; margin: 0; }
+  .campo.compattissimo .turno .tasto-ambra.piccolo { margin-top: 4px; height: auto; min-height: 34px; padding: 4px 6px; font-size: 11px; line-height: 1.15; letter-spacing: 0; }
+  .campo.compattissimo .risultati .nome-indizio { display: none; }     /* il numero accanto dice già chi è */
+  .campo.compattissimo .lato-btn { height: 36px; }
   .tinta.a { fill: var(--ambra); opacity: .24; }
   .tinta.b { fill: var(--squadra-b); opacity: .22; }
 
@@ -713,6 +753,25 @@
   .totale-fine { display: grid; place-content: center; text-align: center; animation: compare-su .45s ease-out .3s both; }
   .totale-fine b { font: clamp(40px, 16vh, 72px)/1 "Michroma", Verdana, sans-serif; font: clamp(40px, 16cqh, 72px)/1 "Michroma", Verdana, sans-serif; color: var(--ambra-testo); }
   .totale-fine span { font-weight: 600; color: var(--su-tasto-tenue); margin-top: 4px; }
+  /* una sola riga, che scorre di lato se le stazioni sono tante: la fine partita resta tutta visibile */
+  #fine-corpo { min-width: 0; }
+  .fine-zap {
+    display: flex; align-items: center; justify-content: safe center; gap: 8px; margin-top: 8px; padding: 2px 2px 4px;
+    overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10px, #000 calc(100% - 10px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 10px, #000 calc(100% - 10px), transparent);
+  }
+  .fine-zap::-webkit-scrollbar { display: none; }
+  .fine-zap .etichetta { flex: none; padding-left: 8px; font: 9px "Michroma", Verdana, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--su-corpo); opacity: .7; }
+  .fine-zap .voce {
+    flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 9px; border-radius: 999px; white-space: nowrap;
+    background: var(--tasto); color: var(--su-tasto); font-size: 13px; font-weight: 700; box-shadow: 0 2px 0 var(--tasto-ombra);
+    animation: compare-su .4s ease-out both; animation-delay: calc(var(--i) * 70ms + 650ms);
+  }
+  .fine-zap .led { width: 8px; height: 8px; background: var(--colore); box-shadow: 0 0 7px var(--colore); }
+  .fine-zap .turni { font-size: 11px; font-weight: 600; color: var(--su-tasto-tenue); }
+  .fine-zap b { font: 12px "Michroma", Verdana, sans-serif; }
+  .fine-zap .voce.top { box-shadow: inset 0 0 0 2px var(--ambra), 0 2px 0 var(--tasto-ombra); }
   .fine-azioni { display: flex; align-items: center; gap: 12px; flex: none; }
   .fine-azioni .btn-piccolo { height: 48px; }
   #schermata-fine .lcd h2 { font-size: clamp(15px, 5vh, 22px); font-size: clamp(15px, 5cqh, 22px); }
@@ -1064,6 +1123,27 @@
     box-shadow: inset 0 0 0 3px var(--colore), 0 1px 0 var(--tasto-ombra);
   }
   .stazioni .tasto.scelto .led { background: var(--colore); box-shadow: 0 0 10px var(--colore); }
+
+  /* ---------- Zapping: la radio salta da una stazione all'altra ----------
+     I tasti diventano interruttori: abbassati quelli in scaletta (col loro led acceso), sollevati e un po'
+     spenti quelli esclusi. Quello che sta suonando ha l'anello pieno e il suo sfondo animato. */
+  .stazioni.zapping .tasto[data-stazione]:not(.scelto) { opacity: .6; }
+  .stazioni.zapping .tasto.scelto:not(.in-ascolto) { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--colore) 60%, transparent), 0 1px 0 var(--tasto-ombra); }
+  .stazioni.zapping .tasto.scelto:not(.in-ascolto) .sfondo * { animation-play-state: paused; }
+  .stazioni.zapping .tasto.in-ascolto { box-shadow: inset 0 0 0 3px var(--colore), 0 1px 0 var(--tasto-ombra), 0 0 16px -2px var(--colore); }
+  .stazioni .tasto.nego { animation: nego .4s ease-in-out; }
+  @keyframes nego { 20%, 60% { translate: -5px 0; } 40%, 80% { translate: 5px 0; } }
+  /* il tasto Zapping, come lo SCAN di un'autoradio: led spento, oppure acceso e lampeggiante mentre scansiona */
+  .tasto-zap {
+    flex: none; display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 22px 0 18px; margin-right: auto;
+    border: 0; border-radius: 12px; cursor: pointer; background: var(--tasto); color: var(--su-tasto);
+    font-family: "Michroma", Verdana, sans-serif; font-size: 15px; letter-spacing: .04em;
+    box-shadow: 0 5px 0 var(--tasto-ombra); transition: transform .08s, box-shadow .08s;
+  }
+  .tasto-zap:active, .tasto-zap[aria-pressed="true"] { transform: translateY(4px); box-shadow: 0 1px 0 var(--tasto-ombra); }
+  .tasto-zap[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--ambra), 0 1px 0 var(--tasto-ombra); }
+  .tasto-zap[aria-pressed="true"] .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); animation: scan-led 1.3s steps(1) infinite; }
+  @keyframes scan-led { 50% { background: var(--ambra-scura); box-shadow: 0 0 3px var(--ambra-scura); } }
   .tastino.ambra { background: var(--ambra); color: #2A1C00; box-shadow: 0 5px 0 var(--ambra-scura); }
   .tastino.ambra:active { box-shadow: 0 1px 0 var(--ambra-scura); }
   #schermata-gioco .marchio { min-width: 0; }
@@ -1174,6 +1254,7 @@
     .riflesso, .scintilla, .alone, .bordo-oro, .stazioni.cambio .tasto { animation: none !important; }
     #manopola-corpo, .indice-manopola { transition: none; } .scintilla { opacity: 0; }
     .sfondo *, .cerca .led, .cerca .ascolto-nome, .in-onda.cerca .nome-onda { animation: none !important; }
+    .tasto-zap .led, .stazioni .tasto.nego, .zap-onda.cerca *, .zap-onda.cerca .zap-display::before, .targhetta.cerca .tema-testo, .fine-zap .voce { animation: none !important; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
@@ -2422,7 +2503,7 @@ Silenzio d'oro | Silenzio imbarazzante
       <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
-          <div class="lcd"><h2>Su che stazione giocate?</h2><span class="contatore" id="conta-carte"></span></div>
+          <div class="lcd"><h2 id="titolo-stazioni">Su che stazione giocate?</h2><span class="contatore" id="conta-carte"></span></div>
           <div class="tasti stazioni" id="tasti-stazioni" data-banda="am">
             <button class="tasto decorato" data-stazione="merenda" data-banda="am" aria-pressed="false" style="--k:0; --colore:var(--menta)">
               <span class="sfondo" aria-hidden="true"><svg class="deco-codette"><defs><pattern id="codette" width="100" height="70" patternUnits="userSpaceOnUse"><line class="c1" x1="4.9" y1="11.8" x2="11.1" y2="8.2"/><line class="c2" x1="25.8" y1="20.6" x2="28.2" y2="27.4"/><line class="c3" x1="40.6" y1="6.8" x2="47.4" y2="9.2"/><line class="c4" x1="64.2" y1="21.1" x2="67.8" y2="14.9"/><line class="c5" x1="81.1" y1="3.9" x2="86.9" y2="8.1"/><line class="c3" x1="10.5" y1="37.1" x2="17.5" y2="38.9"/><line class="c5" x1="37.1" y1="47.5" x2="38.9" y2="40.5"/><line class="c1" x1="55.7" y1="33.2" x2="60.3" y2="38.8"/><line class="c2" x1="76.6" y1="47.2" x2="83.4" y2="44.8"/><line class="c3" x1="95.4" y1="26.5" x2="96.6" y2="33.5"/><line class="c4" x1="1.7" y1="60.8" x2="6.3" y2="55.2"/><line class="c1" x1="22.9" y1="60.2" x2="29.1" y2="63.8"/><line class="c2" x1="46.5" y1="58.6" x2="53.5" y2="57.4"/><line class="c5" x1="70.5" y1="60.7" x2="73.5" y2="67.3"/><line class="c1" x1="89.2" y1="64.3" x2="94.8" y2="59.7"/></pattern></defs><g class="pioggia"><rect y="-70" width="100%" height="300%" fill="url(#codette)"/></g></svg></span>
@@ -2489,7 +2570,7 @@ Silenzio d'oro | Silenzio imbarazzante
             </button>
             <div class="tasto banda" id="selettore-banda" role="slider" tabindex="0" aria-label="Gamma d'onda" aria-valuetext="AM" data-in-onda="am" data-segnale="3" style="--k:3">
               <div class="display-radio">
-                <span class="ascolto-etichetta">In ascolto</span>
+                <span class="ascolto-etichetta" id="ascolto-etichetta">In ascolto</span>
                 <span class="segnale" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
                 <span class="frequenza"><span class="cifre" id="freq-cifre">1080</span><span class="unita" id="freq-unita">kHz</span></span>
                 <span class="ascolto-nome" id="ascolto-nome">Hit Parade</span>
@@ -2516,6 +2597,7 @@ Silenzio d'oro | Silenzio imbarazzante
           </div>
         </div>
         <div class="piede">
+          <button class="tasto-zap" id="tasto-zapping" aria-pressed="false" aria-label="Zapping: a ogni turno la radio cambia stazione"><span class="led" aria-hidden="true"></span>Zapping</button>
           <button class="tasto-ambra" id="avanti-stazione">Avanti</button>
         </div>
       </div>
@@ -2730,6 +2812,7 @@ Silenzio d'oro | Silenzio imbarazzante
       </div>
 
       <div class="passaggio" id="passaggio" hidden>
+        <p class="zap-onda" id="pass-zap" hidden><span class="zap-etichetta">Zapping</span><span class="zap-display"><span class="zap-nome" id="pass-zap-nome"></span><span class="zap-tema" id="pass-zap-tema"></span></span></p>
         <p class="sopra" id="pass-sopra">Passa il telefono a</p>
         <div class="lcd"><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span><h2 id="pass-nome" aria-live="polite"></h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
         <p class="avviso" id="pass-avviso" hidden></p>
@@ -3964,6 +4047,7 @@ Silenzio d'oro | Silenzio imbarazzante
     if (sc) sc.scrollTop = 0;
     if (id === 'schermata-modi') preparaRadioMenu(da);
     else { clearTimeout(attesaMenu); radioMenuInAttesa = false; }
+    if (id !== 'schermata-stazione') fermaScansione();     // lo zapping scansiona solo nella scelta delle stazioni
     aggiornaGuardia();
     aggiornaMusica();
   }
@@ -3972,11 +4056,12 @@ Silenzio d'oro | Silenzio imbarazzante
   // si spegne nel menu delle modalità e nella schermata finale, dove parte la fanfara
   const SCHERMATE_MUSICA = ['schermata-modi', 'schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-gioco'];
   function aggiornaMusica() {
-    // in partita la musica scende a un sottofondo minimo, per non stancare
-    Suoni.livelloMusica(app.dataset.schermata === 'schermata-gioco' ? 0.35 : 1);
+    // in partita la musica scende a un sottofondo minimo, per non stancare (tranne durante un cambio di stazione dello zapping)
+    Suoni.livelloMusica(app.dataset.schermata === 'schermata-gioco' && !musicaAlta ? 0.35 : 1);
     const qui = app.dataset.schermata;
     if (qui === 'schermata-modi' && radioMenuInAttesa) return;     // la radio sta per cercare una stazione
-    const id = qui === 'schermata-modi' ? stazioneMenu : stazioneScelta;
+    const id = qui === 'schermata-modi' ? stazioneMenu
+      : qui === 'schermata-gioco' && partita && partita.zap ? partita.zap.stazione : inAscoltoStazioni();
     if (impostazioni.audio && impostazioni.musica && id && SCHERMATE_MUSICA.includes(qui)) Suoni.musica(id);
     else Suoni.fermaMusica();
   }
@@ -4119,13 +4204,13 @@ Silenzio d'oro | Silenzio imbarazzante
     modoScelto = b.dataset.modo;
     animaOnde(0, 1700, null, null, 'subito');   // le onde iniziano a separarsi già alla pressione del tasto
     // la radio lascia la stazione del menu e cerca quella delle carte: fruscio, cifre che corrono, nuova musica
-    const daStazione = stazioneMenu, arrivo = bandaDi(stazioneScelta) === 'pirata' ? 'hitparade' : stazioneScelta;
+    const daStazione = stazioneMenu;
     suona('cercaStazione');
     setTimeout(() => {
       b.classList.remove('premuto');
       vai('schermata-stazione');
       arrivoInStazioni(daStazione);
-      if (arrivo === daStazione) Suoni.abbassaMusica(0.25, 1.2);   // stessa stazione: la musica si abbassa sotto il fruscio
+      if (inAscoltoStazioni() === daStazione) Suoni.abbassaMusica(0.25, 1.2);   // stessa stazione: la musica si abbassa sotto il fruscio
     }, riduciMoto ? 0 : 240);
   }));
 
@@ -4195,18 +4280,24 @@ Silenzio d'oro | Silenzio imbarazzante
   if (window.ResizeObserver) new ResizeObserver(misuraTitoli).observe(document.getElementById('tasti-stazioni'));
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(misuraTitoli);
   function mostraStazione() {
+    const inOnda = inAscoltoStazioni();
     tastiStazione.forEach(b => {
-      const scelto = b.dataset.stazione === stazioneScelta;
+      const id = b.dataset.stazione;
+      const scelto = zapping ? scalettaZapping.has(id) : id === stazioneScelta;
       b.classList.toggle('scelto', scelto);
+      b.classList.toggle('in-ascolto', zapping && id === inOnda);
       b.setAttribute('aria-pressed', String(scelto));
     });
-    const n = (MAZZI[stazioneScelta] || []).length;
-    contaCarte.textContent = `${n} carte`;
+    griglia.classList.toggle('zapping', zapping);
+    tastoZap.setAttribute('aria-pressed', String(zapping));
+    titoloStazioni.textContent = zapping ? 'Zapping: quali stazioni?' : 'Su che stazione giocate?';
+    if (!avvisoContatore) contaCarte.textContent = zapping ? `${scalettaZapping.size} stazioni` : `${(MAZZI[stazioneScelta] || []).length} carte`;
     griglia.dataset.banda = bandaVisibile;
     ruotaManopola(ANGOLO[bandaVisibile]);
     selettore.setAttribute('aria-valuetext', NOME_BANDA[bandaVisibile]);
-    document.getElementById('ascolto-nome').textContent = nomeStazione(stazioneScelta);
-    if (!rotella) mostraFrequenza(stazioneScelta);
+    etichettaAscolto.textContent = zapping ? 'Zapping' : 'In ascolto';
+    document.getElementById('ascolto-nome').textContent = nomeStazione(inOnda);
+    if (!rotella) mostraFrequenza(inOnda);
     misuraTitoli();
   }
   function impostaBanda(nuova) {
@@ -4270,10 +4361,10 @@ Silenzio d'oro | Silenzio imbarazzante
   // arrivando dal menu le cifre del display corrono dalla stazione che suonava a quella delle carte
   function arrivoInStazioni(da) {
     if (!da) return;
-    sintonizzaCifre(da, stazioneScelta);
+    sintonizzaCifre(da, inAscoltoStazioni());
     clearTimeout(fineRicerca);
     document.querySelectorAll('.stazioni .cerca, .tasto.banda.cerca').forEach(x => x.classList.remove('cerca'));
-    const tasto = tastiStazione.find(b => b.dataset.stazione === stazioneScelta);
+    const tasto = tastiStazione.find(b => b.dataset.stazione === inAscoltoStazioni());
     [tasto, selettore].forEach(x => { if (!x) return; void x.offsetWidth; x.classList.add('cerca'); });
     fineRicerca = setTimeout(() => document.querySelectorAll('.stazioni .cerca, .tasto.banda.cerca').forEach(x => x.classList.remove('cerca')), 1500);
   }
@@ -4293,8 +4384,86 @@ Silenzio d'oro | Silenzio imbarazzante
     fineRicerca = setTimeout(() => document.querySelectorAll('.cerca').forEach(x => x.classList.remove('cerca')), 1500);
   }
   tastiStazione.forEach(b => b.addEventListener('click', () => {
-    scegliStazione(b.dataset.stazione);
+    if (zapping) alternaInScaletta(b);
+    else scegliStazione(b.dataset.stazione);
   }));
+
+  /* ---------- Zapping ----------
+     Il tasto Zapping è lo SCAN della radio: invece di una stazione sola si sceglie una scaletta
+     (all'inizio le sei stazioni AM e FM; le pirata si aggiungono a mano, dopo la conferma dei maggiorenni)
+     e in partita la radio cambia stazione a ogni turno. Qui intanto la radio scansiona la scaletta:
+     ogni pochi secondi passa alla stazione successiva, con fruscio, cifre che corrono e la sua musica. */
+  const STAZIONI_BASE = ['merenda', 'hitparade', 'cerebrali', 'paesello', 'ottobit', 'primavisione'];
+  const ORDINE_STAZIONI = tastiStazione.map(b => b.dataset.stazione);       // dal basso verso l'alto della scala
+  const tastoZap = document.getElementById('tasto-zapping');
+  const titoloStazioni = document.getElementById('titolo-stazioni');
+  const etichettaAscolto = document.getElementById('ascolto-etichetta');
+  let zapping = false, scalettaZapping = new Set(STAZIONI_BASE), inScansione = null, scansione = 0, avvisoContatore = 0;
+  const PAUSA_SCANSIONE = 6500;
+  function inAscoltoStazioni() { return zapping && inScansione ? inScansione : stazioneScelta; }
+  function scalettaOrdinata() { return ORDINE_STAZIONI.filter(id => scalettaZapping.has(id)); }
+  function sintonizzaSu(id) {
+    const prima = inAscoltoStazioni();
+    inScansione = id;
+    if (prima !== id) { suona('cercaStazione'); sintonizzaCifre(prima, id); }
+    mostraStazione();
+    aggiornaMusica();
+    clearTimeout(fineRicerca);
+    document.querySelectorAll('.cerca').forEach(x => x.classList.remove('cerca'));
+    const tasto = tastiStazione.find(b => b.dataset.stazione === id);
+    [tasto, selettore].forEach(x => { void x.offsetWidth; x.classList.add('cerca'); });
+    fineRicerca = setTimeout(() => document.querySelectorAll('.cerca').forEach(x => x.classList.remove('cerca')), 1500);
+  }
+  function passoScansione() {
+    const lista = scalettaOrdinata();
+    if (lista.length) sintonizzaSu(lista[(lista.indexOf(inScansione) + 1) % lista.length]);
+  }
+  function avviaScansione(primo = PAUSA_SCANSIONE) {
+    fermaScansione();
+    const giro = () => { passoScansione(); scansione = setTimeout(giro, PAUSA_SCANSIONE); };
+    scansione = setTimeout(giro, primo);
+  }
+  function fermaScansione() { clearTimeout(scansione); scansione = 0; }
+  // almeno due stazioni, altrimenti non è zapping: il tasto fa "no" e il display lo ricorda
+  function negaSpegnimento(b) {
+    suona('errore'); vibra('errore');
+    b.classList.remove('nego'); void b.offsetWidth; b.classList.add('nego');
+    clearTimeout(avvisoContatore);
+    contaCarte.textContent = 'almeno 2 stazioni';
+    avvisoContatore = setTimeout(() => { avvisoContatore = 0; mostraStazione(); }, 1600);
+  }
+  function alternaInScaletta(b) {
+    const id = b.dataset.stazione;
+    if (scalettaZapping.has(id)) {
+      if (scalettaZapping.size <= 2) { negaSpegnimento(b); return; }
+      scalettaZapping.delete(id);
+      suona('led', { spento: true });
+      if (id === inScansione) passoScansione(); else mostraStazione();
+    } else {
+      scalettaZapping.add(id);
+      suona('led');
+      sintonizzaSu(id);                 // la stazione appena aggiunta si ascolta subito
+    }
+    avviaScansione();
+  }
+  tastiStazione.forEach(b => b.addEventListener('animationend', e => { if (e.animationName === 'nego') b.classList.remove('nego'); }));
+  tastoZap.addEventListener('click', () => {
+    zapping = !zapping;
+    suona('interruttore', { acceso: zapping });
+    if (zapping) {
+      // si parte dalla stazione che si stava ascoltando, che entra in scaletta (anche se pirata)
+      scalettaZapping.add(stazioneScelta);
+      inScansione = stazioneScelta;
+      mostraStazione();
+      avviaScansione(900);              // subito un primo salto, per far sentire che la radio scansiona
+    } else {
+      // come sulle autoradio: spegnendo lo SCAN si resta sulla stazione che sta suonando
+      fermaScansione();
+      if (inScansione) stazioneScelta = inScansione;
+      mostraStazione();
+      aggiornaMusica();
+    }
+  });
   document.getElementById('avanti-stazione').addEventListener('click', () => vai(SCHERMATA_DI[modoScelto]));
 
   // Frequenze Pirata: la conferma dei maggiorenni vale solo finché si resta in questa schermata.
@@ -4307,8 +4476,13 @@ Silenzio d'oro | Silenzio imbarazzante
   function entraInStazioni() {
     maggiorenniConfermato = false;
     if (bandaDi(stazioneScelta) === 'pirata') stazioneScelta = 'hitparade';
-    bandaVisibile = bandaDi(stazioneScelta);         // si apre sulla banda della stazione scelta
+    // lo zapping resta acceso, ma le stazioni pirata escono dalla scaletta finché non si riconferma l'età
+    [...scalettaZapping].forEach(id => { if (bandaDi(id) === 'pirata') scalettaZapping.delete(id); });
+    if (scalettaZapping.size < 2) STAZIONI_BASE.forEach(id => scalettaZapping.add(id));
+    if (zapping && !scalettaZapping.has(inScansione)) inScansione = scalettaOrdinata()[0];
+    bandaVisibile = bandaDi(inAscoltoStazioni());    // si apre sulla banda della stazione in ascolto
     mostraStazione();
+    if (zapping) avviaScansione();
   }
   function chiediMaggiorenni() { dialogoAdulti.hidden = false; suona('avvisoAdulti'); document.getElementById('adulti-no').focus({ preventScroll: true }); aggiornaGuardia(); }
   function chiudiAdulti() { dialogoAdulti.hidden = true; suona('finestraGiu'); ruotaManopola(ANGOLO[bandaVisibile]); aggiornaGuardia(); }
@@ -4640,8 +4814,10 @@ Silenzio d'oro | Silenzio imbarazzante
   let usate = new Set();
   try { usate = new Set(JSON.parse(localStorage.getItem(CHIAVE_USATE)) || []); } catch (e) {}
   function salvaUsate() { try { localStorage.setItem(CHIAVE_USATE, JSON.stringify([...usate])); } catch (e) {} }
-  function pesca() {
-    const carte = MAZZI[stazioneScelta] && MAZZI[stazioneScelta].length ? MAZZI[stazioneScelta] : MAZZI.hitparade;
+  // la stazione delle carte: quella scelta, oppure (con lo zapping) quella in onda in questo turno
+  function stazioneDiPartita() { return partita && partita.zap ? partita.zap.stazione : stazioneScelta; }
+  function pesca(id = stazioneDiPartita()) {
+    const carte = MAZZI[id] && MAZZI[id].length ? MAZZI[id] : MAZZI.hitparade;
     let libere = carte.filter(c => !usate.has(impronta(c)));
     if (!libere.length) {                 // mazzo esaurito: le sue carte tornano tutte disponibili
       carte.forEach(c => usate.delete(impronta(c)));
@@ -4773,6 +4949,7 @@ Silenzio d'oro | Silenzio imbarazzante
   function fermaTimer() { timers.forEach(clearTimeout); timers.clear(); }
   function interrompiPartita() {
     fermaTimer();
+    musicaAlta = false;
     passaggio.hidden = true;
     schermataGioco.classList.remove('accensione');
     ago.style.transition = '';
@@ -4860,8 +5037,21 @@ Silenzio d'oro | Silenzio imbarazzante
   }
 
   /* ---------- Passaggio del telefono ---------- */
-  let dopoPassaggio = null;
+  let dopoPassaggio = null, suonoPassaggio = 0;
+  const passZap = document.getElementById('pass-zap');
   function chiediPassaggio(o, poi) {
+    // con lo zapping, all'inizio di ogni turno si vede (e si sente) la stazione in onda
+    const z = partita && partita.zap, inOnda = !!(z && o.inOnda), appena = inOnda && z.appena;
+    passZap.hidden = !inOnda;
+    passZap.classList.remove('cerca');
+    if (inOnda) {
+      const tasto = tastiStazione.find(b => b.dataset.stazione === z.stazione);
+      document.getElementById('pass-zap-nome').textContent = nomeStazione(z.stazione);
+      document.getElementById('pass-zap-tema').textContent = tasto ? tasto.querySelector('.motto').textContent : '';
+      if (tasto) passZap.style.setProperty('--colore-tema', tasto.style.getPropertyValue('--colore'));
+      if (appena) { void passZap.offsetWidth; passZap.classList.add('cerca'); }
+      z.appena = false;
+    }
     passSopra.textContent = o.sopra;
     passNome.textContent = o.nome;
     passNota.textContent = o.nota || '';
@@ -4873,30 +5063,43 @@ Silenzio d'oro | Silenzio imbarazzante
     passOk.textContent = o.bottone;
     dopoPassaggio = poi;
     passaggio.hidden = false;
-    suona(o.suono || 'passaggio');
+    // se la radio ha appena cambiato stazione, il "passo" arriva dopo il fruscio
+    if (appena) suonoPassaggio = dopo(1500, () => suona(o.suono || 'passaggio')); else suona(o.suono || 'passaggio');
     vibra(o.suono === 'cambioCapo' ? 'cambioCapo' : 'passaggio');
   }
   passOk.addEventListener('click', () => {
     passaggio.hidden = true;
+    clearTimeout(suonoPassaggio); timers.delete(suonoPassaggio);
+    if (musicaAlta) { musicaAlta = false; aggiornaMusica(); }   // inizia il turno: la musica torna un sottofondo
     const poi = dopoPassaggio; dopoPassaggio = null;
     if (poi) poi();
   });
 
   /* ---------- Entrata in partita: la radio si accende ---------- */
-  function entraInPartita(poi) {
-    // in alto: "Sintonizzati su [stazione]" e, nella pillola, la tematica da ricordare ai giocatori
-    document.getElementById('gioco-stazione').textContent = nomeStazione(stazioneScelta);
-    const tastoScelto = tastiStazione.find(b => b.dataset.stazione === stazioneScelta);
+  // in alto "Sintonizzati su [stazione]", sulla targhetta la tematica, sulla scala AM/kHz o FM/MHz (e il teschio
+  // per le pirata). Con lo zapping, a ogni cambio il nome e la targhetta tremolano finché il segnale non si aggancia.
+  let fineCercaGioco = 0;
+  function mostraInOndaInGioco(id, cerca) {
+    const nome = document.getElementById('gioco-stazione');
+    nome.textContent = nomeStazione(id);
+    const tasto = tastiStazione.find(b => b.dataset.stazione === id);
     const targhetta = document.getElementById('targhetta');
-    document.getElementById('chip-stazione').textContent = tastoScelto ? tastoScelto.querySelector('.motto').textContent : '';
-    targhetta.hidden = !tastoScelto;
-    if (tastoScelto) targhetta.style.setProperty('--colore-tema', tastoScelto.style.getPropertyValue('--colore'));
+    document.getElementById('chip-stazione').textContent = tasto ? tasto.querySelector('.motto').textContent : '';
+    targhetta.hidden = !tasto;
+    if (tasto) targhetta.style.setProperty('--colore-tema', tasto.style.getPropertyValue('--colore'));
     requestAnimationFrame(misuraQuadrante);
-    // la scala segue la stazione: AM e kHz per le AM, FM e MHz per le altre, e un teschio per le pirata
-    const banda = bandaDi(stazioneScelta);
+    const banda = bandaDi(id);
     document.getElementById('dial-banda').textContent = banda === 'am' ? 'AM' : 'FM';
     document.getElementById('dial-unita').textContent = banda === 'am' ? 'kHz' : 'MHz';
     document.getElementById('dial-teschio').style.display = banda === 'pirata' ? '' : 'none';
+    if (!cerca) return;
+    clearTimeout(fineCercaGioco);
+    [nome.parentElement, targhetta].forEach(x => { x.classList.remove('cerca'); void x.offsetWidth; x.classList.add('cerca'); });
+    fineCercaGioco = setTimeout(() => [nome.parentElement, targhetta].forEach(x => x.classList.remove('cerca')), 1600);
+  }
+  function entraInPartita(poi) {
+    musicaAlta = false;
+    mostraInOndaInGioco(stazioneDiPartita(), false);
     passaggio.hidden = true;
     pulisciQuadrante();
     ago.style.transition = '';
@@ -4950,13 +5153,57 @@ Silenzio d'oro | Silenzio imbarazzante
     if (p.scelto && extra) box.append(el('div', 'ruolo', extra));
   }
 
+  /* ---------- Zapping in partita ----------
+     La scaletta gira come un mazzo mescolato: escono tutte le stazioni prima che una si ripeta,
+     e mai la stessa due volte di fila. Il cambio avviene al passaggio del telefono, davanti a tutti:
+     fruscio, la musica sale con la nuova stazione e torna un sottofondo quando inizia il turno. */
+  let musicaAlta = false;
+  function mescolata(lista) {
+    const a = lista.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function preparaZap() {
+    if (!zapping) return null;
+    const scaletta = scalettaOrdinata();
+    if (scaletta.length < 2) return null;
+    const prima = scaletta.includes(inScansione) ? inScansione : scaletta[0];   // si parte da quella che si stava ascoltando
+    return { scaletta, stazione: prima, coda: mescolata(scaletta.filter(s => s !== prima)), punti: {}, turni: {}, ordine: [], appena: false };
+  }
+  function prossimaStazione(z) {
+    if (!z.coda.length) {
+      z.coda = mescolata(z.scaletta);
+      if (z.coda[0] === z.stazione) z.coda.push(z.coda.shift());
+    }
+    z.stazione = z.coda.shift();
+  }
+  function cambiaStazione() {
+    const z = partita.zap;
+    prossimaStazione(z);
+    z.appena = true;
+    suona('cercaStazione');
+    musicaAlta = true;
+    aggiornaMusica();
+    mostraInOndaInGioco(z.stazione, true);
+  }
+  // per il riepilogo finale: punti fatti (da tutti) e turni giocati su ogni stazione
+  function segnaZap(punti) {
+    const z = partita && partita.zap;
+    if (!z) return;
+    const s = z.stazione;
+    z.punti[s] = (z.punti[s] || 0) + punti;
+    z.turni[s] = (z.turni[s] || 0) + 1;
+    if (!z.ordine.includes(s)) z.ordine.push(s);
+  }
+
   /* =====================================================================
      Giocatori singoli: vince chi arriva a 10, ma si finisce sempre il giro
      ===================================================================== */
   function avviaSingoli(nomi) {
     ultimaPartita = { modo: 'singoli', nomi };
     const turno = Math.floor(Math.random() * nomi.length);
-    partita = { modo: 'singoli', giocatori: nomi.map(nome => ({ nome, punti: 0 })), turno, turniGiocati: 0, carta: pesca(), cartaPronta: true, fase: 'accensione' };
+    const zap = preparaZap();
+    partita = { modo: 'singoli', giocatori: nomi.map(nome => ({ nome, punti: 0 })), turno, turniGiocati: 0, zap, carta: pesca(zap ? zap.stazione : stazioneScelta), cartaPronta: true, fase: 'accensione' };
     entraInPartita(() => estrai(nomi, turno, nuovoTurno));
   }
   function nomeDi(i) { return partita.giocatori[i].nome; }
@@ -4973,7 +5220,7 @@ Silenzio d'oro | Silenzio imbarazzante
     p.fase = 'attesa';
     pulisciQuadrante(); aggiorna();
     const chi = nomeDi(p.turno);
-    chiediPassaggio({ sopra: 'Passa il telefono a', nome: chi, bottone: `Sono ${chi}`, nota: 'Gli altri non devono vedere lo schermo' },
+    chiediPassaggio({ sopra: 'Passa il telefono a', nome: chi, bottone: `Sono ${chi}`, nota: 'Gli altri non devono vedere lo schermo', inOnda: true },
       () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
   }
 
@@ -5012,6 +5259,7 @@ Silenzio d'oro | Silenzio imbarazzante
     // chi ha dato l'indizio prende 1 punto per ogni giocatore che ha colpito il bersaglio
     p.puntiIndizio = p.tentativi.filter(t => t.punti > 0).length;
     p.giocatori[p.turno].punti += p.puntiIndizio;
+    segnaZap(p.tentativi.reduce((s, t) => s + t.punti, 0) + p.puntiIndizio);
     p.turniGiocati++;
     const max = Math.max(...p.giocatori.map(g => g.punti));
     const fineGiro = p.turniGiocati % n === 0;
@@ -5031,6 +5279,7 @@ Silenzio d'oro | Silenzio imbarazzante
 
   function prossimoTurno() {
     partita.turno = (partita.turno + 1) % partita.giocatori.length;
+    if (partita.zap) cambiaStazione();
     nuovoTurno();
   }
 
@@ -5096,7 +5345,9 @@ Silenzio d'oro | Silenzio imbarazzante
         ol.append(li);
       });
       const indizio = el('li', 'indizio' + (p.puntiIndizio ? '' : ' zero'));
-      indizio.append(el('i', 'num', p.turno + 1), el('span', '', `${nomeDi(p.turno)}, per l’indizio`), el('b', '', p.puntiIndizio ? `+${p.puntiIndizio}` : '0'));
+      const perIndizio = el('span', '');
+      perIndizio.append(el('span', 'nome-indizio', `${nomeDi(p.turno)}, `), 'per l’indizio');
+      indizio.append(el('i', 'num', p.turno + 1), perIndizio, el('b', '', p.puntiIndizio ? `+${p.puntiIndizio}` : '0'));
       ol.append(indizio);
       box.append(ol);
       if (p.finita) box.append(el('div', 'ruolo esito', 'Partita finita!'), bottone('Risultato finale', mostraFine));
@@ -5119,7 +5370,8 @@ Silenzio d'oro | Silenzio imbarazzante
   function avviaSquadre(nomi) {
     ultimaPartita = { modo: 'squadre', nomi };
     const turno = Math.floor(Math.random() * 2);
-    partita = { modo: 'squadre', squadre: nomi.map(nome => ({ nome, punti: 0 })), turno, turniSquadra: [0, 0], carta: pesca(), cartaPronta: true, fase: 'accensione' };
+    const zap = preparaZap();
+    partita = { modo: 'squadre', squadre: nomi.map(nome => ({ nome, punti: 0 })), turno, primo: turno, turniSquadra: [0, 0], zap, carta: pesca(zap ? zap.stazione : stazioneScelta), cartaPronta: true, fase: 'accensione' };
     entraInPartita(() => estrai(nomi, turno, spiegaVantaggio));
   }
 
@@ -5150,7 +5402,7 @@ Silenzio d'oro | Silenzio imbarazzante
       nota: nuovo ? 'Il telefono va a un giocatore diverso da chi ha dato l\u2019indizio la volta scorsa. Gli altri non guardano.'
                   : 'Scegliete un caposquadra: prende il telefono, gli altri non guardano',
       bottone: nuovo ? 'Sono il nuovo caposquadra' : 'Sono il caposquadra',
-      suono: nuovo ? 'cambioCapo' : 'passaggio'
+      suono: nuovo ? 'cambioCapo' : 'passaggio', inOnda: true
     }, () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
   }
 
@@ -5192,6 +5444,7 @@ Silenzio d'oro | Silenzio imbarazzante
     const bonus = punti === 4 ? 0 : (p.lato === latoGiusto ? 1 : 0);
     p.squadre[att].punti += punti;
     p.squadre[opp].punti += bonus;
+    segnaZap(punti + bonus);
     p.esito = { punti, bonus };
     const pa = p.squadre[0].punti, pb = p.squadre[1].punti;
     p.finita = pa >= 10 || pb >= 10;
@@ -5204,7 +5457,12 @@ Silenzio d'oro | Silenzio imbarazzante
     if (bonus) suona('bonus', { t: 1.3 });
   }
 
-  function prossimoSquadre() { partita.turno = altra(partita.turno); turnoSquadra(); }
+  function prossimoSquadre() {
+    partita.turno = altra(partita.turno);
+    // con lo zapping la stazione cambia a ogni giro: entrambe le squadre giocano sulla stessa, per essere giusti
+    if (partita.zap && partita.turno === partita.primo) cambiaStazione();
+    turnoSquadra();
+  }
 
   function disegnaTabellone() {
     const p = partita, ol = el('ol', 'tabellone');
@@ -5285,7 +5543,8 @@ Silenzio d'oro | Silenzio imbarazzante
 
   function avviaCollab() {
     ultimaPartita = { modo: 'collab' };
-    partita = { modo: 'collab', punti: 0, turno: 1, totale: TURNI_COLLAB, carta: pesca(), cartaPronta: true, fase: 'accensione' };
+    const zap = preparaZap();
+    partita = { modo: 'collab', punti: 0, turno: 1, totale: TURNI_COLLAB, zap, carta: pesca(zap ? zap.stazione : stazioneScelta), cartaPronta: true, fase: 'accensione' };
     entraInPartita(turnoCollab);
   }
 
@@ -5297,7 +5556,7 @@ Silenzio d'oro | Silenzio imbarazzante
     pulisciQuadrante(); aggiorna();
     chiediPassaggio({
       sopra: p.turno === 1 ? 'Scegliete chi dà il primo indizio' : 'Passate il telefono a chi dà il prossimo indizio',
-      nome: `Turno ${p.turno} di ${p.totale}`, bottone: 'Mostra il bersaglio', nota: 'Gli altri non guardano lo schermo'
+      nome: `Turno ${p.turno} di ${p.totale}`, bottone: 'Mostra il bersaglio', nota: 'Gli altri non guardano lo schermo', inOnda: true
     }, () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
   }
 
@@ -5319,6 +5578,7 @@ Silenzio d'oro | Silenzio imbarazzante
     const punti = d <= 6.75 ? 3 : d <= 11.25 ? 2 : 0;
     if (centro) p.totale++;                     // centro: un turno (e una carta) in più
     p.punti += punti;
+    segnaZap(punti);
     p.esito = { punti, centro };
     p.finita = p.turno >= p.totale;
     p.fase = 'rivelazione';
@@ -5330,7 +5590,7 @@ Silenzio d'oro | Silenzio imbarazzante
     if (centro) suona('turnoExtra', { t: 1.25 });
   }
 
-  function prossimoCollab() { partita.turno++; turnoCollab(); }
+  function prossimoCollab() { partita.turno++; if (partita.zap) cambiaStazione(); turnoCollab(); }
 
   function disegnaCollab() {
     const p = partita, box = el('div', 'collab-box');
@@ -5394,7 +5654,22 @@ Silenzio d'oro | Silenzio imbarazzante
     if (p.modo === 'squadre') { disegnaTabellone(); disegnaTurnoSquadre(); }
     else if (p.modo === 'collab') { disegnaCollab(); disegnaTurnoCollab(); }
     else { disegnaClassifica(); disegnaTurnoSingoli(); }
+    adattaLati();
   }
+  // i pannelli ai lati della scala devono stare nell'altezza del campo, senza finire sopra la carta
+  const campoGioco = schermataGioco.querySelector('.campo');
+  function adattaLati() {
+    campoGioco.classList.remove('compatto', 'compattissimo');
+    const st = getComputedStyle(campoGioco);
+    const alto = campoGioco.clientHeight - parseFloat(st.paddingTop) - parseFloat(st.paddingBottom);
+    if (alto <= 0) return;
+    const esce = () => [latoSx, latoDx].some(l => l.offsetHeight > alto + 1);
+    if (esce()) { campoGioco.classList.add('compatto'); if (esce()) campoGioco.classList.add('compattissimo'); }
+  }
+  let altoCampo = 0;
+  if (window.ResizeObserver) new ResizeObserver(() => {
+    if (campoGioco.clientHeight !== altoCampo) { altoCampo = campoGioco.clientHeight; if (partita) adattaLati(); }
+  }).observe(campoGioco);
 
   // Chi dà l'indizio può cambiare la carta al massimo 2 volte per turno
   const CAMBI_PER_TURNO = 2;
@@ -5467,6 +5742,8 @@ Silenzio d'oro | Silenzio imbarazzante
       fineCorpo.append(griglia);
     }
 
+    if (p.zap && p.zap.ordine.length) fineCorpo.append(riepilogoZapping(p.zap));
+
     ondaTesto(fineTitolo, titolo);
     suona(fanfara, { livello });
     vibra(fanfara === 'collab' ? 'collab' + livello : fanfara);
@@ -5474,6 +5751,25 @@ Silenzio d'oro | Silenzio imbarazzante
     partita = null;
     vai('schermata-fine');
     animaOnde(onde, 1400);
+  }
+
+  // Zapping: le stazioni visitate, con i punti fatti su ognuna (la più generosa è evidenziata)
+  function riepilogoZapping(z) {
+    const box = el('div', 'fine-zap');
+    box.append(el('span', 'etichetta', 'Zapping'));
+    box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Punti fatti su ogni stazione');
+    const righe = z.ordine.map(s => ({ s, punti: z.punti[s] || 0, turni: z.turni[s] || 0 }))
+      .sort((a, b) => b.punti - a.punti || a.turni - b.turni);
+    const max = righe[0].punti;
+    righe.forEach((r, k) => {
+      const tasto = tastiStazione.find(b => b.dataset.stazione === r.s);
+      const li = el('span', 'voce' + (max > 0 && r.punti === max ? ' top' : ''));
+      if (tasto) li.style.setProperty('--colore', tasto.style.getPropertyValue('--colore'));
+      li.style.setProperty('--i', k);
+      li.append(el('i', 'led'), el('span', 'nome', nomeStazione(r.s)), el('span', 'turni', r.turni === 1 ? '1 turno' : `${r.turni} turni`), el('b', '', r.punti));
+      box.append(li);
+    });
+    return box;
   }
 
   document.getElementById('gioca-ancora').addEventListener('click', () => {
