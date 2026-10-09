@@ -514,6 +514,8 @@
   .passaggio .avviso[hidden] { display: none; }
   .passaggio .avviso svg { width: 18px; height: 18px; flex: none; }
   .passaggio .tasto-ambra { margin-top: 4px; }
+  .passaggio .tasto-ambra:disabled { cursor: progress; }
+  .passaggio .tasto-ambra.sbloccato { animation: trovato .45s ease-out; }
   /* zapping: la stazione in onda all'inizio del turno, nello stile della targhetta della scala */
   .zap-onda {
     margin: 0 0 2px; display: inline-flex; align-items: center; gap: 9px; max-width: 100%;
@@ -4506,8 +4508,8 @@ Silenzio d'oro | Silenzio imbarazzante
   const tastoZap = document.getElementById('tasto-zapping');
   const titoloStazioni = document.getElementById('titolo-stazioni');
   const etichettaAscolto = document.getElementById('ascolto-etichetta');
-  let zapping = false, scalettaZapping = new Set(STAZIONI_BASE), inScansione = null, scansione = 0, avvisoContatore = 0;
-  const PAUSA_SCANSIONE = 3000;                // un salto ogni 3 secondi: 1,5 di fruscio e 1,5 di musica
+  let zapping = false, scalettaZapping = new Set(STAZIONI_BASE), inScansione = null, scansione = 0, avvisoContatore = 0, zappingGiocato = false;
+  const PAUSA_SCANSIONE = 3500;                // un salto ogni 3 secondi e mezzo: 1,5 di fruscio e 2 di musica
   function inAscoltoStazioni() { return zapping && inScansione ? inScansione : stazioneScelta; }
   function scalettaOrdinata() { return ORDINE_STAZIONI.filter(id => scalettaZapping.has(id)); }
   function sintonizzaSu(id) {
@@ -4676,6 +4678,12 @@ Silenzio d'oro | Silenzio imbarazzante
   function maggiorenni() { return maggiorenniConfermato; }
   function entraInStazioni() {
     maggiorenniConfermato = false;
+    if (zappingGiocato) {                // dopo una partita con lo zapping si riparte come sempre: Hit Parade, zapping spento
+      zappingGiocato = false;
+      zapping = false; inScansione = null; stazioneScelta = 'hitparade';
+      scalettaZapping = new Set(STAZIONI_BASE);
+      fermaScansione(); fermaNastro();
+    }
     if (bandaDi(stazioneScelta) === 'pirata') stazioneScelta = 'hitparade';
     // lo zapping resta acceso, ma le stazioni pirata escono dalla scaletta finché non si riconferma l'età
     [...scalettaZapping].forEach(id => { if (bandaDi(id) === 'pirata') scalettaZapping.delete(id); });
@@ -5175,6 +5183,7 @@ Silenzio d'oro | Silenzio imbarazzante
   function fermaTimer() { timers.forEach(clearTimeout); timers.clear(); }
   function interrompiPartita() {
     fermaTimer();
+    passOk.disabled = false;
     musicaAlta = false;
     passaggio.hidden = true;
     schermataGioco.classList.remove('accensione');
@@ -5263,7 +5272,7 @@ Silenzio d'oro | Silenzio imbarazzante
   }
 
   /* ---------- Passaggio del telefono ---------- */
-  let dopoPassaggio = null, suonoPassaggio = 0;
+  let dopoPassaggio = null, suonoPassaggio = 0, sbloccoPassaggio = 0;
   const passZap = document.getElementById('pass-zap');
   function chiediPassaggio(o, poi) {
     // con lo zapping, all'inizio di ogni turno si vede (e si sente) la stazione in onda
@@ -5289,6 +5298,11 @@ Silenzio d'oro | Silenzio imbarazzante
     passOk.textContent = o.bottone;
     dopoPassaggio = poi;
     passaggio.hidden = false;
+    // dopo un cambio di stazione il tasto resta spento finché la radio non si aggancia: tutti vedono e sentono dove si gioca
+    clearTimeout(sbloccoPassaggio); timers.delete(sbloccoPassaggio);
+    passOk.classList.remove('sbloccato');
+    passOk.disabled = !!appena;
+    if (appena) sbloccoPassaggio = dopo(1600, () => { passOk.disabled = false; void passOk.offsetWidth; passOk.classList.add('sbloccato'); });
     // se la radio ha appena cambiato stazione, il "passo" arriva dopo il fruscio
     if (appena) suonoPassaggio = dopo(1500, () => suona(o.suono || 'passaggio')); else suona(o.suono || 'passaggio');
     vibra(o.suono === 'cambioCapo' ? 'cambioCapo' : 'passaggio');
@@ -5394,6 +5408,7 @@ Silenzio d'oro | Silenzio imbarazzante
     const scaletta = scalettaOrdinata();
     if (scaletta.length < 2) return null;
     const prima = scaletta.includes(inScansione) ? inScansione : scaletta[0];   // si parte da quella che si stava ascoltando
+    zappingGiocato = true;
     return { scaletta, stazione: prima, coda: mescolata(scaletta.filter(s => s !== prima)), punti: {}, turni: {}, ordine: [], appena: false };
   }
   function prossimaStazione(z) {
