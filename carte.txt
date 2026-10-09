@@ -36,7 +36,7 @@ Vecchio | Nuovo
 Debole | Forte
 Calmo | Agitato
 Timido | Coraggioso
-Disordinato | Ordinato
+Ordinato | Disordinato
 Liscio | Ruvido
 Bagnato | Asciutto
 Dolce | Salato
@@ -89,27 +89,27 @@ Colazione leggera | Colazione pesante
 Primo della classe | Asino
 Orizzontale | Verticale
 Ding | Boom
-È difficile sedercisi sopra | È facile sedercisi sopra
+È difficile sederci sopra | È facile sederci sopra
 Liquido | Solido
 Pessima caramella | Ottima caramella
 Non peloso | Peloso
 Troppo piccolo | Troppo grande
 Da non abbracciare | Da abbracciare
-Pokémon scarso | Pokémon potente
+Pokémon potente | Pokémon scarso
 Piccola quantità | Grande quantità
 Spuntino | Pasto
 Materia semplice | Materia difficile
 Diviso | Intero
 Nome da cane | Nome da gatto
-Meglio freddo | Meglio caldo
+Meglio caldo | Meglio freddo
 Rigido | Flessibile
-Colore spiacevole | Colore piacevole
+Colore piacevole | Colore spiacevole
 Animale da compagnia comune | Animale da compagnia insolito
 
 # --- copie da altre stazioni (ottobre 2026) ---
 Superpotere inutile | Superpotere utile
 Pigro | Instancabile
-Sfortunato | Fortunato
+Fortunato | Sfortunato
 Mezzo lento | Mezzo veloce
 Croccante | Molle
 Snack sano | Snack spazzatura
@@ -118,7 +118,7 @@ Robot amichevole | Robot minaccioso
 Alieno pacifico | Alieno invasore
 Videogioco rilassante | Videogioco frustrante
 Costume da supereroe ridicolo | Costume da supereroe iconico
-Gusto di gelato deludente | Gusto di gelato pazzesco
+Gusto di gelato deludente | Gusto di gelato irrinunciabile
 Strega simpatica | Strega malvagia
 Costume di Halloween ridicolo | Costume di Halloween terrificante
 
@@ -126,7 +126,7 @@ Costume di Halloween ridicolo | Costume di Halloween terrificante
 # Il mazzo standard: i grandi classici per tutti
 
 Freddo | Caldo
-Sottovalutato | Sopravvalutato
+Sopravvalutato | Sottovalutato
 Inutile | Utile
 Facile da disegnare | Difficile da disegnare
 Noioso | Emozionante
@@ -531,7 +531,7 @@ Pizza ortodossa | Pizza eretica
 Abbinamento tradizionale | Abbinamento eretico
 Formato di pasta sottovalutato | Formato di pasta sopravvalutato
 Piatto regionale sottovalutato | Piatto regionale sopravvalutato
-Gusto di gelato deludente | Gusto di gelato pazzesco
+Gusto di gelato deludente | Gusto di gelato irrinunciabile
 Caffè fatto male | Caffè perfetto
 Bevanda da nonno | Bevanda da ragazzi
 Sagra noiosa | Sagra imperdibile
@@ -947,6 +947,24 @@ Amicizia | Convenienza
 Persona senza scrupoli | Persona scrupolosa
 Azienda eticamente scorretta | Azienda eticamente corretta
 
+# --- nuove carte (ottobre 2026, seconda tornata) ---
+Call evitabile | Call necessaria
+Collega ladro di meriti | Collega generoso
+Stipendio puntuale | Stipendio in ritardo
+Nota spese onesta | Nota spese creativa
+Valutazione serena | Valutazione da incubo
+Telefonata discreta | Telefonata in vivavoce
+Gaffe in call perdonabile | Gaffe in call leggendaria
+Caffè d'ufficio imbevibile | Caffè d'ufficio divino
+Vicino di scrivania ideale | Vicino di scrivania da incubo
+Formazione aziendale utile | Formazione aziendale inutile
+Uscire in orario | Uscire a notte fonda
+Password sicura | Password imbarazzante
+Discorso del capo ispirato | Discorso del capo soporifero
+Ultimo giorno commovente | Ultimo giorno liberatorio
+Pranzo in ufficio discreto | Pranzo in ufficio puzzolente
+Lavoro di squadra vero | Lavoro di squadra finto
+
 [Onda Nera]
 # Umorismo nero e macabro, fantasmi, misteri e paure: per adulti, senza contenuti espliciti
 
@@ -1032,6 +1050,30 @@ Satira | Offesa
 Elettrizzante | Terrificante
 Fobia irragionevole | Fobia ragionevole
 Scienza | Pseudoscienza
+
+# --- nuove carte (ottobre 2026, seconda tornata) ---
+Scheletro nell'armadio piccolo | Scheletro nell'armadio enorme
+Cattivo ridicolo | Cattivo terrificante
+Presentimento sbagliato | Presentimento azzeccato
+Esorcismo riuscito | Esorcismo fallito
+Lupo mannaro tenero | Lupo mannaro feroce
+Mummia ben conservata | Mummia a pezzi
+Delitto maldestro | Delitto perfetto
+Scena del crimine pulita | Scena del crimine splatter
+Piano di fuga disastroso | Piano di fuga geniale
+Telefonata anonima innocua | Telefonata anonima minacciosa
+Stanza segreta deludente | Stanza segreta agghiacciante
+Nebbia romantica | Nebbia da film horror
+Bosco incantato | Bosco maledetto
+Animale impagliato elegante | Animale impagliato inquietante
+Rimedio della nonna efficace | Rimedio della nonna letale
+Museo delle cere carino | Museo delle cere inquietante
+Sonnambulo innocuo | Sonnambulo pericoloso
+Polizza sulla vita normale | Polizza sulla vita sospetta
+Medium credibile | Medium ciarlatano
+Oroscopo rassicurante | Oroscopo minaccioso
+Tè della suocera innocuo | Tè della suocera sospetto
+Urlo nella notte lontano | Urlo nella notte vicinissimo
 
 [Dopo Mezzanotte]
 # Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
@@ -1123,3 +1165,24 @@ Amore | Abitudine
 Fatto per amore | Fatto per soldi
 Verità scomoda | Bugia comoda
 Silenzio d'oro | Silenzio imbarazzante
+
+# --- nuove carte (ottobre 2026, seconda tornata) ---
+Il giorno dopo imbarazzante | Il giorno dopo romantico
+Chimica zero | Chimica esplosiva
+Rottura civile | Rottura drammatica
+Lingerie comoda | Lingerie audace
+Musica d'atmosfera ridicola | Musica d'atmosfera azzeccata
+Ritorno di fiamma tiepido | Ritorno di fiamma travolgente
+Dichiarazione d'amore goffa | Dichiarazione d'amore epica
+App di incontri disastrosa | App di incontri fortunata
+Gioco di coppia innocente | Gioco di coppia spinto
+Ballo goffo | Ballo sensuale
+Sguardo innocente | Sguardo malizioso
+Doppio senso involontario | Doppio senso voluto
+Brindisi commosso | Brindisi imbarazzante
+Rientro all'alba silenzioso | Rientro all'alba rumoroso
+Coppia riservata | Coppia appiccicosa
+Conto alla romana | Conto offerto
+Nomignolo tenero | Nomignolo imbarazzante
+Addio al nubilato tranquillo | Addio al nubilato scandaloso
+Cotta passeggera | Amore eterno
