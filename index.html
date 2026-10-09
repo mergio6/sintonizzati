@@ -4534,18 +4534,19 @@ Silenzio d'oro | Silenzio imbarazzante
     scansione = setTimeout(giro, primo);
   }
   function fermaScansione() { clearTimeout(scansione); scansione = 0; }
-  // almeno due stazioni, altrimenti non è zapping: il tasto fa "no" e il display lo ricorda
+  // almeno tre stazioni, altrimenti lo zapping gira troppo poco: il tasto fa "no" e il display lo ricorda
+  const MIN_ZAPPING = 3;
   function negaSpegnimento(b) {
     suona('errore'); vibra('errore');
     b.classList.remove('nego'); void b.offsetWidth; b.classList.add('nego');
     clearTimeout(avvisoContatore);
-    contaCarte.textContent = 'almeno 2 stazioni';
+    contaCarte.textContent = `almeno ${MIN_ZAPPING} stazioni`;
     avvisoContatore = setTimeout(() => { avvisoContatore = 0; mostraStazione(); }, 1600);
   }
   function alternaInScaletta(b) {
     const id = b.dataset.stazione;
     if (scalettaZapping.has(id)) {
-      if (scalettaZapping.size <= 2) { negaSpegnimento(b); return; }
+      if (scalettaZapping.size <= MIN_ZAPPING) { negaSpegnimento(b); return; }
       scalettaZapping.delete(id);
       suona('led', { spento: true });
       togliDalNastro(id);
@@ -4687,7 +4688,7 @@ Silenzio d'oro | Silenzio imbarazzante
     if (bandaDi(stazioneScelta) === 'pirata') stazioneScelta = 'hitparade';
     // lo zapping resta acceso, ma le stazioni pirata escono dalla scaletta finché non si riconferma l'età
     [...scalettaZapping].forEach(id => { if (bandaDi(id) === 'pirata') scalettaZapping.delete(id); });
-    if (scalettaZapping.size < 2) STAZIONI_BASE.forEach(id => scalettaZapping.add(id));
+    STAZIONI_BASE.forEach(id => { if (scalettaZapping.size < MIN_ZAPPING) scalettaZapping.add(id); });   // senza le pirata se ne aggiungono quante servono
     if (zapping && !scalettaZapping.has(inScansione)) inScansione = scalettaOrdinata()[0];
     bandaVisibile = bandaDi(inAscoltoStazioni());    // si apre sulla banda della stazione in ascolto
     mostraStazione();
@@ -5406,7 +5407,7 @@ Silenzio d'oro | Silenzio imbarazzante
   function preparaZap() {
     if (!zapping) return null;
     const scaletta = scalettaOrdinata();
-    if (scaletta.length < 2) return null;
+    if (scaletta.length < MIN_ZAPPING) return null;
     const prima = scaletta.includes(inScansione) ? inScansione : scaletta[0];   // si parte da quella che si stava ascoltando
     zappingGiocato = true;
     return { scaletta, stazione: prima, coda: mescolata(scaletta.filter(s => s !== prima)), punti: {}, turni: {}, ordine: [], appena: false };
