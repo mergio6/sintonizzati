@@ -1183,6 +1183,45 @@
     background: var(--colore-tema, var(--ambra)); box-shadow: 0 0 0 1px rgba(0, 0, 0, .18), 0 0 7px var(--colore-tema, var(--ambra));
   }
   #schermata-gioco .campo { padding-top: 18px; }
+
+  /* Occhio nell'angolo in alto a destra del vetro: copre e scopre il bersaglio di chi dà l'indizio.
+     Sta fuori dall'arco della scala, oltre i numeri del bersaglio, così non copre mai niente. */
+  .copri-bersaglio {
+    --u: var(--dial-u, .8px); --lato: max(26px, calc(30 * var(--u)));
+    position: absolute; z-index: 1; left: calc(50% + 170 * var(--u)); top: calc(var(--dial-top, 0px) + 70 * var(--u));
+    width: var(--lato); height: var(--lato); transform: translate(-50%, -50%); padding: 0;
+    display: grid; place-items: center; border-radius: 50%; cursor: pointer;
+    border: 1.5px solid color-mix(in srgb, var(--vetro-segni) 55%, transparent);
+    background: color-mix(in srgb, var(--vetro-segni) 10%, var(--vetro)); color: var(--vetro-segni);
+    transition: background-color .2s, color .2s;
+  }
+  .copri-bersaglio[hidden] { display: none; }
+  .copri-bersaglio::before { content: ""; position: absolute; inset: -10px; border-radius: 50%; }   /* più facile da toccare */
+  .copri-bersaglio svg { width: 58%; height: 58%; }
+  .copri-bersaglio .occhio-chiuso, .copri-bersaglio[aria-pressed="true"] .occhio-aperto { display: none; }
+  .copri-bersaglio[aria-pressed="true"] .occhio-chiuso { display: block; }
+  .copri-bersaglio[aria-pressed="true"] { background: var(--vetro-segni); color: var(--vetro); border-color: var(--vetro-segni); }
+  .quadrante.coperto #ventaglio { transform: scale(.12); opacity: 0; }
+  .nota-coperto {
+    --u: var(--dial-u, .8px);
+    position: absolute; left: 50%; top: calc(var(--dial-top, 0px) + 128 * var(--u)); transform: translate(-50%, -50%);
+    font: 10px "Michroma", Verdana, sans-serif; font-size: max(10px, calc(11 * var(--u))); letter-spacing: .06em; white-space: nowrap;
+    color: var(--vetro-segni); opacity: 0; transition: opacity .3s; pointer-events: none;
+  }
+  .quadrante.coperto .nota-coperto { opacity: .6; transition-delay: .25s; }
+
+  /* Nascondi e Conferma chiedono un secondo tocco: il primo li "arma" per 3 secondi */
+  .turno .tasto-ambra.sicuro { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.15; }
+  .turno .tasto-ambra.armato {
+    position: relative; overflow: hidden; background: var(--superficie); color: var(--inchiostro);
+    box-shadow: inset 0 0 0 2px var(--ambra), 0 5px 0 var(--ambra-scura);
+  }
+  .turno .tasto-ambra.armato::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--ambra);
+    transform-origin: left center; animation: scadenza 3s linear forwards;
+  }
+  @keyframes scadenza { to { transform: scaleX(0); } }
+  .tasto-ambra.armato .sicuro-nota { font: 600 11px/1.1 "Bricolage Grotesque", system-ui, sans-serif; letter-spacing: 0; color: var(--tenue); }
   #schermata-gioco.accensione .targhetta { animation: sale-targhetta .45s ease-out .45s both; }
   @keyframes sale-targhetta { from { opacity: 0; transform: translate(-50%, -55%); } }
   #schermata-gioco.accensione .targhetta .tema-testo { animation: cerca-nome .9s linear .7s both; }
@@ -2759,6 +2798,12 @@ Silenzio d'oro | Silenzio imbarazzante
         <div class="quadrante">
           <!-- Targhetta sulla cornice della scala: la tematica della stazione, sempre in vista -->
           <div class="targhetta" id="targhetta"><span class="tema-testo" id="chip-stazione"></span></div>
+          <!-- Chi dà l'indizio può coprire il bersaglio (per appoggiare il telefono sul tavolo) e poi rivederlo -->
+          <button class="copri-bersaglio" id="copri-bersaglio" aria-pressed="false" aria-label="Copri il bersaglio" hidden>
+            <svg class="occhio-aperto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="occhio-chiuso" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.9 10.9 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.2M6.6 6.6C3.7 8.5 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+          </button>
+          <div class="nota-coperto" aria-hidden="true">Bersaglio coperto</div>
           <!-- Quadrante stile VU-meter di uno stereo anni 80 -->
           <svg id="dial" viewBox="0 0 400 236" role="slider" tabindex="0"
                aria-label="Lancetta" aria-valuemin="-90" aria-valuemax="90" aria-valuenow="0">
@@ -4940,6 +4985,30 @@ Silenzio d'oro | Silenzio imbarazzante
   function el(tag, cls, testo) { const e = document.createElement(tag); if (cls) e.className = cls; if (testo != null) e.textContent = testo; return e; }
   function svg(tag, attr) { const e = document.createElementNS(NS, tag); for (const k in attr) e.setAttribute(k, attr[k]); return e; }
   function bottone(testo, azione, cls = 'tasto-ambra piccolo') { const b = el('button', cls, testo); b.addEventListener('click', azione); return b; }
+  // Nascondi e Conferma non si possono annullare (il telefono è già passato di mano): il primo tocco
+  // chiede "Sicuro?", il secondo conferma. Dopo 3 secondi senza conferma il tasto torna com'era;
+  // un secondo tocco troppo ravvicinato (meno di un terzo di secondo) è un doppio tocco per sbaglio e non conta.
+  function bottoneSicuro(testo, azione) {
+    const b = el('button', 'tasto-ambra piccolo sicuro', testo);
+    let armato = 0, scadenza = 0;
+    const disarma = () => { armato = 0; b.classList.remove('armato'); b.textContent = testo; b.removeAttribute('aria-label'); };
+    b.addEventListener('click', () => {
+      const ora = performance.now();
+      if (!armato) {
+        armato = ora;
+        b.classList.add('armato');
+        b.replaceChildren(el('span', 'sicuro-testo', 'Sicuro?'), el('span', 'sicuro-nota', 'tocca di nuovo'));
+        b.setAttribute('aria-label', `${testo}: tocca di nuovo per confermare`);
+        vibra('conferma');
+        clearTimeout(scadenza); scadenza = setTimeout(disarma, 3000);
+        return;
+      }
+      if (ora - armato < 330) return;
+      clearTimeout(scadenza);
+      azione();
+    });
+    return b;
+  }
   function lancettaLibera() { return !!partita && partita.fase === 'tentativo'; }
   function elenco(nomi) { return nomi.length < 2 ? nomi.join('') : nomi.slice(0, -1).join(', ') + ' e ' + nomi[nomi.length - 1]; }
 
@@ -5332,10 +5401,10 @@ Silenzio d'oro | Silenzio imbarazzante
       pannelloEstrazione(box, nomeDi(p.candidato), 'Dà il primo indizio');
     } else if (p.fase === 'segreto') {
       box.append(el('div', 'etichetta', 'Tocca a'), el('div', 'chi', nomeDi(p.turno)),
-        el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottone('Nascondi', nascondiBersaglio));
+        el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottoneSicuro('Nascondi', nascondiBersaglio));
     } else if (p.fase === 'tentativo') {
       box.append(el('div', 'etichetta', `Indizio di ${nomeDi(p.turno)}`), el('div', 'chi', nomeDi(p.ordine[p.corrente])),
-        el('div', 'ruolo', 'Metti la lancetta sul centro del bersaglio'), bottone('Conferma', confermaTentativo));
+        el('div', 'ruolo', 'Metti la lancetta sul centro del bersaglio'), bottoneSicuro('Conferma', confermaTentativo));
     } else if (p.fase === 'rivelazione') {
       box.append(el('div', 'etichetta', `Bersaglio di ${nomeDi(p.turno)}`));
       const ol = el('ol', 'risultati');
@@ -5492,10 +5561,10 @@ Silenzio d'oro | Silenzio imbarazzante
       pannelloEstrazione(box, p.squadre[p.candidato].nome, `${p.squadre[altra(p.candidato)].nome} parte da 1 punto`);
     } else if (p.fase === 'segreto') {
       box.append(el('div', 'etichetta', 'Caposquadra di'), nomeSq(att),
-        el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottone('Nascondi', nascondiSquadra));
+        el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottoneSicuro('Nascondi', nascondiSquadra));
     } else if (p.fase === 'tentativo') {
       box.append(el('div', 'etichetta', 'Indizio per'), nomeSq(att),
-        el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il 4'), bottone('Conferma', confermaSquadra));
+        el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il 4'), bottoneSicuro('Conferma', confermaSquadra));
     } else if (p.fase === 'lato') {
       box.append(el('div', 'etichetta', 'Tocca a'), nomeSq(opp),
         el('div', 'ruolo', 'Il 4 è a sinistra o a destra della lancetta?'));
@@ -5617,10 +5686,10 @@ Silenzio d'oro | Silenzio imbarazzante
     const p = partita, box = el('div', 'turno');
     if (p.fase === 'segreto') {
       box.append(el('div', 'etichetta', `Turno ${p.turno} di ${p.totale}`), el('div', 'chi', 'Tocca a te'),
-        el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottone('Nascondi', nascondiCollab));
+        el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottoneSicuro('Nascondi', nascondiCollab));
     } else if (p.fase === 'tentativo') {
       box.append(el('div', 'etichetta', `Turno ${p.turno} di ${p.totale}`), el('div', 'chi', 'Tutti insieme'),
-        el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il centro'), bottone('Conferma', confermaCollab));
+        el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il centro'), bottoneSicuro('Conferma', confermaCollab));
     } else if (p.fase === 'rivelazione') {
       const e = p.esito;
       const testo = e.centro ? 'Centro!\n3 punti + turno extra' : e.punti === 3 ? 'Spicchio da 3 punti' : e.punti === 2 ? 'Spicchio da 2 punti' : 'Fuori dal bersaglio';
@@ -5650,12 +5719,29 @@ Silenzio d'oro | Silenzio imbarazzante
     dial.classList.toggle('bloccato', !libera);
     dial.classList.toggle('scegli-lato', p.modo === 'squadre' && p.fase === 'lato');
     dial.setAttribute('tabindex', libera ? '0' : '-1');
+    const segreto = p.fase === 'segreto';
+    copriBersaglio.hidden = !segreto;
+    if (!segreto) copri(false, true);
     latoSx.replaceChildren(); latoDx.replaceChildren();
     if (p.modo === 'squadre') { disegnaTabellone(); disegnaTurnoSquadre(); }
     else if (p.modo === 'collab') { disegnaCollab(); disegnaTurnoCollab(); }
     else { disegnaClassifica(); disegnaTurnoSingoli(); }
     adattaLati();
   }
+  // L'occhio sul vetro: copre il bersaglio per appoggiare il telefono sul tavolo, e lo fa ricomparire
+  const copriBersaglio = document.getElementById('copri-bersaglio');
+  function copri(coperto, muto) {
+    const quadrante = copriBersaglio.parentElement;
+    if (quadrante.classList.contains('coperto') === coperto) return;
+    quadrante.classList.toggle('coperto', coperto);
+    copriBersaglio.setAttribute('aria-pressed', String(coperto));
+    copriBersaglio.setAttribute('aria-label', coperto ? 'Mostra di nuovo il bersaglio' : 'Copri il bersaglio');
+    if (!muto) suona(coperto ? 'nascondi' : 'apriBersaglio');
+  }
+  copriBersaglio.addEventListener('click', () => {
+    if (partita && partita.fase === 'segreto') copri(!copriBersaglio.parentElement.classList.contains('coperto'));
+  });
+
   // i pannelli ai lati della scala devono stare nell'altezza del campo, senza finire sopra la carta
   const campoGioco = schermataGioco.querySelector('.campo');
   function adattaLati() {
