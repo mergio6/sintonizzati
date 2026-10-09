@@ -1140,10 +1140,64 @@
     font-family: "Michroma", Verdana, sans-serif; font-size: 15px; letter-spacing: .04em;
     box-shadow: 0 5px 0 var(--tasto-ombra); transition: transform .08s, box-shadow .08s;
   }
-  .tasto-zap:active, .tasto-zap[aria-pressed="true"] { transform: translateY(4px); box-shadow: 0 1px 0 var(--tasto-ombra); }
-  .tasto-zap[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--ambra), 0 1px 0 var(--tasto-ombra); }
-  .tasto-zap[aria-pressed="true"] .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); animation: scan-led 1.3s steps(1) infinite; }
-  @keyframes scan-led { 50% { background: var(--ambra-scura); box-shadow: 0 0 3px var(--ambra-scura); } }
+  /* acceso non resta abbassato (così resta allineato a ON AIR e Avanti): diventa giallo con la spia rossa che pulsa */
+  .tasto-zap:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--tasto-ombra); }
+  .tasto-zap[aria-pressed="true"] { background: var(--ambra); color: #2A1C00; box-shadow: 0 5px 0 var(--ambra-scura); }
+  .tasto-zap[aria-pressed="true"]:active { box-shadow: 0 1px 0 var(--ambra-scura); }
+  .tasto-zap[aria-pressed="true"] .led { background: #E5463A; box-shadow: 0 0 0 1.5px rgba(42, 28, 0, .35), 0 0 9px #FF5A47; animation: scan-led 1.4s ease-in-out infinite; }
+  @keyframes scan-led { 50% { background: #9E2A20; box-shadow: 0 0 0 1.5px rgba(42, 28, 0, .35), 0 0 2px rgba(255, 90, 71, .3); } }
+  /* ON AIR: accanto al tasto Zapping, la lampada rossa degli studi radio e un nastro con le stazioni
+     in scaletta che scorre da destra a sinistra. Le stazioni aggiunte entrano allargandosi al centro
+     del nastro e si accendono, quelle tolte si stringono e spariscono. */
+  .on-air {
+    --modulo: var(--corpo);
+    flex: 1 1 0; min-width: 0; height: 52px; display: flex; align-items: stretch; gap: 7px; padding: 6px;
+    border-radius: 12px; color: var(--vetro-segni);
+    background: radial-gradient(circle, rgba(220, 229, 229, .1) 0 1px, transparent 1.4px) 0 0 / 6px 6px, var(--modulo);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07), inset 0 3px 10px rgba(0, 0, 0, .45), 0 5px 0 var(--tasto-ombra);
+    animation: accendi-onair .45s cubic-bezier(.2, .9, .3, 1.15) both;
+  }
+  :root[data-attivo="scuro"] .on-air { --modulo: #0C2126; }
+  .on-air[hidden] { display: none; }
+  .on-air.spegne { animation: spegni-onair .25s ease-in both; }
+  @keyframes accendi-onair { from { opacity: 0; transform: translateX(-14px) scaleX(.92); } }
+  @keyframes spegni-onair { to { opacity: 0; transform: translateX(-10px) scaleX(.94); } }
+  .lampada-onair {
+    flex: none; display: grid; place-items: center; padding: 0 10px; border-radius: 7px;
+    font: 10px/1 "Michroma", Verdana, sans-serif; letter-spacing: .14em; color: #FFF1EC; white-space: nowrap;
+    background: radial-gradient(120% 150% at 50% 25%, #FF6E5A, #C42B1E 72%);
+    text-shadow: 0 0 6px rgba(255, 225, 215, .9);
+    box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .28), 0 0 14px rgba(255, 90, 71, .5);
+    animation: onair-respiro 3.6s ease-in-out infinite;
+  }
+  @keyframes onair-respiro { 50% { box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .28), 0 0 7px rgba(255, 90, 71, .3); filter: brightness(.93); } }
+  .lampada-onair.lampo { animation: onair-lampo .7s steps(1) 1; }
+  @keyframes onair-lampo { 0%, 30%, 60% { filter: brightness(1.35); box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, .35), 0 0 22px rgba(255, 90, 71, .85); } 15%, 45% { filter: brightness(.8); } }
+  .nastro {
+    flex: 1 1 auto; min-width: 0; position: relative; overflow: hidden; border-radius: 7px;
+    background: var(--vetro); box-shadow: 0 0 0 1.5px rgba(0, 0, 0, .35);
+  }
+  /* le voci sfumano entrando e uscendo dai bordi del vetro; sopra, l'ombra interna del display */
+  .voce-onda.anima { overflow: hidden; }          /* solo mentre si allarga o si stringe */
+  .nastro::before, .nastro::after { content: ""; position: absolute; top: 0; bottom: 0; width: 28px; z-index: 1; pointer-events: none; }
+  .nastro::before { left: 0; background: linear-gradient(90deg, var(--vetro), transparent); }
+  .nastro::after { right: 0; background: linear-gradient(270deg, var(--vetro), transparent); }
+  .on-air .nastro { background-clip: padding-box; }
+  .nastro-ombra { position: absolute; inset: 0; z-index: 2; border-radius: inherit; box-shadow: inset 0 2px 6px rgba(0, 0, 0, .3); pointer-events: none; }
+  .nastro-scorre { position: absolute; left: 0; top: 0; bottom: 0; display: flex; align-items: center; will-change: transform; }
+  .voce-onda {
+    flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 0 18px 0 2px; white-space: nowrap;
+    font: 700 13.5px/1 "Bricolage Grotesque", system-ui, sans-serif; color: var(--vetro-segni); text-shadow: var(--lcd-ombra);
+    opacity: .78; transition: opacity .3s;
+  }
+  .voce-onda::before {
+    content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--c); box-shadow: 0 0 0 1px rgba(0, 0, 0, .18), 0 0 6px var(--c); transition: transform .3s, box-shadow .3s;
+  }
+  .voce-onda.in-ascolto { opacity: 1; }
+  .voce-onda.in-ascolto::before { transform: scale(1.3); box-shadow: 0 0 0 1px rgba(0, 0, 0, .18), 0 0 10px 1px var(--c); }
+  .voce-onda.nuova { animation: voce-nuova 1.6s ease-out; }
+  @keyframes voce-nuova { 0%, 35% { opacity: 1; text-shadow: 0 0 10px var(--c), 0 0 2px var(--c); } }
   .tastino.ambra { background: var(--ambra); color: #2A1C00; box-shadow: 0 5px 0 var(--ambra-scura); }
   .tastino.ambra:active { box-shadow: 0 1px 0 var(--ambra-scura); }
   #schermata-gioco .marchio { min-width: 0; }
@@ -1196,6 +1250,12 @@
     transition: background-color .2s, color .2s;
   }
   .copri-bersaglio[hidden] { display: none; }
+  /* un alone leggero che respira piano: si capisce che si può toccare, senza distrarre */
+  .copri-bersaglio { animation: invito-occhio 3.4s ease-in-out infinite; }
+  @keyframes invito-occhio {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--vetro-segni) 0%, transparent), 0 0 4px color-mix(in srgb, var(--vetro-segni) 15%, transparent); }
+    50% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--vetro-segni) 16%, transparent), 0 0 10px color-mix(in srgb, var(--vetro-segni) 32%, transparent); }
+  }
   .copri-bersaglio::before { content: ""; position: absolute; inset: -10px; border-radius: 50%; }   /* più facile da toccare */
   .copri-bersaglio svg { width: 58%; height: 58%; }
   .copri-bersaglio .occhio-chiuso, .copri-bersaglio[aria-pressed="true"] .occhio-aperto { display: none; }
@@ -1293,6 +1353,7 @@
     .riflesso, .scintilla, .alone, .bordo-oro, .stazioni.cambio .tasto { animation: none !important; }
     #manopola-corpo, .indice-manopola { transition: none; } .scintilla { opacity: 0; }
     .sfondo *, .cerca .led, .cerca .ascolto-nome, .in-onda.cerca .nome-onda { animation: none !important; }
+    .copri-bersaglio, .lampada-onair, .voce-onda.nuova, .on-air, .on-air.spegne { animation: none !important; }
     .tasto-zap .led, .stazioni .tasto.nego, .zap-onda.cerca *, .zap-onda.cerca .zap-display::before, .targhetta.cerca .tema-testo, .fine-zap .voce { animation: none !important; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .fine-squadra, .totale-fine { animation: none !important; }
@@ -2637,6 +2698,7 @@ Silenzio d'oro | Silenzio imbarazzante
         </div>
         <div class="piede">
           <button class="tasto-zap" id="tasto-zapping" aria-pressed="false" aria-label="Zapping: a ogni turno la radio cambia stazione"><span class="led" aria-hidden="true"></span>Zapping</button>
+          <div class="on-air" id="on-air" role="status" hidden><span class="lampada-onair" aria-hidden="true">ON AIR</span><div class="nastro" aria-hidden="true"><div class="nastro-scorre" id="nastro"></div><span class="nastro-ombra"></span></div></div>
           <button class="tasto-ambra" id="avanti-stazione">Avanti</button>
         </div>
       </div>
@@ -4092,7 +4154,7 @@ Silenzio d'oro | Silenzio imbarazzante
     if (sc) sc.scrollTop = 0;
     if (id === 'schermata-modi') preparaRadioMenu(da);
     else { clearTimeout(attesaMenu); radioMenuInAttesa = false; }
-    if (id !== 'schermata-stazione') fermaScansione();     // lo zapping scansiona solo nella scelta delle stazioni
+    if (id !== 'schermata-stazione') { fermaScansione(); fermaNastro(); }   // lo zapping scansiona solo nella scelta delle stazioni
     aggiornaGuardia();
     aggiornaMusica();
   }
@@ -4335,6 +4397,7 @@ Silenzio d'oro | Silenzio imbarazzante
     });
     griglia.classList.toggle('zapping', zapping);
     tastoZap.setAttribute('aria-pressed', String(zapping));
+    if (zapping) nastro.querySelectorAll('.voce-onda').forEach(v => v.classList.toggle('in-ascolto', v.dataset.stazione === inOnda));
     titoloStazioni.textContent = zapping ? 'Zapping: quali stazioni?' : 'Su che stazione giocate?';
     if (!avvisoContatore) contaCarte.textContent = zapping ? `${scalettaZapping.size} stazioni` : `${(MAZZI[stazioneScelta] || []).length} carte`;
     griglia.dataset.banda = bandaVisibile;
@@ -4444,7 +4507,7 @@ Silenzio d'oro | Silenzio imbarazzante
   const titoloStazioni = document.getElementById('titolo-stazioni');
   const etichettaAscolto = document.getElementById('ascolto-etichetta');
   let zapping = false, scalettaZapping = new Set(STAZIONI_BASE), inScansione = null, scansione = 0, avvisoContatore = 0;
-  const PAUSA_SCANSIONE = 6500;
+  const PAUSA_SCANSIONE = 3000;                // un salto ogni 3 secondi: 1,5 di fruscio e 1,5 di musica
   function inAscoltoStazioni() { return zapping && inScansione ? inScansione : stazioneScelta; }
   function scalettaOrdinata() { return ORDINE_STAZIONI.filter(id => scalettaZapping.has(id)); }
   function sintonizzaSu(id) {
@@ -4483,15 +4546,106 @@ Silenzio d'oro | Silenzio imbarazzante
       if (scalettaZapping.size <= 2) { negaSpegnimento(b); return; }
       scalettaZapping.delete(id);
       suona('led', { spento: true });
+      togliDalNastro(id);
       if (id === inScansione) passoScansione(); else mostraStazione();
     } else {
       scalettaZapping.add(id);
       suona('led');
+      aggiungiAlNastro(id);
       sintonizzaSu(id);                 // la stazione appena aggiunta si ascolta subito
     }
     avviaScansione();
   }
   tastiStazione.forEach(b => b.addEventListener('animationend', e => { if (e.animationName === 'nego') b.classList.remove('nego'); }));
+
+  /* ---------- ON AIR: il nastro con le stazioni in scaletta ----------
+     Un nastro trasportatore: le voci scorrono verso sinistra, quella uscita del tutto si toglie
+     e a destra se ne aggiungono altre, seguendo l'ordine della scaletta (che si ripete se è corta). */
+  const onAir = document.getElementById('on-air'), nastro = document.getElementById('nastro');
+  const finestraNastro = nastro.parentElement, lampadaOnAir = onAir.querySelector('.lampada-onair');
+  const VELOCITA_NASTRO = 36;                     // pixel al secondo
+  let xNastro = 0, tNastro = 0, rafNastro = 0, spegniOnAir = 0;
+  const coloreDi = id => { const t = tastiStazione.find(b => b.dataset.stazione === id); return t ? t.style.getPropertyValue('--colore') : 'var(--ambra)'; };
+  function voceOnda(id) {
+    const v = el('span', 'voce-onda' + (zapping && id === inScansione ? ' in-ascolto' : ''), nomeStazione(id));
+    v.dataset.stazione = id;
+    v.style.setProperty('--c', coloreDi(id));
+    return v;
+  }
+  function dopoNelNastro(id) {
+    const lista = scalettaOrdinata(), i = ORDINE_STAZIONI.indexOf(id);
+    return lista.find(s => ORDINE_STAZIONI.indexOf(s) > i) || lista[0];
+  }
+  function riempiNastro() {
+    const W = finestraNastro.clientWidth;
+    if (!W) return;
+    for (let guardia = 0; guardia < 40 && nastro.getBoundingClientRect().width - xNastro < W + 60; guardia++) {
+      const ultima = [...nastro.children].reverse().find(v => !v.classList.contains('esce'));
+      nastro.append(voceOnda(ultima ? dopoNelNastro(ultima.dataset.stazione) : scalettaOrdinata()[0]));
+    }
+  }
+  function passoNastro(t) {
+    const dt = tNastro ? Math.min(0.1, (t - tNastro) / 1000) : 0;
+    tNastro = t;
+    xNastro += VELOCITA_NASTRO * dt;
+    for (let prima = nastro.firstElementChild; prima; prima = nastro.firstElementChild) {
+      const w = prima.getBoundingClientRect().width;
+      if (w > xNastro) break;
+      xNastro -= w; prima.remove();
+    }
+    nastro.style.transform = `translateX(${-xNastro}px)`;
+    riempiNastro();
+    rafNastro = requestAnimationFrame(passoNastro);
+  }
+  function descriviOnAir() { onAir.setAttribute('aria-label', 'In onda: ' + scalettaOrdinata().map(nomeStazione).join(', ')); }
+  function avviaNastro() {
+    clearTimeout(spegniOnAir);
+    onAir.hidden = false;
+    onAir.classList.remove('spegne');
+    nastro.replaceChildren(); nastro.style.transform = '';
+    xNastro = 0; tNastro = 0;
+    descriviOnAir();
+    riempiNastro();
+    cancelAnimationFrame(rafNastro);
+    if (!riduciMoto) rafNastro = requestAnimationFrame(passoNastro);
+  }
+  function fermaNastro() { cancelAnimationFrame(rafNastro); rafNastro = 0; }
+  function spegniNastro() {
+    fermaNastro();
+    onAir.classList.add('spegne');
+    clearTimeout(spegniOnAir);
+    spegniOnAir = setTimeout(() => { onAir.hidden = true; onAir.classList.remove('spegne'); nastro.replaceChildren(); }, riduciMoto ? 0 : 250);
+  }
+  // una stazione aggiunta entra subito, al centro del nastro: le voci a destra si spostano per farle posto
+  function aggiungiAlNastro(id) {
+    lampadaOnAir.classList.remove('lampo'); void lampadaOnAir.offsetWidth; lampadaOnAir.classList.add('lampo');
+    const centro = xNastro + finestraNastro.clientWidth / 2;
+    let dopo = null, somma = 0;
+    for (const v of nastro.children) { somma += v.getBoundingClientRect().width; if (somma >= centro) { dopo = v; break; } }
+    const nuova = voceOnda(id);
+    nuova.classList.add('nuova');
+    if (dopo) dopo.after(nuova); else nastro.append(nuova);
+    if (!riduciMoto && nuova.animate) {
+      const w = nuova.getBoundingClientRect().width;
+      nuova.classList.add('anima');
+      nuova.animate([{ width: '0px', opacity: 0 }, { width: w + 'px', opacity: 1 }], { duration: 480, easing: 'cubic-bezier(.2, .8, .3, 1)' })
+        .onfinish = () => nuova.classList.remove('anima');
+    }
+    descriviOnAir();
+  }
+  // una stazione tolta si stringe e sparisce, ovunque compaia sul nastro
+  function togliDalNastro(id) {
+    nastro.querySelectorAll('.voce-onda').forEach(v => {
+      if (v.dataset.stazione !== id || v.classList.contains('esce')) return;
+      v.classList.add('esce', 'anima');
+      if (riduciMoto || !v.animate) { v.remove(); return; }
+      const w = v.getBoundingClientRect().width;
+      v.animate([{ width: w + 'px', opacity: 1, transform: 'none' }, { width: '0px', opacity: 0, transform: 'scale(.6)' }],
+        { duration: 380, easing: 'ease-in', fill: 'forwards' }).onfinish = () => v.remove();
+    });
+    descriviOnAir();
+  }
+  lampadaOnAir.addEventListener('animationend', e => { if (e.animationName === 'onair-lampo') lampadaOnAir.classList.remove('lampo'); });
   tastoZap.addEventListener('click', () => {
     zapping = !zapping;
     suona('interruttore', { acceso: zapping });
@@ -4500,10 +4654,12 @@ Silenzio d'oro | Silenzio imbarazzante
       scalettaZapping.add(stazioneScelta);
       inScansione = stazioneScelta;
       mostraStazione();
+      avviaNastro();
       avviaScansione(900);              // subito un primo salto, per far sentire che la radio scansiona
     } else {
       // come sulle autoradio: spegnendo lo SCAN si resta sulla stazione che sta suonando
       fermaScansione();
+      spegniNastro();
       if (inScansione) stazioneScelta = inScansione;
       mostraStazione();
       aggiornaMusica();
@@ -4527,7 +4683,8 @@ Silenzio d'oro | Silenzio imbarazzante
     if (zapping && !scalettaZapping.has(inScansione)) inScansione = scalettaOrdinata()[0];
     bandaVisibile = bandaDi(inAscoltoStazioni());    // si apre sulla banda della stazione in ascolto
     mostraStazione();
-    if (zapping) avviaScansione();
+    if (zapping) { avviaScansione(); requestAnimationFrame(avviaNastro); }
+    else onAir.hidden = true;
   }
   function chiediMaggiorenni() { dialogoAdulti.hidden = false; suona('avvisoAdulti'); document.getElementById('adulti-no').focus({ preventScroll: true }); aggiornaGuardia(); }
   function chiudiAdulti() { dialogoAdulti.hidden = true; suona('finestraGiu'); ruotaManopola(ANGOLO[bandaVisibile]); aggiornaGuardia(); }
