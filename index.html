@@ -4400,7 +4400,7 @@ Silenzio d'oro | Silenzio imbarazzante
     griglia.classList.toggle('zapping', zapping);
     tastoZap.setAttribute('aria-pressed', String(zapping));
     if (zapping) nastro.querySelectorAll('.voce-onda').forEach(v => v.classList.toggle('in-ascolto', v.dataset.stazione === inOnda));
-    titoloStazioni.textContent = zapping ? 'Zapping: quali stazioni?' : 'Su che stazione giocate?';
+    titoloStazioni.textContent = zapping ? 'Scegli le tue stazioni preferite!' : 'Su che stazione giocate?';
     if (!avvisoContatore) contaCarte.textContent = zapping ? `${scalettaZapping.size} stazioni` : `${(MAZZI[stazioneScelta] || []).length} carte`;
     griglia.dataset.banda = bandaVisibile;
     ruotaManopola(ANGOLO[bandaVisibile]);
