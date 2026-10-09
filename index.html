@@ -4003,9 +4003,16 @@ Silenzio d'oro | Silenzio imbarazzante
   /* ---------- Vibrazione ----------
      Poche vibrazioni brevi, solo quando servono davvero: quando il telefono è in mano
      e bisogna passarlo, quando una risposta viene registrata, quando c'è un errore,
-     quando si centra il bersaglio e alla fine della partita.
+     quando si centra il bersaglio e alla fine della partita. In più gli "scatti" sotto il dito:
+     la lancetta che passa sulle tacche (come la rotella di una cassaforte), la manopola delle gamme
+     d'onda, l'occhio che copre il bersaglio e la scelta del lato.
      Durate in millisecondi: vibra, pausa, vibra… */
   const VIBRAZIONI = {
+    tacca: [7],                                 // la lancetta passa su una tacca corta
+    taccaLunga: [16],                           // …su una tacca lunga
+    fondoScala: [10, 40, 26],                   // la lancetta arriva in fondo alla scala
+    scatto: [14],                               // la manopola scatta su un'altra gamma d'onda
+    tocco: [10],                                // occhio sul bersaglio, scelta del lato
     passaggio: [20, 60, 20],                    // "passa il telefono"
     cambioCapo: [35, 60, 35, 60, 35],           // stesso segnale, più insistente: cambiate caposquadra
     conferma: [15],                             // risposta registrata
@@ -4023,6 +4030,14 @@ Silenzio d'oro | Silenzio imbarazzante
   function vibra(nome) {
     if (!impostazioni.vibrazione || !navigator.vibrate) return;
     try { navigator.vibrate(VIBRAZIONI[nome] || nome); } catch (e) {}
+  }
+  // gli scatti ravvicinati (lancetta trascinata veloce) non diventano un ronzio: al massimo uno ogni 32 ms
+  let ultimoScatto = 0;
+  function vibraScatto(nome) {
+    const ora = performance.now();
+    if (ora - ultimoScatto < 32) return;
+    ultimoScatto = ora;
+    vibra(nome);
   }
 
   // Il browser permette l'audio solo dopo un gesto: lo sblocchiamo al primo tocco
@@ -4410,12 +4425,13 @@ Silenzio d'oro | Silenzio imbarazzante
     if (!rotella) mostraFrequenza(inOnda);
     misuraTitoli();
   }
-  function impostaBanda(nuova) {
+  function impostaBanda(nuova, giaScattata) {
     if (nuova === bandaVisibile) { ruotaManopola(ANGOLO[nuova]); return; }
     // per entrare nelle Frequenze Pirata serve la conferma dei maggiorenni
     if (nuova === 'pirata' && !maggiorenni()) { ruotaManopola(ANGOLO.pirata); chiediMaggiorenni(); return; }
     bandaVisibile = nuova;
     suona('cambioBanda', { fm: nuova !== 'am' });
+    if (!giaScattata) vibraScatto('scatto');    // trascinando, lo scatto si è già sentito passando sulla tacca
     mostraStazione();
     griglia.classList.remove('cambio'); void griglia.offsetWidth; griglia.classList.add('cambio');
   }
@@ -4442,7 +4458,7 @@ Silenzio d'oro | Silenzio imbarazzante
     const g = Math.max(-72, Math.min(72, Math.atan2(q.x - 60, Math.max(58 - q.y, 0.001)) * 180 / Math.PI));
     ruotaManopola(g);
     const vicina = bandaVicina(g);
-    if (vicina !== presa.ultima) { presa.ultima = vicina; suona('tacca', { pan: g / 90 }); }
+    if (vicina !== presa.ultima) { presa.ultima = vicina; suona('tacca', { pan: g / 90 }); vibraScatto('scatto'); }
   });
   function lascia(e) {
     if (!presa) return;
@@ -4457,8 +4473,9 @@ Silenzio d'oro | Silenzio imbarazzante
       const toccata = BANDE.find(b => Math.hypot(q.x - etichette[b][0], q.y - etichette[b][1]) < 14);
       scelta = toccata || BANDE[(BANDE.indexOf(bandaVisibile) + 1) % BANDE.length];
     }
+    const trascinata = presa.trascinata;
     presa = null;
-    impostaBanda(scelta);
+    impostaBanda(scelta, trascinata);
   }
   manopola.addEventListener('pointerup', lascia);
   manopola.addEventListener('pointercancel', () => { presa = null; manopola.classList.remove('trascina'); ruotaManopola(ANGOLO[bandaVisibile]); });
@@ -4941,7 +4958,13 @@ Silenzio d'oro | Silenzio imbarazzante
   function muoviLancetta(g) {
     const prima = Math.round(angolo / 4.5);
     impostaAngolo(g);
-    if (Math.round(angolo / 4.5) !== prima) suona('tacca', { pan: angolo / 90 * 0.6 });
+    const tacca = Math.round(angolo / 4.5);
+    if (tacca === prima) return;
+    suona('tacca', { pan: angolo / 90 * 0.6 });
+    // le tacche lunghe della scala (ogni 5) scattano più forte; in fondo alla scala un colpo d'arresto.
+    // Sono le stesse per tutti i bersagli: la vibrazione non dice niente su dove sia il centro.
+    if (Math.abs(angolo) >= 89.5) { ultimoScatto = performance.now(); vibra('fondoScala'); }   // l'arresto si sente sempre
+    else vibraScatto(tacca % 5 === 0 ? 'taccaLunga' : 'tacca');
   }
   dial.addEventListener('pointerdown', e => {
     if (partita && partita.modo === 'squadre' && partita.fase === 'lato') {
@@ -5303,10 +5326,11 @@ Silenzio d'oro | Silenzio imbarazzante
     clearTimeout(sbloccoPassaggio); timers.delete(sbloccoPassaggio);
     passOk.classList.remove('sbloccato');
     passOk.disabled = !!appena;
-    if (appena) sbloccoPassaggio = dopo(1600, () => { passOk.disabled = false; void passOk.offsetWidth; passOk.classList.add('sbloccato'); });
+    const segnale = o.suono === 'cambioCapo' ? 'cambioCapo' : 'passaggio';
+    if (appena) sbloccoPassaggio = dopo(1600, () => { passOk.disabled = false; void passOk.offsetWidth; passOk.classList.add('sbloccato'); vibra(segnale); });
     // se la radio ha appena cambiato stazione, il "passo" arriva dopo il fruscio
     if (appena) suonoPassaggio = dopo(1500, () => suona(o.suono || 'passaggio')); else suona(o.suono || 'passaggio');
-    vibra(o.suono === 'cambioCapo' ? 'cambioCapo' : 'passaggio');
+    if (!appena) vibra(segnale);
   }
   passOk.addEventListener('click', () => {
     passaggio.hidden = true;
@@ -5666,7 +5690,7 @@ Silenzio d'oro | Silenzio imbarazzante
     aggiorna();
   }
 
-  function scegliLato(l) { partita.lato = l; suona('lato', { pan: l === 'sx' ? -0.7 : 0.7 }); disegnaLato(); aggiorna(); }
+  function scegliLato(l) { partita.lato = l; suona('lato', { pan: l === 'sx' ? -0.7 : 0.7 }); vibra('tocco'); disegnaLato(); aggiorna(); }
 
   // Zona colorata dal lato scelto dalla squadra avversaria
   function disegnaLato() {
@@ -5909,7 +5933,7 @@ Silenzio d'oro | Silenzio imbarazzante
     quadrante.classList.toggle('coperto', coperto);
     copriBersaglio.setAttribute('aria-pressed', String(coperto));
     copriBersaglio.setAttribute('aria-label', coperto ? 'Mostra di nuovo il bersaglio' : 'Copri il bersaglio');
-    if (!muto) suona(coperto ? 'nascondi' : 'apriBersaglio');
+    if (!muto) { suona(coperto ? 'nascondi' : 'apriBersaglio'); vibra('tocco'); }
   }
   copriBersaglio.addEventListener('click', () => {
     if (partita && partita.fase === 'segreto') copri(!copriBersaglio.parentElement.classList.contains('coperto'));
