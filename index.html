@@ -372,7 +372,7 @@
   .svuota::before { content: ""; position: absolute; inset: -9px -6px; }
   .svuota:active { opacity: 1; background: color-mix(in srgb, var(--vetro-segni) 15%, transparent); }
   .svuota[hidden] { display: none; }
-  .lcd .contatore { font-size: clamp(12px, 3.6vh, 16px); font-size: clamp(12px, 3.6cqh, 16px); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lcd .contatore { font-size: clamp(12px, 3.6vh, 16px); font-size: clamp(12px, 3.6cqh, 16px); font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: -.02em; }
   .strisce { display: grid; gap: 3px; width: 54px; flex: none; }
   .strisce i { display: block; height: 3px; border-radius: 2px; background: var(--ambra); }
   .strisce i:nth-child(2) { background: var(--corallo); }
@@ -404,7 +404,10 @@
   .tasto[data-modo="squadre"].premuto .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
   .tasto[data-modo="collab"].premuto .led { background: var(--zona-2); box-shadow: 0 0 10px var(--zona-2); }
 
-  /* Preselezioni 1–5: un giocatore per stazione memorizzata */
+  /* ---------- Chi gioca? I tasti di preselezione della radio ----------
+     Ogni giocatore è un tasto di preselezione, come sulle autoradio. Scrivendo il nome il tasto si
+     "memorizza": scende e resta abbassato, il led si accende e la lancetta della sua piccola scala
+     corre sulla frequenza di quel tasto (ogni tasto ha la sua). */
   .preset { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(6px, 1.4vw, 12px); gap: clamp(6px, 1.4cqw, 12px); }
   .slot {
     display: grid; gap: 8px; padding: 10px; border-radius: 12px; background: var(--tasto); color: var(--su-tasto);
@@ -423,18 +426,81 @@
   /* mentre si scrive il bordo è giallo: il rosso resta solo per l'errore dei nomi doppi */
   .slot input:focus-visible { outline: 3px solid var(--ambra); outline-offset: 2px; }
 
-  /* Nomi delle squadre */
-  .sfida { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: clamp(8px, 2vw, 16px); gap: clamp(8px, 2cqw, 16px); }
-  .sfida .slot { padding: 12px 14px; }
-  .sfida .slot .testa { font-family: inherit; font-size: 15px; font-weight: 600; justify-content: flex-start; gap: 8px; color: var(--su-tasto-tenue); }
-  .sfida .slot input { height: 46px; font-size: 19px; font-weight: 800; }
-  .sfida .slot.a .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
-  .sfida .slot.b .led { background: var(--squadra-b); box-shadow: 0 0 10px var(--squadra-b); }
-  .sfida .slot.a { box-shadow: inset 4px 0 0 var(--ambra), 0 4px 0 var(--tasto-ombra); }
-  .sfida .slot.b { box-shadow: inset -4px 0 0 var(--squadra-b), 0 4px 0 var(--tasto-ombra); }
-  .sfida .vs { font-family: "Michroma", Verdana, sans-serif; font-size: 16px; color: var(--su-tasto-tenue); }
-  :root[data-attivo="scuro"] .sfida .vs { color: var(--sfondo); }
-  :root[data-attivo="chiaro"] .sfida .vs { color: var(--griglia); }
+  .preset .slot {
+    grid-template-rows: auto auto 1fr auto; gap: 6px;
+    min-height: clamp(112px, 36vh, 170px); min-height: clamp(112px, 36cqh, 170px);
+    padding: clamp(9px, 2.8vh, 14px) 10px 10px; padding: clamp(9px, 2.8cqh, 14px) 10px 10px;
+    box-shadow: 0 6px 0 var(--tasto-ombra); margin-bottom: 6px;
+    transition: transform .12s ease-out, box-shadow .12s ease-out;
+  }
+  .preset .slot.acceso { transform: translateY(4px); box-shadow: inset 0 0 0 2.5px var(--menta), 0 2px 0 var(--tasto-ombra); }
+  .preset .slot.doppio { box-shadow: inset 0 0 0 2.5px var(--corallo), 0 2px 0 var(--tasto-ombra); animation: nego .4s ease-in-out; }
+  .preset .numero { font-size: clamp(20px, 7.2vh, 30px); font-size: clamp(20px, 7.2cqh, 30px); line-height: 1; letter-spacing: -.02em; }
+  .preset .slot:not(.acceso) .numero { color: var(--su-tasto-tenue); }
+  /* la piccola scala: tacche fitte, una lunga ogni cinque, e la lancetta rossa */
+  .scala-preset {
+    position: relative; height: 15px; margin: 0 1px; color: color-mix(in srgb, var(--su-tasto) 34%, transparent);
+    background:
+      repeating-linear-gradient(90deg, currentColor 0 1.5px, transparent 1.5px 30px) left bottom / 100% 10px no-repeat,
+      repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 6px) left bottom / 100% 5px no-repeat,
+      linear-gradient(currentColor, currentColor) left bottom / 100% 1px no-repeat;
+  }
+  .ago-preset {
+    position: absolute; left: 2%; bottom: -3px; width: 2.5px; height: 19px; margin-left: -1px; border-radius: 2px;
+    background: var(--su-tasto-tenue); opacity: .45;
+    transition: left .8s cubic-bezier(.3, 1.35, .5, 1), background-color .3s, opacity .3s, box-shadow .3s;
+  }
+  .slot.acceso .ago-preset { left: calc(var(--sintonia) * 100%); background: var(--corallo); opacity: 1; box-shadow: 0 0 6px color-mix(in srgb, var(--corallo) 70%, transparent); }
+  .preset .slot input { height: clamp(34px, 10.5vh, 42px); height: clamp(34px, 10.5cqh, 42px); }
+
+  /* ---------- Squadre: due walkie-talkie, uno per squadra ----------
+     Il nome si scrive sullo schermo del walkie; tra i due, il segnale va e viene come sul tasto della modalità,
+     e la spia di ognuno si accende quando è lui a trasmettere. */
+  .sfida { --spazio: clamp(8px, 2vw, 16px); display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: end; gap: var(--spazio); }
+  @supports (width: 1cqw) { .sfida { --spazio: clamp(8px, 2cqw, 16px); } }
+  .slot.wt { position: relative; display: block; padding: 24px 0 0; background: none; box-shadow: none; margin: 0; }
+  .wt.a { --squadra: var(--ambra); } .wt.b { --squadra: var(--squadra-b); }
+  .wt-antenna {
+    position: absolute; top: 4px; width: 7px; height: 30px; border-radius: 4px 4px 2px 2px;
+    background: var(--su-corpo); opacity: .8;
+  }
+  .wt-antenna::before { content: ""; position: absolute; left: 50%; top: -3px; width: 11px; height: 11px; margin-left: -5.5px; border-radius: 50%; background: inherit; }
+  .wt.a .wt-antenna { right: 16px; } .wt.b .wt-antenna { left: 16px; }
+  .wt-corpo {
+    position: relative; display: grid; gap: 8px; padding: 10px 14px 12px; border-radius: 16px;
+    background: var(--squadra); color: #2A1C00; box-shadow: inset 0 -5px 0 rgba(0, 0, 0, .14), 0 5px 0 var(--tasto-ombra);
+  }
+  /* il tasto per parlare, sul fianco esterno */
+  .wt-corpo::before { content: ""; position: absolute; top: 34%; width: 6px; height: 30%; border-radius: 4px; background: color-mix(in srgb, var(--squadra) 55%, #000); }
+  .wt.a .wt-corpo::before { left: -5px; } .wt.b .wt-corpo::before { right: -5px; }
+  .wt .testa { justify-content: flex-start; gap: 8px; font: 700 14px "Bricolage Grotesque", system-ui, sans-serif; color: #2A1C00; opacity: .85; }
+  .wt .led { background: rgba(0, 0, 0, .28); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .3); }
+  .wt.a .led { animation: trasmette-wt-a 4.6s ease-in-out infinite; } .wt.b .led { animation: trasmette-wt-b 4.6s ease-in-out infinite; }
+  @keyframes trasmette-wt-a { 0%, 38% { background: #fff; box-shadow: 0 0 8px #fff, 0 0 2px #fff; } 46%, 100% { background: rgba(0, 0, 0, .28); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .3); } }
+  @keyframes trasmette-wt-b { 0%, 50% { background: rgba(0, 0, 0, .28); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .3); } 54%, 88% { background: #fff; box-shadow: 0 0 8px #fff, 0 0 2px #fff; } 96%, 100% { background: rgba(0, 0, 0, .28); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .3); } }
+  .wt input {
+    height: clamp(38px, 12vh, 48px); height: clamp(38px, 12cqh, 48px); padding: 0 12px; font-size: 19px; font-weight: 800;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, .2), inset 0 2px 6px rgba(0, 0, 0, .2);
+  }
+  .wt input:focus-visible { outline-color: #fff; }
+  /* la griglia dell'altoparlante: tanti forellini */
+  .wt-griglia {
+    height: 15px; margin: 2px 6px 0; border-radius: 4px;
+    background: radial-gradient(circle, rgba(0, 0, 0, .3) 1.7px, transparent 2.1px) center / 9px 7.5px;
+  }
+  /* tra le due antenne corre il segnale: prima parla la prima squadra, poi risponde la seconda */
+  .etere { align-self: stretch; display: grid; grid-template-rows: 24px 1fr; justify-items: center; align-items: center; min-width: 40px; }
+  .etere-filo {
+    position: relative; align-self: start; justify-self: stretch; height: 24px; margin: -5.5px calc(-1 * (var(--spazio) + 19.5px)) 0;
+    background: radial-gradient(circle, var(--su-corpo) 1.1px, transparent 1.5px) left center / 7px 4px repeat-x;
+  }
+  .etere-filo svg { position: absolute; top: 0; width: 16px; height: 24px; overflow: visible; fill: none; stroke-width: 2.2; stroke-linecap: round; opacity: 0; }
+  .etere-a { left: 0; stroke: var(--ambra); animation: etere-a 4.6s ease-in-out infinite both; }
+  .etere-b { left: calc(100% - 16px); stroke: var(--squadra-b); animation: etere-b 4.6s ease-in-out infinite both; }
+  @keyframes etere-a { 0% { opacity: 0; left: 6px; } 8%, 32% { opacity: 1; } 44%, 100% { opacity: 0; left: calc(100% - 22px); } }
+  @keyframes etere-b { 0%, 50% { opacity: 0; left: calc(100% - 22px); } 58%, 82% { opacity: 1; } 94%, 100% { opacity: 0; left: 6px; } }
+  @media (prefers-reduced-motion: reduce) { .etere-filo .etere-a { opacity: 1; left: 6px; } }
+  .sfida .vs { font-family: "Michroma", Verdana, sans-serif; font-size: 15px; color: var(--su-corpo); opacity: .75; }
 
   .piede { width: min(820px, 100%); display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding-bottom: 6px; }
   .barra .suggerimento {
@@ -663,12 +729,42 @@
   .segno svg { width: 20px; height: 20px; }
   .livelli { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
   .livelli li {
-    display: grid; grid-template-columns: 22px 50px minmax(0, 1fr); gap: 8px; align-items: center;
+    display: grid; grid-template-columns: 22px 54px minmax(0, 1fr); gap: 8px; align-items: center;
     padding: 4px 8px; border-radius: 8px; font-size: clamp(12px, 3.6vh, 14px); font-size: clamp(12px, 3.6cqh, 14px); font-weight: 600; line-height: 1.2;
   }
   .livelli svg { width: 22px; height: 18px; }
-  .livelli b { font: 11px "Michroma", Verdana, sans-serif; font-variant-numeric: tabular-nums; }
+  .livelli b { font: 11px "Michroma", Verdana, sans-serif; font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: -.02em; }
   .livelli li.attivo { background: var(--ambra); color: #2A1C00; }
+
+  /* Il riquadro dei livelli è un secondo display della radio: un misuratore di segnale.
+     Entrando, la verifica scorre i livelli uno dopo l'altro (le tacche si accendono) e si ferma su Mente alveare. */
+  #schermata-collab .misuratore {
+    background: var(--vetro); color: var(--vetro-segni); text-shadow: var(--lcd-ombra);
+    box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--vetro-segni) 16%, transparent), inset 0 2px 8px rgba(0, 0, 0, .16), 0 4px 0 var(--tasto-ombra);
+  }
+  #schermata-collab .scheda.misuratore h3 { font: 10.5px/1.35 "Michroma", Verdana, sans-serif; letter-spacing: .02em; color: inherit; opacity: .85; }
+  #schermata-collab .misuratore .livelli li { position: relative; isolation: isolate; animation: verifica .6s ease-out both; }
+  #schermata-collab .misuratore .livelli li:nth-child(1) { animation-delay: .35s; }
+  #schermata-collab .misuratore .livelli li:nth-child(2) { animation-delay: .7s; }
+  #schermata-collab .misuratore .livelli li:nth-child(3) { animation-delay: 1.05s; }
+  #schermata-collab .misuratore .livelli li:nth-child(4) { animation: verifica .6s ease-out 1.4s both, alveare .8s ease-out 1.75s both; }
+  @keyframes verifica {
+    0% { opacity: .38; background-color: transparent; }
+    35% { opacity: 1; background-color: color-mix(in srgb, var(--vetro-segni) 20%, transparent); }
+    100% { opacity: 1; background-color: transparent; }
+  }
+  /* Mente alveare: la riga resta accesa, dorata, con il favo che compare sotto */
+  #schermata-collab .misuratore .livelli li:last-child { background-color: color-mix(in srgb, var(--zona-oro) 24%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--zona-oro) 80%, transparent); }
+  #schermata-collab .misuratore .livelli li:last-child svg { color: var(--zona-oro); }
+  :root[data-attivo="chiaro"] #schermata-collab .misuratore .livelli li:last-child svg { color: #C98A00; }
+  #schermata-collab .misuratore .livelli li:last-child::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; opacity: .45;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='33' height='19.05' viewBox='0 0 33 19.05'%3E%3Cpath d='M0%209.53L5.5%200L16.5%200L22%209.53L16.5%2019.05L5.5%2019.05ZM16.5%200L22%20-9.53L33%20-9.53L38.5%200L33%209.53L22%209.53ZM16.5%2019.05L22%209.53L33%209.53L38.5%2019.05L33%2028.58L22%2028.58Z' fill='none' stroke='%23F2A900' stroke-width='1.2'/%3E%3C/svg%3E") right center / 22px 12.7px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 30%, #000); mask-image: linear-gradient(90deg, transparent 30%, #000);
+    animation: alveare-favo .8s ease-out 1.75s both;
+  }
+  @keyframes alveare { from { background-color: transparent; box-shadow: none; } }
+  @keyframes alveare-favo { from { opacity: 0; } }
 
   .collab-box { display: grid; justify-items: center; gap: 4px; text-align: center; }
   .collab-box .etichetta { font-size: clamp(13px, 3.6vh, 16px); font-size: clamp(13px, 3.6cqh, 16px); font-weight: 600; color: var(--tenue); }
@@ -687,6 +783,7 @@
 
   /* schermi bassi: la schermata delle regole si compatta per far stare anche il tasto Inizia */
   @media (max-height: 400px) {
+    #schermata-collab .scheda.misuratore h3 { font-size: 9px; margin-bottom: 4px; }
     #schermata-collab .setup { padding-top: 6px; padding-bottom: 8px; }
     #schermata-collab .contenuto { gap: 8px; padding-top: 4px; }
     #schermata-collab .pannello { padding: 10px; gap: 8px; }
@@ -697,11 +794,12 @@
     #schermata-collab .regole li { font-size: 12.5px; line-height: 1.25; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; }
     #schermata-collab .segno { width: 26px; height: 26px; font-size: 12px; }
     #schermata-collab .segno svg { width: 16px; height: 16px; }
-    #schermata-collab .livelli li { padding-block: 2px; font-size: 12.5px; grid-template-columns: 20px 40px minmax(0, 1fr); gap: 6px; }
+    #schermata-collab .livelli li { padding-block: 2px; font-size: 12.5px; grid-template-columns: 20px 50px minmax(0, 1fr); gap: 6px; }
     #schermata-collab .info-collab { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
     #schermata-collab .tasto-ambra { height: 46px; }
   }
   @container app (max-height: 400px) {
+    #schermata-collab .scheda.misuratore h3 { font-size: 9px; margin-bottom: 4px; }
     #schermata-collab .setup { padding-top: 6px; padding-bottom: 8px; }
     #schermata-collab .contenuto { gap: 8px; padding-top: 4px; }
     #schermata-collab .pannello { padding: 10px; gap: 8px; }
@@ -712,13 +810,26 @@
     #schermata-collab .regole li { font-size: 12.5px; line-height: 1.25; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; }
     #schermata-collab .segno { width: 26px; height: 26px; font-size: 12px; }
     #schermata-collab .segno svg { width: 16px; height: 16px; }
-    #schermata-collab .livelli li { padding-block: 2px; font-size: 12.5px; grid-template-columns: 20px 40px minmax(0, 1fr); gap: 6px; }
+    #schermata-collab .livelli li { padding-block: 2px; font-size: 12.5px; grid-template-columns: 20px 50px minmax(0, 1fr); gap: 6px; }
     #schermata-collab .info-collab { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
     #schermata-collab .tasto-ambra { height: 46px; }
   }
 
   /* telefoni molto bassi: ancora un po' più compatta */
   @media (max-height: 340px) {
+    #schermata-singoli .setup, #schermata-squadre .setup { padding-top: 6px; padding-bottom: 8px; }
+    #schermata-singoli .contenuto, #schermata-squadre .contenuto { gap: 8px; padding-top: 2px; }
+    #schermata-singoli .pannello, #schermata-squadre .pannello { padding: 10px; gap: 8px; }
+    #schermata-singoli .lcd, #schermata-squadre .lcd { padding-block: 6px; }
+    .preset .slot { min-height: 0; gap: 5px; padding: 8px 8px 8px; }
+    .preset .numero { font-size: 19px; }
+    .scala-preset { height: 12px; }
+    .ago-preset { height: 15px; }
+    .slot.wt { padding-top: 20px; }
+    .wt-antenna { height: 26px; }
+    .wt-corpo { gap: 6px; padding: 8px 12px 9px; }
+    .wt-griglia { height: 10px; }
+    .etere-filo { margin-top: -7.5px; }
     #schermata-collab .barra .btn-piccolo, #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { height: 34px; }
     #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { width: 34px; }
     #schermata-collab .setup { padding-top: 4px; padding-bottom: 6px; }
@@ -731,6 +842,19 @@
     #schermata-collab .tasto-ambra { height: 42px; }
   }
   @container app (max-height: 340px) {
+    #schermata-singoli .setup, #schermata-squadre .setup { padding-top: 6px; padding-bottom: 8px; }
+    #schermata-singoli .contenuto, #schermata-squadre .contenuto { gap: 8px; padding-top: 2px; }
+    #schermata-singoli .pannello, #schermata-squadre .pannello { padding: 10px; gap: 8px; }
+    #schermata-singoli .lcd, #schermata-squadre .lcd { padding-block: 6px; }
+    .preset .slot { min-height: 0; gap: 5px; padding: 8px 8px 8px; }
+    .preset .numero { font-size: 19px; }
+    .scala-preset { height: 12px; }
+    .ago-preset { height: 15px; }
+    .slot.wt { padding-top: 20px; }
+    .wt-antenna { height: 26px; }
+    .wt-corpo { gap: 6px; padding: 8px 12px 9px; }
+    .wt-griglia { height: 10px; }
+    .etere-filo { margin-top: -7.5px; }
     #schermata-collab .barra .btn-piccolo, #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { height: 34px; }
     #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { width: 34px; }
     #schermata-collab .setup { padding-top: 4px; padding-bottom: 6px; }
@@ -1537,7 +1661,7 @@
     #manopola-corpo, .indice-manopola { transition: none; } .scintilla { opacity: 0; }
     .sfondo *, .cerca .led, .cerca .ascolto-nome, .in-onda.cerca .nome-onda { animation: none !important; }
     .copri-bersaglio, .lampada-onair, .voce-onda.nuova, .on-air, .on-air.spegne { animation: none !important; }
-    .tasto-zap .led, .stazioni .tasto.nego, .zap-onda.cerca *, .zap-onda.cerca .zap-display::before, .targhetta.cerca .tema-testo, .fine-zap .voce { animation: none !important; }
+    .tasto-zap .led, .stazioni .tasto.nego, .zap-onda.cerca *, .zap-onda.cerca .zap-display::before, .targhetta.cerca .tema-testo, .fine-zap .voce, .preset .slot, .wt .led, .etere *, #schermata-collab .misuratore li, #schermata-collab .misuratore li::before { animation: none !important; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .premio, .premio .medaglia svg, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
@@ -2899,15 +3023,20 @@ Silenzio d'oro | Silenzio imbarazzante
         <div class="pannello">
           <div class="lcd"><h2>Chi gioca?</h2><span class="lcd-destra"><button class="svuota" id="svuota-singoli" type="button" hidden>Svuota</button><span class="contatore" id="contatore">0/5</span></span></div>
           <div class="preset">
-            <label class="slot"><span class="testa">1<span class="led"></span></span>
+            <label class="slot" style="--sintonia:0.16"><span class="testa"><span class="numero">1</span><span class="led"></span></span>
+              <span class="scala-preset" aria-hidden="true"><i class="ago-preset"></i></span>
               <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 1"></label>
-            <label class="slot"><span class="testa">2<span class="led"></span></span>
+            <label class="slot" style="--sintonia:0.37"><span class="testa"><span class="numero">2</span><span class="led"></span></span>
+              <span class="scala-preset" aria-hidden="true"><i class="ago-preset"></i></span>
               <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 2"></label>
-            <label class="slot"><span class="testa">3<span class="led"></span></span>
+            <label class="slot" style="--sintonia:0.56"><span class="testa"><span class="numero">3</span><span class="led"></span></span>
+              <span class="scala-preset" aria-hidden="true"><i class="ago-preset"></i></span>
               <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 3"></label>
-            <label class="slot"><span class="testa">4<span class="led"></span></span>
+            <label class="slot" style="--sintonia:0.74"><span class="testa"><span class="numero">4</span><span class="led"></span></span>
+              <span class="scala-preset" aria-hidden="true"><i class="ago-preset"></i></span>
               <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 4"></label>
-            <label class="slot"><span class="testa">5<span class="led"></span></span>
+            <label class="slot" style="--sintonia:0.9"><span class="testa"><span class="numero">5</span><span class="led"></span></span>
+              <span class="scala-preset" aria-hidden="true"><i class="ago-preset"></i></span>
               <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Nome" aria-label="Giocatore 5"></label>
           </div>
         </div>
@@ -2926,11 +3055,26 @@ Silenzio d'oro | Silenzio imbarazzante
         <div class="pannello">
           <div class="lcd"><h2>Come si chiamano le squadre?</h2><span class="lcd-destra"><button class="svuota" id="svuota-squadre" type="button" hidden>Svuota</button><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></span></div>
           <div class="sfida">
-            <label class="slot a"><span class="testa"><span class="led"></span>Prima squadra</span>
-              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Ambra" aria-label="Nome della prima squadra"></label>
-            <span class="vs" aria-hidden="true">VS</span>
-            <label class="slot b"><span class="testa"><span class="led"></span>Seconda squadra</span>
-              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Corallo" aria-label="Nome della seconda squadra"></label>
+            <label class="slot wt a">
+              <span class="wt-antenna" aria-hidden="true"></span>
+              <span class="wt-corpo">
+                <span class="testa"><span class="led"></span>Prima squadra</span>
+                <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Ambra" aria-label="Nome della prima squadra">
+                <span class="wt-griglia" aria-hidden="true"></span>
+              </span>
+            </label>
+            <span class="etere" aria-hidden="true">
+              <span class="etere-filo"><svg class="etere-a" viewBox="0 0 16 24"><path d="M2 8.5a5 5 0 0 1 0 7M6.5 5a10 10 0 0 1 0 14M11 1.5a15 15 0 0 1 0 21"/></svg><svg class="etere-b" viewBox="0 0 16 24"><path d="M14 8.5a5 5 0 0 0 0 7M9.5 5a10 10 0 0 0 0 14M5 1.5a15 15 0 0 0 0 21"/></svg></span>
+              <span class="vs">VS</span>
+            </span>
+            <label class="slot wt b">
+              <span class="wt-antenna" aria-hidden="true"></span>
+              <span class="wt-corpo">
+                <span class="testa"><span class="led"></span>Seconda squadra</span>
+                <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Corallo" aria-label="Nome della seconda squadra">
+                <span class="wt-griglia" aria-hidden="true"></span>
+              </span>
+            </label>
           </div>
         </div>
         <div class="piede">
@@ -2956,7 +3100,7 @@ Silenzio d'oro | Silenzio imbarazzante
                 <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22 7.5 3.5h9z" style="fill:var(--zona-oro)"/><path d="M12 22 3 6l4.5-2.5zM12 22l9-16-4.5-2.5z" style="fill:var(--zona-3)"/></svg></span><span>Lo spicchio dorato centrale vale solo 3 punti ma vi fa guadagnare un turno extra di gioco.</span></li>
               </ul>
             </div>
-            <div class="scheda">
+            <div class="scheda misuratore">
               <h3>Verifica della connessione in corso…</h3>
               <ol class="livelli">
                   <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity=".25"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>0–14</b><span>Errore 404: frequenza non trovata</span></li>
@@ -3141,7 +3285,7 @@ Silenzio d'oro | Silenzio imbarazzante
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09c</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09d</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
