@@ -504,6 +504,46 @@
   .slot.acceso .tasto-preset { transform: translateY(5px); color: var(--su-tasto); background: color-mix(in srgb, var(--tasto) 93%, #000); box-shadow: inset 0 2px 5px rgba(0, 0, 0, .14), 0 1px 0 var(--tasto-ombra); }
   .slot.doppio .tasto-preset { animation: nego .4s ease-in-out; }
 
+  /* ---------- Partita in pausa ----------
+     Sotto le modalità compare una striscia con la spia "In pausa" (lampeggia piano, come il tasto pausa di un
+     registratore), la modalità della partita lasciata a metà e il tasto Riprendi; la ✕ la dimentica.
+     Anche il led del tasto di quella modalità lampeggia giallo. */
+  /* resta incollata in fondo allo schermo: sui telefoni bassi, dove il menu scorre, si vede comunque */
+  .pausa {
+    position: sticky; bottom: 6px; z-index: 3;
+    width: min(820px, 100%); display: flex; align-items: center; gap: 12px; padding: 6px 6px 6px 7px; border-radius: 15px;
+    background: var(--corpo); box-shadow: var(--ombra-tile); animation: pausa-su .5s cubic-bezier(.2, .9, .3, 1.15) both;
+  }
+  .pausa[hidden] { display: none; }
+  #schermata-modi.ingresso .pausa { opacity: 0; animation: none; }
+  #schermata-modi.rivela .pausa { animation-delay: .75s; }
+  .pausa.via { animation: pausa-via .35s ease-in both; }
+  @keyframes pausa-su { from { opacity: 0; transform: translateY(14px); } }
+  @keyframes pausa-via { to { opacity: 0; transform: translateY(10px) scale(.97); } }
+  .lampada-pausa {
+    flex: none; display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 13px 0 11px; border-radius: 9px;
+    font: 10px/1 "Michroma", Verdana, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #3A2600; white-space: nowrap;
+    background: radial-gradient(120% 150% at 50% 25%, #FFD272, #E59A00 72%);
+    box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .35), 0 0 14px rgba(255, 181, 46, .5);
+    animation: pausa-spia 2.2s ease-in-out infinite;
+  }
+  .lampada-pausa svg { width: 12px; height: 12px; fill: currentColor; }
+  @keyframes pausa-spia { 50% { filter: brightness(.72) saturate(.8); box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .2), 0 0 4px rgba(255, 181, 46, .15); } }
+  .pausa-testo { flex: 1 1 auto; min-width: 0; font-size: clamp(14px, 4.2vh, 16px); font-size: clamp(14px, 4.2cqh, 16px); font-weight: 600; color: var(--su-corpo); line-height: 1.2; }
+  .pausa-testo b { font-weight: 800; }
+  .pausa-elimina {
+    flex: none; width: 38px; height: 38px; display: grid; place-items: center; border: 0; border-radius: 50%; cursor: pointer;
+    background: transparent; color: var(--su-corpo); opacity: .7;
+  }
+  .pausa-elimina svg { width: 18px; height: 18px; }
+  .pausa-elimina:active { opacity: 1; background: color-mix(in srgb, var(--su-corpo) 14%, transparent); }
+  .pausa-riprendi { height: 42px; padding: 0 20px; font-size: 15px; box-shadow: 0 4px 0 var(--ambra-scura); }
+  .pausa-riprendi:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ambra-scura); }
+  .tasto[data-modo].in-pausa .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); animation: pausa-led 2.2s ease-in-out infinite; }
+  @keyframes pausa-led { 50% { opacity: .25; box-shadow: none; } }
+  @media (max-height: 340px) { .pausa { padding: 4px 4px 4px 5px; } .lampada-pausa, .pausa-elimina { height: 32px; } .pausa-elimina { width: 32px; } .pausa-riprendi { height: 36px; } }
+  @container app (max-height: 340px) { .pausa { padding: 4px 4px 4px 5px; } .lampada-pausa, .pausa-elimina { height: 32px; } .pausa-elimina { width: 32px; } .pausa-riprendi { height: 36px; } }
+  @media (prefers-reduced-motion: reduce) { .pausa, .lampada-pausa, .tasto[data-modo].in-pausa .led { animation: none; } }
   /* ---------- Riga di anteprima del nome, sopra la tastiera del telefono ---------- */
   .anteprima-nome {
     position: fixed; z-index: 70; left: 50%; top: max(8px, env(safe-area-inset-top, 0px));
@@ -3053,6 +3093,13 @@ Cotta passeggera | Amore eterno
             </button>
           </div>
         </div>
+        <!-- una partita lasciata a metà: la spia "In pausa", come sui registratori a cassette -->
+        <div class="pausa" id="pausa" role="group" aria-label="Partita in pausa" hidden>
+          <span class="lampada-pausa" aria-hidden="true"><svg viewBox="0 0 12 12"><rect x="2.2" y="1.5" width="2.8" height="9" rx="1"/><rect x="7" y="1.5" width="2.8" height="9" rx="1"/></svg>In pausa</span>
+          <span class="pausa-testo" id="pausa-testo"></span>
+          <button class="pausa-elimina" id="pausa-elimina" type="button" aria-label="Dimentica la partita in pausa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          <button class="tasto-ambra pausa-riprendi" id="pausa-riprendi" type="button">Riprendi</button>
+        </div>
       </div>
     </div>
   </section>
@@ -3450,7 +3497,7 @@ Cotta passeggera | Amore eterno
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09k</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09l</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -3487,18 +3534,6 @@ Cotta passeggera | Amore eterno
         </figure>
         <div class="chiudi-regole-blocco"><p class="nota-regole">La radio vi dice sempre a chi passare il telefono.</p><button class="tastino ambra" id="chiudi-regole">Ho capito</button></div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Partita lasciata a metà (app chiusa da Android, telefonata, batteria…): si può riprendere -->
-  <div class="dialogo" id="dialogo-riprendi" hidden>
-    <div class="pannello" role="alertdialog" aria-modal="true" aria-labelledby="riprendi-titolo" aria-describedby="riprendi-testo">
-      <div class="lcd"><h2 id="riprendi-titolo">Partita in sospeso</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
-      <p id="riprendi-testo"></p>
-      <div class="dialogo-azioni">
-        <button class="tastino" id="riprendi-no">Nuova partita</button>
-        <button class="tastino ambra" id="riprendi-si">Riprendi</button>
       </div>
     </div>
   </div>
@@ -4693,7 +4728,7 @@ Cotta passeggera | Amore eterno
     else if (id === 'schermata-modi') animaOnde(1, 900);
     const sc = document.getElementById(id).querySelector('.setup');
     if (sc) sc.scrollTop = 0;
-    if (id === 'schermata-modi') preparaRadioMenu(da, spegniZapping);
+    if (id === 'schermata-modi') { preparaRadioMenu(da, spegniZapping); proponiRipresa(); }
     else { clearTimeout(attesaMenu); radioMenuInAttesa = false; }
     if (id !== 'schermata-stazione') { fermaScansione(); fermaNastro(); }   // lo zapping scansiona solo nella scelta delle stazioni
     aggiornaGuardia();
@@ -4773,7 +4808,6 @@ Cotta passeggera | Amore eterno
     else if (!dialogoAdulti.hidden) chiudiAdulti();
     else if (!dialogoRegole.hidden) chiudiRegole();
     else if (!dialogoEsci.hidden) chiudiDialogo();                   // come "Continua a giocare"
-    else if (!dialogoRiprendi.hidden) chiudiRiprendi();
     else if (qui === 'schermata-gioco') apriDialogoEsci();          // chiede se abbandonare la partita
     else if (qui === 'schermata-stazione') vai('schermata-modi');
     else if (SCHERMATE_PREPARTITA.includes(qui)) { if (!sintonizzando) vai('schermata-stazione'); }
@@ -4796,7 +4830,6 @@ Cotta passeggera | Amore eterno
     } catch (e) { /* schermo intero o blocco orientamento non disponibili: si gioca lo stesso */ }
     await versoIlMenu();
     inTransizione = false;
-    proponiRipresa();
   });
 
   // Il testo svanisce, il logo "vola" nell'angolo in alto e il pannello del menu si monta pezzo per pezzo
@@ -4854,34 +4887,37 @@ Cotta passeggera | Amore eterno
     if (!s || !s.partita || !INIZI_TURNO[s.partita.modo] || Date.now() - s.quando > VALIDITA_PARTITA) { if (s) dimenticaPartita(); return null; }
     return s;
   }
-  const dialogoRiprendi = document.getElementById('dialogo-riprendi');
+  const spiaPausa = document.getElementById('pausa');
+  const MODO_PAUSA = { singoli: 'a giocatori singoli', squadre: 'a squadre', collab: 'collaborativa' };
   let daRiprendere = null;
-  function descriviPartita(s) {
-    const p = s.partita;
-    const dove = p.zap ? 'con lo zapping' : `su ${nomeStazione(s.stazione)}`;
-    if (p.modo === 'singoli') {
-      const classifica = p.giocatori.map(g => `${g.nome} ${g.punti}`).join(', ');
-      return `Giocatori singoli ${dove}, turno ${p.turniGiocati + 1}. Punti: ${classifica}.`;
-    }
-    if (p.modo === 'squadre') return `A squadre ${dove}: ${p.squadre[0].nome} ${p.squadre[0].punti}, ${p.squadre[1].nome} ${p.squadre[1].punti}.`;
-    return `Collaborativa ${dove}, turno ${p.turno} di ${p.totale}, ${p.punti} punti.`;
-  }
+  function segnaPausa(modo) { document.querySelectorAll('.tasto[data-modo]').forEach(b => b.classList.toggle('in-pausa', b.dataset.modo === modo)); }
+  // entrando nel menu: se c'è una partita lasciata a metà compare la spia, altrimenti niente
   function proponiRipresa() {
     daRiprendere = partitaSalvata();
-    if (!daRiprendere || app.dataset.schermata !== 'schermata-modi') return;
-    document.getElementById('riprendi-testo').textContent = `C’è una partita lasciata a metà: ${descriviPartita(daRiprendere)} Volete riprenderla?`;
-    dialogoRiprendi.hidden = false;
-    suona('finestra');
-    document.getElementById('riprendi-si').focus({ preventScroll: true });
-    aggiornaGuardia();
+    spiaPausa.classList.remove('via');
+    if (!daRiprendere) { spiaPausa.hidden = true; segnaPausa(null); return; }
+    const modo = daRiprendere.partita.modo;
+    const testo = document.getElementById('pausa-testo');
+    testo.replaceChildren('C’è una partita ', el('b', '', MODO_PAUSA[modo]), ' in sospeso');
+    spiaPausa.hidden = false;
+    segnaPausa(modo);
   }
-  function chiudiRiprendi() { dialogoRiprendi.hidden = true; suona('finestraGiu'); aggiornaGuardia(); }
-  document.getElementById('riprendi-no').addEventListener('click', () => { dimenticaPartita(); daRiprendere = null; chiudiRiprendi(); });
-  document.getElementById('riprendi-si').addEventListener('click', () => {
+  function togliSpia() {
+    segnaPausa(null);
+    if (riduciMoto || spiaPausa.hidden) { spiaPausa.hidden = true; return; }
+    spiaPausa.classList.add('via');
+    setTimeout(() => { spiaPausa.hidden = true; spiaPausa.classList.remove('via'); }, 360);
+  }
+  document.getElementById('pausa-elimina').addEventListener('click', () => {
+    dimenticaPartita(); daRiprendere = null;
+    suona('led', { spento: true });
+    togliSpia();
+  });
+  document.getElementById('pausa-riprendi').addEventListener('click', () => {
     const s = daRiprendere;
-    dialogoRiprendi.hidden = true;
-    aggiornaGuardia();
     if (!s) return;
+    daRiprendere = null;
+    spiaPausa.hidden = true; segnaPausa(null);
     partita = s.partita; ultimaPartita = s.ultima || { modo: s.partita.modo };
     if (s.stazione) stazioneScelta = s.stazione;
     if (partita.zap) zappingGiocato = true;
