@@ -15,11 +15,18 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Sintonizzati">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Michroma&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Michroma&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" href="fonti/bricolage-grotesque.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="fonti/michroma.woff" as="font" type="font/woff" crossorigin>
 <style>
+  /* ---------- Caratteri del gioco ----------
+     Sono salvati nella cartella "fonti" insieme all'app (e nella memoria del service worker),
+     così si vedono uguali anche al primo avvio senza connessione. Bricolage è un carattere variabile:
+     tre pesi (normale, semibold, extrabold) presi dallo stesso file, come prima con Google Fonts. */
+  @font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonti/bricolage-grotesque.woff") format("woff"); }
+  @font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 600; font-display: swap; src: url("fonti/bricolage-grotesque.woff") format("woff"); }
+  @font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 800; font-display: swap; src: url("fonti/bricolage-grotesque.woff") format("woff"); }
+  @font-face { font-family: "Michroma"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonti/michroma.woff") format("woff"); }
+
   /* ---------- Token: tema chiaro (alluminio spazzolato, plastica scura) ---------- */
   :root {
     --sfondo: #DCE3E3;
@@ -266,7 +273,7 @@
   }
   .squadra { text-align: center; }
   .squadra .nome { font-size: clamp(13px, 3.6vh, 17px); font-size: clamp(13px, 3.6cqh, 17px); color: var(--tenue); font-weight: 600; }
-  .squadra .punti { font-family: "Michroma", Verdana, sans-serif; font-size: clamp(34px, 13vh, 64px); font-size: clamp(34px, 13cqh, 64px); line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .squadra .punti { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 800; font-size: clamp(34px, 13vh, 64px); font-size: clamp(34px, 13cqh, 64px); line-height: 1.15; font-variant-numeric: tabular-nums; }
   .squadra.a .punti { color: var(--ambra-testo); }
   .squadra.b .punti { color: var(--squadra-b-testo); }
   .squadra .di-turno {
@@ -355,6 +362,16 @@
     box-shadow: inset 0 2px 6px rgba(0, 0, 0, .18);
   }
   .lcd h2 { margin: 0; font-weight: 400; font-size: clamp(14px, 4.4vh, 20px); font-size: clamp(14px, 4.4cqh, 20px); letter-spacing: .01em; line-height: 1.2; }
+  /* "Svuota": compare sul display quando ci sono nomi rimasti dalla partita prima */
+  .lcd-destra { display: flex; align-items: center; gap: 12px; flex: none; }
+  .svuota {
+    position: relative; padding: 5px 10px; border: 1.5px solid currentColor; border-radius: 999px; background: transparent; cursor: pointer;
+    color: var(--vetro-segni); font: 10px/1 "Michroma", Verdana, sans-serif; letter-spacing: .06em; text-transform: uppercase; opacity: .8;
+    animation: appari .3s ease-out both;
+  }
+  .svuota::before { content: ""; position: absolute; inset: -9px -6px; }
+  .svuota:active { opacity: 1; background: color-mix(in srgb, var(--vetro-segni) 15%, transparent); }
+  .svuota[hidden] { display: none; }
   .lcd .contatore { font-size: clamp(12px, 3.6vh, 16px); font-size: clamp(12px, 3.6cqh, 16px); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .strisce { display: grid; gap: 3px; width: 54px; flex: none; }
   .strisce i { display: block; height: 3px; border-radius: 2px; background: var(--ambra); }
@@ -403,7 +420,8 @@
   }
   .slot.doppio input { box-shadow: inset 0 0 0 2px var(--corallo); }
   .slot input::placeholder { color: var(--vetro-segni); opacity: .45; text-shadow: none; }
-  .slot input:focus-visible { outline: 3px solid var(--corallo); outline-offset: 2px; }
+  /* mentre si scrive il bordo è giallo: il rosso resta solo per l'errore dei nomi doppi */
+  .slot input:focus-visible { outline: 3px solid var(--ambra); outline-offset: 2px; }
 
   /* Nomi delle squadre */
   .sfida { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: clamp(8px, 2vw, 16px); gap: clamp(8px, 2cqw, 16px); }
@@ -441,7 +459,8 @@
     padding: 5px 10px 5px 6px; border-radius: 8px; font-size: clamp(13px, 3.8vh, 16px); font-size: clamp(13px, 3.8cqh, 16px); font-weight: 600;
   }
   .classifica li span, .risultati li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .classifica li b, .risultati li b { font-family: "Michroma", Verdana, sans-serif; font-weight: 400; font-variant-numeric: tabular-nums; }
+  /* tutti i punteggi sono in Bricolage: lo zero di Michroma sembrava una casella da spuntare */
+  .classifica li b, .risultati li b { font-weight: 800; font-variant-numeric: tabular-nums; }
   .num {
     width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-style: normal;
     background: var(--inchiostro); color: var(--sfondo); font: 10px/1 "Michroma", Verdana, sans-serif;
@@ -545,7 +564,7 @@
   .tabellone .nome { display: flex; align-items: center; gap: 8px; font-size: clamp(13px, 3.6vh, 15px); font-size: clamp(13px, 3.6cqh, 15px); font-weight: 600; color: var(--tenue); }
   .tabellone li, .tabellone .nome span:last-child { min-width: 0; }
   .tabellone .nome span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .tabellone b { display: block; font: clamp(26px, 9vh, 40px)/1.15 "Michroma", Verdana, sans-serif; font: clamp(26px, 9cqh, 40px)/1.15 "Michroma", Verdana, sans-serif; font-variant-numeric: tabular-nums; }
+  .tabellone b { display: block; font: 800 clamp(26px, 9vh, 40px)/1.15 "Bricolage Grotesque", system-ui, sans-serif; font: 800 clamp(26px, 9cqh, 40px)/1.15 "Bricolage Grotesque", system-ui, sans-serif; font-variant-numeric: tabular-nums; }
   .tabellone b { transform-origin: left center; }
   .tabellone .a b { color: var(--ambra-testo); }
   .tabellone .b b { color: var(--squadra-b-testo); }
@@ -653,7 +672,7 @@
 
   .collab-box { display: grid; justify-items: center; gap: 4px; text-align: center; }
   .collab-box .etichetta { font-size: clamp(13px, 3.6vh, 16px); font-size: clamp(13px, 3.6cqh, 16px); font-weight: 600; color: var(--tenue); }
-  .collab-box .totale { font: clamp(36px, 14vh, 62px)/1.1 "Michroma", Verdana, sans-serif; font: clamp(36px, 14cqh, 62px)/1.1 "Michroma", Verdana, sans-serif; color: var(--ambra-testo); margin-bottom: 6px; }
+  .collab-box .totale { font: 800 clamp(36px, 14vh, 62px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; font: 800 clamp(36px, 14cqh, 62px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; color: var(--ambra-testo); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
   .collab-box .totale.segnato { animation: punto .6s ease-out .9s both; }
   .pallini { display: grid; grid-template-columns: repeat(7, 11px); justify-content: center; gap: 6px; margin-top: 4px; }
   .pallini i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--tenue); }
@@ -663,7 +682,7 @@
   .pallini i.extra.giocato { background: var(--zona-oro); }
   .legenda { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 13px; font-weight: 600; color: var(--tenue); line-height: 1.2; text-align: left; max-width: 160px; }
   .legenda svg { width: 12px; height: 16px; flex: none; overflow: visible; }
-  .turno .guadagno { font: clamp(30px, 11vh, 48px)/1.1 "Michroma", Verdana, sans-serif; font: clamp(30px, 11cqh, 48px)/1.1 "Michroma", Verdana, sans-serif; color: var(--ambra-testo); margin: 4px 0; }
+  .turno .guadagno { font: 800 clamp(30px, 11vh, 48px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; font: 800 clamp(30px, 11cqh, 48px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; color: var(--ambra-testo); margin: 4px 0; font-variant-numeric: tabular-nums; }
   .turno .guadagno.zero { color: var(--tenue); }
 
   /* schermi bassi: la schermata delle regole si compatta per far stare anche il tasto Inizia */
@@ -732,8 +751,8 @@
     animation: compare-su .4s ease-out both; animation-delay: calc(var(--i) * 90ms + 300ms);
   }
   .podio li span:nth-child(3) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .podio .pos, .podio b { font: 13px "Michroma", Verdana, sans-serif; }
-  .podio b { font-size: 15px; }
+  .podio .pos { font: 13px "Michroma", Verdana, sans-serif; }
+  .podio b { font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; }
   .podio li.vince { background: var(--ambra); color: #2A1C00; }
   .podio li.vince .num { background: #2A1C00; color: var(--ambra); }
   .fine-sfida { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: clamp(8px, 2vw, 16px); gap: clamp(8px, 2cqw, 16px); }
@@ -743,7 +762,7 @@
   }
   .fine-squadra .nome { display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 600; color: var(--su-tasto-tenue); }
   .fine-squadra .nome span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .fine-squadra b { display: block; font: clamp(34px, 13vh, 56px)/1.15 "Michroma", Verdana, sans-serif; font: clamp(34px, 13cqh, 56px)/1.15 "Michroma", Verdana, sans-serif; }
+  .fine-squadra b { display: block; font: 800 clamp(34px, 13vh, 56px)/1.15 "Bricolage Grotesque", system-ui, sans-serif; font: 800 clamp(34px, 13cqh, 56px)/1.15 "Bricolage Grotesque", system-ui, sans-serif; font-variant-numeric: tabular-nums; }
   .fine-squadra.a b { color: var(--ambra-testo); }
   .fine-squadra.b b { color: var(--squadra-b-testo); }
   .fine-squadra.a .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
@@ -753,7 +772,7 @@
   .fine-sfida .vs { font-family: "Michroma", Verdana, sans-serif; font-size: 16px; color: var(--griglia); }
   .fine-collab { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(8px, 1.6vw, 14px); gap: clamp(8px, 1.6cqw, 14px); align-items: stretch; }
   .totale-fine { display: grid; place-content: center; text-align: center; animation: compare-su .45s ease-out .3s both; }
-  .totale-fine b { font: clamp(40px, 16vh, 72px)/1 "Michroma", Verdana, sans-serif; font: clamp(40px, 16cqh, 72px)/1 "Michroma", Verdana, sans-serif; color: var(--ambra-testo); }
+  .totale-fine b { font: 800 clamp(40px, 16vh, 72px)/1 "Bricolage Grotesque", system-ui, sans-serif; font: 800 clamp(40px, 16cqh, 72px)/1 "Bricolage Grotesque", system-ui, sans-serif; color: var(--ambra-testo); font-variant-numeric: tabular-nums; }
   .totale-fine span { font-weight: 600; color: var(--su-tasto-tenue); margin-top: 4px; }
   /* una sola riga, che scorre di lato se le stazioni sono tante: la fine partita resta tutta visibile */
   #fine-corpo { min-width: 0; }
@@ -772,8 +791,94 @@
   }
   .fine-zap .led { width: 8px; height: 8px; background: var(--colore); box-shadow: 0 0 7px var(--colore); }
   .fine-zap .turni { font-size: 11px; font-weight: 600; color: var(--su-tasto-tenue); }
-  .fine-zap b { font: 12px "Michroma", Verdana, sans-serif; }
+  .fine-zap b { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; }
   .fine-zap .voce.top { box-shadow: inset 0 0 0 2px var(--ambra), 0 2px 0 var(--tasto-ombra); }
+  /* Giocatori singoli: la classifica a sinistra e i premi della partita a destra */
+  .fine-singoli { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(8px, 1.6vw, 14px); gap: clamp(8px, 1.6cqw, 14px); align-items: stretch; }
+  .fine-singoli > .scheda { display: grid; align-content: center; }
+  .fine-singoli .podio { width: 100%; }
+  .premi { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(4px, 1.4vh, 8px); gap: clamp(4px, 1.4cqh, 8px); }
+  .premio {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px;
+    animation: compare-su .4s ease-out both; animation-delay: calc(var(--i) * 170ms + 850ms);
+  }
+  .premio-disco { --colore: var(--zona-oro); } .premio-antenna { --colore: var(--menta); }
+  .premio-coppia { --colore: var(--zona-2); } .premio-fuori { --colore: var(--viola); }
+  .medaglia {
+    display: grid; place-items: center; width: clamp(28px, 8.6vh, 34px); width: clamp(28px, 8.6cqh, 34px); aspect-ratio: 1; border-radius: 50%;
+    background: color-mix(in srgb, var(--colore) 22%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--colore) 55%, transparent);
+  }
+  .medaglia svg { width: 72%; height: 72%; overflow: visible; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .premio-testo { min-width: 0; }
+  .premio-titolo { display: block; font: 8.5px/1.35 "Michroma", Verdana, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--su-tasto-tenue); }
+  .premio-riga { display: flex; align-items: baseline; gap: 6px; min-width: 0; font-size: clamp(13px, 3.9vh, 16px); font-size: clamp(13px, 3.9cqh, 16px); line-height: 1.25; }
+  .premio-chi { flex: none; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; }
+  .premio-perche { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .82em; font-weight: 600; color: var(--su-tasto-tenue); }
+  /* le icone: un disco d'oro, un'antenna che trasmette, due onde in fase e un segnale tutto disturbato */
+  .ip-oro { fill: var(--zona-oro); }
+  .ip-solco { stroke: #5A3A00; stroke-width: .8; opacity: .35; }
+  .ip-etichetta { fill: var(--corallo); }
+  .ip-foro { fill: var(--tasto); }
+  .ip-riflesso { stroke: #fff; stroke-width: 1.6; opacity: .7; }
+  .ip-onda { stroke: var(--menta); stroke-width: 2.2; }
+  .ip-asta { stroke: var(--su-tasto); stroke-width: 2; opacity: .75; }
+  .ip-punta { fill: var(--menta); }
+  .ip-onda-a { stroke: var(--zona-2); stroke-width: 2.6; }
+  .ip-onda-b { stroke: var(--ambra); stroke-width: 2.6; }
+  .ip-rumore { stroke: var(--viola); stroke-width: 2.2; }
+  .premio-disco .medaglia svg { animation: gira-disco 1.4s cubic-bezier(.2, .7, .3, 1) both; animation-delay: calc(var(--i) * 170ms + 850ms); }
+  @keyframes gira-disco { from { transform: rotate(-300deg); } }
+  /* schermi bassi: tutto un po' più compatto, così si vedono anche i tasti in fondo */
+  @media (max-height: 430px) {
+    #schermata-fine .setup { padding-top: 6px; padding-bottom: 8px; }
+    #schermata-fine .contenuto { gap: 8px; padding-top: 4px; }
+    #schermata-fine .pannello { padding: 10px; gap: 8px; }
+    #schermata-fine .lcd { padding-block: 6px; }
+    #schermata-fine .scheda { padding: 6px 10px; margin-bottom: 3px; }
+    #schermata-fine .podio li { padding-block: 2px; }
+    #schermata-fine .fine-zap { margin-top: 4px; }
+  }
+  @container app (max-height: 430px) {
+    #schermata-fine .setup { padding-top: 6px; padding-bottom: 8px; }
+    #schermata-fine .contenuto { gap: 8px; padding-top: 4px; }
+    #schermata-fine .pannello { padding: 10px; gap: 8px; }
+    #schermata-fine .lcd { padding-block: 6px; }
+    #schermata-fine .scheda { padding: 6px 10px; margin-bottom: 3px; }
+    #schermata-fine .podio li { padding-block: 2px; }
+    #schermata-fine .fine-zap { margin-top: 4px; }
+  }
+  @media (max-height: 340px) {
+    #schermata-fine .barra .tema, #schermata-fine .barra .ingranaggio { width: 34px; height: 34px; }
+    #schermata-fine .setup { padding-top: 4px; padding-bottom: 6px; }
+    #schermata-fine .contenuto { gap: 6px; padding-top: 2px; }
+    #schermata-fine .pannello { padding: 8px; gap: 6px; }
+    #schermata-fine .lcd { padding-block: 4px; }
+    #schermata-fine .lcd h2 { font-size: 14px; }
+    #schermata-fine .scheda { padding: 4px 9px; }
+    #schermata-fine .podio { gap: 1px; }
+    #schermata-fine .podio li { padding-block: 1px; font-size: 13px; }
+    #schermata-fine .podio b { font-size: 15px; }
+    #schermata-fine .premi { gap: 2px; }
+    #schermata-fine .premio-riga { font-size: 13px; }
+    #schermata-fine .fine-zap .voce { padding-block: 2px; }
+    #schermata-fine .fine-azioni .btn-piccolo, #schermata-fine .fine-azioni .tasto-ambra { height: 42px; }
+  }
+  @container app (max-height: 340px) {
+    #schermata-fine .barra .tema, #schermata-fine .barra .ingranaggio { width: 34px; height: 34px; }
+    #schermata-fine .setup { padding-top: 4px; padding-bottom: 6px; }
+    #schermata-fine .contenuto { gap: 6px; padding-top: 2px; }
+    #schermata-fine .pannello { padding: 8px; gap: 6px; }
+    #schermata-fine .lcd { padding-block: 4px; }
+    #schermata-fine .lcd h2 { font-size: 14px; }
+    #schermata-fine .scheda { padding: 4px 9px; }
+    #schermata-fine .podio { gap: 1px; }
+    #schermata-fine .podio li { padding-block: 1px; font-size: 13px; }
+    #schermata-fine .podio b { font-size: 15px; }
+    #schermata-fine .premi { gap: 2px; }
+    #schermata-fine .premio-riga { font-size: 13px; }
+    #schermata-fine .fine-zap .voce { padding-block: 2px; }
+    #schermata-fine .fine-azioni .btn-piccolo, #schermata-fine .fine-azioni .tasto-ambra { height: 42px; }
+  }
   .fine-azioni { display: flex; align-items: center; gap: 12px; flex: none; }
   .fine-azioni .btn-piccolo { height: 48px; }
   #schermata-fine .lcd h2 { font-size: clamp(15px, 5vh, 22px); font-size: clamp(15px, 5cqh, 22px); }
@@ -1359,6 +1464,7 @@
     font-size: 12px; font-weight: 600; letter-spacing: .02em; color: var(--tenue); opacity: .85;
   }
   .dialogo .credito-imp { margin: 0 auto 0 4px; padding: 0; align-self: center; font-size: 13px; font-weight: 600; color: var(--su-corpo); opacity: .75; }
+  .dialogo .versione-app { display: block; margin-top: 3px; font: 9px/1.2 "Michroma", Verdana, sans-serif; letter-spacing: .04em; font-variant-numeric: tabular-nums; opacity: .85; }
 
   /* ---------- Impostazioni ---------- */
   .interruttori { display: grid; padding-block: 4px; }
@@ -1423,7 +1529,7 @@
     .copri-bersaglio, .lampada-onair, .voce-onda.nuova, .on-air, .on-air.spegne { animation: none !important; }
     .tasto-zap .led, .stazioni .tasto.nego, .zap-onda.cerca *, .zap-onda.cerca .zap-display::before, .targhetta.cerca .tema-testo, .fine-zap .voce { animation: none !important; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
-    .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .fine-squadra, .totale-fine { animation: none !important; }
+    .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .premio, .premio .medaglia svg, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
     .loader.pronto, .loader.invito, .loader.invito .invito-testo { animation: none; }
     .loader, .loader .label, body { transition: none; }
@@ -2781,7 +2887,7 @@ Silenzio d'oro | Silenzio imbarazzante
       <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-stazione"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-singoli" aria-live="polite"></p><div class="azioni"><button class="btn-piccolo regole-btn" data-regole="singoli"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01" stroke-width="3"/></svg>Come si gioca</button><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
-          <div class="lcd"><h2>Chi gioca?</h2><span class="contatore" id="contatore">0/5</span></div>
+          <div class="lcd"><h2>Chi gioca?</h2><span class="lcd-destra"><button class="svuota" id="svuota-singoli" type="button" hidden>Svuota</button><span class="contatore" id="contatore">0/5</span></span></div>
           <div class="preset">
             <label class="slot"><span class="testa">1<span class="led"></span></span>
               <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 1"></label>
@@ -2808,7 +2914,7 @@ Silenzio d'oro | Silenzio imbarazzante
       <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-stazione"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-squadre" aria-live="polite"></p><div class="azioni"><button class="btn-piccolo regole-btn" data-regole="squadre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01" stroke-width="3"/></svg>Come si gioca</button><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
-          <div class="lcd"><h2>Come si chiamano le squadre?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="lcd"><h2>Come si chiamano le squadre?</h2><span class="lcd-destra"><button class="svuota" id="svuota-squadre" type="button" hidden>Svuota</button><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></span></div>
           <div class="sfida">
             <label class="slot a"><span class="testa"><span class="led"></span>Prima squadra</span>
               <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Ambra" aria-label="Nome della prima squadra"></label>
@@ -3025,7 +3131,7 @@ Silenzio d'oro | Silenzio imbarazzante
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio</p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -4941,26 +5047,45 @@ Silenzio d'oro | Silenzio imbarazzante
     sintonizzaEAvvia(suggCollab, iniziaCollab, [], () => avviaCollab());
   });
 
-  /* ---------- Caselle vuote a ogni ingresso, e sintonia prima di giocare ---------- */
+  // Svuota: cancella in un colpo i nomi rimasti dalla partita prima
+  function tastoSvuota(id, campi, verifica) {
+    const b = document.getElementById(id);
+    const aggiorna = () => { b.hidden = sintonizzando || !campi.some(c => c.value.trim()); };
+    campi.forEach(c => c.addEventListener('input', aggiorna));
+    b.addEventListener('click', () => {
+      if (sintonizzando) return;
+      campi.forEach(c => { c.value = ''; });
+      verifica();
+      aggiorna();
+    });
+    return aggiorna;
+  }
+
+  /* ---------- Nomi e sintonia prima di giocare ----------
+     I nomi scritti restano nelle caselle finché l'app è aperta (per la partita dopo, o se si torna
+     indietro a cambiare stazione); quando l'app si riavvia le caselle ripartono vuote. */
   let sintonizzando = false;
+  const svuotaSingoli = tastoSvuota('svuota-singoli', campiGiocatori, verificaSingoli);
+  const svuotaSquadre = tastoSvuota('svuota-squadre', campiSquadre, verificaSquadre);
   // Il titolo originale di ogni display, per ripristinarlo dopo la sintonia
   document.querySelectorAll('.setup .lcd h2').forEach(h => { h.dataset.titolo = h.textContent; });
   function displayDi(pulsante) { return pulsante.closest('.screen').querySelector('.lcd h2'); }
 
   function preparaNomi(id) {
     const conf = {
-      'schermata-singoli': [campiGiocatori, iniziaSingoli, suggSingoli, verificaSingoli],
-      'schermata-squadre': [campiSquadre, iniziaSquadre, suggSquadre, verificaSquadre],
-      'schermata-collab': [[], iniziaCollab, suggCollab, () => { suggCollab.textContent = TESTO_COLLAB; }]
+      'schermata-singoli': [campiGiocatori, iniziaSingoli, suggSingoli, verificaSingoli, svuotaSingoli],
+      'schermata-squadre': [campiSquadre, iniziaSquadre, suggSquadre, verificaSquadre, svuotaSquadre],
+      'schermata-collab': [[], iniziaCollab, suggCollab, () => { suggCollab.textContent = TESTO_COLLAB; }, () => {}]
     }[id];
-    const [campi, pulsante, sugg, verifica] = conf;
-    campi.forEach(c => { c.value = ''; c.disabled = false; });
+    const [campi, pulsante, sugg, verifica, svuota] = conf;
+    campi.forEach(c => { c.disabled = false; });
     pulsante.classList.remove('premuto');
     sugg.classList.remove('errore');
     const display = displayDi(pulsante);
     display.classList.remove('onda-testo', 'sintonizzato');
     display.textContent = display.dataset.titolo;
     verifica(true);
+    svuota();
   }
 
   // Scrive un testo lettera per lettera, così può "ondeggiare"
@@ -4978,6 +5103,7 @@ Silenzio d'oro | Silenzio imbarazzante
   // Premendo "Inizia" il tasto resta abbassato e le onde tornano a unirsi, poi si entra in partita
   function sintonizzaEAvvia(sugg, pulsante, campi, avvio) {
     sintonizzando = true;
+    document.querySelectorAll('.svuota').forEach(b => { b.hidden = true; });
     if (document.activeElement) document.activeElement.blur();
     campi.forEach(c => { c.disabled = true; });
     pulsante.classList.add('premuto');
@@ -5542,7 +5668,7 @@ Silenzio d'oro | Silenzio imbarazzante
     ultimaPartita = { modo: 'singoli', nomi };
     const turno = Math.floor(Math.random() * nomi.length);
     const zap = preparaZap();
-    partita = { modo: 'singoli', giocatori: nomi.map(nome => ({ nome, punti: 0 })), turno, turniGiocati: 0, zap, carta: pesca(zap ? zap.stazione : stazioneScelta), cartaPronta: true, fase: 'accensione' };
+    partita = { modo: 'singoli', giocatori: nomi.map(nome => ({ nome, punti: 0 })), turno, turniGiocati: 0, storico: [], zap, carta: pesca(zap ? zap.stazione : stazioneScelta), cartaPronta: true, fase: 'accensione' };
     entraInPartita(() => estrai(nomi, turno, nuovoTurno));
   }
   function nomeDi(i) { return partita.giocatori[i].nome; }
@@ -5598,6 +5724,8 @@ Silenzio d'oro | Silenzio imbarazzante
     // chi ha dato l'indizio prende 1 punto per ogni giocatore che ha colpito il bersaglio
     p.puntiIndizio = p.tentativi.filter(t => t.punti > 0).length;
     p.giocatori[p.turno].punti += p.puntiIndizio;
+    // per i premi di fine partita: chi ha dato l'indizio, su che carta, e quanto lontano è andata ogni lancetta
+    p.storico.push({ da: p.turno, carta: p.carta, tentativi: p.tentativi.map(t => ({ chi: t.chi, distanza: Math.abs(t.angolo - p.centro), punti: t.punti })) });
     segnaZap(p.tentativi.reduce((s, t) => s + t.punti, 0) + p.puntiIndizio);
     p.turniGiocati++;
     const max = Math.max(...p.giocatori.map(g => g.punti));
@@ -6068,7 +6196,12 @@ Silenzio d'oro | Silenzio imbarazzante
         ol.append(li);
       });
       scheda.append(ol);
-      fineCorpo.append(scheda);
+      const premi = premiSingoli(p);
+      if (premi.length) {
+        const griglia = el('div', 'fine-singoli');
+        griglia.append(scheda, schedaPremi(premi));
+        fineCorpo.append(griglia);
+      } else fineCorpo.append(scheda);
     } else if (p.modo === 'squadre') {
       titolo = p.pareggio ? 'Pareggio!' : `Vince ${p.squadre[p.vincitrice].nome}!`;
       fanfara = p.pareggio ? 'pareggio' : 'vittoria';
@@ -6107,6 +6240,74 @@ Silenzio d'oro | Silenzio imbarazzante
     partita = null;
     vai('schermata-fine');
     animaOnde(onde, 1400);
+  }
+
+  /* ---------- Premi di fine partita (solo giocatori singoli) ----------
+     Disco d'oro: chi ha colpito più volte il bersaglio (2, 3 o 4 punti, conta ogni colpo).
+     Antenna perfetta: la lancetta più vicina al centro di tutta la partita (se ha colpito il bersaglio).
+     Coppia in sintonia: i due che hanno fatto più punti con gli indizi l'uno dell'altro (da 3 giocatori in su).
+     Fuori frequenza: la lancetta più lontana dal centro, se ha mancato il bersaglio. */
+  // la carta in breve, senza ripetere le parole uguali: "Piatto facile / difficile"
+  function cartaBreve([a, b]) {
+    const pa = a.split(' '), pb = b.split(' ');
+    let pre = 0, suf = 0;
+    while (pre < pa.length - 1 && pre < pb.length - 1 && pa[pre].toLowerCase() === pb[pre].toLowerCase()) pre++;
+    while (suf < pa.length - 1 - pre && suf < pb.length - 1 - pre && pa[pa.length - 1 - suf].toLowerCase() === pb[pb.length - 1 - suf].toLowerCase()) suf++;
+    return `${pa.slice(0, pa.length - suf).join(' ')} / ${pb.slice(pre).join(' ')}`;
+  }
+  function elencoNomi(nomi) { return nomi.length < 2 ? nomi[0] : nomi.slice(0, -1).join(', ') + ' e ' + nomi[nomi.length - 1]; }
+  function premiSingoli(p) {
+    const n = p.giocatori.length, nome = i => p.giocatori[i].nome;
+    const tutte = (p.storico || []).flatMap(t => t.tentativi.map(x => ({ ...x, da: t.da, carta: t.carta })));
+    if (!tutte.length) return [];
+    const premi = [];
+    const colpi = p.giocatori.map(() => 0);
+    tutte.forEach(x => { if (x.punti > 0) colpi[x.chi]++; });
+    const piuColpi = Math.max(...colpi);
+    const primi = colpi.map((c, i) => c === piuColpi ? i : -1).filter(i => i >= 0);
+    if (piuColpi > 0 && primi.length < n) {
+      premi.push({ tipo: 'disco', titolo: 'Disco d\u2019oro', chi: elencoNomi(primi.map(nome)), perche: piuColpi === 1 ? '1 volta sul bersaglio' : `${piuColpi} volte sul bersaglio` });
+    }
+    const vicina = tutte.reduce((a, b) => b.distanza < a.distanza ? b : a);
+    if (vicina.punti > 0) premi.push({ tipo: 'antenna', titolo: 'Antenna perfetta', chi: nome(vicina.chi), perche: 'la più vicina al centro', carta: vicina.carta });
+    if (n >= 3) {
+      let coppia = null;
+      for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++) {
+        const tra = tutte.filter(x => (x.da === a && x.chi === b) || (x.da === b && x.chi === a));
+        const punti = tra.reduce((s, x) => s + x.punti, 0), distanza = tra.reduce((s, x) => s + x.distanza, 0);
+        if (!coppia || punti > coppia.punti || (punti === coppia.punti && distanza < coppia.distanza)) coppia = { a, b, punti, distanza };
+      }
+      if (coppia.punti > 0) premi.push({ tipo: 'coppia', titolo: 'Coppia in sintonia', chi: `${nome(coppia.a)} e ${nome(coppia.b)}`, perche: `${coppia.punti} punti scambiandosi gli indizi` });
+    }
+    const lontana = tutte.reduce((a, b) => b.distanza > a.distanza ? b : a);
+    if (lontana.punti === 0) premi.push({ tipo: 'fuori', titolo: 'Fuori frequenza', chi: nome(lontana.chi), perche: 'la più lontana dal centro', carta: lontana.carta });
+    return premi;
+  }
+  const ICONE_PREMI = {
+    disco: '<circle class="ip-oro" cx="16" cy="16" r="13"/><circle class="ip-solco" cx="16" cy="16" r="10"/><circle class="ip-solco" cx="16" cy="16" r="7.2"/><circle class="ip-etichetta" cx="16" cy="16" r="4.4"/><circle class="ip-foro" cx="16" cy="16" r="1.3"/><path class="ip-riflesso" d="M8.2 10.4A10 10 0 0 1 13 6.4"/>',
+    antenna: '<path class="ip-onda" d="M10.6 5.4a7.6 7.6 0 0 0 0 9.2M21.4 5.4a7.6 7.6 0 0 1 0 9.2M7.2 2.6a12.4 12.4 0 0 0 0 14.8M24.8 2.6a12.4 12.4 0 0 1 0 14.8"/><path class="ip-asta" d="M16 12.5 11.2 29.5M16 12.5l4.8 17M12.8 24h6.4M14.2 18.6h3.6"/><circle class="ip-punta" cx="16" cy="10" r="2.7"/>',
+    coppia: '<path class="ip-onda-a" d="M2 13q3.5-8 7 0t7 0 7 0 7 0"/><path class="ip-onda-b" d="M2 19q3.5-8 7 0t7 0 7 0 7 0"/>',
+    fuori: '<path class="ip-rumore" d="M2 17l2.6-6 2.6 11 2.4-14 2.8 9 2.4-6 2.6 12 2.5-15 2.7 10 2.4-5 2.6 7 2.4-4"/>'
+  };
+  function schedaPremi(premi) {
+    const scheda = el('div', 'scheda scheda-premi');
+    const lista = el('ul', 'premi');
+    lista.setAttribute('aria-label', 'Premi della partita');
+    premi.forEach((pr, k) => {
+      const li = el('li', 'premio premio-' + pr.tipo);
+      li.style.setProperty('--i', k);
+      const tondo = el('span', 'medaglia');
+      tondo.setAttribute('aria-hidden', 'true');
+      tondo.innerHTML = `<svg viewBox="0 0 32 32">${ICONE_PREMI[pr.tipo]}</svg>`;
+      const testo = el('span', 'premio-testo');
+      const riga = el('span', 'premio-riga');
+      riga.append(el('b', 'premio-chi', pr.chi), el('span', 'premio-perche', pr.carta ? `${pr.perche} · ${cartaBreve(pr.carta)}` : pr.perche));
+      testo.append(el('span', 'premio-titolo', pr.titolo), riga);
+      li.append(tondo, testo);
+      lista.append(li);
+    });
+    scheda.append(lista);
+    return scheda;
   }
 
   // Zapping: le stazioni visitate, con i punti fatti su ognuna (la più generosa è evidenziata)
