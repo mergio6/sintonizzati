@@ -496,6 +496,33 @@
   .slot.acceso .tasto-preset { transform: translateY(5px); color: var(--su-tasto); background: color-mix(in srgb, var(--tasto) 93%, #000); box-shadow: inset 0 2px 5px rgba(0, 0, 0, .14), 0 1px 0 var(--tasto-ombra); }
   .slot.doppio .tasto-preset { animation: nego .4s ease-in-out; }
 
+  /* ---------- Riga di anteprima del nome, sopra la tastiera del telefono ---------- */
+  .anteprima-nome {
+    position: fixed; z-index: 70; left: 50%; top: max(8px, env(safe-area-inset-top, 0px));
+    width: min(820px, calc(100% - 24px)); transform: translate(-50%, var(--vv-top, 0px));
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px;
+    padding: 8px 8px 8px 16px; border-radius: 14px; background: var(--corpo);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .35); animation: an-scende .18s ease-out both;
+  }
+  .anteprima-nome[hidden] { display: none; }
+  @keyframes an-scende { from { opacity: 0; translate: 0 -10px; } }
+  .an-testa { display: flex; align-items: center; gap: 8px; font: 11px/1.2 "Michroma", Verdana, sans-serif; letter-spacing: .04em; color: var(--su-corpo); white-space: nowrap; }
+  .anteprima-nome .led { background: var(--menta); box-shadow: 0 0 10px var(--menta); }
+  .anteprima-nome.squadra-a .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
+  .anteprima-nome.squadra-b .led { background: var(--squadra-b); box-shadow: 0 0 10px var(--squadra-b); }
+  .an-testo {
+    min-width: 0; height: 46px; display: flex; align-items: center; padding: 0 14px; border-radius: 9px; overflow: hidden; white-space: pre;
+    background: var(--vetro); color: var(--vetro-segni); text-shadow: var(--lcd-ombra); box-shadow: inset 0 2px 6px rgba(0, 0, 0, .2);
+    font: 800 24px/1 "Bricolage Grotesque", system-ui, sans-serif;
+  }
+  .an-segnaposto { opacity: .35; text-shadow: none; }
+  .an-cursore { display: inline-block; width: 2.5px; height: 1.05em; margin: 0 1px; border-radius: 1px; background: currentColor; animation: an-cursore 1s steps(1) infinite; }
+  @keyframes an-cursore { 50% { opacity: 0; } }
+  .anteprima-nome.doppio .an-testo { color: var(--corallo); box-shadow: inset 0 0 0 2px var(--corallo), inset 0 2px 6px rgba(0, 0, 0, .2); }
+  .anteprima-nome.doppio .an-etichetta { color: var(--corallo); }
+  .an-ok { height: 46px; padding: 0 20px; font-size: 15px; box-shadow: 0 3px 0 var(--ambra-scura); }
+  .an-ok:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ambra-scura); }
+  @media (prefers-reduced-motion: reduce) { .anteprima-nome, .an-cursore { animation: none; } }
   /* ---------- Squadre: due walkie-talkie, uno per squadra ----------
      Il nome si scrive sullo schermo del walkie; tra i due, il segnale va e viene come sul tasto della modalità,
      e la spia di ognuno si accende quando è lui a trasmettere. */
@@ -3317,6 +3344,14 @@ Silenzio d'oro | Silenzio imbarazzante
     </div>
   </section>
 
+  <!-- Mentre si scrive un nome sul telefono la tastiera copre quasi tutto: in alto compare una riga
+       che mostra cosa si sta scrivendo (è solo uno specchio del campo vero, che resta quello attivo) -->
+  <div class="anteprima-nome" id="anteprima-nome" hidden aria-hidden="true">
+    <span class="an-testa"><span class="led"></span><span class="an-etichetta" id="an-etichetta"></span></span>
+    <span class="an-testo" id="an-testo"></span>
+    <button class="tasto-ambra an-ok" id="an-ok" type="button" tabindex="-1">OK</button>
+  </div>
+
   <!-- Impostazioni -->
   <div class="dialogo" id="dialogo-impostazioni" hidden>
     <div class="pannello" role="dialog" aria-modal="true" aria-labelledby="imp-titolo">
@@ -3343,7 +3378,7 @@ Silenzio d'oro | Silenzio imbarazzante
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09g</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09h</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -5306,6 +5341,77 @@ Silenzio d'oro | Silenzio imbarazzante
     });
     return aggiorna;
   }
+
+  /* ---------- Anteprima del nome sopra la tastiera ----------
+     A schermo intero la tastiera del telefono si appoggia sopra l'app senza spostarla, e copre le caselle.
+     Quando si scrive un nome (solo sui dispositivi touch) in alto compare una riga che mostra il testo,
+     con il cursore lampeggiante, il nome della casella e un tasto OK per chiudere la tastiera. */
+  const anteprimaNome = document.getElementById('anteprima-nome');
+  const anEtichetta = document.getElementById('an-etichetta');
+  const anTesto = document.getElementById('an-testo');
+  const touch = window.matchMedia('(pointer: coarse)');
+  const campiNome = [...campiGiocatori, ...campiSquadre];
+  let campoAttivo = null;
+  function etichettaDi(c) {
+    const k = campiGiocatori.indexOf(c);
+    if (k >= 0) return `Giocatore ${k + 1}`;
+    return campiSquadre.indexOf(c) === 0 ? 'Prima squadra' : 'Seconda squadra';
+  }
+  function aggiornaAnteprima() {
+    const c = campoAttivo;
+    if (!c) return;
+    const v = c.value, pos = Math.min(c.selectionStart ?? v.length, v.length);
+    const cursore = el('i', 'an-cursore');
+    if (v) anTesto.replaceChildren(document.createTextNode(v.slice(0, pos)), cursore, document.createTextNode(v.slice(pos)));
+    else anTesto.replaceChildren(cursore, el('span', 'an-segnaposto', c.placeholder));
+    const doppio = c.closest('.slot').classList.contains('doppio');
+    anteprimaNome.classList.toggle('doppio', doppio);
+    anEtichetta.textContent = doppio ? 'Nome già usato' : etichettaDi(c);
+  }
+  function posizionaAnteprima() {
+    const vv = window.visualViewport;
+    anteprimaNome.style.setProperty('--vv-top', vv && !ruotata ? Math.max(0, vv.offsetTop) + 'px' : '0px');
+  }
+  campiNome.forEach(c => {
+    c.addEventListener('focus', () => {
+      if (!touch.matches || sintonizzando) return;
+      campoAttivo = c;
+      const sq = campiSquadre.indexOf(c);
+      anteprimaNome.classList.toggle('squadra-a', sq === 0);
+      anteprimaNome.classList.toggle('squadra-b', sq === 1);
+      anteprimaNome.hidden = false;
+      posizionaAnteprima();
+      aggiornaAnteprima();
+    });
+    c.addEventListener('input', aggiornaAnteprima);
+    c.addEventListener('blur', () => setTimeout(() => {
+      if (campiNome.includes(document.activeElement)) return;
+      campoAttivo = null;
+      anteprimaNome.hidden = true;
+    }, 0));
+  });
+  document.addEventListener('selectionchange', () => { if (campoAttivo && document.activeElement === campoAttivo) aggiornaAnteprima(); });
+  if (window.visualViewport) ['resize', 'scroll'].forEach(t => window.visualViewport.addEventListener(t, () => { if (campoAttivo) posizionaAnteprima(); }));
+  // Se la tastiera si chiude da sola (tasto indietro o freccia giù di Android) il campo resterebbe attivo
+  // e la riga in alto coprirebbe i tasti: appena la tastiera sparisce, si chiude anche la riga.
+  let tastieraVista = false;
+  function tastieraChiusa() { tastieraVista = false; if (campoAttivo) campoAttivo.blur(); }
+  if (navigator.virtualKeyboard) {
+    try { navigator.virtualKeyboard.overlaysContent = true; } catch (e) {}
+    navigator.virtualKeyboard.addEventListener('geometrychange', e => {
+      const alta = e.target.boundingRect.height;
+      if (alta > 0) tastieraVista = true; else if (tastieraVista) tastieraChiusa();
+    });
+  } else if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => {
+      const vv = window.visualViewport;
+      if (vv.height < window.innerHeight * .8) tastieraVista = true;
+      else if (tastieraVista) tastieraChiusa();
+    });
+  }
+  const anOk = document.getElementById('an-ok');
+  anOk.addEventListener('pointerdown', e => e.preventDefault());     // il campo resta attivo fino al tocco su OK
+  anOk.addEventListener('click', () => { if (campoAttivo) campoAttivo.blur(); });
 
   /* ---------- Nomi e sintonia prima di giocare ----------
      I nomi scritti restano nelle caselle finché l'app è aperta (per la partita dopo, o se si torna
