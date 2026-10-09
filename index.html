@@ -3141,7 +3141,7 @@ Silenzio d'oro | Silenzio imbarazzante
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09b</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09c</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -4525,8 +4525,10 @@ Silenzio d'oro | Silenzio imbarazzante
     b.classList.add('premuto');
     modoScelto = b.dataset.modo;
     animaOnde(0, 1700, null, null, 'subito');   // le onde iniziano a separarsi già alla pressione del tasto
-    // la radio lascia la stazione del menu e cerca quella delle carte: fruscio, cifre che corrono, nuova musica
+    // la radio lascia la stazione del menu e cerca quella delle carte: fruscio, cifre che corrono, nuova musica.
+    // Si parte sempre da Hit Parade; se nel menu suonava già Hit Parade, da Onde Cerebrali (così il fruscio porta sempre a una stazione nuova)
     const daStazione = stazioneMenu;
+    stazioneScelta = stazioneDiPartenza();
     suona('cercaStazione');
     setTimeout(() => {
       b.classList.remove('premuto');
@@ -4689,6 +4691,7 @@ Silenzio d'oro | Silenzio imbarazzante
   });
   let fineRicerca = 0;
   // arrivando dal menu le cifre del display corrono dalla stazione che suonava a quella delle carte
+  function stazioneDiPartenza() { return stazioneMenu === 'hitparade' ? 'cerebrali' : 'hitparade'; }
   function arrivoInStazioni(da) {
     if (!da) return;
     sintonizzaCifre(da, inAscoltoStazioni());
@@ -4899,9 +4902,9 @@ Silenzio d'oro | Silenzio imbarazzante
   function maggiorenni() { return maggiorenniConfermato; }
   function entraInStazioni() {
     maggiorenniConfermato = false;
-    if (zappingGiocato) {                // dopo una partita con lo zapping si riparte come sempre: Hit Parade, zapping spento
+    if (zappingGiocato) {                // dopo una partita con lo zapping si riparte come sempre: Hit Parade (o Onde Cerebrali), zapping spento
       zappingGiocato = false;
-      zapping = false; inScansione = null; stazioneScelta = 'hitparade';
+      zapping = false; inScansione = null; stazioneScelta = stazioneDiPartenza();
       scalettaZapping = new Set(STAZIONI_BASE);
       fermaScansione(); fermaNastro();
     }
