@@ -426,32 +426,75 @@
   /* mentre si scrive il bordo è giallo: il rosso resta solo per l'errore dei nomi doppi */
   .slot input:focus-visible { outline: 3px solid var(--ambra); outline-offset: 2px; }
 
-  .preset .slot {
-    grid-template-rows: auto auto 1fr auto; gap: 6px;
-    min-height: clamp(112px, 36vh, 170px); min-height: clamp(112px, 36cqh, 170px);
-    padding: clamp(9px, 2.8vh, 14px) 10px 10px; padding: clamp(9px, 2.8cqh, 14px) 10px 10px;
-    box-shadow: 0 6px 0 var(--tasto-ombra); margin-bottom: 6px;
-    transition: transform .12s ease-out, box-shadow .12s ease-out;
+  /* in alto un display unico diviso in cinque canali, dove si scrivono i nomi; sotto, i cinque tasti.
+     Ogni colonna (canale + tasto) è un'unica etichetta: toccando il tasto si scrive nel suo canale. */
+  .preset { grid-template-rows: auto auto; column-gap: 0; row-gap: clamp(8px, 2.6vh, 12px); row-gap: clamp(8px, 2.6cqh, 12px); }
+  .preset::before {
+    content: ""; grid-area: 1 / 1 / 2 / -1; border-radius: 10px; background: var(--vetro);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, .18);
   }
-  .preset .slot.acceso { transform: translateY(4px); box-shadow: inset 0 0 0 2.5px var(--menta), 0 2px 0 var(--tasto-ombra); }
-  .preset .slot.doppio { box-shadow: inset 0 0 0 2.5px var(--corallo), 0 2px 0 var(--tasto-ombra); animation: nego .4s ease-in-out; }
-  .preset .numero { font-size: clamp(20px, 7.2vh, 30px); font-size: clamp(20px, 7.2cqh, 30px); line-height: 1; letter-spacing: -.02em; }
-  .preset .slot:not(.acceso) .numero { color: var(--su-tasto-tenue); }
-  /* la piccola scala: tacche fitte, una lunga ogni cinque, e la lancetta rossa */
-  .scala-preset {
-    position: relative; height: 15px; margin: 0 1px; color: color-mix(in srgb, var(--su-tasto) 34%, transparent);
+  /* Il titolo "Chi gioca?" e i cinque canali sono un unico display: la riga del titolo in alto,
+     una sottile linea tratteggiata, poi la scala e i nomi. Così le due parti non sembrano due barre appiccicate. */
+  #schermata-singoli .pannello { row-gap: 0; }
+  #schermata-singoli .lcd { border-radius: 10px 10px 0 0; box-shadow: inset 0 4px 6px -4px rgba(0, 0, 0, .3), inset 4px 0 6px -4px rgba(0, 0, 0, .12), inset -4px 0 6px -4px rgba(0, 0, 0, .12); padding-bottom: clamp(5px, 1.6vh, 8px); padding-bottom: clamp(5px, 1.6cqh, 8px); }
+  #schermata-singoli .preset::before { border-radius: 0 0 10px 10px; box-shadow: inset 0 -4px 6px -4px rgba(0, 0, 0, .18), inset 4px 0 6px -4px rgba(0, 0, 0, .12), inset -4px 0 6px -4px rgba(0, 0, 0, .12); }
+  #schermata-singoli .preset::after {
+    content: ""; grid-area: 1 / 1 / 2 / -1; align-self: start; height: 1px; margin: 0 14px; pointer-events: none;
+    background: repeating-linear-gradient(90deg, var(--vetro-segni) 0 5px, transparent 5px 9px); opacity: .28;
+  }
+  #schermata-singoli .scala-display { margin-top: 9px; }
+  #schermata-singoli .canale { margin-top: 20px; }
+  #schermata-singoli .preset { row-gap: clamp(10px, 3.2vh, 16px); row-gap: clamp(10px, 3.2cqh, 16px); }
+  /* in cima al display, la scala della sintonia: la lancetta corre sul canale in cui si sta scrivendo */
+  .scala-display {
+    grid-area: 1 / 1 / 2 / -1; align-self: start; position: relative; z-index: 1; height: 8px; margin: 5px 14px 0; pointer-events: none;
+    color: color-mix(in srgb, var(--vetro-segni) 40%, transparent);
     background:
-      repeating-linear-gradient(90deg, currentColor 0 1.5px, transparent 1.5px 30px) left bottom / 100% 10px no-repeat,
-      repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 6px) left bottom / 100% 5px no-repeat,
-      linear-gradient(currentColor, currentColor) left bottom / 100% 1px no-repeat;
+      repeating-linear-gradient(90deg, currentColor 0 1.5px, transparent 1.5px 10%) left top / 100% 8px no-repeat,
+      repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 2%) left top / 100% 4px no-repeat;
   }
-  .ago-preset {
-    position: absolute; left: 2%; bottom: -3px; width: 2.5px; height: 19px; margin-left: -1px; border-radius: 2px;
-    background: var(--su-tasto-tenue); opacity: .45;
-    transition: left .8s cubic-bezier(.3, 1.35, .5, 1), background-color .3s, opacity .3s, box-shadow .3s;
+  .ago-display {
+    position: absolute; top: -2px; left: calc(var(--ago, .1) * 100%); width: 3px; height: 15px; margin-left: -1.5px; border-radius: 2px;
+    background: var(--corallo); box-shadow: 0 0 6px color-mix(in srgb, var(--corallo) 60%, transparent);
+    transition: left .6s cubic-bezier(.3, 1.3, .5, 1);
   }
-  .slot.acceso .ago-preset { left: calc(var(--sintonia) * 100%); background: var(--corallo); opacity: 1; box-shadow: 0 0 6px color-mix(in srgb, var(--corallo) 70%, transparent); }
-  .preset .slot input { height: clamp(34px, 10.5vh, 42px); height: clamp(34px, 10.5cqh, 42px); }
+  .preset .slot { display: contents; }
+  .preset .slot > * { grid-column: var(--c); }
+  .canale {
+    grid-row: 1; position: relative; display: grid; gap: 1px; min-width: 0; margin: 16px 0 4px; padding: 3px 10px 2px;
+    border-radius: 7px; cursor: text; transition: box-shadow .15s;
+  }
+  .preset .slot + .slot .canale::before {
+    content: ""; position: absolute; left: 0; top: 6px; bottom: 6px; width: 1px; background: var(--vetro-segni); opacity: .18;
+  }
+  .canale-tag { font: 8.5px/1.2 "Michroma", Verdana, sans-serif; letter-spacing: .08em; color: var(--vetro-segni); opacity: .55; text-shadow: none; }
+  .canale-tag::before { content: "P" attr(data-n); }
+  .slot.acceso .canale-tag { opacity: .85; }
+  .slot.memorizza .canale-tag::before { content: "MEM"; }
+  .slot.memorizza .canale-tag { opacity: 1; animation: mem .55s steps(1) 2; }
+  @keyframes mem { 50% { opacity: .15; } }
+  .preset .slot input {
+    height: clamp(26px, 9.4vh, 36px); height: clamp(26px, 9.4cqh, 36px); padding: 0; border-radius: 0;
+    background: none; box-shadow: none; font-size: clamp(16px, 5.2vh, 20px); font-size: clamp(16px, 5.2cqh, 20px); font-weight: 700; letter-spacing: .01em;
+  }
+  .preset .slot input::placeholder { opacity: .35; }
+  .preset .slot input:focus-visible { outline: none; }
+  .preset .canale:focus-within { box-shadow: inset 0 0 0 2px var(--ambra); }
+  .preset .slot.doppio input { box-shadow: none; color: var(--corallo); }
+  .preset .slot.doppio .canale { box-shadow: inset 0 0 0 2px var(--corallo); }
+  /* i tasti: sollevati finché il canale è vuoto, abbassati e con il led acceso quando c'è un nome */
+  .tasto-preset {
+    grid-row: 2; position: relative; display: grid; place-items: center; margin: 0 clamp(3px, .8vw, 7px) 6px; margin: 0 clamp(3px, .8cqw, 7px) 6px;
+    height: clamp(38px, 15vh, 64px); height: clamp(38px, 15cqh, 64px); border-radius: 10px; cursor: pointer;
+    background: var(--tasto); color: var(--su-tasto-tenue);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 6px 0 var(--tasto-ombra);
+    transition: transform .1s ease-out, box-shadow .1s ease-out, color .2s;
+  }
+  :root[data-attivo="scuro"] .tasto-preset { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 6px 0 var(--tasto-ombra); }
+  .tasto-preset .numero { font: clamp(17px, 6.4vh, 28px)/1 "Michroma", Verdana, sans-serif; font: clamp(17px, 6.4cqh, 28px)/1 "Michroma", Verdana, sans-serif; }
+  .tasto-preset .led { position: absolute; top: 7px; right: 8px; width: 8px; height: 8px; }
+  .slot.acceso .tasto-preset { transform: translateY(5px); color: var(--su-tasto); background: color-mix(in srgb, var(--tasto) 93%, #000); box-shadow: inset 0 2px 5px rgba(0, 0, 0, .14), 0 1px 0 var(--tasto-ombra); }
+  .slot.doppio .tasto-preset { animation: nego .4s ease-in-out; }
 
   /* ---------- Squadre: due walkie-talkie, uno per squadra ----------
      Il nome si scrive sullo schermo del walkie; tra i due, il segnale va e viene come sul tasto della modalità,
@@ -483,13 +526,13 @@
     box-shadow: 0 0 0 3px rgba(0, 0, 0, .2), inset 0 2px 6px rgba(0, 0, 0, .2);
   }
   .wt input:focus-visible { outline-color: #fff; }
-  /* la griglia dell'altoparlante: tanti forellini */
-  .wt-griglia {
-    height: 15px; margin: 2px 6px 0; border-radius: 4px;
-    background: radial-gradient(circle, rgba(0, 0, 0, .3) 1.7px, transparent 2.1px) center / 9px 7.5px;
-  }
+  /* l'altoparlante: tre feritoie scavate nella plastica (scure, con un filo di luce sul bordo basso) */
+  .wt-griglia { display: grid; gap: 5px; padding: 3px 16% 1px; }
+  .wt-griglia i { height: 5px; border-radius: 3px; background: rgba(0, 0, 0, .26); box-shadow: inset 0 1.5px 2px rgba(0, 0, 0, .25), 0 1px 0 rgba(255, 255, 255, .3); }
   /* tra le due antenne corre il segnale: prima parla la prima squadra, poi risponde la seconda */
-  .etere { align-self: stretch; display: grid; grid-template-rows: 24px 1fr; justify-items: center; align-items: center; min-width: 40px; }
+  .etere { position: relative; align-self: stretch; display: grid; grid-template-rows: 24px 1fr; justify-items: center; align-items: center; min-width: 40px; }
+  /* il VS sta alla stessa altezza dei nomi (la posizione la misura lo script) */
+  .etere .vs { position: absolute; left: 50%; top: var(--vs-y, 58%); transform: translate(-50%, -50%); }
   .etere-filo {
     position: relative; align-self: start; justify-self: stretch; height: 24px; margin: -5.5px calc(-1 * (var(--spazio) + 19.5px)) 0;
     background: radial-gradient(circle, var(--su-corpo) 1.1px, transparent 1.5px) left center / 7px 4px repeat-x;
@@ -500,7 +543,13 @@
   @keyframes etere-a { 0% { opacity: 0; left: 6px; } 8%, 32% { opacity: 1; } 44%, 100% { opacity: 0; left: calc(100% - 22px); } }
   @keyframes etere-b { 0%, 50% { opacity: 0; left: calc(100% - 22px); } 58%, 82% { opacity: 1; } 94%, 100% { opacity: 0; left: 6px; } }
   @media (prefers-reduced-motion: reduce) { .etere-filo .etere-a { opacity: 1; left: 6px; } }
-  .sfida .vs { font-family: "Michroma", Verdana, sans-serif; font-size: 15px; color: var(--su-corpo); opacity: .75; }
+  /* VS su un piccolo display tondo, come la spia di un canale */
+  .sfida .vs {
+    display: grid; place-items: center; width: clamp(40px, 13vh, 54px); width: clamp(40px, 13cqh, 54px); aspect-ratio: 1; border-radius: 50%;
+    background: var(--vetro); color: var(--vetro-segni); text-shadow: var(--lcd-ombra);
+    font: clamp(13px, 4.4vh, 18px)/1 "Michroma", Verdana, sans-serif; font: clamp(13px, 4.4cqh, 18px)/1 "Michroma", Verdana, sans-serif; letter-spacing: .02em;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--su-corpo) 22%, transparent), inset 0 2px 6px rgba(0, 0, 0, .2);
+  }
 
   .piede { width: min(820px, 100%); display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding-bottom: 6px; }
   .barra .suggerimento {
@@ -743,11 +792,11 @@
     box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--vetro-segni) 16%, transparent), inset 0 2px 8px rgba(0, 0, 0, .16), 0 4px 0 var(--tasto-ombra);
   }
   #schermata-collab .scheda.misuratore h3 { font: 10.5px/1.35 "Michroma", Verdana, sans-serif; letter-spacing: .02em; color: inherit; opacity: .85; }
-  #schermata-collab .misuratore .livelli li { position: relative; isolation: isolate; animation: verifica .6s ease-out both; }
-  #schermata-collab .misuratore .livelli li:nth-child(1) { animation-delay: .35s; }
-  #schermata-collab .misuratore .livelli li:nth-child(2) { animation-delay: .7s; }
-  #schermata-collab .misuratore .livelli li:nth-child(3) { animation-delay: 1.05s; }
-  #schermata-collab .misuratore .livelli li:nth-child(4) { animation: verifica .6s ease-out 1.4s both, alveare .8s ease-out 1.75s both; }
+  #schermata-collab .misuratore .livelli li { position: relative; isolation: isolate; animation: verifica 1s ease-out both; }
+  #schermata-collab .misuratore .livelli li:nth-child(1) { animation-delay: .5s; }
+  #schermata-collab .misuratore .livelli li:nth-child(2) { animation-delay: 1.15s; }
+  #schermata-collab .misuratore .livelli li:nth-child(3) { animation-delay: 1.8s; }
+  #schermata-collab .misuratore .livelli li:nth-child(4) { animation: verifica 1s ease-out 2.45s both, alveare 1.1s ease-out 3s both; }
   @keyframes verifica {
     0% { opacity: .38; background-color: transparent; }
     35% { opacity: 1; background-color: color-mix(in srgb, var(--vetro-segni) 20%, transparent); }
@@ -761,7 +810,7 @@
     content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; opacity: .45;
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='33' height='19.05' viewBox='0 0 33 19.05'%3E%3Cpath d='M0%209.53L5.5%200L16.5%200L22%209.53L16.5%2019.05L5.5%2019.05ZM16.5%200L22%20-9.53L33%20-9.53L38.5%200L33%209.53L22%209.53ZM16.5%2019.05L22%209.53L33%209.53L38.5%2019.05L33%2028.58L22%2028.58Z' fill='none' stroke='%23F2A900' stroke-width='1.2'/%3E%3C/svg%3E") right center / 22px 12.7px;
     -webkit-mask-image: linear-gradient(90deg, transparent 30%, #000); mask-image: linear-gradient(90deg, transparent 30%, #000);
-    animation: alveare-favo .8s ease-out 1.75s both;
+    animation: alveare-favo 1.1s ease-out 3s both;
   }
   @keyframes alveare { from { background-color: transparent; box-shadow: none; } }
   @keyframes alveare-favo { from { opacity: 0; } }
@@ -783,6 +832,7 @@
 
   /* schermi bassi: la schermata delle regole si compatta per far stare anche il tasto Inizia */
   @media (max-height: 400px) {
+    .slot.wt { padding-top: 20px; } .wt-corpo { gap: 6px; padding-top: 8px; } .wt-griglia { gap: 4px; }
     #schermata-collab .scheda.misuratore h3 { font-size: 9px; margin-bottom: 4px; }
     #schermata-collab .setup { padding-top: 6px; padding-bottom: 8px; }
     #schermata-collab .contenuto { gap: 8px; padding-top: 4px; }
@@ -799,6 +849,7 @@
     #schermata-collab .tasto-ambra { height: 46px; }
   }
   @container app (max-height: 400px) {
+    .slot.wt { padding-top: 20px; } .wt-corpo { gap: 6px; padding-top: 8px; } .wt-griglia { gap: 4px; }
     #schermata-collab .scheda.misuratore h3 { font-size: 9px; margin-bottom: 4px; }
     #schermata-collab .setup { padding-top: 6px; padding-bottom: 8px; }
     #schermata-collab .contenuto { gap: 8px; padding-top: 4px; }
@@ -820,15 +871,15 @@
     #schermata-singoli .setup, #schermata-squadre .setup { padding-top: 6px; padding-bottom: 8px; }
     #schermata-singoli .contenuto, #schermata-squadre .contenuto { gap: 8px; padding-top: 2px; }
     #schermata-singoli .pannello, #schermata-squadre .pannello { padding: 10px; gap: 8px; }
+    #schermata-singoli .pannello { row-gap: 0; }
     #schermata-singoli .lcd, #schermata-squadre .lcd { padding-block: 6px; }
-    .preset .slot { min-height: 0; gap: 5px; padding: 8px 8px 8px; }
-    .preset .numero { font-size: 19px; }
-    .scala-preset { height: 12px; }
-    .ago-preset { height: 15px; }
+    .tasto-preset { height: 36px; }
+    .preset .slot input { height: 24px; font-size: 15px; }
+    #schermata-singoli .canale { margin-top: 17px; } #schermata-singoli .scala-display { margin-top: 7px; }
     .slot.wt { padding-top: 20px; }
     .wt-antenna { height: 26px; }
     .wt-corpo { gap: 6px; padding: 8px 12px 9px; }
-    .wt-griglia { height: 10px; }
+    .wt-griglia { gap: 3px; } .wt-griglia i { height: 4px; }
     .etere-filo { margin-top: -7.5px; }
     #schermata-collab .barra .btn-piccolo, #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { height: 34px; }
     #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { width: 34px; }
@@ -845,15 +896,15 @@
     #schermata-singoli .setup, #schermata-squadre .setup { padding-top: 6px; padding-bottom: 8px; }
     #schermata-singoli .contenuto, #schermata-squadre .contenuto { gap: 8px; padding-top: 2px; }
     #schermata-singoli .pannello, #schermata-squadre .pannello { padding: 10px; gap: 8px; }
+    #schermata-singoli .pannello { row-gap: 0; }
     #schermata-singoli .lcd, #schermata-squadre .lcd { padding-block: 6px; }
-    .preset .slot { min-height: 0; gap: 5px; padding: 8px 8px 8px; }
-    .preset .numero { font-size: 19px; }
-    .scala-preset { height: 12px; }
-    .ago-preset { height: 15px; }
+    .tasto-preset { height: 36px; }
+    .preset .slot input { height: 24px; font-size: 15px; }
+    #schermata-singoli .canale { margin-top: 17px; } #schermata-singoli .scala-display { margin-top: 7px; }
     .slot.wt { padding-top: 20px; }
     .wt-antenna { height: 26px; }
     .wt-corpo { gap: 6px; padding: 8px 12px 9px; }
-    .wt-griglia { height: 10px; }
+    .wt-griglia { gap: 3px; } .wt-griglia i { height: 4px; }
     .etere-filo { margin-top: -7.5px; }
     #schermata-collab .barra .btn-piccolo, #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { height: 34px; }
     #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { width: 34px; }
@@ -1364,8 +1415,9 @@
   .deco-microfono { aspect-ratio: 106 / 50; max-width: calc(100% - 46px); }
   .capsula { fill: var(--menta); opacity: .6; }
   :root[data-attivo="scuro"] .capsula { opacity: .85; }
-  .griglia { fill: none; stroke: var(--tasto); stroke-width: 1.8; stroke-linecap: round; opacity: .75; }
-  .forcella, .asta { fill: none; stroke: var(--su-tasto); stroke-width: 2.6; stroke-linecap: round; opacity: .32; }
+  .griglia { fill: none; stroke: var(--tasto); stroke-width: 1.6; stroke-linecap: round; opacity: .75; }
+  .forcella, .asta { fill: none; stroke: var(--su-tasto); stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; opacity: .3; }
+  .fascia-mic { fill: none; stroke: var(--tasto); stroke-width: 2.4; opacity: .55; }
   .onde-voce .arco {
     /* più si allontanano dal microfono, più le onde si fanno sottili e tenui */
     --forza: calc(1 - var(--i) * .11);
@@ -1661,7 +1713,7 @@
     #manopola-corpo, .indice-manopola { transition: none; } .scintilla { opacity: 0; }
     .sfondo *, .cerca .led, .cerca .ascolto-nome, .in-onda.cerca .nome-onda { animation: none !important; }
     .copri-bersaglio, .lampada-onair, .voce-onda.nuova, .on-air, .on-air.spegne { animation: none !important; }
-    .tasto-zap .led, .stazioni .tasto.nego, .zap-onda.cerca *, .zap-onda.cerca .zap-display::before, .targhetta.cerca .tema-testo, .fine-zap .voce, .preset .slot, .wt .led, .etere *, #schermata-collab .misuratore li, #schermata-collab .misuratore li::before { animation: none !important; }
+    .tasto-zap .led, .stazioni .tasto.nego, .zap-onda.cerca *, .zap-onda.cerca .zap-display::before, .targhetta.cerca .tema-testo, .fine-zap .voce, .tasto-preset, .slot.memorizza .canale-tag, .wt .led, .etere *, #schermata-collab .misuratore li, #schermata-collab .misuratore li::before { animation: none !important; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .premio, .premio .medaglia svg, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
@@ -2872,7 +2924,7 @@ Silenzio d'oro | Silenzio imbarazzante
           <div class="lcd"><h2>Come giocate?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
           <div class="tasti">
             <button class="tasto decorato" data-modo="singoli" style="--k:0">
-              <span class="sfondo" aria-hidden="true"><svg class="deco-microfono" viewBox="0 0 106 50" preserveAspectRatio="xMinYMin meet"><g class="onde-voce"><path class="arco" style="--i:0" d="M34.35 2.28A22 22 0 0 1 34.35 31.72"/><path class="arco" style="--i:1" d="M40.29 -3.07A30 30 0 0 1 40.29 37.07"/><path class="arco" style="--i:2" d="M47.93 -8.00A39 39 0 0 1 47.93 42.00"/><path class="arco" style="--i:3" d="M60.14 -8.00A49 49 0 0 1 60.14 42.00"/><path class="arco" style="--i:4" d="M72.54 -8.00A60 60 0 0 1 72.54 42.00"/><path class="arco" style="--i:5" d="M85.52 -8.00A72 72 0 0 1 85.52 42.00"/><path class="arco" style="--i:6" d="M99.24 -8.00A85 85 0 0 1 99.24 42.00"/></g><g class="microfono"><path class="forcella" d="M2 17a16 16 0 0 0 32 0"/><path class="asta" d="M18 33v12M10 47h16"/><rect class="capsula" x="6" y="3" width="24" height="28" rx="12"/><path class="griglia" d="M11.5 10h13M10 15h16M10 20h16M11.5 25h13"/></g></svg></span>
+              <span class="sfondo" aria-hidden="true"><svg class="deco-microfono" viewBox="0 0 106 50" preserveAspectRatio="xMinYMin meet"><g class="onde-voce"><path class="arco" style="--i:0" d="M31.86 2.62A20 20 0 0 1 31.86 29.38"/><path class="arco" style="--i:1" d="M37.81 -2.74A28 28 0 0 1 37.81 34.74"/><path class="arco" style="--i:2" d="M45.16 -8.00A37 37 0 0 1 45.16 40.00"/><path class="arco" style="--i:3" d="M57.41 -8.00A47 47 0 0 1 57.41 40.00"/><path class="arco" style="--i:4" d="M69.80 -8.00A58 58 0 0 1 69.80 40.00"/><path class="arco" style="--i:5" d="M82.76 -8.00A70 70 0 0 1 82.76 40.00"/><path class="arco" style="--i:6" d="M96.45 -8.00A83 83 0 0 1 96.45 40.00"/></g><g class="microfono"><path class="forcella" d="M4.5 14v8a12.5 12.5 0 0 0 25 0v-8"/><path class="asta" d="M17 34.5V42M12 44.5h10"/><rect class="capsula" x="8" y="1" width="18" height="30" rx="9"/><path class="griglia" d="M11.5 6.5h11M10.5 10.5h13M10.5 14.5h13"/><path class="fascia-mic" d="M8.6 19.5h16.8"/></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="24" cy="16" r="7"/><path d="M11 40c0-8 6-13 13-13s13 5 13 13"/>
               </svg>
@@ -3023,21 +3075,27 @@ Silenzio d'oro | Silenzio imbarazzante
         <div class="pannello">
           <div class="lcd"><h2>Chi gioca?</h2><span class="lcd-destra"><button class="svuota" id="svuota-singoli" type="button" hidden>Svuota</button><span class="contatore" id="contatore">0/5</span></span></div>
           <div class="preset">
-            <label class="slot" style="--sintonia:0.16"><span class="testa"><span class="numero">1</span><span class="led"></span></span>
-              <span class="scala-preset" aria-hidden="true"><i class="ago-preset"></i></span>
-              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 1"></label>
-            <label class="slot" style="--sintonia:0.37"><span class="testa"><span class="numero">2</span><span class="led"></span></span>
-              <span class="scala-preset" aria-hidden="true"><i class="ago-preset"></i></span>
-              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 2"></label>
-            <label class="slot" style="--sintonia:0.56"><span class="testa"><span class="numero">3</span><span class="led"></span></span>
-              <span class="scala-preset" aria-hidden="true"><i class="ago-preset"></i></span>
-              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 3"></label>
-            <label class="slot" style="--sintonia:0.74"><span class="testa"><span class="numero">4</span><span class="led"></span></span>
-              <span class="scala-preset" aria-hidden="true"><i class="ago-preset"></i></span>
-              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 4"></label>
-            <label class="slot" style="--sintonia:0.9"><span class="testa"><span class="numero">5</span><span class="led"></span></span>
-              <span class="scala-preset" aria-hidden="true"><i class="ago-preset"></i></span>
-              <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Nome" aria-label="Giocatore 5"></label>
+            <span class="scala-display" aria-hidden="true"><i class="ago-display"></i></span>
+            <label class="slot" style="--c:1">
+              <span class="canale"><span class="canale-tag" data-n="1" aria-hidden="true"></span><input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 1"></span>
+              <span class="tasto-preset" aria-hidden="true"><span class="numero">1</span><span class="led"></span></span>
+            </label>
+            <label class="slot" style="--c:2">
+              <span class="canale"><span class="canale-tag" data-n="2" aria-hidden="true"></span><input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 2"></span>
+              <span class="tasto-preset" aria-hidden="true"><span class="numero">2</span><span class="led"></span></span>
+            </label>
+            <label class="slot" style="--c:3">
+              <span class="canale"><span class="canale-tag" data-n="3" aria-hidden="true"></span><input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 3"></span>
+              <span class="tasto-preset" aria-hidden="true"><span class="numero">3</span><span class="led"></span></span>
+            </label>
+            <label class="slot" style="--c:4">
+              <span class="canale"><span class="canale-tag" data-n="4" aria-hidden="true"></span><input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nome" aria-label="Giocatore 4"></span>
+              <span class="tasto-preset" aria-hidden="true"><span class="numero">4</span><span class="led"></span></span>
+            </label>
+            <label class="slot" style="--c:5">
+              <span class="canale"><span class="canale-tag" data-n="5" aria-hidden="true"></span><input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Nome" aria-label="Giocatore 5"></span>
+              <span class="tasto-preset" aria-hidden="true"><span class="numero">5</span><span class="led"></span></span>
+            </label>
           </div>
         </div>
         <div class="piede">
@@ -3060,7 +3118,7 @@ Silenzio d'oro | Silenzio imbarazzante
               <span class="wt-corpo">
                 <span class="testa"><span class="led"></span>Prima squadra</span>
                 <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Ambra" aria-label="Nome della prima squadra">
-                <span class="wt-griglia" aria-hidden="true"></span>
+                <span class="wt-griglia" aria-hidden="true"><i></i><i></i><i></i></span>
               </span>
             </label>
             <span class="etere" aria-hidden="true">
@@ -3072,7 +3130,7 @@ Silenzio d'oro | Silenzio imbarazzante
               <span class="wt-corpo">
                 <span class="testa"><span class="led"></span>Seconda squadra</span>
                 <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Corallo" aria-label="Nome della seconda squadra">
-                <span class="wt-griglia" aria-hidden="true"></span>
+                <span class="wt-griglia" aria-hidden="true"><i></i><i></i><i></i></span>
               </span>
             </label>
           </div>
@@ -3285,7 +3343,7 @@ Silenzio d'oro | Silenzio imbarazzante
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09d</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09g</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -5157,6 +5215,10 @@ Silenzio d'oro | Silenzio imbarazzante
       const slot = c.closest('.slot');
       const prima = slot.classList.contains('acceso');
       if (!prima && nomi[i]) accese++; else if (prima && !nomi[i]) spente++;
+      if (!prima && nomi[i] && silenzioso !== true) {        // come sulle autoradio: sul display lampeggia MEM
+        slot.classList.remove('memorizza'); void slot.offsetWidth; slot.classList.add('memorizza');
+        clearTimeout(slot._mem); slot._mem = setTimeout(() => slot.classList.remove('memorizza'), 1100);
+      }
       slot.classList.toggle('acceso', !!nomi[i]);
       slot.classList.toggle('doppio', !!nomi[i] && conta[nomi[i].toLowerCase()] > 1);
     });
@@ -5175,6 +5237,10 @@ Silenzio d'oro | Silenzio imbarazzante
     return pieni;
   }
   campiGiocatori.forEach(c => { formattaMentreScrivi(c); c.addEventListener('input', () => verificaSingoli()); });
+  // la lancetta del display corre sul canale in cui si scrive
+  const tastieraPreset = document.querySelector('#schermata-singoli .preset');
+  function spostaAgo(k) { tastieraPreset.style.setProperty('--ago', ((k + .5) / campiGiocatori.length).toFixed(3)); }
+  campiGiocatori.forEach((c, k) => c.addEventListener('focus', () => spostaAgo(k)));
   catena(campiGiocatori);
   verificaSingoli(true);
 
@@ -5200,6 +5266,14 @@ Silenzio d'oro | Silenzio imbarazzante
     iniziaSquadre.disabled = uguali;
   }
   campiSquadre.forEach(c => { formattaMentreScrivi(c); c.addEventListener('input', () => verificaSquadre()); });
+  // il VS si allinea al centro dei nomi scritti sugli schermi dei walkie
+  const etere = document.querySelector('#schermata-squadre .etere');
+  function centraVS() {
+    if (!etere.offsetParent) return;
+    const r = campiSquadre[0].getBoundingClientRect(), e = etere.getBoundingClientRect();
+    etere.style.setProperty('--vs-y', Math.round((r.top + r.bottom) / 2 - e.top) + 'px');
+  }
+  if (window.ResizeObserver) new ResizeObserver(centraVS).observe(etere);
   catena(campiSquadre);
   verificaSquadre(true);
 
@@ -5228,6 +5302,7 @@ Silenzio d'oro | Silenzio imbarazzante
       campi.forEach(c => { c.value = ''; });
       verifica();
       aggiorna();
+      if (campi === campiGiocatori) spostaAgo(0);
     });
     return aggiorna;
   }
@@ -5257,6 +5332,8 @@ Silenzio d'oro | Silenzio imbarazzante
     display.textContent = display.dataset.titolo;
     verifica(true);
     svuota();
+    if (id === 'schermata-singoli') spostaAgo(Math.max(0, campiGiocatori.findIndex(c => !c.value.trim())));
+    if (id === 'schermata-squadre') centraVS();
   }
 
   // Scrive un testo lettera per lettera, così può "ondeggiare"
