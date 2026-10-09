@@ -1109,6 +1109,71 @@
     0% { opacity: 0; transform: scale(1.7); } 5% { opacity: .85; transform: scale(.92); } 9% { transform: scale(1); }
     62% { opacity: .7; transform: scale(1); } 80%, 100% { opacity: 0; transform: scale(1); }
   }
+  /* ---------- Come giocate?: anche i tasti delle modalità hanno il loro disegno a tema ----------
+     Le icone restano al loro posto ma invisibili, così le misure dei tasti non cambiano: al loro posto un disegno
+     che si anima piano piano e sfuma appena sopra il titolo. */
+  #schermata-modi .tasto.decorato { position: relative; isolation: isolate; }
+  #schermata-modi .tasto.decorato .icona { visibility: hidden; }
+  .tasto[data-modo] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 12px), transparent calc(var(--testo, 999px) + 2px)); mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 12px), transparent calc(var(--testo, 999px) + 2px)); }
+  .deco-microfono, .deco-walkie {
+    left: 10px; width: auto;
+    top: calc(clamp(12px, 3.4vh, 18px) - 5px); top: calc(clamp(12px, 3.4cqh, 18px) - 5px);
+    height: clamp(30px, calc(var(--testo, 999px) - clamp(12px, 3.4vh, 18px) - 2px), 64px);
+    height: clamp(30px, calc(var(--testo, 999px) - clamp(12px, 3.4cqh, 18px) - 2px), 64px);
+  }
+  /* Giocatori singoli: un microfono da studio, chi dà l'indizio lo dice ad alta voce */
+  .deco-microfono { aspect-ratio: 106 / 50; max-width: calc(100% - 46px); }
+  .capsula { fill: var(--menta); opacity: .6; }
+  :root[data-attivo="scuro"] .capsula { opacity: .85; }
+  .griglia { fill: none; stroke: var(--tasto); stroke-width: 1.8; stroke-linecap: round; opacity: .75; }
+  .forcella, .asta { fill: none; stroke: var(--su-tasto); stroke-width: 2.6; stroke-linecap: round; opacity: .32; }
+  .onde-voce .arco {
+    /* più si allontanano dal microfono, più le onde si fanno sottili e tenui */
+    --forza: calc(1 - var(--i) * .11);
+    fill: none; stroke: var(--menta); stroke-width: calc(2.6px - var(--i) * .2px); stroke-linecap: round; opacity: calc(var(--forza) * .5);
+    animation: voce 3.4s ease-out calc(var(--i) * .16s) infinite both;
+  }
+  @keyframes voce { 0% { opacity: calc(var(--forza) * .08); } 12% { opacity: calc(var(--forza) * .85); } 50%, 100% { opacity: calc(var(--forza) * .08); } }
+  /* A squadre: due walkie-talkie, uno per squadra, che si passano la parola */
+  .deco-walkie { aspect-ratio: 168 / 62; max-width: calc(100% - 50px); }
+  .linea-radio { fill: none; stroke: var(--su-tasto); stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: .1 6; opacity: .3; }
+  :root[data-attivo="scuro"] .corpo-walkie { opacity: .85; }
+  .walkie-a, .segnale-a { --colore: var(--ambra); }
+  .walkie-b, .segnale-b { --colore: var(--squadra-b); }
+  .corpo-walkie { fill: var(--colore); opacity: .6; }
+  .schermo { fill: var(--tasto); opacity: .8; }
+  .altoparlante { fill: none; stroke: var(--tasto); stroke-width: 2.2; stroke-linecap: round; opacity: .7; }
+  .antenna { fill: none; stroke: var(--su-tasto); stroke-width: 2.6; stroke-linecap: round; opacity: .35; }
+  .pomello { fill: var(--su-tasto); opacity: .35; }
+  .segnale path { fill: none; stroke: var(--colore); stroke-width: 2.2; stroke-linecap: round; }
+  .sfondo .segnale { transform-box: view-box; }
+  .segnale-a { opacity: .7; animation: segnale-a 4.6s ease-in-out infinite both; }
+  .segnale-b { opacity: 0; animation: segnale-b 4.6s ease-in-out infinite both; }
+  .walkie-a .pomello { animation: trasmette-a 4.6s ease-in-out infinite both; }
+  .walkie-b .pomello { animation: trasmette-b 4.6s ease-in-out infinite both; }
+  @keyframes segnale-a { 0% { opacity: 0; transform: translateX(0); } 8%, 34% { opacity: .85; } 44%, 100% { opacity: 0; transform: translateX(76px); } }
+  @keyframes segnale-b { 0%, 50% { opacity: 0; transform: translateX(0); } 58%, 84% { opacity: .85; } 94%, 100% { opacity: 0; transform: translateX(-76px); } }
+  @keyframes trasmette-a { 0%, 38% { fill: var(--colore); opacity: 1; } 46%, 100% { fill: var(--su-tasto); opacity: .35; } }
+  @keyframes trasmette-b { 0%, 50% { fill: var(--su-tasto); opacity: .35; } 54%, 88% { fill: var(--colore); opacity: 1; } 96%, 100% { fill: var(--su-tasto); opacity: .35; } }
+  /* Collaborativa: un favo che si riempie di miele una cella alla volta, con l'ape che ci gira attorno */
+  .tasto[data-modo="collab"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 26px), transparent calc(var(--testo, 999px) + 2px)); mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 26px), transparent calc(var(--testo, 999px) + 2px)); }
+  .deco-alveare { inset: 0; width: 100%; height: 100%; }
+  .favo-linee { fill: none; stroke: var(--su-tasto); stroke-width: 1.1; opacity: .15; }
+  .cella { --miele: .62; fill: var(--zona-oro); opacity: var(--miele); animation: miele 7s ease-in-out calc(var(--i) * .55s) infinite both; }
+  :root[data-attivo="scuro"] .cella { --miele: .88; }
+  @keyframes miele { 0% { opacity: .08; } 10%, 62% { opacity: var(--miele); } 78%, 100% { opacity: .08; } }
+  .sfondo .ape { transform-box: view-box; transform: translate(112px, 20px); animation: ronzio 6s ease-in-out infinite; }
+  @keyframes ronzio {
+    0%, 100% { transform: translate(110px, 20px); } 25% { transform: translate(118px, 11px); }
+    50% { transform: translate(126px, 19px); } 75% { transform: translate(117px, 28px); }
+  }
+  .ape-corpo { animation: dondolo-ape 1.5s ease-in-out infinite alternate; }
+  @keyframes dondolo-ape { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
+  .addome { fill: var(--zona-oro); }
+  .strisce-ape { fill: none; stroke: #2A1C00; stroke-width: 1.3; opacity: .8; }
+  .testa-ape { fill: #2A1C00; opacity: .85; }
+  .ali { fill: color-mix(in srgb, #fff 75%, var(--zona-2)); opacity: .8; stroke: var(--su-tasto); stroke-width: .5; stroke-opacity: .3; transform-origin: 50% 100%; animation: ali .14s linear infinite alternate; }
+  @keyframes ali { from { transform: scaleY(.55); } to { transform: scaleY(1); } }
   /* ricerca della frequenza: led e nome sul display tremolano per un secondo e mezzo */
   .stazioni .tasto.scelto.cerca .led { animation: cerca-led 1.5s linear both; }
   .tasto.banda.cerca .ascolto-nome { animation: cerca-nome 1.5s linear both; }
@@ -2566,7 +2631,8 @@ Silenzio d'oro | Silenzio imbarazzante
         <div class="pannello">
           <div class="lcd"><h2>Come giocate?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
           <div class="tasti">
-            <button class="tasto" data-modo="singoli" style="--k:0">
+            <button class="tasto decorato" data-modo="singoli" style="--k:0">
+              <span class="sfondo" aria-hidden="true"><svg class="deco-microfono" viewBox="0 0 106 50" preserveAspectRatio="xMinYMin meet"><g class="onde-voce"><path class="arco" style="--i:0" d="M34.35 2.28A22 22 0 0 1 34.35 31.72"/><path class="arco" style="--i:1" d="M40.29 -3.07A30 30 0 0 1 40.29 37.07"/><path class="arco" style="--i:2" d="M47.93 -8.00A39 39 0 0 1 47.93 42.00"/><path class="arco" style="--i:3" d="M60.14 -8.00A49 49 0 0 1 60.14 42.00"/><path class="arco" style="--i:4" d="M72.54 -8.00A60 60 0 0 1 72.54 42.00"/><path class="arco" style="--i:5" d="M85.52 -8.00A72 72 0 0 1 85.52 42.00"/><path class="arco" style="--i:6" d="M99.24 -8.00A85 85 0 0 1 99.24 42.00"/></g><g class="microfono"><path class="forcella" d="M2 17a16 16 0 0 0 32 0"/><path class="asta" d="M18 33v12M10 47h16"/><rect class="capsula" x="6" y="3" width="24" height="28" rx="12"/><path class="griglia" d="M11.5 10h13M10 15h16M10 20h16M11.5 25h13"/></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="24" cy="16" r="7"/><path d="M11 40c0-8 6-13 13-13s13 5 13 13"/>
               </svg>
@@ -2574,7 +2640,8 @@ Silenzio d'oro | Silenzio imbarazzante
               <span class="led"></span>
               <span class="descr"><span class="motto">Ognuno per sé</span><span class="conteggio">Da 2 a 5 giocatori</span></span>
             </button>
-            <button class="tasto" data-modo="squadre" style="--k:1">
+            <button class="tasto decorato" data-modo="squadre" style="--k:1">
+              <span class="sfondo" aria-hidden="true"><svg class="deco-walkie" viewBox="0 0 168 62" preserveAspectRatio="xMinYMin meet"><path class="linea-radio" d="M40 10H128"/><g class="segnale segnale-a"><path d="M28.24 5.76A6 6 0 0 1 28.24 14.24"/><path d="M31.78 2.22A11 11 0 0 1 31.78 17.78"/><path d="M35.31 -1.31A16 16 0 0 1 35.31 21.31"/></g><g class="segnale segnale-b"><path d="M139.76 5.76A6 6 0 0 0 139.76 14.24"/><path d="M136.22 2.22A11 11 0 0 0 136.22 17.78"/><path d="M132.69 -1.31A16 16 0 0 0 132.69 21.31"/></g><g class="walkie walkie-a"><path class="antenna" d="M24 16V4"/><circle class="pomello" cx="24" cy="4" r="2.4"/><rect class="corpo-walkie" x="4" y="15" width="26" height="45" rx="5"/><rect class="schermo" x="9" y="21" width="16" height="9" rx="1.5"/><path class="altoparlante" d="M10 39h14M10 45h14M10 51h14"/></g><g class="walkie walkie-b"><path class="antenna" d="M144 16V4"/><circle class="pomello" cx="144" cy="4" r="2.4"/><rect class="corpo-walkie" x="138" y="15" width="26" height="45" rx="5"/><rect class="schermo" x="143" y="21" width="16" height="9" rx="1.5"/><path class="altoparlante" d="M144 39h14M144 45h14M144 51h14"/></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="15" cy="17" r="6"/><path d="M4 39c0-7 5-11 11-11 3 0 5.5 1 7 2.5"/>
                 <circle cx="33" cy="17" r="6"/><path d="M44 39c0-7-5-11-11-11s-11 4-11 11"/>
@@ -2583,7 +2650,8 @@ Silenzio d'oro | Silenzio imbarazzante
               <span class="led"></span>
               <span class="descr"><span class="motto">Gruppo contro gruppo</span><span class="conteggio">Da 6 giocatori in su</span></span>
             </button>
-            <button class="tasto" data-modo="collab" style="--k:2">
+            <button class="tasto decorato" data-modo="collab" style="--k:2">
+              <span class="sfondo" aria-hidden="true"><svg class="deco-alveare"><defs><pattern id="favo" x="6" y="4" width="33" height="19.053" patternUnits="userSpaceOnUse"><path class="favo-linee" d="M0.00 9.53L5.50 -0.00L16.50 -0.00L22.00 9.53L16.50 19.05L5.50 19.05ZM16.50 0.00L22.00 -9.53L33.00 -9.53L38.50 0.00L33.00 9.53L22.00 9.53ZM16.50 19.05L22.00 9.53L33.00 9.53L38.50 19.05L33.00 28.58L22.00 28.58ZM-16.50 0.00L-11.00 -9.53L0.00 -9.53L5.50 0.00L0.00 9.53L-11.00 9.53ZM-16.50 19.05L-11.00 9.53L0.00 9.53L5.50 19.05L0.00 28.58L-11.00 28.58Z"/></pattern></defs><rect class="favo" width="100%" height="100%" fill="url(#favo)"/><g class="celle-oro"><path class="cella" style="--i:0" d="M22.50 23.05L28.00 13.52L39.00 13.52L44.50 23.05L39.00 32.58L28.00 32.58Z"/><path class="cella" style="--i:1" d="M39.00 13.53L44.50 4.00L55.50 4.00L61.00 13.53L55.50 23.06L44.50 23.06Z"/><path class="cella" style="--i:2" d="M55.50 23.05L61.00 13.52L72.00 13.52L77.50 23.05L72.00 32.58L61.00 32.58Z"/><path class="cella" style="--i:3" d="M39.00 32.58L44.50 23.05L55.50 23.05L61.00 32.58L55.50 42.11L44.50 42.11Z"/><path class="cella" style="--i:4" d="M72.00 13.53L77.50 4.00L88.50 4.00L94.00 13.53L88.50 23.06L77.50 23.06Z"/><path class="cella" style="--i:5" d="M55.50 4.00L61.00 -5.53L72.00 -5.53L77.50 4.00L72.00 13.53L61.00 13.53Z"/></g><g class="ape"><g class="ape-corpo"><ellipse class="ali" cx="-1" cy="-4" rx="3.2" ry="4.4"/><ellipse class="ali ali-2" cx="2.4" cy="-3.6" rx="2.6" ry="3.8"/><ellipse class="addome" cx="0" cy="0" rx="5.2" ry="3.6"/><path class="strisce-ape" d="M-1.4-3.2v6.4M1.6-3.4v6.8"/><circle class="testa-ape" cx="-5.6" cy="-.6" r="2.2"/></g></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="10" cy="19" r="5"/><circle cx="24" cy="14" r="5.5"/><circle cx="38" cy="19" r="5"/>
                 <path d="M3 40c0-6 3-10 8-10M45 40c0-6-3-10-8-10M13 40c0-8 5-13 11-13s11 5 11 13"/>
@@ -4395,13 +4463,18 @@ Silenzio d'oro | Silenzio imbarazzante
     rotella = requestAnimationFrame(passo);
   }
   // gli sfondi a tema sfumano appena sopra il titolo: qui si misura dove comincia in ogni tasto
+  const tastiDecorati = [...document.querySelectorAll('.tasto.decorato')];
   function misuraTitoli() {
-    tastiStazione.forEach(b => {
-      if (!b.classList.contains('decorato') || !b.offsetParent) return;
+    tastiDecorati.forEach(b => {
+      if (!b.offsetParent) return;
       b.style.setProperty('--testo', (b.querySelector('.titolo').offsetTop - 3) + 'px');
     });
   }
-  if (window.ResizeObserver) new ResizeObserver(misuraTitoli).observe(document.getElementById('tasti-stazioni'));
+  if (window.ResizeObserver) {
+    const osservaTitoli = new ResizeObserver(misuraTitoli);
+    osservaTitoli.observe(document.getElementById('tasti-stazioni'));
+    osservaTitoli.observe(document.querySelector('#schermata-modi .tasti'));
+  }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(misuraTitoli);
   function mostraStazione() {
     const inOnda = inAscoltoStazioni();
