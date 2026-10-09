@@ -776,13 +776,16 @@
   .totale-fine span { font-weight: 600; color: var(--su-tasto-tenue); margin-top: 4px; }
   /* una sola riga, che scorre di lato se le stazioni sono tante: la fine partita resta tutta visibile */
   #fine-corpo { min-width: 0; }
-  .fine-zap {
-    display: flex; align-items: center; justify-content: safe center; gap: 8px; margin-top: 8px; padding: 2px 2px 4px;
-    overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10px, #000 calc(100% - 10px), transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 10px, #000 calc(100% - 10px), transparent);
+  .fine-zap { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; min-width: 0; }
+  /* le stazioni stanno su un nastro: ferme e centrate se ci stanno, altrimenti scorrono come l'ON AIR */
+  .zap-nastro { flex: 0 1 auto; min-width: 0; overflow: hidden; padding: 2px 2px 4px; }
+  .zap-traccia { display: flex; gap: 8px; width: max-content; }
+  .zap-nastro.scorre-attivo {
+    flex-grow: 1;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
   }
-  .fine-zap::-webkit-scrollbar { display: none; }
+  @media (prefers-reduced-motion: reduce) { .zap-nastro { overflow-x: auto; scrollbar-width: none; } .zap-nastro::-webkit-scrollbar { display: none; } }
   .fine-zap .etichetta { flex: none; padding-left: 8px; font: 9px "Michroma", Verdana, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--su-corpo); opacity: .7; }
   .fine-zap .voce {
     flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 9px; border-radius: 999px; white-space: nowrap;
@@ -814,6 +817,13 @@
   .premio-riga { display: flex; align-items: baseline; gap: 6px; min-width: 0; font-size: clamp(13px, 3.9vh, 16px); font-size: clamp(13px, 3.9cqh, 16px); line-height: 1.25; }
   .premio-chi { flex: none; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; }
   .premio-perche { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .82em; font-weight: 600; color: var(--su-tasto-tenue); }
+  /* il testo troppo lungo scorre: si ferma un attimo all'inizio di ogni giro, così si legge con calma */
+  .premio-perche.scorre-attivo > .scorre { display: inline-flex; gap: 32px; width: max-content; }
+  .premio-perche.scorre-attivo {
+    text-overflow: clip;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4px, #000 calc(100% - 16px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 4px, #000 calc(100% - 16px), transparent);
+  }
   /* le icone: un disco d'oro, un'antenna che trasmette, due onde in fase e un segnale tutto disturbato */
   .ip-oro { fill: var(--zona-oro); }
   .ip-solco { stroke: #5A3A00; stroke-width: .8; opacity: .35; }
@@ -3131,7 +3141,7 @@ Silenzio d'oro | Silenzio imbarazzante
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09b</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -4330,6 +4340,15 @@ Silenzio d'oro | Silenzio imbarazzante
   function vai(id) {
     const da = app.dataset.schermata;
     if (id === 'schermata-modi' && SCHERMATE_PREPARTITA.includes(da)) suona('riunisci');
+    // tornando al menu con lo zapping acceso, lo zapping si spegne e la radio si sintonizza a caso
+    // su una delle sei stazioni AM/FM: rientrando nelle stazioni si ritrova quella, con lo zapping spento
+    const spegniZapping = da === 'schermata-stazione' && id === 'schermata-modi' && zapping;
+    if (spegniZapping) {
+      const scelte = STAZIONI_BASE.filter(s => s !== inScansione);
+      zapping = false; fermaScansione(); fermaNastro();
+      stazioneScelta = scelte[Math.floor(Math.random() * scelte.length)];
+      inScansione = null;
+    }
     schermate.forEach(el => { el.hidden = el.id !== id; });
     app.dataset.schermata = id;
     if (id === 'schermata-gioco') entrataInGioco = performance.now();
@@ -4343,7 +4362,7 @@ Silenzio d'oro | Silenzio imbarazzante
     else if (id === 'schermata-modi') animaOnde(1, 900);
     const sc = document.getElementById(id).querySelector('.setup');
     if (sc) sc.scrollTop = 0;
-    if (id === 'schermata-modi') preparaRadioMenu(da);
+    if (id === 'schermata-modi') preparaRadioMenu(da, spegniZapping);
     else { clearTimeout(attesaMenu); radioMenuInAttesa = false; }
     if (id !== 'schermata-stazione') { fermaScansione(); fermaNastro(); }   // lo zapping scansiona solo nella scelta delle stazioni
     aggiornaGuardia();
@@ -4386,9 +4405,14 @@ Silenzio d'oro | Silenzio imbarazzante
     mostraInOnda(true);
     aggiornaMusica();
   }
-  function preparaRadioMenu(da) {
+  function preparaRadioMenu(da, cambiaStazione) {
     clearTimeout(attesaMenu);
-    if (SCHERMATE_PREPARTITA.includes(da) && stazioneMenu) { stazioneMenu = stazioneScelta; radioMenuInAttesa = false; mostraInOnda(false); return; }
+    if (SCHERMATE_PREPARTITA.includes(da) && (stazioneMenu || cambiaStazione)) {
+      stazioneMenu = stazioneScelta; radioMenuInAttesa = false;
+      if (cambiaStazione) suona('cercaStazione');        // fruscio e nuova stazione, come quando si preme Gioca
+      mostraInOnda(cambiaStazione);
+      return;
+    }
     if (da === 'schermata-modi') return;
     radioMenuInAttesa = true;
     attesaMenu = setTimeout(() => { radioMenuInAttesa = false; if (app.dataset.schermata === 'schermata-modi') sintonizzaMenu(); },
@@ -6240,6 +6264,7 @@ Silenzio d'oro | Silenzio imbarazzante
     partita = null;
     vai('schermata-fine');
     animaOnde(onde, 1400);
+    requestAnimationFrame(nastriFine);
   }
 
   /* ---------- Premi di fine partita (solo giocatori singoli) ----------
@@ -6301,7 +6326,10 @@ Silenzio d'oro | Silenzio imbarazzante
       tondo.innerHTML = `<svg viewBox="0 0 32 32">${ICONE_PREMI[pr.tipo]}</svg>`;
       const testo = el('span', 'premio-testo');
       const riga = el('span', 'premio-riga');
-      riga.append(el('b', 'premio-chi', pr.chi), el('span', 'premio-perche', pr.carta ? `${pr.perche} · ${cartaBreve(pr.carta)}` : pr.perche));
+      const perche = el('span', 'premio-perche'), scorre = el('span', 'scorre');
+      scorre.append(el('span', '', pr.carta ? `${pr.perche} · ${cartaBreve(pr.carta)}` : pr.perche));
+      perche.append(scorre);
+      riga.append(el('b', 'premio-chi', pr.chi), perche);
       testo.append(el('span', 'premio-titolo', pr.titolo), riga);
       li.append(tondo, testo);
       lista.append(li);
@@ -6310,10 +6338,48 @@ Silenzio d'oro | Silenzio imbarazzante
     return scheda;
   }
 
+  /* ---------- Nastri della fine partita ----------
+     Quello che non ci sta scorre come il nastro dell'ON AIR: il testo accanto ai premiati e le stazioni
+     del riepilogo zapping. Si mette in coda una copia del contenuto e la traccia avanza di una lunghezza
+     esatta, così il giro si richiude senza scatti. Se c'è spazio per tutto, resta tutto fermo. */
+  function nastroScorrevole(finestra, traccia, { velocita, pausa = 0, attesa = 0 }) {
+    traccia.getAnimations().forEach(a => a.cancel());
+    traccia.querySelectorAll('[data-copia]').forEach(c => c.remove());
+    finestra.classList.remove('scorre-attivo');
+    if (riduciMoto || !finestra.offsetParent || !traccia.animate) return;
+    const originali = [...traccia.children];
+    if (!originali.length || finestra.scrollWidth <= finestra.clientWidth + 1) return;
+    originali.forEach(c => {
+      const copia = c.cloneNode(true);
+      copia.dataset.copia = '';
+      copia.setAttribute('aria-hidden', 'true');
+      traccia.append(copia);
+    });
+    finestra.classList.add('scorre-attivo');
+    const corsa = traccia.children[originali.length].offsetLeft - originali[0].offsetLeft;
+    const durata = corsa / velocita * 1000 + pausa;     // a ogni giro si ferma un attimo all'inizio (pausa), poi scorre
+    traccia.animate([{ transform: 'none', offset: 0 }, { transform: 'none', offset: pausa / durata }, { transform: `translateX(${-corsa}px)`, offset: 1 }],
+      { duration: durata, delay: attesa, iterations: Infinity, easing: 'linear' });
+  }
+  function nastriFine() {
+    document.querySelectorAll('#fine-corpo .premio-perche').forEach(p =>
+      nastroScorrevole(p, p.querySelector('.scorre'), { velocita: 30, pausa: 1800, attesa: 900 }));
+    document.querySelectorAll('#fine-corpo .zap-nastro').forEach(n =>
+      nastroScorrevole(n, n.querySelector('.zap-traccia'), { velocita: VELOCITA_NASTRO, attesa: 1500 }));
+  }
+  if (window.ResizeObserver) {
+    let larghezzaFine = 0;
+    new ResizeObserver(voci => {
+      const w = Math.round(voci[0].contentRect.width);
+      if (w && w !== larghezzaFine) { larghezzaFine = w; nastriFine(); }
+    }).observe(fineCorpo);
+  }
+
   // Zapping: le stazioni visitate, con i punti fatti su ognuna (la più generosa è evidenziata)
   function riepilogoZapping(z) {
-    const box = el('div', 'fine-zap');
-    box.append(el('span', 'etichetta', 'Zapping'));
+    const box = el('div', 'fine-zap'), nastroZap = el('div', 'zap-nastro'), traccia = el('div', 'zap-traccia');
+    nastroZap.append(traccia);
+    box.append(el('span', 'etichetta', 'Zapping'), nastroZap);
     box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Punti fatti su ogni stazione');
     const righe = z.ordine.map(s => ({ s, punti: z.punti[s] || 0, turni: z.turni[s] || 0 }))
       .sort((a, b) => b.punti - a.punti || a.turni - b.turni);
@@ -6324,7 +6390,7 @@ Silenzio d'oro | Silenzio imbarazzante
       if (tasto) li.style.setProperty('--colore', tasto.style.getPropertyValue('--colore'));
       li.style.setProperty('--i', k);
       li.append(el('i', 'led'), el('span', 'nome', nomeStazione(r.s)), el('span', 'turni', r.turni === 1 ? '1 turno' : `${r.turni} turni`), el('b', '', r.punti));
-      box.append(li);
+      traccia.append(li);
     });
     return box;
   }
