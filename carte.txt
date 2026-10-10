@@ -1061,6 +1061,7 @@ Motivo banale per finire all'inferno | Motivo imperdonabile per finire all'infer
 Epitafio rispettoso | Epitafio irrispettoso
 Tragedia comunicata con tatto | Tragedia comunicata con cinismo
 Minaccia soprannaturale trascurabile | Minaccia soprannaturale apocalittica
+Errore medico senza conseguenze | Errore medico da prima pagina
 
 [Dopo Mezzanotte]
 # Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
