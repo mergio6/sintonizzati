@@ -964,6 +964,22 @@ Discorso del capo ispirato | Discorso del capo soporifero
 Ultimo giorno commovente | Ultimo giorno liberatorio
 Pranzo in ufficio discreto | Pranzo in ufficio puzzolente
 Lavoro di squadra vero | Lavoro di squadra finto
+Vendetta al capo innocua | Vendetta al capo infame
+Collega passivo-aggressivo | Collega ostile
+Scusa per darsi malati credibile | Scusa per darsi malati falsa
+Bugia innocente sul curriculum | Bugia imperdonabile sul curriculum
+Segreto aziendale insignificante | Segreto aziendale scandaloso
+Errore professionale perdonabile | Errore professionale da licenziamento
+Cliente maleducato | Cliente da denuncia
+Umiliazione del capo insignificante | Umiliazione del capo pesante
+Motivo valido per sabotare un collega | Motivo ridicolo per sabotare un collega
+Email passivo-aggressiva | Email che dichiara guerra
+Lavoro sottopagato | Lavoro pagato troppo
+Favoritismo lieve | Favoritismo netto
+Frase innocua in una riunione | Frase che ti rovina in una riunione
+Accettabile in smart working | Inaccettabile in smart working
+Messaggio di dimissioni normale | Messaggio di dimissioni incendiario
+
 
 [Onda Nera]
 # Umorismo nero e macabro, fantasmi, misteri e paure: per adulti, senza contenuti espliciti
@@ -1074,6 +1090,21 @@ Medium credibile | Medium ciarlatano
 Oroscopo rassicurante | Oroscopo minaccioso
 Tè della suocera innocuo | Tè della suocera sospetto
 Urlo nella notte lontano | Urlo nella notte vicinissimo
+Persona che non merita di morire | Persona che merita di morire
+Scherzo macabro innocuo | Scherzo macabro imperdonabile
+Cosa da dire a un condannato a morte | Cosa da non dire a un condannato a morte
+Cadavere scoperto in maniera normale | Cadavere scoperto in maniera traumatica
+Eredità che risolve la vita | Eredità che rovina la vita
+Patto innocuo col diavolo innocuo | Patto folle col diavolo
+Maledizione gestibile | Maledizione ingestibile
+Segreto che puoi portare nella tomba | Segreto che ti perseguiterà anche nella tomba
+Miglior alleato in un'apocalisse zombie | Peggior alleato in un'apocalisse zombie
+Esperimento medico comprensibile | Esperimento medico completamente disumano
+Minaccia soprannaturale credibile | Minaccia soprannaturale non credibile
+Motivo ridicolo per finire all'inferno | Motivo sensato per finire all'inferno
+Epitafio rispettoso | Epitafio irrispettoso
+Bugia innocente detta a un moribondo | Bugia crudele detta a un moribondo
+Tragedia comunicata con tatto | Tragedia comunicata con cinismo
 
 [Dopo Mezzanotte]
 # Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
@@ -1186,3 +1217,21 @@ Conto alla romana | Conto offerto
 Nomignolo tenero | Nomignolo imbarazzante
 Addio al nubilato tranquillo | Addio al nubilato scandaloso
 Cotta passeggera | Amore eterno
+Fetish socialmente accettato | Fetish socialmente imbarazzante
+Luogo eccitante per fare sesso | Luogo assurdo per fare sesso
+Messaggio da mandare a un ex | Messaggio da non mandare mai a un ex
+Motivo perdonabile per tradire | Motivo imperdonabile per tradire
+Bugia innocente sulla propria vita sessuale | Bugia enorme sulla propria vita sessuale
+Fetish facile da confessare | Fetish difficile da confessare
+Frase sexy da dire durante il sesso | Frase terribile da dire durante il sesso
+Buon amante | Pessimo amante
+Motivo accettabile per ghostare | Motivo imperdonabile per ghostare
+Segreto confessabile al partner | Segreto da portare nella tomba
+Esperienza sessuale convenzionale | Esperienza sessuale estrema
+Modo elegante di provarci | Modo disperato di provarci
+Cronologia internet innocua | Cronologia internet terrificante
+Tradimento emotivo lieve | Tradimento emotivo imperdonabile
+Foto intima poco sexy | Foto intima estrema
+Cosa perdonabile dopo una sbronza | Cosa imperdonabile dopo una sbronza
+Esperienza sessuale da raccontare | Esperienza sessuale da non raccontare a nessuno
+
