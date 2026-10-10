@@ -973,9 +973,7 @@ Funerale noioso | Funerale memorabile
 Epitaffio banale | Epitaffio geniale
 Necrologio sobrio | Necrologio esagerato
 Bara economica | Bara di lusso
-Fiori da funerale | Fiori da festa
 Testamento prevedibile | Testamento scioccante
-Eredità indesiderata | Eredità desiderata
 Reincarnazione sfigata | Reincarnazione da sogno
 Aldilà noioso | Aldilà divertente
 Fantasma innocuo | Fantasma terrificante
@@ -983,7 +981,6 @@ Casa infestata accogliente | Casa infestata invivibile
 Cimitero tranquillo | Cimitero inquietante
 Cantina accogliente | Cantina da film horror
 Seduta spiritica divertente | Seduta spiritica da incubo
-Maledizione innocua | Maledizione terribile
 Oggetto antico innocuo | Oggetto antico maledetto
 Profezia ottimista | Profezia catastrofica
 Coincidenza innocua | Coincidenza inquietante
@@ -995,7 +992,6 @@ Strega simpatica | Strega malvagia
 Vampiro affascinante | Vampiro ripugnante
 Zombie lento | Zombie velocissimo
 Rifugio anti-zombie pessimo | Rifugio anti-zombie perfetto
-Alleato per l'apocalisse inutile | Alleato per l'apocalisse perfetto
 Fine del mondo noiosa | Fine del mondo spettacolare
 Esperimento innocuo | Esperimento da scienziato pazzo
 Insetto innocuo | Insetto da incubo
@@ -1003,7 +999,6 @@ Visita dal dentista tranquilla | Visita dal dentista da incubo
 Volo tranquillo | Volo da incubo
 Disgrazia sopportabile | Disgrazia biblica
 Battuta macabra innocua | Battuta macabra imperdonabile
-Morte in un film prevedibile | Morte in un film sconvolgente
 Leggenda metropolitana credibile | Leggenda metropolitana assurda
 Cena con delitto noiosa | Cena con delitto avvincente
 Alibi debole | Alibi di ferro
@@ -1012,7 +1007,6 @@ Testimone inaffidabile | Testimone credibile
 Giallo prevedibile | Giallo imprevedibile
 Indagine banale | Indagine impossibile
 Vicino di casa normale | Vicino di casa sospetto
-Scherzo di Halloween innocuo | Scherzo di Halloween crudele
 Costume di Halloween ridicolo | Costume di Halloween terrificante
 Storia di paura per bambini | Storia di paura da non dormire
 Gatto nero porta fortuna | Gatto nero porta sfortuna
@@ -1023,38 +1017,22 @@ Ospite che non se ne va mai | Ospite che sparisce nel nulla
 Cosa da trovare in soffitta innocua | Cosa da trovare in soffitta inquietante
 
 # --- copie da altre stazioni (ottobre 2026) ---
-Spaventoso | Coccoloso
-Esiste davvero | È inventato
 Posto sicuro | Posto pericoloso
 Da non abbracciare | Da abbracciare
-Inquietante | Rassicurante
-Innocuo | Pericoloso
-Animale innocuo | Animale letale
-Fortunato | Sfortunato
 Superstizione assurda | Superstizione sensata
-Bufala | Verità
-Vita breve | Vita lunga
-Non vivrà fino a cent'anni | Vivrà fino a cent'anni
-Succede lentamente | Succede improvvisamente
-Inutile in un'emergenza | Utile in un'emergenza
-Arma efficace | Arma non efficace
-Cibo di sopravvivenza | Alta cucina
-Destino | Caso
-Sacro | Profano
-Genialità | Follia
-Giustizia | Vendetta
-Satira | Offesa
+Morte lenta | Morte improvvisa
+Inutile in un'apocalisse zombie | Utile in un'apocalisse zombie
+Cibo schifoso | Cibo macabro
+Mostro tradizionale | Aberrazione folle
 Elettrizzante | Terrificante
 Fobia irragionevole | Fobia ragionevole
-Scienza | Pseudoscienza
+
 
 # --- nuove carte (ottobre 2026, seconda tornata) ---
 Scheletro nell'armadio piccolo | Scheletro nell'armadio enorme
-Cattivo ridicolo | Cattivo terrificante
 Presentimento sbagliato | Presentimento azzeccato
 Esorcismo riuscito | Esorcismo fallito
 Lupo mannaro tenero | Lupo mannaro feroce
-Mummia ben conservata | Mummia a pezzi
 Delitto maldestro | Delitto perfetto
 Scena del crimine pulita | Scena del crimine splatter
 Piano di fuga disastroso | Piano di fuga geniale
@@ -1066,26 +1044,23 @@ Animale impagliato elegante | Animale impagliato inquietante
 Rimedio della nonna efficace | Rimedio della nonna letale
 Museo delle cere carino | Museo delle cere inquietante
 Sonnambulo innocuo | Sonnambulo pericoloso
-Polizza sulla vita normale | Polizza sulla vita sospetta
 Medium credibile | Medium ciarlatano
 Oroscopo rassicurante | Oroscopo minaccioso
 Tè della suocera innocuo | Tè della suocera sospetto
-Urlo nella notte lontano | Urlo nella notte vicinissimo
 Persona che non merita di morire | Persona che merita di morire
 Scherzo macabro innocuo | Scherzo macabro imperdonabile
 Cosa da dire a un condannato a morte | Cosa da non dire a un condannato a morte
-Cadavere scoperto in maniera normale | Cadavere scoperto in maniera traumatica
+Ritrovamento di un cadavere poco traumatico | Ritrovamento di un cadavere devastante
 Eredità che risolve la vita | Eredità che rovina la vita
-Patto innocuo col diavolo innocuo | Patto folle col diavolo
+Patto col diavolo vantaggioso | Patto col diavolo catasfrofico
 Maledizione gestibile | Maledizione ingestibile
 Segreto che puoi portare nella tomba | Segreto che ti perseguiterà anche nella tomba
 Miglior alleato in un'apocalisse zombie | Peggior alleato in un'apocalisse zombie
 Esperimento medico comprensibile | Esperimento medico completamente disumano
-Minaccia soprannaturale credibile | Minaccia soprannaturale non credibile
-Motivo ridicolo per finire all'inferno | Motivo sensato per finire all'inferno
+Motivo banale per finire all'inferno | Motivo imperdonabile per finire all'inferno
 Epitafio rispettoso | Epitafio irrispettoso
-Bugia innocente detta a un moribondo | Bugia crudele detta a un moribondo
 Tragedia comunicata con tatto | Tragedia comunicata con cinismo
+Minaccia soprannaturale trascurabile | Minaccia soprannaturale apocalittica
 
 [Dopo Mezzanotte]
 # Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
