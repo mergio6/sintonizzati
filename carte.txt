@@ -1067,106 +1067,69 @@ Minaccia soprannaturale trascurabile | Minaccia soprannaturale apocalittica
 
 Appuntamento flop | Appuntamento da sogno
 Abbordaggio pessimo | Abbordaggio geniale
-Bacio imbarazzante | Bacio da film
 Per niente sexy | Sexyssimo
 Mestiere poco sexy | Mestiere sexy
 Accento poco sexy | Accento sexy
 Cocktail leggero | Cocktail micidiale
-Sbronza leggera | Sbronza epica
 Postumi leggeri | Postumi devastanti
 Messaggio innocuo | Messaggio da ubriachi
 Idea da sobri | Idea da ubriachi
-Canzone da sobri | Canzone da ubriachi
-Segreto innocente | Segreto inconfessabile
-Bugia bianca | Bugia imperdonabile
 Peccato veniale | Peccato mortale
 Fantasia innocente | Fantasia proibita
 Da dire a cena | Da dire a letto
 Si fa in pubblico | Si fa in privato
-Relazione noiosa | Relazione passionale
 Ex dimenticabile | Ex indimenticabile
-Flirt innocente | Flirt pericoloso
 Regalo romantico | Regalo piccante
 Posto poco romantico | Posto romanticissimo
 Look da divano | Look da seduzione
-Serata tranquilla | Serata leggendaria
-Notte tranquilla | Notte brava
 Festa noiosa | Festa senza limiti
 Vizio accettabile | Vizio inconfessabile
 Imbarazzo lieve | Imbarazzo cosmico
 Domanda innocente | Domanda indiscreta
 Gossip noioso | Gossip succoso
-Tradimento perdonabile | Imperdonabile
 Red flag | Green flag
 Profilo inquietante | Profilo irresistibile
 Foto imbarazzante | Foto da profilo
-Da raccontare a mamma | Da non raccontare mai
-Da vedere coi genitori | Da vedere da soli
+Da raccontare a mamma | Da non raccontare a mamma
+Utilizzabile come dildo |  Inutilizzabile come dildo
 Parolaccia leggera | Parolaccia pesante
 Battuta pulita | Battuta sporca
-Humor innocente | Humor nero
 Gelosia sana | Gelosia tossica
 Locale squallido | Locale esclusivo
 Single felice | Single disperato
 Matrimonio da favola | Matrimonio da incubo
 Tatuaggio da pentirsi | Tatuaggio azzeccato
-Confessione leggera | Confessione scioccante
-Rischio calcolato | Follia totale
 Posizione comoda | Posizione acrobatica
 Detto ad alta voce | Pensato e mai detto
-Coinquilino perfetto | Coinquilino da incubo
-Suocera adorabile | Suocera terribile
-Collega simpatico | Collega insopportabile
-Vino da cartone | Vino pregiato
+Collega con cui flirteresti | Collega con cui non usciresti mai
 Bacio da dimenticare | Bacio leggendario
 Scusa per non uscire | Scusa per restare
 Weekend tranquillo | Weekend da raccontare
-Spesa da adulti | Spesa da ragazzini
 Vergogna passeggera | Vergogna eterna
 
 # --- carte aggiunte a ottobre 2026 ---
-Crea poca dipendenza | Crea molta dipendenza
 Complimento fuori luogo | Complimento elegante
-Fuori controllo | In controllo
-Segreto | Di pubblico dominio
-Vizio | Virtù
+Appuntamento sotto controllo | Appuntamento fuori controllo
+Appuntamento al risparmio | Appuntamento senza badare a spese
+Esperienza da dimenticare | Esperienza da raccontare a tutti
 
 # --- copie da altre stazioni (ottobre 2026) ---
-Da fare di giorno | Da fare di notte
-Cibo con cui ti sporchi | Cibo con cui non ti sporchi
-Orizzontale | Verticale
-Troppo piccolo | Troppo grande
-Non peloso | Peloso
-Per niente piccante | Piccantissimo
-Per niente romantico | Romanticissimo
+Cibo adatto a un appuntamento | Cibo disastroso a un appuntamento
 Da fare da soli | Da fare in compagnia
-Non lo fa nessuno | Lo fanno tutti
-Proibito | Consigliabile
-Fa bene | Fa male
-Tirchio | Spendaccione
-Conversazione leggera | Conversazione pesante
-Imbarazzante | Da vantarsi
-Poco tatuato | Molto tatuato
-Non addomesticabile | Addomesticabile
 Amore | Abitudine
 Fatto per amore | Fatto per soldi
-Verità scomoda | Bugia comoda
 Silenzio d'oro | Silenzio imbarazzante
 
 # --- nuove carte (ottobre 2026, seconda tornata) ---
-Il giorno dopo imbarazzante | Il giorno dopo romantico
 Chimica zero | Chimica esplosiva
 Rottura civile | Rottura drammatica
 Lingerie comoda | Lingerie audace
 Musica d'atmosfera ridicola | Musica d'atmosfera azzeccata
-Ritorno di fiamma tiepido | Ritorno di fiamma travolgente
 Dichiarazione d'amore goffa | Dichiarazione d'amore epica
-App di incontri disastrosa | App di incontri fortunata
 Gioco di coppia innocente | Gioco di coppia spinto
 Ballo goffo | Ballo sensuale
 Sguardo innocente | Sguardo malizioso
 Doppio senso involontario | Doppio senso voluto
-Brindisi commosso | Brindisi imbarazzante
 Rientro all'alba silenzioso | Rientro all'alba rumoroso
 Coppia riservata | Coppia appiccicosa
 Conto alla romana | Conto offerto
@@ -1187,7 +1150,9 @@ Esperienza sessuale convenzionale | Esperienza sessuale estrema
 Modo elegante di provarci | Modo disperato di provarci
 Cronologia internet innocua | Cronologia internet terrificante
 Tradimento emotivo lieve | Tradimento emotivo imperdonabile
-Foto intima poco sexy | Foto intima estrema
+Foto intima innocua | Foto intima compromettente
 Cosa perdonabile dopo una sbronza | Cosa imperdonabile dopo una sbronza
 Esperienza sessuale da raccontare | Esperienza sessuale da non raccontare a nessuno
+Vizio innocente | Vizio inconfessabile
+Pratica sessuale comune | Pratica sessuale rara
 
