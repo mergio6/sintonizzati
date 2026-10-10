@@ -858,65 +858,53 @@ Autentico | Costruito
 
 Riunione inutile | Riunione indispensabile
 Presentazione noiosa | Presentazione brillante
-Brainstorming inutile | Brainstorming produttivo
 Capo comprensivo | Capo tiranno
-Capo assente | Capo onnipresente
 Messaggio del capo innocuo | Messaggio del capo terrificante
 Commento sul capo innocuo | Commento sul capo da licenziamento
-Ascensore col capo silenzioso | Ascensore col capo imbarazzante
+Situazione in ascensore imbarazzante | Situazione in ascensore normale
 Regalo per il capo azzeccato | Regalo per il capo imbarazzante
 Leccapiedi discreto | Leccapiedi sfacciato
 Collega silenzioso | Collega logorroico
 Pettegolezzo d'ufficio innocuo | Pettegolezzo d'ufficio esplosivo
 Flirt in ufficio innocuo | Flirt in ufficio pericoloso
 Storia tra colleghi segreta | Storia tra colleghi nota a tutti
-Email gentile | Email passivo-aggressiva
 Firma email sobria | Firma email esagerata
 Chat di lavoro tranquilla | Chat di lavoro infernale
-Videochiamata tranquilla | Videochiamata imbarazzante
-Smart working serio | Smart working in pigiama
 Lunedì mattina sopportabile | Lunedì mattina infernale
 Venerdì pomeriggio produttivo | Venerdì pomeriggio inutile
 Pausa caffè breve | Pausa caffè infinita
 Mensa aziendale deludente | Mensa aziendale stellata
-Furto dal frigo aziendale perdonabile | Furto dal frigo aziendale imperdonabile
+Furto dal frigo perdonabile | Furto dal frigo imperdonabile
 Scrivania ordinata | Scrivania esplosa
 Stampante collaborativa | Stampante diabolica
 Open space silenzioso | Open space infernale
-Pendolarismo breve | Pendolarismo infernale
+Pendolarismo breve | Pendolarismo infinito
 Ritardo giustificabile | Ritardo ingiustificabile
 Malattia credibile | Malattia inventata
 Scadenza comoda | Scadenza impossibile
 Multitasking riuscito | Multitasking disastroso
 Obiettivo aziendale realistico | Obiettivo aziendale delirante
-Gergo aziendale comprensibile | Gergo aziendale incomprensibile
 Team building divertente | Team building imbarazzante
 Cena aziendale noiosa | Cena aziendale leggendaria
 Festa aziendale sobria | Festa aziendale fuori controllo
-Aperitivo dopo il lavoro sobrio | Aperitivo dopo il lavoro epico
+Aperitivo post-lavoro sobrio | Aperitivo post-lavoro epico
 Look da ufficio sobrio | Look da ufficio audace
-Battuta in riunione azzeccata | Battuta in riunione disastrosa
 Colloquio di lavoro disastroso | Colloquio di lavoro perfetto
 Domanda da colloquio facile | Domanda da colloquio impossibile
-Curriculum onesto | Curriculum gonfiato
 Primo giorno di lavoro tranquillo | Primo giorno di lavoro traumatico
 Aumento ridicolo | Aumento da sogno
 Straordinario pagato | Straordinario gratis
 Promozione meritata | Promozione immeritata
 Ferie vere | Ferie col portatile
-Cliente gentile | Cliente da incubo
 Reclamo ragionevole | Reclamo assurdo
 Dimissioni educate | Dimissioni plateali
 Licenziamento meritato | Licenziamento ingiusto
 Collega che fa tutto | Collega che non fa niente
-Riunione alle 9 del lunedì | Riunione alle 18 del venerdì
 Badge dimenticato | Badge perso per sempre
 Lavoro dei sogni da bambino | Lavoro attuale
 
 # --- copie da altre stazioni (ottobre 2026) ---
 Mestiere facile | Mestiere difficile
-Amico | Nemico
-Rigido | Flessibile
 Lavoro noioso | Lavoro da sogno
 Lavoro manuale | Lavoro intellettuale
 Mestiere sottopagato | Mestiere strapagato
@@ -934,21 +922,18 @@ Casual | Elegante
 Fisso | Mobile
 Facoltativo | Obbligatorio
 Perdita di tempo | Tempo ben impiegato
-Scusa credibile | Scusa ridicola
 Regola stupida | Regola sacrosanta
 App inutile | App indispensabile
 Merito | Raccomandazione
 Lavoro | Vocazione
 Ambizione sana | Ambizione tossica
 Successo | Realizzazione
-Tempo libero | Tempo perso
 Fallimento | Lezione
 Amicizia | Convenienza
 Persona senza scrupoli | Persona scrupolosa
 Azienda eticamente scorretta | Azienda eticamente corretta
 
 # --- nuove carte (ottobre 2026, seconda tornata) ---
-Call evitabile | Call necessaria
 Collega ladro di meriti | Collega generoso
 Stipendio puntuale | Stipendio in ritardo
 Nota spese onesta | Nota spese creativa
@@ -958,13 +943,10 @@ Gaffe in call perdonabile | Gaffe in call leggendaria
 Caffè d'ufficio imbevibile | Caffè d'ufficio divino
 Vicino di scrivania ideale | Vicino di scrivania da incubo
 Formazione aziendale utile | Formazione aziendale inutile
-Uscire in orario | Uscire a notte fonda
 Password sicura | Password imbarazzante
-Discorso del capo ispirato | Discorso del capo soporifero
 Ultimo giorno commovente | Ultimo giorno liberatorio
 Pranzo in ufficio discreto | Pranzo in ufficio puzzolente
 Lavoro di squadra vero | Lavoro di squadra finto
-Vendetta al capo innocua | Vendetta al capo infame
 Collega passivo-aggressivo | Collega ostile
 Scusa per darsi malati credibile | Scusa per darsi malati falsa
 Bugia innocente sul curriculum | Bugia imperdonabile sul curriculum
@@ -974,7 +956,6 @@ Cliente maleducato | Cliente da denuncia
 Umiliazione del capo insignificante | Umiliazione del capo pesante
 Motivo valido per sabotare un collega | Motivo ridicolo per sabotare un collega
 Email passivo-aggressiva | Email che dichiara guerra
-Lavoro sottopagato | Lavoro pagato troppo
 Favoritismo lieve | Favoritismo netto
 Frase innocua in una riunione | Frase che ti rovina in una riunione
 Accettabile in smart working | Inaccettabile in smart working
