@@ -45,7 +45,7 @@ Comune | Raro
 Inutile | Utile
 Fragile | Indistruttibile
 Colore scuro | Colore chiaro
-Poco colorato | Coloratissimo
+Colori spenti | Colori sgargianti
 Spaventoso | Coccoloso
 Fa ridere | Fa piangere
 Esiste davvero | È inventato
@@ -60,7 +60,7 @@ Facile da mangiare | Difficile da mangiare
 Frutta aspra | Frutta dolce
 Facile da disegnare | Difficile da disegnare
 Animale tenero | Animale pauroso
-Animale lento | Animale veloce
+Animale lentissimo | Animale velocissimo
 Animale piccolo | Animale enorme
 Animale di casa | Animale selvatico
 Gioco tranquillo | Gioco scatenato
@@ -81,39 +81,38 @@ Galleggia | Affonda
 Si rompe subito | Dura per sempre
 
 # --- carte aggiunte a ottobre 2026 ---
-Quadrato | Tondo
-Ha un cattivo sapore | Ha un buon sapore
-Cibo con cui ti sporchi | Cibo con cui non ti sporchi
+Quadrato | Rotondo
+Sapore disgustoso | Sapore delizioso
+Cibo che sporca tantissimo | Cibo che non sporca affatto
 Amico | Nemico
-Colazione leggera | Colazione pesante
-Primo della classe | Asino
+Colazione leggera | Colazione abbondante
+Studente modello | Studente pessimo
 Orizzontale | Verticale
-Ding | Boom
-È difficile sedercisi sopra | È facile sedercisi sopra
+Quasi impossibile sedercisi | Facilissimo sedercisi
 Liquido | Solido
-Pessima caramella | Ottima caramella
+Caramella disgustosa | Caramella deliziosa
 Non peloso | Peloso
 Troppo piccolo | Troppo grande
-Da non abbracciare | Da abbracciare
-Pokémon scarso | Pokémon potente
+Da tenere a distanza | Da stringere forte
+Pokémon debolissimo | Pokémon fortissimo
 Piccola quantità | Grande quantità
 Spuntino | Pasto
-Materia semplice | Materia difficile
+Materia facilissima | Materia complicatissima
 Diviso | Intero
-Nome da cane | Nome da gatto
-Meglio caldo | Meglio freddo
+Nome perfetto per un cane | Nome perfetto per un gatto
+Meglio servito caldo | Meglio servito freddo
 Rigido | Flessibile
-Colore piacevole | Colore spiacevole
-Animale da compagnia comune | Animale da compagnia insolito
+Colore gradevole | Colore sgradevole
+Animale domestico tipico | Animale domestico stravagante
 
 # --- copie da altre stazioni (ottobre 2026) ---
-Superpotere inutile | Superpotere utile
-Pigro | Instancabile
+Superpotere inutile | Superpotere straordinario
+Pigrissimo | Iperattivo
 Fortunato | Sfortunato
-Mezzo lento | Mezzo veloce
+Mezzo di trasporto lentissimo | Mezzo di trasporto velocissimo
 Croccante | Molle
 Snack sano | Snack spazzatura
-Invenzione inutile | Invenzione geniale
+Invenzione superflua | Invenzione rivoluzionaria
 Robot amichevole | Robot minaccioso
 Alieno pacifico | Alieno invasore
 Videogioco rilassante | Videogioco frustrante
@@ -129,7 +128,7 @@ Freddo | Caldo
 Sottovalutato | Sopravvalutato
 Inutile | Utile
 Facile da disegnare | Difficile da disegnare
-Noioso | Emozionante
+Noiosissimo | Entusiasmante
 Cibo da colazione | Cibo da cena
 Animale debole | Animale forte
 Film per bambini | Film per adulti
@@ -148,13 +147,13 @@ Da fare in estate | Da fare in inverno
 Morbido | Duro
 Leggero | Pesante
 Da città | Da campagna
-Pigro | Instancabile
+Pigrissimo | Iperattivo
 Prevedibile | Sorprendente
 Snob | Alla mano
 Fa bene | Fa male
 Triste | Allegro
 Inquietante | Rassicurante
-Superpotere inutile | Superpotere utile
+Superpotere inutile | Superpotere straordinario
 Vacanza da incubo | Vacanza da sogno
 Lavoro noioso | Lavoro da sogno
 Personaggio buono | Personaggio cattivo
@@ -178,10 +177,10 @@ Piatto facile | Piatto difficile
 Colazione triste | Colazione da re
 Si beve caldo | Si beve freddo
 Bevanda disgustosa | Bevanda deliziosa
-Invenzione inutile | Invenzione geniale
+Invenzione superflua | Invenzione rivoluzionaria
 App inutile | App indispensabile
 Oggetto inutile | Oggetto indispensabile
-Facile da ricordare | Difficile da ricordare
+Impossibile da dimenticare | Impossibile da ricordare
 Facile da dire | Difficile da dire
 Mestiere sottopagato | Mestiere strapagato
 Mestiere sicuro | Mestiere pericoloso
@@ -197,10 +196,10 @@ Città da visitare | Città da evitare
 Posto rilassante | Posto caotico
 Vacanza economica | Vacanza di lusso
 Viaggio breve | Viaggio infinito
-Mezzo lento | Mezzo veloce
+Mezzo di trasporto lentissimo | Mezzo di trasporto velocissimo
 Festa noiosa | Festa memorabile
 Regalo da riciclare | Regalo da tenere
-Casual | Elegante
+Abbigliamento informale | Abbigliamento elegante
 Vestito estivo | Vestito invernale
 Colore triste | Colore allegro
 Nome antico | Nome moderno
@@ -233,7 +232,7 @@ Divertente | Irritante
 Imbarazzante | Da vantarsi
 Facile da trovare | Introvabile
 Dura poco | Dura per sempre
-Faccenda odiosa | Faccenda piacevole
+Lavoro di casa odioso | Lavoro di casa piacevole
 Superstizione assurda | Superstizione sensata
 Scusa credibile | Scusa ridicola
 Regola stupida | Regola sacrosanta
@@ -246,106 +245,105 @@ Per niente romantico | Romanticissimo
 Fragile | Indistruttibile
 
 # --- carte aggiunte a ottobre 2026 ---
-Persona cattiva | Persona buona
+Persona spregevole | Persona ammirevole
 Anni '80 | Anni '90
-Divinità meno potente | Divinità più potente
+Divinità dai poteri limitati | Divinità dai poteri sconfinati
 Stimato | Disprezzato
-Facile da eliminare | Difficile da eliminare
+Facile da togliere di mezzo | Difficile da togliere di mezzo
 Inaffidabile | Affidabile
-Senza valore | Inestimabile
-Ipocalorico | Ipercalorico
+Privo di valore | Di valore incalcolabile
+Poche calorie | Tantissime calorie
 Inefficace | Efficace
-Richiede fortuna | Richiede abilità
-Sciatto | Elegante
-Ha una cattiva reputazione | Ha una buona reputazione
+Conta soprattutto la fortuna | Conta soprattutto la bravura
+Trasandato | Raffinato
+Pessima reputazione | Ottima reputazione
 Impopolare | Popolare
 Star Wars | Star Trek
-Emoji utile | Emoji inutile
-Abilità sottovalutata | Abilità sopravvalutata
+Emoji indispensabile | Emoji completamente inutile
+Talento sottovalutato | Talento sopravvalutato
 Instabile | Stabile
-Difficile da usare | Facile da usare
-Poco colto | Molto colto
-Cibo di sopravvivenza | Alta cucina
-Tamarro | Chic
-Pessimo attore | Ottimo attore
-Succede lentamente | Succede improvvisamente
-Mestiere sopravvalutato | Mestiere sottovalutato
+Complicato da utilizzare | Semplicissimo da utilizzare
+Ignorante | Acculturato
+Cibo da emergenza | Cibo da ristorante stellato
+Volgare | Di classe
+Attore incapace | Attore eccezionale
+Accade molto gradualmente | Accade all’improvviso
+Professione sopravvalutata | Professione sottovalutata
 Grifondoro | Serpeverde
-Vita breve | Vita lunga
-Non lo fa nessuno | Lo fanno tutti
-Inodore | Odore intenso
+Vita brevissima | Vita lunghissima
+Non lo fa quasi nessuno | Lo fanno praticamente tutti
+Senza alcun odore | Odore fortissimo
 Gioco sottovalutato | Gioco sopravvalutato
-Pessimo consiglio | Ottimo consiglio
+Consiglio disastroso | Consiglio preziosissimo
 Ottimo | Pessimo
-Sport agonistico | Sport amatoriale
-Lato chiaro della Forza | Lato oscuro della Forza
-Persona brutta | Persona bella
-Cosa normale da possedere | Cosa bizzarra da possedere
-Inutile in un'emergenza | Utile in un'emergenza
-Persona che potrebbe batterti in uno scontro | Persona che potresti battere in uno scontro
+Sport praticato per competere | Sport praticato per divertimento
+Persona poco attraente | Persona bellissima
+Oggetto normalissimo da possedere | Oggetto assurdo da possedere
+Non serve in emergenza | Fondamentale in emergenza
+Avversario che ti batterebbe | Avversario che batteresti
 Non abbastanza | Troppo
-Fenomeno passeggero | Stella internazionale
-Evento informale | Evento formale
-Argomento divertente | Argomento serio
+Celebrità di un momento | Star di fama mondiale
+Occasione informale | Occasione formale
+Argomento scherzoso | Argomento serissimo
 Film sottovalutato | Film sopravvalutato
-Pessimo personaggio dei cartoni | Ottimo personaggio dei cartoni
-Hobby noioso | Hobby interessante
-Tormentone estivo | Grande classico
+Personaggio animato pessimo | Personaggio animato fantastico
+Passatempo soporifero | Passatempo appassionante
+Hit di una sola estate | Classico senza tempo
 Bufala | Verità
-Peggior epoca per viaggiare nel tempo | Miglior epoca per viaggiare nel tempo
-Persona noiosa | Persona divertente
+Epoca da evitare viaggiando nel tempo | Epoca da visitare viaggiando nel tempo
+Persona soporifera | Persona spassosa
 Libro sottovalutato | Libro sopravvalutato
-Saluto normale | Saluto bizzarro
+Saluto convenzionale | Saluto stravagante
 Amante dei gatti | Amante dei cani
-Pessimo condimento per la pizza | Ottimo condimento per la pizza
+Farcitura per pizza terribile | Farcitura per pizza perfetta
 Cortesia | Scortesia
 Persona antipatica | Persona simpatica
-Cosa sottovalutata da possedere | Cosa sopravvalutata da possedere
+Oggetto poco apprezzato | Oggetto troppo apprezzato
 Fantasy | Fantascienza
-Il peggiore anno nella storia | Il migliore anno nella storia
+Anno storico da incubo | Anno storico da sogno
 Blu | Verde
-Specie a rischio di estinzione | Specie in sovrappopolazione
+Specie quasi estinta | Specie diffusissima
 Ordinario | Straordinario
-Film commerciale | Film d'autore
-Poco tatuato | Molto tatuato
+Cinema da botteghino | Cinema d’autore
+Pochissimi tatuaggi | Coperto di tatuaggi
 Fisso | Mobile
-Non vivrà fino a cent'anni | Vivrà fino a cent'anni
-Pessima scuola | Ottima scuola
-Nome banale | Nome originale
-Fatto poco conosciuto | Fatto molto conosciuto
-Peggior atleta di tutti i tempi | Miglior atleta di tutti i tempi
-Pessimo investimento | Buon investimento
-Conversazione leggera | Conversazione pesante
+Difficilmente centenario | Futuro centenario
+Scuola da evitare | Scuola eccellente
+Nome scontato | Nome fuori dal comune
+Curiosità sconosciuta | Fatto noto a tutti
+Atleta disastroso | Atleta leggendario
+Investimento disastroso | Investimento redditizio
+Chiacchierata spensierata | Discorso impegnativo
 Stupido | Geniale
 Bassa qualità | Alta qualità
-Privo di talento | Talentuoso
+Senza alcun talento | Pieno di talento
 Facoltativo | Obbligatorio
 Invendibile | Vendibile
-Cibo secco | Cibo umido
-Arma efficace | Arma non efficace
-Difficile da scrivere | Facile da scrivere
-Non importante | Importante
+Cibo asciuttissimo | Cibo molto umido
+Arma molto efficace | Arma quasi inutile
+Un incubo da scrivere | Semplicissimo da scrivere
+Trascurabile | Fondamentale
 Insostituibile | Sostituibile
 Meglio il libro | Meglio il film
-Musicista sottovalutato | Musicista sopravvalutato
-Cibo con pochi ingredienti | Cibo con molti ingredienti
+Musicista poco apprezzato | Musicista troppo celebrato
+Ricetta essenziale | Ricetta ricca di ingredienti
 Eseguito male | Eseguito bene
-Argomento noioso | Argomento interessante
+Tema soporifero | Tema appassionante
 Insapore | Saporito
-Perdita di tempo | Tempo ben impiegato
-Modello da seguire | Modello da evitare
-Laurea inutile | Laurea utile
+Tempo buttato | Tempo speso bene
+Esempio da imitare | Esempio da non imitare
+Titolo di studio poco spendibile | Titolo di studio prezioso
 Non igienico | Igienico
-Film che Godzilla rovinerebbe | Film che Godzilla migliorerebbe
+Film in cui Godzilla stonerebbe | Film in cui Godzilla sarebbe perfetto
 Proibito | Consigliabile
 Fallimento | Capolavoro
-Cosa sottovalutata da fare | Cosa sopravvalutata da fare
-Attore sottovalutato | Attore sopravvalutato
-Peggior giorno dell'anno | Miglior giorno dell'anno
-Parte del corpo inutile | Parte del corpo utile
+Attività poco apprezzata | Attività troppo osannata
+Interprete poco riconosciuto | Interprete troppo celebrato
+Giorno più detestato dell’anno | Giorno più amato dell’anno
+Parte del corpo superflua | Parte del corpo indispensabile
 Comico | Drammatico
-Pessimo programma TV | Ottimo programma TV
-Persona genuina | Persona falsa
+Trasmissione inguardabile | Trasmissione imperdibile
+Persona autentica | Persona ipocrita
 Non addomesticabile | Addomesticabile
 Per bambini | Per adulti
 Obsoleto | Innovativo
@@ -353,20 +351,20 @@ Difficile da pronunciare | Facile da pronunciare
 Canzone triste | Canzone allegra
 Innocuo | Pericoloso
 Film triste | Film allegro
-Pessimo genere musicale | Ottimo genere musicale
+Genere musicale insopportabile | Genere musicale fantastico
 
 # --- copie da altre stazioni (ottobre 2026) ---
 Galleggia | Affonda
 Timido | Coraggioso
 Ordinato | Disordinato
 Facile da mangiare | Difficile da mangiare
-Cibo con cui ti sporchi | Cibo con cui non ti sporchi
+Cibo che sporca tantissimo | Cibo che non sporca affatto
 Amico | Nemico
-È difficile sedercisi sopra | È facile sedercisi sopra
-Da non abbracciare | Da abbracciare
-Nome da cane | Nome da gatto
+Quasi impossibile sedercisi | Facilissimo sedercisi
+Da tenere a distanza | Da stringere forte
+Nome perfetto per un cane | Nome perfetto per un gatto
 Animale di casa | Animale selvatico
-Animale da compagnia comune | Animale da compagnia insolito
+Animale domestico tipico | Animale domestico stravagante
 Esiste davvero | È inventato
 
 [Onde Cerebrali]
@@ -380,7 +378,7 @@ Razionale | Irrazionale
 Destino | Caso
 Ordine | Caos
 Utopia | Distopia
-Mainstream | Di nicchia
+Di massa | Di nicchia
 Concreto | Astratto
 Oggettivo | Soggettivo
 Semplice | Complesso
@@ -446,17 +444,17 @@ Autentico | Costruito
 Fatto per amore | Fatto per soldi
 
 # --- carte aggiunte a ottobre 2026 ---
-Persona senza scrupoli | Persona scrupolosa
-Elettrizzante | Terrificante
-Fobia irragionevole | Fobia ragionevole
-Pettegolezzo | Notizia
-Inerme | Potente
-Lineare | Sinuoso
+Persona spietata | Persona molto coscienziosa
+Adrenalinico | Spaventoso
+Paura completamente assurda | Paura più che giustificata
+Voce di corridoio | Notizia verificata
+Indifeso | Potentissimo
+Rettlineo | Tortuoso
 Arte | Design
 Limitato | Infinito
 Guerrafondaio | Pacifista
 Simile | Identico
-Cattiva amministrazione | Buona amministrazione
+Gestione disastrosa | Gestione impeccabile
 Assurdo | Strano
 Piccolo | Minuscolo
 Dittatura | Democrazia
@@ -464,17 +462,17 @@ Incomprensibile | Comprensibile
 Storicamente importante | Storicamente irrilevante
 Saggio | Intelligente
 Film d'azione | Film d'avventura
-Culturalmente irrilevante | Culturalmente significativo
+Senza impatto culturale | Di enorme impatto culturale
 Popolare | Elitario
 Eterogeneo | Omogeneo
-Cibo etico | Cibo non etico
+Cibo prodotto eticamente | Cibo prodotto senza scrupoli
 Scienza | Pseudoscienza
-Problema locale | Problema globale
+Questione circoscritta | Questione mondiale
 Galateo | Buone maniere
 Abitudine | Mania
-Argomento non controverso | Argomento controverso
+Tema su cui tutti concordano | Tema che divide tutti
 Probabile | Improbabile
-Azienda eticamente scorretta | Azienda eticamente corretta
+Impresa senza scrupoli | Impresa responsabile
 Tagliente | Appuntito
 Prova che Dio non esiste | Prova che Dio esiste
 Bene | Male
@@ -482,8 +480,8 @@ Moderato | Conservatore
 Imparziale | Di parte
 Tradizionalmente femminile | Tradizionalmente maschile
 Tradizionale | Radicale
-Avvantaggia te | Avvantaggia tutti
-Talento innato | Abilità acquisita
+Conviene solo a te | Conviene a tutti
+Dono naturale | Capacità sviluppata
 Pacchiano | Raffinato
 
 [Amarcord Radio]
@@ -587,9 +585,9 @@ Usanza italiana normale | Usanza italiana inspiegabile
 Si fa al mare | Si fa in montagna
 Cibo da merenda | Cibo da cena
 Cartone per piccoli | Cartone per grandi
-Primo della classe | Asino
-Pessima caramella | Ottima caramella
-Materia semplice | Materia difficile
+Studente modello | Studente pessimo
+Caramella disgustosa | Caramella deliziosa
+Materia facilissima | Materia complicatissima
 Hobby da nonni | Hobby da ragazzi
 Da città | Da campagna
 Fuori moda | Di moda
@@ -602,8 +600,8 @@ Fatto in casa | Industriale
 Piatto del nord | Piatto del sud
 Superstizione assurda | Superstizione sensata
 Anni '80 | Anni '90
-Tamarro | Chic
-Pessimo personaggio dei cartoni | Ottimo personaggio dei cartoni
+Volgare | Di classe
+Personaggio animato pessimo | Personaggio animato fantastico
 Tradizione | Progresso
 Nostalgico | Visionario
 Ricordo | Rimpianto
@@ -708,28 +706,26 @@ Scena di hacking realistica | Scena di hacking ridicola
 Postazione sobria | Postazione piena di LED
 
 # --- copie da altre stazioni (ottobre 2026) ---
-Pokémon potente | Pokémon scarso
+Pokémon fortissimo | Pokémon debolissimo
 Supereroe debole | Supereroe fortissimo
-Ding | Boom
-Superpotere inutile | Superpotere utile
-Invenzione inutile | Invenzione geniale
+Superpotere inutile | Superpotere straordinario
+Invenzione superflua | Invenzione rivoluzionaria
 App inutile | App indispensabile
 Eroe | Cattivo
 Tecnologia vecchia | Tecnologia futuristica
-Divinità meno potente | Divinità più potente
-Facile da eliminare | Difficile da eliminare
-Richiede fortuna | Richiede abilità
+Divinità dai poteri limitati | Divinità dai poteri sconfinati
+Facile da togliere di mezzo | Difficile da togliere di mezzo
+Conta soprattutto la fortuna | Conta soprattutto la bravura
 Star Wars | Star Trek
-Difficile da usare | Facile da usare
+Complicato da utilizzare | Semplicissimo da utilizzare
 Grifondoro | Serpeverde
 Gioco sottovalutato | Gioco sopravvalutato
-Lato chiaro della Forza | Lato oscuro della Forza
-Peggior epoca per viaggiare nel tempo | Miglior epoca per viaggiare nel tempo
+Epoca da evitare viaggiando nel tempo | Epoca da visitare viaggiando nel tempo
 Fantasy | Fantascienza
 Utopia | Distopia
-Mainstream | Di nicchia
+Di massa | Di nicchia
 Reale | Immaginario
-Inerme | Potente
+Indifeso | Potentissimo
 
 [Prima Visione]
 # Cinema, serie TV, musica e star: lo spettacolo in tutte le sue forme
@@ -830,25 +826,24 @@ Film sottovalutato | Film sopravvalutato
 Film triste | Film allegro
 Comico | Drammatico
 Meglio il libro | Meglio il film
-Film che Godzilla rovinerebbe | Film che Godzilla migliorerebbe
-Pessimo attore | Ottimo attore
-Attore sottovalutato | Attore sopravvalutato
-Fenomeno passeggero | Stella internazionale
-Privo di talento | Talentuoso
+Film in cui Godzilla stonerebbe | Film in cui Godzilla sarebbe perfetto
+Attore incapace | Attore eccezionale
+Interprete poco riconosciuto | Interprete troppo celebrato
+Celebrità di un momento | Star di fama mondiale
+Senza alcun talento | Pieno di talento
 Programma trash | Programma colto
-Pessimo programma TV | Ottimo programma TV
+Trasmissione inguardabile | Trasmissione imperdibile
 Canzone brutta | Canzone bellissima
 Canzone triste | Canzone allegra
-Tormentone estivo | Grande classico
-Musicista sottovalutato | Musicista sopravvalutato
-Pessimo genere musicale | Ottimo genere musicale
+Hit di una sola estate | Classico senza tempo
+Musicista poco apprezzato | Musicista troppo celebrato
+Genere musicale insopportabile | Genere musicale fantastico
 Star Wars | Star Trek
 Grifondoro | Serpeverde
-Lato chiaro della Forza | Lato oscuro della Forza
 Fantasy | Fantascienza
 Film d'azione | Film d'avventura
 Arte | Non arte
-Mainstream | Di nicchia
+Di massa | Di nicchia
 Ispirazione | Plagio
 Invecchia bene | Invecchia male
 Autentico | Costruito
@@ -909,19 +904,19 @@ Lavoro noioso | Lavoro da sogno
 Lavoro manuale | Lavoro intellettuale
 Mestiere sottopagato | Mestiere strapagato
 Mestiere sicuro | Mestiere pericoloso
-Mestiere sopravvalutato | Mestiere sottovalutato
-Laurea inutile | Laurea utile
+Professione sopravvalutata | Professione sottovalutata
+Titolo di studio poco spendibile | Titolo di studio prezioso
 Si fa al lavoro | Si fa in vacanza
 Rilassante | Stressante
-Pigro | Instancabile
+Pigrissimo | Iperattivo
 Puntuale | Ritardatario
 Inaffidabile | Affidabile
 Insostituibile | Sostituibile
-Persona genuina | Persona falsa
-Casual | Elegante
+Persona autentica | Persona ipocrita
+Abbigliamento informale | Abbigliamento elegante
 Fisso | Mobile
 Facoltativo | Obbligatorio
-Perdita di tempo | Tempo ben impiegato
+Tempo buttato | Tempo speso bene
 Regola stupida | Regola sacrosanta
 App inutile | App indispensabile
 Merito | Raccomandazione
@@ -930,8 +925,8 @@ Ambizione sana | Ambizione tossica
 Successo | Realizzazione
 Fallimento | Lezione
 Amicizia | Convenienza
-Persona senza scrupoli | Persona scrupolosa
-Azienda eticamente scorretta | Azienda eticamente corretta
+Persona spietata | Persona molto coscienziosa
+Impresa senza scrupoli | Impresa responsabile
 
 # --- nuove carte (ottobre 2026, seconda tornata) ---
 Collega ladro di meriti | Collega generoso
@@ -1018,14 +1013,14 @@ Cosa da trovare in soffitta innocua | Cosa da trovare in soffitta inquietante
 
 # --- copie da altre stazioni (ottobre 2026) ---
 Posto sicuro | Posto pericoloso
-Da non abbracciare | Da abbracciare
+Da tenere a distanza | Da stringere forte
 Superstizione assurda | Superstizione sensata
 Morte lenta | Morte improvvisa
 Inutile in un'apocalisse zombie | Utile in un'apocalisse zombie
 Cibo schifoso | Cibo macabro
 Mostro tradizionale | Aberrazione folle
-Elettrizzante | Terrificante
-Fobia irragionevole | Fobia ragionevole
+Adrenalinico | Spaventoso
+Paura completamente assurda | Paura più che giustificata
 
 
 # --- nuove carte (ottobre 2026, seconda tornata) ---
@@ -1109,7 +1104,7 @@ Weekend tranquillo | Weekend da raccontare
 Vergogna passeggera | Vergogna eterna
 
 # --- carte aggiunte a ottobre 2026 ---
-Complimento fuori luogo | Complimento elegante
+Complimento inappropriato | Complimento di classe
 Appuntamento sotto controllo | Appuntamento fuori controllo
 Appuntamento al risparmio | Appuntamento senza badare a spese
 Esperienza da dimenticare | Esperienza da raccontare a tutti
