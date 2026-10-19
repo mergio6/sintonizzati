@@ -24,7 +24,7 @@ Freddo | Caldo
 Morbido | Duro
 Facile | Difficile
 Leggero | Pesante
-Pulito | Sporco
+Sporco | Pulito
 Noioso | Divertente
 Triste | Allegro
 Brutto | Bello
@@ -47,7 +47,7 @@ Fragile | Indistruttibile
 Colore scuro | Colore chiaro
 Colori spenti | Colori sgargianti
 Spaventoso | Coccoloso
-Fa ridere | Fa piangere
+Fa piangere | Fa ridere
 Esiste davvero | È inventato
 Cosa da piccoli | Cosa da grandi
 Da fare di giorno | Da fare di notte
@@ -59,14 +59,14 @@ Cibo da merenda | Cibo da cena
 Facile da mangiare | Difficile da mangiare
 Frutta aspra | Frutta dolce
 Facile da disegnare | Difficile da disegnare
-Animale tenero | Animale pauroso
+Animale spaventoso | Animale tenero
 Animale lentissimo | Animale velocissimo
 Animale piccolo | Animale enorme
 Animale di casa | Animale selvatico
 Gioco tranquillo | Gioco scatenato
 Giocattolo noioso | Giocattolo fantastico
 Cartone per piccoli | Cartone per grandi
-Personaggio buono | Personaggio cattivo
+Personaggio cattivo | Personaggio buono
 Supereroe debole | Supereroe fortissimo
 Mostro buffo | Mostro spaventoso
 Sport facile | Sport difficile
@@ -74,8 +74,8 @@ Mestiere facile | Mestiere difficile
 Mestiere noioso | Mestiere da sogno
 Regalo deludente | Regalo fantastico
 Posto noioso | Posto avventuroso
-Posto sicuro | Posto pericoloso
-Rumore piacevole | Rumore fastidioso
+Posto pericoloso | Posto sicuro
+Rumore fastidioso | Rumore piacevole
 Parola facile | Parola difficile
 Galleggia | Affonda
 Si rompe subito | Dura per sempre
@@ -84,41 +84,41 @@ Si rompe subito | Dura per sempre
 Quadrato | Rotondo
 Sapore disgustoso | Sapore delizioso
 Cibo che sporca tantissimo | Cibo che non sporca affatto
-Amico | Nemico
+Nemico | Amico
 Colazione leggera | Colazione abbondante
-Studente modello | Studente pessimo
+Studente pessimo | Studente modello
 Orizzontale | Verticale
-Quasi impossibile sedercisi | Facilissimo sedercisi
+Seduta da incubo | Seduta da sogno
 Liquido | Solido
-Caramella disgustosa | Caramella deliziosa
+Caramella da scherzo | Caramella da premio
 Non peloso | Peloso
 Troppo piccolo | Troppo grande
-Da tenere a distanza | Da stringere forte
+Abbraccio che eviti | Abbraccio che cerchi
 Pokémon debolissimo | Pokémon fortissimo
 Piccola quantità | Grande quantità
 Spuntino | Pasto
-Materia facilissima | Materia complicatissima
+Materia da studiare sui libri | Materia da provare in laboratorio
 Diviso | Intero
-Nome perfetto per un cane | Nome perfetto per un gatto
+Nome da cucciolo | Nome da bestione
 Meglio servito caldo | Meglio servito freddo
 Rigido | Flessibile
-Colore gradevole | Colore sgradevole
-Animale domestico tipico | Animale domestico stravagante
+Colore sgradevole | Colore gradevole
+Animale da salotto | Animale da grandi spazi
 
 # --- copie da altre stazioni (ottobre 2026) ---
-Superpotere inutile | Superpotere straordinario
+Superpotere discreto | Superpotere appariscente
 Pigrissimo | Iperattivo
-Fortunato | Sfortunato
+Sfortunato | Fortunato
 Mezzo di trasporto lentissimo | Mezzo di trasporto velocissimo
 Croccante | Molle
-Snack sano | Snack spazzatura
-Invenzione superflua | Invenzione rivoluzionaria
-Robot amichevole | Robot minaccioso
-Alieno pacifico | Alieno invasore
-Videogioco rilassante | Videogioco frustrante
+Snack spazzatura | Snack sano
+Invenzione nostalgica | Invenzione futuristica
+Robot minaccioso | Robot amichevole
+Alieno invasore | Alieno pacifico
+Videogioco frustrante | Videogioco rilassante
 Costume da supereroe ridicolo | Costume da supereroe iconico
 Gusto di gelato deludente | Gusto di gelato pazzesco
-Strega simpatica | Strega malvagia
+Strega malvagia | Strega simpatica
 Costume di Halloween ridicolo | Costume di Halloween terrificante
 
 [Hit Parade]
@@ -137,10 +137,10 @@ Brutto | Bello
 Puzza | Profuma
 Hobby da nonni | Hobby da ragazzi
 Economico | Costoso
-Rilassante | Stressante
+Stressante | Rilassante
 Antico | Moderno
 Minuscolo | Enorme
-Salato | Dolce
+Dolce | Salato
 Lento | Veloce
 Silenzioso | Rumoroso
 Da fare in estate | Da fare in inverno
@@ -150,16 +150,16 @@ Da città | Da campagna
 Pigrissimo | Iperattivo
 Prevedibile | Sorprendente
 Snob | Alla mano
-Fa bene | Fa male
+Fa male | Fa bene
 Triste | Allegro
 Inquietante | Rassicurante
-Superpotere inutile | Superpotere straordinario
+Superpotere discreto | Superpotere appariscente
 Vacanza da incubo | Vacanza da sogno
 Lavoro noioso | Lavoro da sogno
-Personaggio buono | Personaggio cattivo
+Personaggio cattivo | Personaggio buono
 Odiato | Amato
 Fuori moda | Di moda
-Mangiabile | Immangiabile
+Immangiabile | Mangiabile
 Poco italiano | Italianissimo
 Liscio | Ruvido
 Bagnato | Asciutto
@@ -167,7 +167,7 @@ Regalo pessimo | Regalo perfetto
 Sport facile | Sport difficile
 Da fare da soli | Da fare in compagnia
 Normale | Strano
-Brutta parola | Bella parola
+Parola da insulto | Parola da poesia
 Talento inutile | Talento utile
 Film brutto | Film capolavoro
 Canzone brutta | Canzone bellissima
@@ -177,22 +177,22 @@ Piatto facile | Piatto difficile
 Colazione triste | Colazione da re
 Si beve caldo | Si beve freddo
 Bevanda disgustosa | Bevanda deliziosa
-Invenzione superflua | Invenzione rivoluzionaria
+Invenzione nostalgica | Invenzione futuristica
 App inutile | App indispensabile
 Oggetto inutile | Oggetto indispensabile
-Impossibile da dimenticare | Impossibile da ricordare
+Parola da sussurrare | Parola da urlare
 Facile da dire | Difficile da dire
-Mestiere sottopagato | Mestiere strapagato
-Mestiere sicuro | Mestiere pericoloso
+Lavoro a orari fissi | Lavoro sempre reperibile
+Lavoro da scrivania | Lavoro in movimento
 Si fa al lavoro | Si fa in vacanza
 Hobby economico | Hobby costoso
 Sport noioso | Sport spettacolare
 Sport per pigri | Sport per atleti
 Animale brutto | Animale bellissimo
-Animale innocuo | Animale letale
+Animale letale | Animale innocuo
 Animale sopravvalutato | Animale sottovalutato
 Città brutta | Città bellissima
-Città da visitare | Città da evitare
+Città da evitare | Città da visitare
 Posto rilassante | Posto caotico
 Vacanza economica | Vacanza di lusso
 Viaggio breve | Viaggio infinito
@@ -205,12 +205,12 @@ Colore triste | Colore allegro
 Nome antico | Nome moderno
 Lingua facile | Lingua difficile
 Gioco facile | Gioco complicato
-Famoso | Sconosciuto
-Eroe | Cattivo
-Fortunato | Sfortunato
-Ottimista | Pessimista
-Puntuale | Ritardatario
-Tirchio | Spendaccione
+Sconosciuto | Famoso
+Cattivo | Eroe
+Sfortunato | Fortunato
+Pessimista | Ottimista
+Ritardatario | Puntuale
+Tirchio | Generoso
 Introverso | Estroverso
 Vecchio stile | All'avanguardia
 Cosa da boomer | Cosa da Gen Z
@@ -221,168 +221,168 @@ Sapore delicato | Sapore forte
 Cibo leggero | Cibo pesante
 Per niente piccante | Piccantissimo
 Croccante | Molle
-Snack sano | Snack spazzatura
+Snack spazzatura | Snack sano
 Piatto del nord | Piatto del sud
 Cibo di strada | Cibo stellato
 Cena veloce | Cena elaborata
 Moda passeggera | Intramontabile
 Programma trash | Programma colto
 Libro noioso | Libro avvincente
-Divertente | Irritante
+Irritante | Divertente
 Imbarazzante | Da vantarsi
 Facile da trovare | Introvabile
 Dura poco | Dura per sempre
 Lavoro di casa odioso | Lavoro di casa piacevole
 Superstizione assurda | Superstizione sensata
-Scusa credibile | Scusa ridicola
+Scusa ridicola | Scusa credibile
 Regola stupida | Regola sacrosanta
-Abitudine sana | Abitudine pessima
-Vizio innocuo | Vizio pericoloso
+Abitudine pessima | Abitudine sana
+Vizio pericoloso | Vizio innocuo
 Da mattinieri | Da nottambuli
-Rumore rilassante | Rumore insopportabile
+Rumore insopportabile | Rumore rilassante
 Lavoro manuale | Lavoro intellettuale
 Per niente romantico | Romanticissimo
 Fragile | Indistruttibile
 
 # --- carte aggiunte a ottobre 2026 ---
 Persona spregevole | Persona ammirevole
-Anni '80 | Anni '90
-Divinità dai poteri limitati | Divinità dai poteri sconfinati
-Stimato | Disprezzato
-Facile da togliere di mezzo | Difficile da togliere di mezzo
+Nostalgia analogica | Nostalgia digitale
+Divinità vendicativa | Divinità protettrice
+Disprezzato | Stimato
+Nemico che scappa | Nemico che ti insegue
 Inaffidabile | Affidabile
 Privo di valore | Di valore incalcolabile
 Poche calorie | Tantissime calorie
 Inefficace | Efficace
-Conta soprattutto la fortuna | Conta soprattutto la bravura
+Sfida da preparare | Sfida da improvvisare
 Trasandato | Raffinato
-Pessima reputazione | Ottima reputazione
+Personaggio che divide | Personaggio che unisce
 Impopolare | Popolare
-Star Wars | Star Trek
-Emoji indispensabile | Emoji completamente inutile
-Talento sottovalutato | Talento sopravvalutato
+Fantascienza riflessiva | Fantascienza d'azione
+Emoji completamente inutile | Emoji indispensabile
+Talento che spicca subito | Talento che scopri col tempo
 Instabile | Stabile
-Complicato da utilizzare | Semplicissimo da utilizzare
+Tecnologia intuitiva | Tecnologia da esperti
 Ignorante | Acculturato
 Cibo da emergenza | Cibo da ristorante stellato
 Volgare | Di classe
-Attore incapace | Attore eccezionale
-Accade molto gradualmente | Accade all’improvviso
+Attore da commedia | Attore da tragedia
+Cambiamento annunciato | Cambiamento inatteso
 Professione sopravvalutata | Professione sottovalutata
 Grifondoro | Serpeverde
 Vita brevissima | Vita lunghissima
 Non lo fa quasi nessuno | Lo fanno praticamente tutti
 Senza alcun odore | Odore fortissimo
-Gioco sottovalutato | Gioco sopravvalutato
-Consiglio disastroso | Consiglio preziosissimo
-Ottimo | Pessimo
+Gioco silenzioso | Gioco chiassoso
+Consiglio richiesto | Consiglio non richiesto
+Pessimo | Ottimo
 Sport praticato per competere | Sport praticato per divertimento
-Persona poco attraente | Persona bellissima
-Oggetto normalissimo da possedere | Oggetto assurdo da possedere
-Non serve in emergenza | Fondamentale in emergenza
-Avversario che ti batterebbe | Avversario che batteresti
+Look discreto | Look appariscente
+Oggetto da nascondere | Oggetto da esporre
+Da portare sempre con sé | Da lasciare a casa
+Avversario scorretto | Avversario leale
 Non abbastanza | Troppo
-Celebrità di un momento | Star di fama mondiale
+Famoso senza meriti | Famoso per talento
 Occasione informale | Occasione formale
-Argomento scherzoso | Argomento serissimo
-Film sottovalutato | Film sopravvalutato
-Personaggio animato pessimo | Personaggio animato fantastico
+Argomento da aperitivo | Argomento da assemblea
+Film da vedere da soli | Film da vedere in gruppo
+Personaggio animato tenero | Personaggio animato inquietante
 Passatempo soporifero | Passatempo appassionante
 Hit di una sola estate | Classico senza tempo
 Bufala | Verità
-Epoca da evitare viaggiando nel tempo | Epoca da visitare viaggiando nel tempo
-Persona soporifera | Persona spassosa
-Libro sottovalutato | Libro sopravvalutato
-Saluto convenzionale | Saluto stravagante
-Amante dei gatti | Amante dei cani
-Farcitura per pizza terribile | Farcitura per pizza perfetta
-Cortesia | Scortesia
+Epoca per avventurieri | Epoca per pantofolai
+Persona taciturna | Persona logorroica
+Libro da divorare | Libro da leggere con calma
+Saluto formale | Saluto confidenziale
+Animale pantofolaio | Animale esploratore
+Pizza tradizionale | Pizza sperimentale
+Scortesia | Cortesia
 Persona antipatica | Persona simpatica
-Oggetto poco apprezzato | Oggetto troppo apprezzato
+Oggetto da collezione | Oggetto d'uso quotidiano
 Fantasy | Fantascienza
-Anno storico da incubo | Anno storico da sogno
+Anno di pace | Anno di guerra
 Blu | Verde
-Specie quasi estinta | Specie diffusissima
+Specie urbana | Specie lontana dall'uomo
 Ordinario | Straordinario
 Cinema da botteghino | Cinema d’autore
 Pochissimi tatuaggi | Coperto di tatuaggi
 Fisso | Mobile
-Difficilmente centenario | Futuro centenario
-Scuola da evitare | Scuola eccellente
+Stile di vita spericolato | Stile di vita prudente
+Scuola severissima | Scuola molto permissiva
 Nome scontato | Nome fuori dal comune
-Curiosità sconosciuta | Fatto noto a tutti
-Atleta disastroso | Atleta leggendario
-Investimento disastroso | Investimento redditizio
-Chiacchierata spensierata | Discorso impegnativo
+Curiosità inquietante | Curiosità divertente
+Atleta da sprint | Atleta da maratona
+Investimento prudente | Investimento azzardato
+Chiacchierata tra sconosciuti | Dialogo tra amici intimi
 Stupido | Geniale
 Bassa qualità | Alta qualità
 Senza alcun talento | Pieno di talento
 Facoltativo | Obbligatorio
 Invendibile | Vendibile
 Cibo asciuttissimo | Cibo molto umido
-Arma molto efficace | Arma quasi inutile
-Un incubo da scrivere | Semplicissimo da scrivere
+Arma quasi inutile | Arma molto efficace
+Parola piena di consonanti | Parola piena di vocali
 Trascurabile | Fondamentale
-Insostituibile | Sostituibile
-Meglio il libro | Meglio il film
-Musicista poco apprezzato | Musicista troppo celebrato
+Sostituibile | Insostituibile
+Storia fatta di parole | Storia fatta di immagini
+Musicista intimista | Musicista da grandi folle
 Ricetta essenziale | Ricetta ricca di ingredienti
 Eseguito male | Eseguito bene
-Tema soporifero | Tema appassionante
+Argomento da biblioteca | Argomento da bar
 Insapore | Saporito
-Tempo buttato | Tempo speso bene
-Esempio da imitare | Esempio da non imitare
-Titolo di studio poco spendibile | Titolo di studio prezioso
+Tempo davanti allo schermo | Tempo all'aria aperta
+Esempio di coraggio | Esempio di prudenza
+Titolo per lavorare subito | Titolo per fare ricerca
 Non igienico | Igienico
-Film in cui Godzilla stonerebbe | Film in cui Godzilla sarebbe perfetto
+Film senza effetti speciali | Film pieno di effetti speciali
 Proibito | Consigliabile
 Fallimento | Capolavoro
-Attività poco apprezzata | Attività troppo osannata
-Interprete poco riconosciuto | Interprete troppo celebrato
-Giorno più detestato dell’anno | Giorno più amato dell’anno
-Parte del corpo superflua | Parte del corpo indispensabile
+Attività per rilassarsi | Attività per sfogarsi
+Interprete da protagonista | Interprete da spalla
+Giorno da passare soli | Giorno da passare insieme
+Parte del corpo delicata | Parte del corpo resistente
 Comico | Drammatico
 Trasmissione inguardabile | Trasmissione imperdibile
-Persona autentica | Persona ipocrita
+Persona ipocrita | Persona autentica
 Non addomesticabile | Addomesticabile
 Per bambini | Per adulti
 Obsoleto | Innovativo
-Difficile da pronunciare | Facile da pronunciare
+Parola dal suono dolce | Parola dal suono aspro
 Canzone triste | Canzone allegra
-Innocuo | Pericoloso
+Pericoloso | Innocuo
 Film triste | Film allegro
 Genere musicale insopportabile | Genere musicale fantastico
 
 # --- copie da altre stazioni (ottobre 2026) ---
 Galleggia | Affonda
 Timido | Coraggioso
-Ordinato | Disordinato
+Disordinato | Ordinato
 Facile da mangiare | Difficile da mangiare
 Cibo che sporca tantissimo | Cibo che non sporca affatto
-Amico | Nemico
-Quasi impossibile sedercisi | Facilissimo sedercisi
-Da tenere a distanza | Da stringere forte
-Nome perfetto per un cane | Nome perfetto per un gatto
+Nemico | Amico
+Seduta da incubo | Seduta da sogno
+Abbraccio che eviti | Abbraccio che cerchi
+Nome da cucciolo | Nome da bestione
 Animale di casa | Animale selvatico
-Animale domestico tipico | Animale domestico stravagante
+Animale da salotto | Animale da grandi spazi
 Esiste davvero | È inventato
 
 [Onde Cerebrali]
 # Concetti astratti e sfumati: per chi vuole ragionarci su
 
-Etico | Immorale
-Arte | Non arte
+Immorale | Etico
+Non considerato arte | Considerato arte
 Scoperto | Inventato
 Naturale | Artificiale
-Razionale | Irrazionale
+Irrazionale | Razionale
 Destino | Caso
-Ordine | Caos
-Utopia | Distopia
+Caos | Ordine
+Distopia | Utopia
 Di massa | Di nicchia
 Concreto | Astratto
 Oggettivo | Soggettivo
 Semplice | Complesso
-Bene comune | Interesse personale
+Interesse personale | Bene comune
 Libertà | Sicurezza
 Tradizione | Progresso
 Corpo | Mente
@@ -390,52 +390,52 @@ Emozione | Ragione
 Individuo | Collettività
 Effimero | Eterno
 Reale | Immaginario
-Verità scomoda | Bugia comoda
+Bugia comoda | Verità scomoda
 Sacro | Profano
 Genialità | Follia
-Coraggio | Incoscienza
-Prudenza | Codardia
-Ambizione sana | Ambizione tossica
-Giustizia | Vendetta
-Perdonabile | Imperdonabile
-Diritto | Privilegio
-Bisogno | Capriccio
-Necessario | Superfluo
+Incoscienza | Coraggio
+Codardia | Prudenza
+Ambizione tossica | Ambizione sana
+Vendetta | Giustizia
+Imperdonabile | Perdonabile
+Privilegio per pochi | Diritto per tutti
+Capriccio | Bisogno
+Superfluo | Necessario
 Talento | Fortuna
-Merito | Raccomandazione
+Raccomandazione | Merito
 Natura | Cultura
 Istinto | Riflessione
 Nostalgico | Visionario
 Conservatore | Rivoluzionario
-Ottimismo | Cinismo
-Amore | Abitudine
-Amicizia | Convenienza
+Cinismo | Ottimismo
+Legame per abitudine | Legame per amore
+Rapporto di convenienza | Amicizia sincera
 Ironia | Sarcasmo
-Satira | Offesa
+Offesa gratuita | Satira intelligente
 Cultura alta | Cultura popolare
-Profondo | Superficiale
-Ispirazione | Plagio
+Superficiale | Profondo
+Plagio | Ispirazione
 Minimalista | Barocco
 Funzionale | Decorativo
-Utile alla società | Dannoso alla società
+Dannoso alla società | Utile alla società
 Lavoro | Vocazione
-Successo | Realizzazione
-Ricchezza | Felicità
-Tempo libero | Tempo perso
+Successo di facciata | Realizzazione autentica
+Ricchezza materiale | Ricchezza affettiva
+Tempo sprecato | Tempo libero ben speso
 Dubbio | Certezza
-Fede | Scienza
-Credibile | Assurdo
+Basato sulla fede | Basato su prove scientifiche
+Assurdo | Credibile
 Teoria | Pratica
-Invecchia bene | Invecchia male
+Invecchia male | Invecchia bene
 Cliché | Inaspettato
 Ovvietà | Paradosso
-Silenzio d'oro | Silenzio imbarazzante
+Silenzio imbarazzante | Silenzio d'oro
 Fallimento | Lezione
 Ricordo | Rimpianto
 Quantità | Qualità
 Arte da museo | Arte di strada
-Maturo | Infantile
-Coerente | Contraddittorio
+Infantile | Maturo
+Contraddittorio | Coerente
 Moderato | Estremo
 Pubblico | Privato
 Egoista | Altruista
@@ -445,43 +445,43 @@ Fatto per amore | Fatto per soldi
 
 # --- carte aggiunte a ottobre 2026 ---
 Persona spietata | Persona molto coscienziosa
-Adrenalinico | Spaventoso
+Spaventoso | Adrenalinico
 Paura completamente assurda | Paura più che giustificata
 Voce di corridoio | Notizia verificata
 Indifeso | Potentissimo
-Rettlineo | Tortuoso
-Arte | Design
+Rettilineo | Tortuoso
+Oggetto decorativo | Oggetto funzionale
 Limitato | Infinito
 Guerrafondaio | Pacifista
 Simile | Identico
 Gestione disastrosa | Gestione impeccabile
-Assurdo | Strano
-Piccolo | Minuscolo
+Insolito | Completamente assurdo
+Minuscolo | Gigantesco
 Dittatura | Democrazia
 Incomprensibile | Comprensibile
-Storicamente importante | Storicamente irrilevante
-Saggio | Intelligente
-Film d'azione | Film d'avventura
-Senza impatto culturale | Di enorme impatto culturale
+Evento ricordato con dolore | Evento ricordato con gioia
+Chi conosce la teoria | Chi impara dall'esperienza
+Film adrenalinico | Film contemplativo
+Opera legata al suo tempo | Opera senza tempo
 Popolare | Elitario
 Eterogeneo | Omogeneo
-Cibo prodotto eticamente | Cibo prodotto senza scrupoli
-Scienza | Pseudoscienza
-Questione circoscritta | Questione mondiale
-Galateo | Buone maniere
+Cibo prodotto senza scrupoli | Cibo prodotto eticamente
+Pseudoscienza | Scienza
+Problema delle campagne | Problema delle metropoli
+Cortesia di facciata | Cortesia spontanea
 Abitudine | Mania
-Tema su cui tutti concordano | Tema che divide tutti
-Probabile | Improbabile
+Tema da risata | Tema da litigio
+Improbabile | Probabile
 Impresa senza scrupoli | Impresa responsabile
-Tagliente | Appuntito
-Prova che Dio non esiste | Prova che Dio esiste
-Bene | Male
-Moderato | Conservatore
-Imparziale | Di parte
-Tradizionalmente femminile | Tradizionalmente maschile
+Serve per pungere | Serve per tagliare
+Mistero che spaventa | Mistero che incuriosisce
+Male | Bene
+Progressista | Conservatore
+Di parte | Imparziale
+Abitudine di una volta | Abitudine nata online
 Tradizionale | Radicale
-Conviene solo a te | Conviene a tutti
-Dono naturale | Capacità sviluppata
+Scelta utile subito | Scelta utile nel tempo
+Dote creativa | Dote organizzativa
 Pacchiano | Raffinato
 
 [Amarcord Radio]
@@ -492,7 +492,7 @@ Gioco da cortile noioso | Gioco da cortile epico
 Giocattolo dimenticato | Giocattolo iconico
 Figurina comune | Figurina introvabile
 Gita scolastica noiosa | Gita scolastica epica
-Compiti delle vacanze leggeri | Compiti delle vacanze infiniti
+Compiti delle vacanze infiniti | Compiti delle vacanze leggeri
 Ricordo d'infanzia sbiadito | Ricordo d'infanzia vivido
 Sogno da bambino realistico | Sogno da bambino impossibile
 Diario segreto noioso | Diario segreto esplosivo
@@ -514,11 +514,11 @@ Motorino sfigato | Motorino leggendario
 Campeggio da incubo | Campeggio da sogno
 Rito da spiaggia noioso | Rito da spiaggia irrinunciabile
 Pranzo della domenica leggero | Pranzo della domenica infinito
-Domanda dei parenti innocua | Domanda dei parenti imbarazzante
+Domanda dei parenti imbarazzante | Domanda dei parenti innocua
 Regola della nonna assurda | Regola della nonna sacrosanta
 Rimedio della nonna inutile | Rimedio della nonna miracoloso
-Ricetta della nonna semplice | Ricetta della nonna segreta
-Mamma italiana tranquilla | Mamma italiana apprensiva
+Ricetta della nonna facilissima | Ricetta della nonna complicatissima
+Mamma italiana apprensiva | Mamma italiana tranquilla
 Gesto italiano offensivo | Gesto italiano affettuoso
 Dialetto incomprensibile | Dialetto chiarissimo
 Parola dialettale brutta | Parola dialettale bellissima
@@ -549,9 +549,9 @@ Cosa da anni '90 | Cosa da anni 2000
 Gioco in scatola dimenticato | Gioco in scatola immortale
 
 # --- nuove carte (ottobre 2026) ---
-Parente che vedi spesso | Parente che vedi ai matrimoni
-Cugino modello | Cugino pecora nera
-Frase da mamma rassicurante | Frase da mamma minacciosa
+Parente che vedi solo ai matrimoni | Parente che vedi sempre
+Cugino pecora nera | Cugino modello
+Frase da mamma minacciosa | Frase da mamma rassicurante
 Bugia dei genitori smascherata subito | Bugia dei genitori creduta per anni
 Aneddoto del nonno verosimile | Aneddoto del nonno leggendario
 Porzione normale | Porzione da nonna
@@ -561,14 +561,14 @@ Cibo che odiavi da bambino | Cibo che amavi da bambino
 Sapore d'estate | Sapore d'inverno
 Gelato confezionato anonimo | Gelato confezionato mitico
 Prodotto da Autogrill inutile | Prodotto da Autogrill irresistibile
-Maestra dolcissima | Maestra terribile
-Compagno di banco tranquillo | Compagno di banco disastroso
-Giustificazione credibile | Giustificazione assurda
+Maestra terribile | Maestra dolcissima
+Compagno di banco disastroso | Compagno di banco tranquillo
+Giustificazione assurda | Giustificazione credibile
 Punizione blanda | Punizione esemplare
-Soprannome affettuoso | Soprannome spietato
-Penitenza leggera | Penitenza crudele
-Pesce d'aprile innocente | Pesce d'aprile da denuncia
-Cartone d'infanzia dolce | Cartone d'infanzia traumatico
+Soprannome spietato | Soprannome affettuoso
+Penitenza crudele | Penitenza leggera
+Pesce d'aprile da denuncia | Pesce d'aprile innocente
+Cartone d'infanzia traumatico | Cartone d'infanzia dolce
 Sigla dimenticata | Sigla che sai a memoria
 Suono anni '90 dimenticato | Suono anni '90 inconfondibile
 Aggeggio anni '90 superato | Aggeggio anni '90 rimpianto
@@ -585,9 +585,9 @@ Usanza italiana normale | Usanza italiana inspiegabile
 Si fa al mare | Si fa in montagna
 Cibo da merenda | Cibo da cena
 Cartone per piccoli | Cartone per grandi
-Studente modello | Studente pessimo
-Caramella disgustosa | Caramella deliziosa
-Materia facilissima | Materia complicatissima
+Studente pessimo | Studente modello
+Caramella da scherzo | Caramella da premio
+Materia da studiare sui libri | Materia da provare in laboratorio
 Hobby da nonni | Hobby da ragazzi
 Da città | Da campagna
 Fuori moda | Di moda
@@ -599,9 +599,9 @@ Cosa da boomer | Cosa da Gen Z
 Fatto in casa | Industriale
 Piatto del nord | Piatto del sud
 Superstizione assurda | Superstizione sensata
-Anni '80 | Anni '90
+Nostalgia analogica | Nostalgia digitale
 Volgare | Di classe
-Personaggio animato pessimo | Personaggio animato fantastico
+Personaggio animato tenero | Personaggio animato inquietante
 Tradizione | Progresso
 Nostalgico | Visionario
 Ricordo | Rimpianto
@@ -609,7 +609,7 @@ Ricordo | Rimpianto
 [8-Bit FM]
 # Per nerd: videogiochi, fumetti, anime, giochi di ruolo, fantascienza e tecnologia
 
-Videogioco rilassante | Videogioco frustrante
+Videogioco frustrante | Videogioco rilassante
 Boss finale ridicolo | Boss finale leggendario
 Console dimenticata | Console leggendaria
 Grafica pixellosa | Grafica realistica
@@ -634,95 +634,95 @@ Classe da GdR debole | Classe da GdR fortissima
 Tiro di dado disastroso | Tiro di dado critico
 Gioco da tavolo per principianti | Gioco da tavolo per esperti
 Incantesimo inutile | Incantesimo potentissimo
-Creatura magica innocua | Creatura magica letale
-Mondo immaginario da visitare | Mondo immaginario da evitare
+Creatura magica letale | Creatura magica innocua
+Mondo immaginario da evitare | Mondo immaginario da visitare
 Cattivo dimenticabile | Cattivo iconico
 Finale deludente | Finale perfetto
 Sequel inutile | Sequel migliore dell'originale
-Saga da recuperare | Saga da abbandonare
+Saga da abbandonare | Saga da recuperare
 Trama semplice | Trama complicatissima
 Personaggio secondario inutile | Personaggio secondario che ruba la scena
 Personaggio da odiare | Personaggio da amare
 Teoria dei fan assurda | Teoria dei fan geniale
-Spoiler innocuo | Spoiler imperdonabile
+Spoiler imperdonabile | Spoiler innocuo
 Anime per tutti | Anime per veri fan
 Fumetto per bambini | Fumetto per adulti
 Costume da supereroe ridicolo | Costume da supereroe iconico
 Cosplay facile | Cosplay difficilissimo
 Collezione normale | Collezione ossessiva
 Passione nerd moderata | Passione nerd estrema
-Gergo nerd comprensibile | Gergo nerd incomprensibile
-Robot amichevole | Robot minaccioso
-Alieno pacifico | Alieno invasore
-Pianeta abitabile | Pianeta infernale
+Gergo nerd incomprensibile | Gergo nerd comprensibile
+Robot minaccioso | Robot amichevole
+Alieno invasore | Alieno pacifico
+Pianeta infernale | Pianeta abitabile
 Astronave scassata | Astronave da sogno
-Paradosso temporale innocuo | Paradosso temporale catastrofico
+Paradosso temporale catastrofico | Paradosso temporale innocuo
 Tecnologia impossibile | Tecnologia in arrivo
-IA amichevole | IA inquietante
-Codice leggibile | Codice incomprensibile
-Bug innocuo | Bug catastrofico
+IA inquietante | IA amichevole
+Codice incomprensibile | Codice leggibile
+Bug catastrofico | Bug innocuo
 Password debole | Password inattaccabile
 Meme vecchio | Meme fresco
-Controller comodo | Controller scomodo
+Controller scomodo | Controller comodo
 Gioco per console | Gioco per computer
 Mappa minuscola | Mappa sterminata
-Armatura brutta ma utile | Armatura bella ma inutile
+Armatura fragilissima | Armatura indistruttibile
 Personaggio muto | Personaggio logorroico
-Gioco da maratona notturna | Gioco da cinque minuti
+Gioco da cinque minuti | Gioco da maratona notturna
 
 # --- nuove carte (ottobre 2026) ---
 Power-up deludente | Power-up devastante
-Checkpoint ovunque | Checkpoint introvabili
-Gioco accessibile | Gioco per masochisti
-Gioco onesto | Gioco mangiasoldi
+Checkpoint introvabili | Checkpoint ovunque
+Gioco per masochisti | Gioco accessibile
+Gioco mangiasoldi | Gioco onesto
 Si molla subito | Ancora una partita!
-Gioco che unisce | Gioco che distrugge amicizie
+Gioco che distrugge amicizie | Gioco che unisce
 Hype tradito | Hype ripagato
 Lore inesistente | Lore sterminata
 Segreto facile da trovare | Segreto introvabile
 Effetto sonoro fastidioso | Effetto sonoro iconico
-Cheat code innocuo | Cheat code che rompe il gioco
-NPC prezioso | NPC insopportabile
+Cheat code che rompe il gioco | Cheat code innocuo
+NPC insopportabile | NPC prezioso
 Nemico che non torna più | Nemico che torna sempre
 Personaggio da salvare | Personaggio che salva tutti
-Master generoso | Master sadico
-Legale buono | Caotico malvagio
+Master sadico | Master generoso
+Caotico malvagio | Legale buono
 Forza bruta | Pura magia
 Arma medievale | Arma futuristica
-Rifugio anti-zombie sicuro | Rifugio anti-zombie disastroso
+Rifugio anti-zombie disastroso | Rifugio anti-zombie sicuro
 Trasformazione lampo | Trasformazione infinita
 Pettinatura normale | Pettinatura da anime
 Manga breve | Manga infinito
-Identità segreta credibile | Identità segreta ridicola
-Piano del cattivo sensato | Piano del cattivo assurdo
+Identità segreta ridicola | Identità segreta credibile
+Piano del cattivo assurdo | Piano del cattivo sensato
 Poteri di nascita | Solo gadget e soldi
-Fandom tranquillo | Fandom tossico
+Fandom tossico | Fandom tranquillo
 Sapere nerd inutile | Sapere nerd utilissimo
-Fantascienza plausibile | Fantascienza assurda
+Fantascienza assurda | Fantascienza plausibile
 Gadget sci-fi superfluo | Gadget sci-fi da avere subito
 Tecnologia fragile | Tecnologia indistruttibile
 Trucco tech placebo | Trucco tech infallibile
-Scena di hacking realistica | Scena di hacking ridicola
+Scena di hacking ridicola | Scena di hacking realistica
 Postazione sobria | Postazione piena di LED
 
 # --- copie da altre stazioni (ottobre 2026) ---
-Pokémon fortissimo | Pokémon debolissimo
+Pokémon debolissimo | Pokémon fortissimo
 Supereroe debole | Supereroe fortissimo
-Superpotere inutile | Superpotere straordinario
-Invenzione superflua | Invenzione rivoluzionaria
+Superpotere discreto | Superpotere appariscente
+Invenzione nostalgica | Invenzione futuristica
 App inutile | App indispensabile
-Eroe | Cattivo
+Cattivo | Eroe
 Tecnologia vecchia | Tecnologia futuristica
-Divinità dai poteri limitati | Divinità dai poteri sconfinati
-Facile da togliere di mezzo | Difficile da togliere di mezzo
-Conta soprattutto la fortuna | Conta soprattutto la bravura
-Star Wars | Star Trek
-Complicato da utilizzare | Semplicissimo da utilizzare
+Divinità vendicativa | Divinità protettrice
+Nemico che scappa | Nemico che ti insegue
+Sfida da preparare | Sfida da improvvisare
+Fantascienza riflessiva | Fantascienza d'azione
+Tecnologia intuitiva | Tecnologia da esperti
 Grifondoro | Serpeverde
-Gioco sottovalutato | Gioco sopravvalutato
-Epoca da evitare viaggiando nel tempo | Epoca da visitare viaggiando nel tempo
+Gioco silenzioso | Gioco chiassoso
+Epoca per avventurieri | Epoca per pantofolai
 Fantasy | Fantascienza
-Utopia | Distopia
+Distopia | Utopia
 Di massa | Di nicchia
 Reale | Immaginario
 Indifeso | Potentissimo
@@ -739,7 +739,7 @@ Colpo di scena prevedibile | Colpo di scena sconvolgente
 Inizio lento | Inizio folgorante
 Film troppo corto | Film troppo lungo
 Film da popcorn | Film da festival
-Oscar meritato | Oscar rubato
+Oscar rubato | Oscar meritato
 Cameo dimenticabile | Cameo leggendario
 Effetti speciali ridicoli | Effetti speciali spettacolari
 Horror che fa ridere | Horror che terrorizza
@@ -755,7 +755,7 @@ Genere di film sottovalutato | Genere di film sopravvalutato
 Film da primo appuntamento sbagliato | Film da primo appuntamento perfetto
 Maratona di film stancante | Maratona di film epica
 Posto al cinema pessimo | Posto al cinema perfetto
-Vicino di poltrona educato | Vicino di poltrona insopportabile
+Vicino di poltrona insopportabile | Vicino di poltrona educato
 Snack da cinema deludente | Snack da cinema irrinunciabile
 Serie da mollare subito | Serie da divorare
 Episodio di riempimento | Episodio cult
@@ -770,14 +770,14 @@ Star antipatica | Star simpatica
 Coppia vip improbabile | Coppia vip perfetta
 Scandalo vip innocuo | Scandalo vip epocale
 Carriera finita presto | Carriera infinita
-Influencer utile | Influencer inutile
+Influencer inutile | Influencer utile
 Concerto da dimenticare | Concerto indimenticabile
 Band da garage | Band da stadio
 Album flop | Album capolavoro
 Ritornello che non ricordi | Ritornello che non ti esce dalla testa
 Videoclip dimenticabile | Videoclip iconico
 Canzone da doccia | Canzone da stadio
-Testo di canzone profondo | Testo di canzone senza senso
+Testo di canzone senza senso | Testo di canzone profondo
 Assolo noioso | Assolo leggendario
 Strumento facile da suonare | Strumento difficilissimo
 Duetto improbabile | Duetto perfetto
@@ -792,60 +792,60 @@ Telefilm anni '90 dimenticato | Telefilm anni '90 indimenticabile
 # --- nuove carte (ottobre 2026) ---
 Basta una volta | Da rivedere all'infinito
 Da vedere al cinema | Da vedere sul divano
-Da vedere coi genitori | Imbarazzante coi genitori
+Imbarazzante coi genitori | Da vedere coi genitori
 Zero lacrime | Fazzoletti finiti
 Piace alla critica | Piace al pubblico
 Finale aperto | Finale chiuso
 Scena post-credit inutile | Scena post-credit fondamentale
-Ultima stagione all'altezza | Ultima stagione disastrosa
+Ultima stagione disastrosa | Ultima stagione all'altezza
 Miniserie | Serie infinita
-Adattamento fedelissimo | Adattamento irriconoscibile
-Casting perfetto | Casting sbagliatissimo
+Adattamento irriconoscibile | Adattamento fedelissimo
+Casting sbagliatissimo | Casting perfetto
 Attore monoespressivo | Attore trasformista
 Recitazione sobria | Recitazione sopra le righe
-Cattivo da odiare | Cattivo per cui tifi
+Cattivo da odiare | Cattivo per cui fai il tifo
 Film estivo | Film natalizio
-Talk show pacato | Talk show da rissa
+Talk show da rissa | Talk show pacato
 Vincitore di talent dimenticato | Vincitore di talent diventato star
 Star riservata | Star esibizionista
-Look da red carpet elegante | Look da red carpet assurdo
+Look da red carpet assurdo | Look da red carpet elegante
 Canzone da matrimonio | Canzone da funerale
-Canzone d'amore | Canzone di rabbia
+Canzone di rabbia | Canzone d'amore
 Da cantare a squarciagola | Da ascoltare in silenzio
 Musica per dormire | Musica per pogare
 Playback spudorato | Live impeccabile
 Voce naturale | Autotune a palla
 
 # --- copie da altre stazioni (ottobre 2026) ---
-Fa ridere | Fa piangere
+Fa piangere | Fa ridere
 Cartone per piccoli | Cartone per grandi
-Personaggio buono | Personaggio cattivo
+Personaggio cattivo | Personaggio buono
 Film per bambini | Film per adulti
 Film brutto | Film capolavoro
-Film sottovalutato | Film sopravvalutato
+Film da vedere da soli | Film da vedere in gruppo
 Film triste | Film allegro
 Comico | Drammatico
-Meglio il libro | Meglio il film
-Film in cui Godzilla stonerebbe | Film in cui Godzilla sarebbe perfetto
-Attore incapace | Attore eccezionale
-Interprete poco riconosciuto | Interprete troppo celebrato
-Celebrità di un momento | Star di fama mondiale
+Storia fatta di parole | Storia fatta di immagini
+Film senza effetti speciali | Film pieno di effetti speciali
+Attore da commedia | Attore da tragedia
+Interprete da protagonista | Interprete da spalla
+Famoso senza meriti | Famoso per talento
 Senza alcun talento | Pieno di talento
 Programma trash | Programma colto
 Trasmissione inguardabile | Trasmissione imperdibile
 Canzone brutta | Canzone bellissima
 Canzone triste | Canzone allegra
 Hit di una sola estate | Classico senza tempo
-Musicista poco apprezzato | Musicista troppo celebrato
+Musicista intimista | Musicista da grandi folle
 Genere musicale insopportabile | Genere musicale fantastico
-Star Wars | Star Trek
+Fantascienza riflessiva | Fantascienza d'azione
 Grifondoro | Serpeverde
 Fantasy | Fantascienza
-Film d'azione | Film d'avventura
-Arte | Non arte
+Film adrenalinico | Film contemplativo
+Non considerato arte | Considerato arte
 Di massa | Di nicchia
-Ispirazione | Plagio
-Invecchia bene | Invecchia male
+Plagio | Ispirazione
+Invecchia male | Invecchia bene
 Autentico | Costruito
 
 [Fuori Orario]
@@ -853,107 +853,107 @@ Autentico | Costruito
 
 Riunione inutile | Riunione indispensabile
 Presentazione noiosa | Presentazione brillante
-Capo comprensivo | Capo tiranno
-Messaggio del capo innocuo | Messaggio del capo terrificante
-Commento sul capo innocuo | Commento sul capo da licenziamento
+Capo tiranno | Capo comprensivo
+Messaggio del capo terrificante | Messaggio del capo innocuo
+Commento sul capo da licenziamento | Commento sul capo innocuo
 Situazione in ascensore imbarazzante | Situazione in ascensore normale
-Regalo per il capo azzeccato | Regalo per il capo imbarazzante
+Regalo per il capo imbarazzante | Regalo per il capo azzeccato
 Leccapiedi discreto | Leccapiedi sfacciato
 Collega silenzioso | Collega logorroico
-Pettegolezzo d'ufficio innocuo | Pettegolezzo d'ufficio esplosivo
-Flirt in ufficio innocuo | Flirt in ufficio pericoloso
+Pettegolezzo d'ufficio esplosivo | Pettegolezzo d'ufficio innocuo
+Flirt in ufficio pericoloso | Flirt in ufficio innocuo
 Storia tra colleghi segreta | Storia tra colleghi nota a tutti
 Firma email sobria | Firma email esagerata
-Chat di lavoro tranquilla | Chat di lavoro infernale
-Lunedì mattina sopportabile | Lunedì mattina infernale
-Venerdì pomeriggio produttivo | Venerdì pomeriggio inutile
+Chat di lavoro infernale | Chat di lavoro tranquilla
+Lunedì mattina infernale | Lunedì mattina sopportabile
+Venerdì pomeriggio inutile | Venerdì pomeriggio produttivo
 Pausa caffè breve | Pausa caffè infinita
 Mensa aziendale deludente | Mensa aziendale stellata
-Furto dal frigo perdonabile | Furto dal frigo imperdonabile
-Scrivania ordinata | Scrivania esplosa
-Stampante collaborativa | Stampante diabolica
-Open space silenzioso | Open space infernale
+Furto dal frigo imperdonabile | Furto dal frigo perdonabile
+Scrivania esplosa | Scrivania ordinata
+Stampante diabolica | Stampante collaborativa
+Open space infernale | Open space silenzioso
 Pendolarismo breve | Pendolarismo infinito
-Ritardo giustificabile | Ritardo ingiustificabile
-Malattia credibile | Malattia inventata
-Scadenza comoda | Scadenza impossibile
-Multitasking riuscito | Multitasking disastroso
-Obiettivo aziendale realistico | Obiettivo aziendale delirante
-Team building divertente | Team building imbarazzante
+Ritardo ingiustificabile | Ritardo giustificabile
+Malattia inventata | Malattia credibile
+Scadenza impossibile | Scadenza comoda
+Multitasking disastroso | Multitasking riuscito
+Obiettivo aziendale delirante | Obiettivo aziendale realistico
+Team building imbarazzante | Team building divertente
 Cena aziendale noiosa | Cena aziendale leggendaria
 Festa aziendale sobria | Festa aziendale fuori controllo
 Aperitivo post-lavoro sobrio | Aperitivo post-lavoro epico
 Look da ufficio sobrio | Look da ufficio audace
 Colloquio di lavoro disastroso | Colloquio di lavoro perfetto
 Domanda da colloquio facile | Domanda da colloquio impossibile
-Primo giorno di lavoro tranquillo | Primo giorno di lavoro traumatico
+Primo giorno di lavoro traumatico | Primo giorno di lavoro tranquillo
 Aumento ridicolo | Aumento da sogno
-Straordinario pagato | Straordinario gratis
-Promozione meritata | Promozione immeritata
-Ferie vere | Ferie col portatile
-Reclamo ragionevole | Reclamo assurdo
+Straordinario gratis | Straordinario pagato
+Promozione immeritata | Promozione meritata
+Ferie col portatile | Ferie vere
+Reclamo assurdo | Reclamo ragionevole
 Dimissioni educate | Dimissioni plateali
-Licenziamento meritato | Licenziamento ingiusto
-Collega che fa tutto | Collega che non fa niente
+Licenziamento ingiusto | Licenziamento meritato
+Collega che non fa niente | Collega che fa tutto
 Badge dimenticato | Badge perso per sempre
-Lavoro dei sogni da bambino | Lavoro attuale
+Lavoro che ti pesa | Lavoro che ti entusiasma
 
 # --- copie da altre stazioni (ottobre 2026) ---
 Mestiere facile | Mestiere difficile
 Lavoro noioso | Lavoro da sogno
 Lavoro manuale | Lavoro intellettuale
-Mestiere sottopagato | Mestiere strapagato
-Mestiere sicuro | Mestiere pericoloso
+Lavoro a orari fissi | Lavoro sempre reperibile
+Lavoro da scrivania | Lavoro in movimento
 Professione sopravvalutata | Professione sottovalutata
-Titolo di studio poco spendibile | Titolo di studio prezioso
+Titolo per lavorare subito | Titolo per fare ricerca
 Si fa al lavoro | Si fa in vacanza
-Rilassante | Stressante
+Stressante | Rilassante
 Pigrissimo | Iperattivo
-Puntuale | Ritardatario
+Ritardatario | Puntuale
 Inaffidabile | Affidabile
-Insostituibile | Sostituibile
-Persona autentica | Persona ipocrita
+Sostituibile | Insostituibile
+Persona ipocrita | Persona autentica
 Abbigliamento informale | Abbigliamento elegante
 Fisso | Mobile
 Facoltativo | Obbligatorio
-Tempo buttato | Tempo speso bene
+Tempo davanti allo schermo | Tempo all'aria aperta
 Regola stupida | Regola sacrosanta
 App inutile | App indispensabile
-Merito | Raccomandazione
+Raccomandazione | Merito
 Lavoro | Vocazione
-Ambizione sana | Ambizione tossica
-Successo | Realizzazione
+Ambizione tossica | Ambizione sana
+Successo di facciata | Realizzazione autentica
 Fallimento | Lezione
-Amicizia | Convenienza
+Rapporto di convenienza | Amicizia sincera
 Persona spietata | Persona molto coscienziosa
 Impresa senza scrupoli | Impresa responsabile
 
 # --- nuove carte (ottobre 2026, seconda tornata) ---
 Collega ladro di meriti | Collega generoso
-Stipendio puntuale | Stipendio in ritardo
-Nota spese onesta | Nota spese creativa
-Valutazione serena | Valutazione da incubo
+Stipendio in ritardo | Stipendio puntuale
+Nota spese falsificata | Nota spese onesta
+Valutazione da incubo | Valutazione serena
 Telefonata discreta | Telefonata in vivavoce
-Gaffe in call perdonabile | Gaffe in call leggendaria
+Gaffe in call imbarazzante | Gaffe in call esilarante
 Caffè d'ufficio imbevibile | Caffè d'ufficio divino
-Vicino di scrivania ideale | Vicino di scrivania da incubo
-Formazione aziendale utile | Formazione aziendale inutile
-Password sicura | Password imbarazzante
+Vicino di scrivania da incubo | Vicino di scrivania ideale
+Formazione aziendale inutile | Formazione aziendale utile
+Password vulnerabile | Password sicura
 Ultimo giorno commovente | Ultimo giorno liberatorio
-Pranzo in ufficio discreto | Pranzo in ufficio puzzolente
-Lavoro di squadra vero | Lavoro di squadra finto
-Collega passivo-aggressivo | Collega ostile
-Scusa per darsi malati credibile | Scusa per darsi malati falsa
-Bugia innocente sul curriculum | Bugia imperdonabile sul curriculum
+Pranzo in ufficio puzzolente | Pranzo in ufficio discreto
+Lavoro di squadra finto | Lavoro di squadra vero
+Collega che ti ostacola | Collega che ti sostiene
+Scusa per darsi malati assurda | Scusa per darsi malati credibile
+Bugia imperdonabile sul curriculum | Bugia innocente sul curriculum
 Segreto aziendale insignificante | Segreto aziendale scandaloso
-Errore professionale perdonabile | Errore professionale da licenziamento
-Cliente maleducato | Cliente da denuncia
-Umiliazione del capo insignificante | Umiliazione del capo pesante
-Motivo valido per sabotare un collega | Motivo ridicolo per sabotare un collega
+Errore professionale da licenziamento | Errore professionale perdonabile
+Cliente da incubo | Cliente modello
+Capo che ti umilia | Capo che ti valorizza
+Motivo ridicolo per fare un reclamo | Motivo valido per fare un reclamo
 Email passivo-aggressiva | Email che dichiara guerra
 Favoritismo lieve | Favoritismo netto
-Frase innocua in una riunione | Frase che ti rovina in una riunione
-Accettabile in smart working | Inaccettabile in smart working
+Frase che ti rovina in una riunione | Frase innocua in una riunione
+Inaccettabile in smart working | Accettabile in smart working
 Messaggio di dimissioni normale | Messaggio di dimissioni incendiario
 
 
@@ -971,90 +971,90 @@ Bara economica | Bara di lusso
 Testamento prevedibile | Testamento scioccante
 Reincarnazione sfigata | Reincarnazione da sogno
 Aldilà noioso | Aldilà divertente
-Fantasma innocuo | Fantasma terrificante
-Casa infestata accogliente | Casa infestata invivibile
-Cimitero tranquillo | Cimitero inquietante
-Cantina accogliente | Cantina da film horror
-Seduta spiritica divertente | Seduta spiritica da incubo
+Fantasma terrificante | Fantasma innocuo
+Casa infestata invivibile | Casa infestata accogliente
+Cimitero inquietante | Cimitero tranquillo
+Cantina da film horror | Cantina accogliente
+Seduta spiritica da incubo | Seduta spiritica divertente
 Oggetto antico innocuo | Oggetto antico maledetto
 Profezia ottimista | Profezia catastrofica
-Coincidenza innocua | Coincidenza inquietante
-Rumore notturno innocuo | Rumore notturno terrificante
+Coincidenza inquietante | Coincidenza innocua
+Rumore notturno terrificante | Rumore notturno innocuo
 Incubo leggero | Incubo terrificante
-Bambola tenera | Bambola inquietante
-Clown simpatico | Clown terrificante
-Strega simpatica | Strega malvagia
-Vampiro affascinante | Vampiro ripugnante
+Bambola inquietante | Bambola tenera
+Clown terrificante | Clown simpatico
+Strega malvagia | Strega simpatica
+Vampiro ripugnante | Vampiro affascinante
 Zombie lento | Zombie velocissimo
 Rifugio anti-zombie pessimo | Rifugio anti-zombie perfetto
 Fine del mondo noiosa | Fine del mondo spettacolare
-Esperimento innocuo | Esperimento da scienziato pazzo
-Insetto innocuo | Insetto da incubo
-Visita dal dentista tranquilla | Visita dal dentista da incubo
-Volo tranquillo | Volo da incubo
+Esperimento da scienziato pazzo | Esperimento innocuo
+Insetto da incubo | Insetto innocuo
+Visita dal dentista da incubo | Visita dal dentista tranquilla
+Volo da incubo | Volo tranquillo
 Disgrazia sopportabile | Disgrazia biblica
-Battuta macabra innocua | Battuta macabra imperdonabile
-Leggenda metropolitana credibile | Leggenda metropolitana assurda
+Battuta macabra imperdonabile | Battuta macabra innocua
+Leggenda metropolitana assurda | Leggenda metropolitana credibile
 Cena con delitto noiosa | Cena con delitto avvincente
 Alibi debole | Alibi di ferro
-Faccia da innocente | Faccia da colpevole
+Faccia da colpevole | Faccia da innocente
 Testimone inaffidabile | Testimone credibile
 Giallo prevedibile | Giallo imprevedibile
 Indagine banale | Indagine impossibile
-Vicino di casa normale | Vicino di casa sospetto
+Vicino di casa sospetto | Vicino di casa normale
 Costume di Halloween ridicolo | Costume di Halloween terrificante
 Storia di paura per bambini | Storia di paura da non dormire
-Gatto nero porta fortuna | Gatto nero porta sfortuna
-Specchio rotto innocuo | Specchio rotto catastrofico
+Gatto nero porta sfortuna | Gatto nero porta fortuna
+Specchio rotto catastrofico | Specchio rotto innocuo
 Mostro mitologico ridicolo | Mostro mitologico terrificante
-Sorpresa piacevole | Sorpresa agghiacciante
-Ospite che non se ne va mai | Ospite che sparisce nel nulla
-Cosa da trovare in soffitta innocua | Cosa da trovare in soffitta inquietante
+Sorpresa agghiacciante | Sorpresa piacevole
+Ospite invadente | Ospite graditissimo
+Cosa da trovare in soffitta inquietante | Cosa da trovare in soffitta innocua
 
 # --- copie da altre stazioni (ottobre 2026) ---
-Posto sicuro | Posto pericoloso
-Da tenere a distanza | Da stringere forte
+Posto pericoloso | Posto sicuro
+Abbraccio che eviti | Abbraccio che cerchi
 Superstizione assurda | Superstizione sensata
 Morte lenta | Morte improvvisa
 Inutile in un'apocalisse zombie | Utile in un'apocalisse zombie
-Cibo schifoso | Cibo macabro
-Mostro tradizionale | Aberrazione folle
-Adrenalinico | Spaventoso
+Cibo da film horror | Cibo da ristorante stellato
+Mostro da incubo | Mostro da fiaba
+Spaventoso | Adrenalinico
 Paura completamente assurda | Paura più che giustificata
 
 
 # --- nuove carte (ottobre 2026, seconda tornata) ---
 Scheletro nell'armadio piccolo | Scheletro nell'armadio enorme
 Presentimento sbagliato | Presentimento azzeccato
-Esorcismo riuscito | Esorcismo fallito
+Esorcismo fallito | Esorcismo riuscito
 Lupo mannaro tenero | Lupo mannaro feroce
 Delitto maldestro | Delitto perfetto
 Scena del crimine pulita | Scena del crimine splatter
 Piano di fuga disastroso | Piano di fuga geniale
-Telefonata anonima innocua | Telefonata anonima minacciosa
+Telefonata anonima minacciosa | Telefonata anonima innocua
 Stanza segreta deludente | Stanza segreta agghiacciante
-Nebbia romantica | Nebbia da film horror
-Bosco incantato | Bosco maledetto
-Animale impagliato elegante | Animale impagliato inquietante
-Rimedio della nonna efficace | Rimedio della nonna letale
-Museo delle cere carino | Museo delle cere inquietante
-Sonnambulo innocuo | Sonnambulo pericoloso
-Medium credibile | Medium ciarlatano
-Oroscopo rassicurante | Oroscopo minaccioso
-Tè della suocera innocuo | Tè della suocera sospetto
+Nebbia da film horror | Nebbia romantica
+Bosco maledetto | Bosco incantato
+Animale impagliato inquietante | Animale impagliato elegante
+Rimedio della nonna letale | Rimedio della nonna efficace
+Museo delle cere inquietante | Museo delle cere carino
+Sonnambulo pericoloso | Sonnambulo innocuo
+Medium ciarlatano | Medium credibile
+Oroscopo minaccioso | Oroscopo rassicurante
+Tè della suocera sospetto | Tè della suocera innocuo
 Persona che non merita di morire | Persona che merita di morire
-Scherzo macabro innocuo | Scherzo macabro imperdonabile
-Cosa da dire a un condannato a morte | Cosa da non dire a un condannato a morte
-Ritrovamento di un cadavere poco traumatico | Ritrovamento di un cadavere devastante
-Eredità che risolve la vita | Eredità che rovina la vita
-Patto col diavolo vantaggioso | Patto col diavolo catasfrofico
-Maledizione gestibile | Maledizione ingestibile
-Segreto che puoi portare nella tomba | Segreto che ti perseguiterà anche nella tomba
-Miglior alleato in un'apocalisse zombie | Peggior alleato in un'apocalisse zombie
-Esperimento medico comprensibile | Esperimento medico completamente disumano
+Scherzo macabro imperdonabile | Scherzo macabro innocuo
+Frase crudele a un condannato | Frase di conforto a un condannato
+Ritrovamento di un cadavere devastante | Ritrovamento di un cadavere poco traumatico
+Eredità che rovina la vita | Eredità che risolve la vita
+Patto col diavolo catastrofico | Patto col diavolo vantaggioso
+Maledizione ingestibile | Maledizione gestibile
+Segreto che ti tormenta | Segreto che puoi dimenticare
+Peggior alleato in un'apocalisse zombie | Miglior alleato in un'apocalisse zombie
+Esperimento medico completamente disumano | Esperimento medico comprensibile
 Motivo banale per finire all'inferno | Motivo imperdonabile per finire all'inferno
-Epitafio rispettoso | Epitafio irrispettoso
-Tragedia comunicata con tatto | Tragedia comunicata con cinismo
+Epitaffio irrispettoso | Epitaffio rispettoso
+Tragedia comunicata con cinismo | Tragedia comunicata con tatto
 Minaccia soprannaturale trascurabile | Minaccia soprannaturale apocalittica
 Errore medico senza conseguenze | Errore medico da prima pagina
 
@@ -1063,13 +1063,13 @@ Errore medico senza conseguenze | Errore medico da prima pagina
 
 Appuntamento flop | Appuntamento da sogno
 Abbordaggio pessimo | Abbordaggio geniale
-Per niente sexy | Sexyssimo
+Per niente sexy | Irresistibilmente sexy
 Mestiere poco sexy | Mestiere sexy
 Accento poco sexy | Accento sexy
 Cocktail leggero | Cocktail micidiale
-Postumi leggeri | Postumi devastanti
-Messaggio innocuo | Messaggio da ubriachi
-Idea da sobri | Idea da ubriachi
+Postumi devastanti | Postumi leggeri
+Messaggio di cui ti penti | Messaggio che conquista
+Pessima idea da ubriachi | Ottima idea da sobri
 Peccato veniale | Peccato mortale
 Fantasia innocente | Fantasia proibita
 Da dire a cena | Da dire a letto
@@ -1081,23 +1081,23 @@ Look da divano | Look da seduzione
 Festa noiosa | Festa senza limiti
 Vizio accettabile | Vizio inconfessabile
 Imbarazzo lieve | Imbarazzo cosmico
-Domanda innocente | Domanda indiscreta
+Domanda indiscreta | Domanda innocente
 Gossip noioso | Gossip succoso
 Red flag | Green flag
 Profilo inquietante | Profilo irresistibile
 Foto imbarazzante | Foto da profilo
-Da raccontare a mamma | Da non raccontare a mamma
-Utilizzabile come dildo |  Inutilizzabile come dildo
+Da non raccontare a mamma | Da raccontare a mamma
+Inutilizzabile come dildo | Utilizzabile come dildo
 Parolaccia leggera | Parolaccia pesante
 Battuta pulita | Battuta sporca
-Gelosia sana | Gelosia tossica
-Locale squallido | Locale esclusivo
-Single felice | Single disperato
-Matrimonio da favola | Matrimonio da incubo
+Gelosia tossica | Gelosia sana
+Locale squallido | Locale da sogno
+Single disperato | Single felice
+Matrimonio da incubo | Matrimonio da favola
 Tatuaggio da pentirsi | Tatuaggio azzeccato
 Posizione comoda | Posizione acrobatica
 Detto ad alta voce | Pensato e mai detto
-Collega con cui flirteresti | Collega con cui non usciresti mai
+Collega con cui non usciresti mai | Collega con cui flirteresti
 Bacio da dimenticare | Bacio leggendario
 Scusa per non uscire | Scusa per restare
 Weekend tranquillo | Weekend da raccontare
@@ -1105,20 +1105,20 @@ Vergogna passeggera | Vergogna eterna
 
 # --- carte aggiunte a ottobre 2026 ---
 Complimento inappropriato | Complimento di classe
-Appuntamento sotto controllo | Appuntamento fuori controllo
+Appuntamento fuori controllo | Appuntamento sotto controllo
 Appuntamento al risparmio | Appuntamento senza badare a spese
 Esperienza da dimenticare | Esperienza da raccontare a tutti
 
 # --- copie da altre stazioni (ottobre 2026) ---
-Cibo adatto a un appuntamento | Cibo disastroso a un appuntamento
+Cibo disastroso a un appuntamento | Cibo adatto a un appuntamento
 Da fare da soli | Da fare in compagnia
-Amore | Abitudine
+Legame per abitudine | Legame per amore
 Fatto per amore | Fatto per soldi
-Silenzio d'oro | Silenzio imbarazzante
+Silenzio imbarazzante | Silenzio d'oro
 
 # --- nuove carte (ottobre 2026, seconda tornata) ---
 Chimica zero | Chimica esplosiva
-Rottura civile | Rottura drammatica
+Rottura drammatica | Rottura civile
 Lingerie comoda | Lingerie audace
 Musica d'atmosfera ridicola | Musica d'atmosfera azzeccata
 Dichiarazione d'amore goffa | Dichiarazione d'amore epica
@@ -1129,43 +1129,43 @@ Doppio senso involontario | Doppio senso voluto
 Rientro all'alba silenzioso | Rientro all'alba rumoroso
 Coppia riservata | Coppia appiccicosa
 Conto alla romana | Conto offerto
-Nomignolo tenero | Nomignolo imbarazzante
-Addio al nubilato tranquillo | Addio al nubilato scandaloso
+Nomignolo imbarazzante | Nomignolo tenero
+Addio al nubilato imbarazzante | Addio al nubilato memorabile
 Cotta passeggera | Amore eterno
-Fetish socialmente accettato | Fetish socialmente imbarazzante
-Luogo eccitante per fare sesso | Luogo assurdo per fare sesso
-Messaggio da mandare a un ex | Messaggio da non mandare mai a un ex
-Motivo perdonabile per tradire | Motivo imperdonabile per tradire
-Bugia innocente sulla propria vita sessuale | Bugia enorme sulla propria vita sessuale
-Fetish facile da confessare | Fetish difficile da confessare
-Frase sexy da dire durante il sesso | Frase terribile da dire durante il sesso
-Buon amante | Pessimo amante
-Motivo accettabile per ghostare | Motivo imperdonabile per ghostare
-Segreto confessabile al partner | Segreto da portare nella tomba
+Fetish comune | Fetish insolito
+Luogo assurdo per fare sesso | Luogo eccitante per fare sesso
+Messaggio da non mandare mai a un ex | Messaggio da mandare a un ex
+Motivo imperdonabile per tradire | Motivo perdonabile per tradire
+Bugia enorme sulla propria vita sessuale | Bugia innocente sulla propria vita sessuale
+Fetish difficile da confessare | Fetish facile da confessare
+Frase terribile da dire durante il sesso | Frase sexy da dire durante il sesso
+Pessimo amante | Buon amante
+Motivo imperdonabile per ghostare | Motivo accettabile per ghostare
+Segreto da portare nella tomba | Segreto confessabile al partner
 Esperienza sessuale convenzionale | Esperienza sessuale estrema
-Modo elegante di provarci | Modo disperato di provarci
-Cronologia internet innocua | Cronologia internet terrificante
-Tradimento emotivo lieve | Tradimento emotivo imperdonabile
-Foto intima innocua | Foto intima compromettente
-Cosa perdonabile dopo una sbronza | Cosa imperdonabile dopo una sbronza
-Esperienza sessuale da raccontare | Esperienza sessuale da non raccontare a nessuno
-Vizio innocente | Vizio inconfessabile
+Modo disperato di provarci | Modo elegante di provarci
+Cronologia internet terrificante | Cronologia internet innocua
+Tradimento emotivo imperdonabile | Tradimento emotivo lieve
+Foto intima compromettente | Foto intima innocua
+Cosa imperdonabile dopo una sbronza | Cosa perdonabile dopo una sbronza
+Esperienza sessuale da non raccontare a nessuno | Esperienza sessuale da raccontare
+Vizio inconfessabile | Vizio innocente
 Pratica sessuale comune | Pratica sessuale rara
 Preliminare sottovalutato | Preliminare sopravvalutato
-Interruzione innocua | Interruzione distruggi-atmosfera
-Scusa credibile per non fare sesso | Scusa assurda per non fare sesso
-Esperienza psichedelica rassicurante | Esperienza psichedelica terrificante
+Interruzione distruggi-atmosfera | Interruzione innocua
+Scusa assurda per non fare sesso | Scusa credibile per non fare sesso
+Esperienza psichedelica terrificante | Esperienza psichedelica rassicurante
 Persona peggiore con cui sballarsi | Persona migliore con cui sballarsi
-Opinione impopolare innocua | Opinione impopolare grave
-Confessione che fa ridere tutti | Confessione che fa calare il silenzio
-Dipendenza socialmente accettata | Dipendenza socialmente imbarazzante
-Collezione innocente | Collezione inquietante
-Vizio che ti rende interessante | Vizio che ti rende insopportabile
+Opinione impopolare grave | Opinione impopolare innocua
+Confessione che fa calare il silenzio | Confessione che fa ridere tutti
+Dipendenza nascosta | Dipendenza dichiarata
+Collezione inquietante | Collezione innocente
+Vizio che ti rende insopportabile | Vizio che ti rende interessante
 Posizione che richiede flessibilità | Posizione che richiede resistenza
 Posizione da primo appuntamento | Posizione da veterani
 Sex toy discreto | Sex toy impossibile da nascondere
 Sex toy da lasciare a casa | Sex toy da viaggio
-Intimo che seduce | Intimo che fa ridere
+Intimo che fa ridere | Intimo che seduce
 Costume erotico ridicolo | Costume erotico sexy
-Playlist erotica raffinata | Playlist erotica imbarazzante
-Imprevisto innocuo in hotel | Imprevisto imbarazzante in hotel
+Playlist erotica imbarazzante | Playlist erotica raffinata
+Imprevisto imbarazzante in hotel | Imprevisto innocuo in hotel
