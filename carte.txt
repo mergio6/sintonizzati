@@ -605,6 +605,23 @@ Personaggio animato tenero | Personaggio animato inquietante
 Tradizione | Progresso
 Nostalgico | Visionario
 Ricordo | Rimpianto
+Pranzo da gita terribile | Pranzo da gita eccezionale
+Scambio di figurine truffaldino | Scambio di figurine vantaggioso
+Avviso sul diario da nascondere | Avviso sul diario da mostrare
+Foto di classe in cui esci malissimo | Foto di classe in cui esci benissimo
+Primo cellulare da nascondere | Primo cellulare da esibire
+Merenda da scambiare | Merenda da tenere stretta
+Zaino delle elementari orrendo | Zaino delle elementari fantastico
+Gioco dell'infanzia da dimenticare | Gioco dell'infanzia da rifare
+Cartone del sabato mattina noioso | Cartone del sabato mattina imperdibile
+Ricordo della scuola da cancellare | Ricordo della scuola da rivivere
+Regalo di compleanno deludente | Regalo di compleanno perfetto
+Abitudine di famiglia da abolire | Abitudine di famiglia da tramandare
+Primo videogioco deludente | Primo videogioco indimenticabile
+Scherzo tra compagni crudele | Scherzo tra compagni divertente
+Personaggio dei cartoni da evitare | Personaggio dei cartoni da imitare
+Oggetto nell'astuccio che perdevi | Oggetto nell'astuccio che custodivi
+
 
 [8-Bit FM]
 # Per nerd: videogiochi, fumetti, anime, giochi di ruolo, fantascienza e tecnologia
@@ -726,6 +743,24 @@ Distopia | Utopia
 Di massa | Di nicchia
 Reale | Immaginario
 Indifeso | Potentissimo
+Scambio Pokémon truffaldino | Scambio Pokémon vantaggioso
+Pokémon shiny orrendo | Pokémon shiny spettacolare
+Oggetto in Minecraft inutile | Oggetto in Minecraft utilissimo
+Percorso Mario Kart piacevole | Percorso Mario Kart impossibile
+Trappola di D&D ingiusta | Trappola di D&D geniale
+Classe+razza di D&d scontata | Classe+razza di D&d rivoluzionaria
+Piano contro un drago suicida | Piano contro un drago brillante
+Videogioco senza cutscene | Videogioco pieno di cutscene
+Primo videogioco deludente | Primo videogioco indimenticabile
+Pokémon da lasciare nel box | Pokémon da portare in squadra
+Skin di un videogioco orrenda | Skin di un videogioco bellissima
+Personaggio di Mario Kart da evitare | Personaggio di Mario Kart da scegliere
+Supereroe coinquilino terribile | Supereroe coinquilino ideale
+Mostro di D&D da cui fuggire | Mostro di D&D da adottare
+Videogioco che non perdona nulla | Videogioco che perdona tutto
+Personaggio dei videogiochi bugiardo | Personaggio dei videogiochi affidabile
+Carta Pokémon da scartare | Carta Pokémon da custodire
+Regola di D&D da abolire | Regola di D&D da introdurre
 
 [Prima Visione]
 # Cinema, serie TV, musica e star: lo spettacolo in tutte le sue forme
@@ -847,6 +882,19 @@ Di massa | Di nicchia
 Plagio | Ispirazione
 Invecchia male | Invecchia bene
 Autentico | Costruito
+Monologo da saltare | Monologo da applausi
+Ospite a Sanremo fuori contesto | Ospite a Sanremo perfetto
+Coppia di conduttori senza intesa | Coppia di conduttori affiatata
+Fuori onda televisivo imbarazzante | Fuori onda diventato cult
+Fan service gratuito | Fan service che funziona
+Film Disney sopravvalutato | Film Disney sottovalutato
+Serie TV terribile | Serie TV perfetta
+Attore che rovina la scena | Attore che salva la scena
+Canzone da karaoke imbarazzante | Canzone da karaoke trascinante
+Protagonista odioso | Protagonista adorabile
+Coppia mal assortita | Coppia perfetta
+Reality a cui non parteciperesti | Reality a cui parteciperesti subito
+Canzone imbarazzante | Canzone a tutto volume
 
 [Fuori Orario]
 # La vita lavorativa vista dal lato scomodo: capi, colleghi, riunioni e dopo-lavoro
@@ -955,6 +1003,21 @@ Favoritismo lieve | Favoritismo netto
 Frase che ti rovina in una riunione | Frase innocua in una riunione
 Inaccettabile in smart working | Accettabile in smart working
 Messaggio di dimissioni normale | Messaggio di dimissioni incendiario
+Benefit aziendale ridicolo | Benefit aziendale super
+Webcam accesa nel momento peggiore | Webcam gestita impeccabilmente
+Microfono aperto durante uno sfogo | Microfono spento al momento giusto
+Regalo del Secret Santa da buttare | Regalo del Secret Santa da custodire
+Trasferimento di sede terribile | Trasferimento di sede desiderato
+Mansione da scaricare agli altri | Mansione per cui ti offri volontario
+Telefonata di lavoro da evitare | Telefonata di lavoro attesissima
+Regola aziendale da abolire | Regola aziendale da difendere
+Oggetto d'ufficio che nessuno vuole | Oggetto d'ufficio ambitissimo
+Collega da non portare in trasferta | Collega perfetto per una trasferta
+Frase da colloquio che ti fa scartare | Frase da colloquio che ti fa assumere
+Errore sul lavoro da nascondere | Errore sul lavoro da ammettere subito
+Lavoro da affidare a un principiante | Lavoro da affidare a un esperto
+Foto del badge imbarazzante | Foto del badge perfetta
+
 
 
 [Onda Nera]
@@ -1057,6 +1120,16 @@ Epitaffio irrispettoso | Epitaffio rispettoso
 Tragedia comunicata con cinismo | Tragedia comunicata con tatto
 Minaccia soprannaturale trascurabile | Minaccia soprannaturale apocalittica
 Errore medico senza conseguenze | Errore medico da prima pagina
+Risposta tavola Ouija banale | Risposta tavola Ouija agghiacciante
+Trappola alla Saw facilissima | Trappola alla Saw impossibile
+Foto paranormale falsa | Foto paranormale inspiegabile
+Arma anti-zombie terribile | Arma anti-zombie perfetta
+Mostro debole | Mostro temibile
+Ritrovamento ridicolo in una cripta | Ritrovamento terrificante in una cripta
+Oggetto inutile in un'apocalisse | Oggetto fantastico in un'apocalisse
+Nome da serial killer ridicolo | Nome da serial killer terrificante
+Mistero macabro che ignoreresti | Mistero macabro su cui indagheresti
+
 
 [Dopo Mezzanotte]
 # Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
@@ -1169,3 +1242,20 @@ Intimo che fa ridere | Intimo che seduce
 Costume erotico ridicolo | Costume erotico sexy
 Playlist erotica imbarazzante | Playlist erotica raffinata
 Imprevisto imbarazzante in hotel | Imprevisto innocuo in hotel
+Sexting viscido | Sexting arrapante
+Spogliarello comico | Spogliarello magnetico
+Bacio spiacevole | Bacio perfetto
+Flirt invadente | Flirt discreto
+Messaggio su Tinder disastroso | Messaggio su Tinder brillante
+Scelta per Netflix and chill ingenua | Scelta per Netflix and chill maliziosa
+Frase dopo il sesso disastrosa | Frase dopo il sesso perfetta
+Alibi per rientrare all'alba assurdo | Alibi per rientrare all'alba inattaccabile
+Emoji in una chat piccante fuori luogo | Emoji in una chat piccante azzeccata
+Celebrità con cui non usciresti | Celebrità con cui usciresti subito
+Emoji che spegne il flirt | Emoji che accende il flirt
+Cosa da non dire dopo un bacio | Cosa da dire dopo un bacio
+Oggetto che rovina l'atmosfera | Oggetto che migliora l'atmosfera
+Luogo pessimo per un incontro segreto | Luogo perfetto per un incontro segreto
+Bio di Tinder imbarazzante | Bio di Tinder irresistibile
+Lo bombo | Lo passo
+Scusa per fermarsi a dormire ridicola | Scusa per fermarsi a dormire credibile
