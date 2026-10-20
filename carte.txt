@@ -120,6 +120,38 @@ Costume da supereroe ridicolo | Costume da supereroe iconico
 Gusto di gelato deludente | Gusto di gelato pazzesco
 Strega malvagia | Strega simpatica
 Costume di Halloween ridicolo | Costume di Halloween terrificante
+Vicino | Lontano
+Stretto | Largo
+Sottile | Spesso
+Acceso | Spento
+Aperto | Chiuso
+Sgonfio | Gonfio
+Si vede attraverso | Non si vede attraverso
+Rimbalza poco | Rimbalza tantissimo
+Fa venire sonno | Tiene svegli
+Si scioglie subito | Non si scioglie mai
+Da usare una volta | Da usare tante volte
+Facile da nascondere | Difficile da nascondere
+Dritto | Storto
+Facile da lavare | Difficile da lavare
+Da condividere | Da tenere per sé
+Da giocare al chiuso | Da giocare all'aperto
+Si gioca con le mani | Si gioca con i piedi
+Da mangiare con le mani | Da mangiare con le posate
+Da usare con il sole | Da usare con la pioggia
+Da fare da soli | Serve l'aiuto di un adulto
+Piace agli insetti | Gli insetti lo evitano
+Si usa da seduti | Si usa in piedi
+Facile da aprire | Difficile da aprire
+Si usa ogni giorno | Non si usa mai
+Si vede da lontano | Si nota solo da vicino
+Si muove con il vento | Non si muove col vento
+Piace ai cani | Fa paura ai cani
+Serve a costruire | Serve a distruggere
+Si usa al buio | Si usa con la luce
+Si perde facilmente | Impossibile da perdere
+Si può annusare | Meglio non annusarlo
+
 
 [Hit Parade]
 # Il mazzo standard: i grandi classici per tutti
@@ -483,6 +515,26 @@ Tradizionale | Radicale
 Scelta utile subito | Scelta utile nel tempo
 Dote creativa | Dote organizzativa
 Pacchiano | Raffinato
+Libero arbitrio | Determinismo
+Morale relativa | Morale assoluta
+Idealismo | Pragmatismo
+Empatia | Indifferenza
+Inclusione | Esclusione
+Autonomia | Dipendenza
+Conformismo | Dissenso
+Conoscenza | Ignoranza
+Legittimo | Illegittimo
+Scelta reversibile | Scelta irreversibile
+Memoria collettiva | Oblio collettivo
+Essere | Apparire
+Proteggere | Controllare
+Sentirsi a casa | Sentirsi fuori posto
+Cambiare per sé stessi | Cambiare per piacere agli altri
+Regola che protegge | Regola che limita
+Paura che protegge | Paura che paralizza
+Critica che aiuta | Critica che ferisce
+Ricordo che consola | Ricordo che tormenta
+
 
 [Amarcord Radio]
 # Nostalgia e italianità: infanzia anni '80-2000, cibo, dialetti, parenti e luoghi comuni
