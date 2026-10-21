@@ -10,7 +10,7 @@
 #    FM: [Amarcord Radio], [8-Bit FM], [Prima Visione]
 #    Frequenze Pirata (solo 18+): [Fuori Orario], [Onda Nera], [Dopo Mezzanotte]
 #  - se una riga è scritta male, il gioco la salta e usa tutte le altre
-#  - tieni gli estremi brevi (massimo una ventina di caratteri)
+#  - mantieni gli estremi brevi quando possibile; alcuni possono superare 20 caratteri
 # =====================================================================
 
 
@@ -88,7 +88,7 @@ Nemico | Amico
 Colazione leggera | Colazione abbondante
 Studente pessimo | Studente modello
 Orizzontale | Verticale
-Seduta da incubo | Seduta da sogno
+Sedia scomodissima | Sedia comodissima
 Liquido | Solido
 Caramella da scherzo | Caramella da premio
 Non peloso | Peloso
@@ -97,7 +97,7 @@ Abbraccio che eviti | Abbraccio che cerchi
 Pokémon debolissimo | Pokémon fortissimo
 Piccola quantità | Grande quantità
 Spuntino | Pasto
-Materia da studiare sui libri | Materia da provare in laboratorio
+Materia con tanti numeri | Materia con tante parole
 Diviso | Intero
 Nome da cucciolo | Nome da bestione
 Meglio servito caldo | Meglio servito freddo
@@ -106,17 +106,17 @@ Colore sgradevole | Colore gradevole
 Animale da salotto | Animale da grandi spazi
 
 # --- copie da altre stazioni (ottobre 2026) ---
-Superpotere discreto | Superpotere appariscente
-Pigrissimo | Iperattivo
+Superpotere nascosto | Superpotere evidente
+Pigrissimo | Pieno di energia
 Sfortunato | Fortunato
 Mezzo di trasporto lentissimo | Mezzo di trasporto velocissimo
 Croccante | Molle
 Snack spazzatura | Snack sano
-Invenzione nostalgica | Invenzione futuristica
+Oggetto del passato | Oggetto del futuro
 Robot minaccioso | Robot amichevole
 Alieno invasore | Alieno pacifico
 Videogioco frustrante | Videogioco rilassante
-Costume da supereroe ridicolo | Costume da supereroe iconico
+Costume da supereroe buffo | Costume da supereroe bellissimo
 Gusto di gelato deludente | Gusto di gelato pazzesco
 Strega malvagia | Strega simpatica
 Costume di Halloween ridicolo | Costume di Halloween terrificante
@@ -195,7 +195,7 @@ Immangiabile | Mangiabile
 Poco italiano | Italianissimo
 Liscio | Ruvido
 Bagnato | Asciutto
-Regalo pessimo | Regalo perfetto
+Regalo impersonale | Regalo personalissimo
 Sport facile | Sport difficile
 Da fare da soli | Da fare in compagnia
 Normale | Strano
@@ -360,7 +360,7 @@ Storia fatta di parole | Storia fatta di immagini
 Musicista intimista | Musicista da grandi folle
 Ricetta essenziale | Ricetta ricca di ingredienti
 Eseguito male | Eseguito bene
-Argomento da biblioteca | Argomento da bar
+Argomento che unisce | Argomento che divide
 Insapore | Saporito
 Tempo davanti allo schermo | Tempo all'aria aperta
 Esempio di coraggio | Esempio di prudenza
@@ -482,17 +482,17 @@ Paura completamente assurda | Paura più che giustificata
 Voce di corridoio | Notizia verificata
 Indifeso | Potentissimo
 Rettilineo | Tortuoso
-Oggetto decorativo | Oggetto funzionale
+Scelta per principio | Scelta per convenienza
 Limitato | Infinito
 Guerrafondaio | Pacifista
-Simile | Identico
+Simile | Opposto
 Gestione disastrosa | Gestione impeccabile
-Insolito | Completamente assurdo
-Minuscolo | Gigantesco
+Giudicato normale | Giudicato scandaloso
+Scelta senza conseguenze | Scelta che cambia una vita
 Dittatura | Democrazia
 Incomprensibile | Comprensibile
 Evento ricordato con dolore | Evento ricordato con gioia
-Chi conosce la teoria | Chi impara dall'esperienza
+Imparare dagli altri | Imparare da soli
 Film adrenalinico | Film contemplativo
 Opera legata al suo tempo | Opera senza tempo
 Popolare | Elitario
@@ -505,13 +505,13 @@ Abitudine | Mania
 Tema da risata | Tema da litigio
 Improbabile | Probabile
 Impresa senza scrupoli | Impresa responsabile
-Serve per pungere | Serve per tagliare
+Promessa mantenuta | Promessa tradita
 Mistero che spaventa | Mistero che incuriosisce
 Male | Bene
-Progressista | Conservatore
+Cambiare idea | Restare sulle proprie posizioni
 Di parte | Imparziale
 Abitudine di una volta | Abitudine nata online
-Tradizionale | Radicale
+Dire la verità | Nascondere la verità
 Scelta utile subito | Scelta utile nel tempo
 Dote creativa | Dote organizzativa
 Pacchiano | Raffinato
@@ -535,6 +535,11 @@ Paura che protegge | Paura che paralizza
 Critica che aiuta | Critica che ferisce
 Ricordo che consola | Ricordo che tormenta
 
+
+# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
+Introverso | Estroverso
+Red flag | Green flag
+Gelosia tossica | Gelosia sana
 
 [Amarcord Radio]
 # Nostalgia e italianità: infanzia anni '80-2000, cibo, dialetti, parenti e luoghi comuni
@@ -675,6 +680,9 @@ Personaggio dei cartoni da evitare | Personaggio dei cartoni da imitare
 Oggetto nell'astuccio che perdevi | Oggetto nell'astuccio che custodivi
 
 
+# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
+Sentirsi a casa | Sentirsi fuori posto
+
 [8-Bit FM]
 # Per nerd: videogiochi, fumetti, anime, giochi di ruolo, fantascienza e tecnologia
 
@@ -758,7 +766,7 @@ Master sadico | Master generoso
 Caotico malvagio | Legale buono
 Forza bruta | Pura magia
 Arma medievale | Arma futuristica
-Rifugio anti-zombie disastroso | Rifugio anti-zombie sicuro
+Inventario senza limiti | Inventario con spazio limitato
 Trasformazione lampo | Trasformazione infinita
 Pettinatura normale | Pettinatura da anime
 Manga breve | Manga infinito
@@ -800,19 +808,23 @@ Pokémon shiny orrendo | Pokémon shiny spettacolare
 Oggetto in Minecraft inutile | Oggetto in Minecraft utilissimo
 Percorso Mario Kart piacevole | Percorso Mario Kart impossibile
 Trappola di D&D ingiusta | Trappola di D&D geniale
-Classe+razza di D&d scontata | Classe+razza di D&d rivoluzionaria
+Combinazione di D&D banale | Combinazione di D&D originale
 Piano contro un drago suicida | Piano contro un drago brillante
 Videogioco senza cutscene | Videogioco pieno di cutscene
 Primo videogioco deludente | Primo videogioco indimenticabile
-Pokémon da lasciare nel box | Pokémon da portare in squadra
+Pokémon difficile da catturare | Pokémon facile da catturare
 Skin di un videogioco orrenda | Skin di un videogioco bellissima
 Personaggio di Mario Kart da evitare | Personaggio di Mario Kart da scegliere
 Supereroe coinquilino terribile | Supereroe coinquilino ideale
 Mostro di D&D da cui fuggire | Mostro di D&D da adottare
-Videogioco che non perdona nulla | Videogioco che perdona tutto
+Videogioco basato sulla storia | Videogioco basato sull’azione
 Personaggio dei videogiochi bugiardo | Personaggio dei videogiochi affidabile
 Carta Pokémon da scartare | Carta Pokémon da custodire
 Regola di D&D da abolire | Regola di D&D da introdurre
+
+# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
+Lupo mannaro tenero | Lupo mannaro feroce
+Maledizione ingestibile | Maledizione gestibile
 
 [Prima Visione]
 # Cinema, serie TV, musica e star: lo spettacolo in tutte le sue forme
@@ -944,9 +956,17 @@ Serie TV terribile | Serie TV perfetta
 Attore che rovina la scena | Attore che salva la scena
 Canzone da karaoke imbarazzante | Canzone da karaoke trascinante
 Protagonista odioso | Protagonista adorabile
-Coppia mal assortita | Coppia perfetta
+Coppia che si somiglia | Coppia di opposti
 Reality a cui non parteciperesti | Reality a cui parteciperesti subito
 Canzone imbarazzante | Canzone a tutto volume
+
+# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
+Canzone di Sanremo flop | Canzone di Sanremo cult
+Cinepanettone dimenticabile | Cinepanettone cult
+Ballo di gruppo imbarazzante | Ballo di gruppo irresistibile
+Teoria dei fan assurda | Teoria dei fan geniale
+Spoiler imperdonabile | Spoiler innocuo
+Fandom tossico | Fandom tranquillo
 
 [Fuori Orario]
 # La vita lavorativa vista dal lato scomodo: capi, colleghi, riunioni e dopo-lavoro
@@ -1000,7 +1020,6 @@ Lavoro che ti pesa | Lavoro che ti entusiasma
 
 # --- copie da altre stazioni (ottobre 2026) ---
 Mestiere facile | Mestiere difficile
-Lavoro noioso | Lavoro da sogno
 Lavoro manuale | Lavoro intellettuale
 Lavoro a orari fissi | Lavoro sempre reperibile
 Lavoro da scrivania | Lavoro in movimento
@@ -1017,7 +1036,6 @@ Abbigliamento informale | Abbigliamento elegante
 Fisso | Mobile
 Facoltativo | Obbligatorio
 Tempo davanti allo schermo | Tempo all'aria aperta
-Regola stupida | Regola sacrosanta
 App inutile | App indispensabile
 Raccomandazione | Merito
 Lavoro | Vocazione
@@ -1038,7 +1056,7 @@ Gaffe in call imbarazzante | Gaffe in call esilarante
 Caffè d'ufficio imbevibile | Caffè d'ufficio divino
 Vicino di scrivania da incubo | Vicino di scrivania ideale
 Formazione aziendale inutile | Formazione aziendale utile
-Password vulnerabile | Password sicura
+PC lasciato sbloccato | PC sempre bloccato
 Ultimo giorno commovente | Ultimo giorno liberatorio
 Pranzo in ufficio puzzolente | Pranzo in ufficio discreto
 Lavoro di squadra finto | Lavoro di squadra vero
@@ -1071,6 +1089,9 @@ Lavoro da affidare a un principiante | Lavoro da affidare a un esperto
 Foto del badge imbarazzante | Foto del badge perfetta
 
 
+
+# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
+Critica che aiuta | Critica che ferisce
 
 [Onda Nera]
 # Umorismo nero e macabro, fantasmi, misteri e paure: per adulti, senza contenuti espliciti
@@ -1151,7 +1172,7 @@ Stanza segreta deludente | Stanza segreta agghiacciante
 Nebbia da film horror | Nebbia romantica
 Bosco maledetto | Bosco incantato
 Animale impagliato inquietante | Animale impagliato elegante
-Rimedio della nonna letale | Rimedio della nonna efficace
+Pozione della strega innocua | Pozione della strega letale
 Museo delle cere inquietante | Museo delle cere carino
 Sonnambulo pericoloso | Sonnambulo innocuo
 Medium ciarlatano | Medium credibile
@@ -1178,10 +1199,13 @@ Foto paranormale falsa | Foto paranormale inspiegabile
 Arma anti-zombie terribile | Arma anti-zombie perfetta
 Mostro debole | Mostro temibile
 Ritrovamento ridicolo in una cripta | Ritrovamento terrificante in una cripta
-Oggetto inutile in un'apocalisse | Oggetto fantastico in un'apocalisse
+Oggetto che scaccia i fantasmi | Oggetto che attira i fantasmi
 Nome da serial killer ridicolo | Nome da serial killer terrificante
 Mistero macabro che ignoreresti | Mistero macabro su cui indagheresti
 
+
+# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
+Horror che fa ridere | Horror che terrorizza
 
 [Dopo Mezzanotte]
 # Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
@@ -1274,8 +1298,6 @@ Tradimento emotivo imperdonabile | Tradimento emotivo lieve
 Foto intima compromettente | Foto intima innocua
 Cosa imperdonabile dopo una sbronza | Cosa perdonabile dopo una sbronza
 Esperienza sessuale da non raccontare a nessuno | Esperienza sessuale da raccontare
-Vizio inconfessabile | Vizio innocente
-Pratica sessuale comune | Pratica sessuale rara
 Preliminare sottovalutato | Preliminare sopravvalutato
 Interruzione distruggi-atmosfera | Interruzione innocua
 Scusa assurda per non fare sesso | Scusa credibile per non fare sesso
@@ -1296,7 +1318,7 @@ Playlist erotica imbarazzante | Playlist erotica raffinata
 Imprevisto imbarazzante in hotel | Imprevisto innocuo in hotel
 Sexting viscido | Sexting arrapante
 Spogliarello comico | Spogliarello magnetico
-Bacio spiacevole | Bacio perfetto
+Bacio timido | Bacio passionale
 Flirt invadente | Flirt discreto
 Messaggio su Tinder disastroso | Messaggio su Tinder brillante
 Scelta per Netflix and chill ingenua | Scelta per Netflix and chill maliziosa
@@ -1311,3 +1333,7 @@ Luogo pessimo per un incontro segreto | Luogo perfetto per un incontro segreto
 Bio di Tinder imbarazzante | Bio di Tinder irresistibile
 Lo bombo | Lo passo
 Scusa per fermarsi a dormire ridicola | Scusa per fermarsi a dormire credibile
+
+# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
+Scena d'amore imbarazzante | Scena d'amore memorabile
+Film da primo appuntamento sbagliato | Film da primo appuntamento perfetto
