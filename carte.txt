@@ -157,7 +157,10 @@ Superpotere che crea pasticci | Superpotere che risolve guai
 Oggetto da gita inutile | Oggetto da gita indispensabile
 Attività che annoia gli amici | Attività che coinvolge tutti
 Cosa che rovina una festa | Cosa che rende bella una festa
-
+Nome buffo per un dinosauro | Nome spaventoso per un dinosauro
+Cosa che fa piangere un robot | Cosa che fa ridere un robot
+Mezzo per la Luna pericoloso | Mezzo per la Luna sicuro
+Insetto spaventoso | Insetto simpatico
 
 
 
@@ -418,6 +421,12 @@ Sorpresa di compleanno da evitare | Sorpresa di compleanno gradita
 Attività pessima per un appuntamento | Attività perfetta per un appuntamento
 Kit di sopravvivenza inutile | Kit di sopravvivenza utilissimo
 Oggetto del futuro che spaventa | Oggetto del futuro che entusiasma
+Soprannome da supercattivo ridicolo | Soprannome da supercattivo minaccioso
+Scoperta durante un trasloco inquietante | Scoperta durante un trasloco piacevole
+Abbigliamento imbarazzante | Abbigliamento ultra-chic
+Grido da stadio classico | Grido da stadio fuori luogo
+Superpotere per un colloquio inutile | Superpotere per un colloquio decisivo
+Oggetto in un museo ridicolo | Oggetto in un museo azzeccato
 
 
 
@@ -564,6 +573,9 @@ Premio che offende | Premio che valorizza
 Verità che divide | Verità che unisce
 Favore disinteressato | Favore interessato
 Scoperta che spaventa | Scoperta che dà speranza
+Decisione che accontenta pochi | Decisione che accontenta tutti
+Successo ottenuto imbrogliando | Successo ottenuto onestamente
+Decisione da presidente impulsiva | Decisione da presidente ponderata
 
 
 
@@ -712,7 +724,14 @@ Rito odioso | Rito simpatico
 Canzone da oratorio triste | Canzone da oratorio trascinante
 Conoscente invecchiato male | Conoscente invecchiato bene
 Ricordo che fa arrossire | Ricordo che fa sorridere
-
+Frase incisa sul banco terribile | Frase incisa sul banco leggendaria
+Colazione prima della scuola triste | Colazione prima della scuola perfetta
+Scherzo telefonico crudele | Scherzo telefonico divertente
+Vestito da recita scolastica imbarazzante | Vestito da recita scolastica stupendo
+Dedica sulla Smemoranda penosa | Dedica sulla Smemoranda bellissima
+Ritrovamento in soffitta banale | Ritrovamento in soffitta prezioso
+Sorpresa ovetto Kinder da dimenticare | Sorpresa ovetto Kinder da collezionare
+Messaggio nel testamento che scatena litigi | Messaggio nel testamento che mette pace
 
 
 
@@ -862,7 +881,13 @@ Videogioco in cui vivresti | Videogioco da cui scapperesti
 Frase da boss finale ridicola | Frase da boss finale intimidatoria
 Oggetto del futuro che spaventa | Oggetto del futuro che entusiasma
 Frase da alieno spaventosa | Frase da alieno rassicurante
-
+Nome di una spada magica ridicolo | Nome di una spada magica epico
+Incantesimo inutile | Incantesimo utilissimo
+Maledizione innocua | Maledizione terribile
+Equipaggiamento per il boss ridicolo | Equipaggiamento per il boss perfetto
+Nome da gilda imbarazzante | Nome da gilda leggendario
+Soprannome da supercattivo ridicolo | Soprannome da supercattivo minaccioso
+Superpotere per un colloquio inutile | Superpotere per un colloquio decisivo
 
 
 
@@ -1008,7 +1033,13 @@ Sigla TV triste | Sigla TV allegra
 Celebrità da non invitare a cena | Celebrità da invitare a cena 
 Personaggio Disney pessimo | Personaggio Disney stupendo
 Finale di serie TV terribile | Finale di serie TV perfetto
-
+Ospite per un podcast soporifero | Ospite per un podcast irresistibile
+Nome da band da dimenticare | Nome da band memorabile
+Presentatore di un funerale fuori luogo | Presentatore di un funerale impeccabile
+Colpo di scena da telenovela ridicolo | Colpo di scena da telenovela credibile
+Canzone per dichiararsi disastrosa | Canzone per dichiararsi perfetta
+Musica da aldilà inappropriata | Musica da aldilà perfetta
+Nome per un hotel infestato ridicolo | Nome per un hotel infestato inquietante
 
 
 
@@ -1136,7 +1167,16 @@ Orario terribile per una riunione | Orario ideale per una riunione
 Promessa del direttore impossibile | Promessa del direttore realistica
 Oggetto per lo smart working ridicolo | Oggetto per lo smart working pratico
 Complimento che mette a disagio | Complimento che fa piacere
-
+Nome da start-up ridicolo | Nome da start-up convincente
+Motto aziendale che fa scappare | Motto aziendale che motiva
+Risposta al capo che peggiora tutto | Risposta al capo che risolve tutto
+Momento per chiedere un aumento terribile | Momento per chiedere un aumento ideale
+Regalo per il pensionamento offensivo | Regalo per il pensionamento commovente
+Cartello in ufficio irritante | Cartello in ufficio utile
+Titolo professionale pomposo | Titolo professionale chiarissimo
+Motivo futile per convocare tutti | Motivo importante per convocare tutti 
+Inglesismo insopportabile | Inglesismo accettato
+Successo ottenuto imbrogliando | Successo ottenuto onestamente
 
 
 
@@ -1255,7 +1295,20 @@ Mestiere per un fantasma ridicolo | Mestiere per un fantasma perfetto
 Movente ridicolo per un omicidio | Movente sensato per un omicidio
 Segreto di famiglia innocente | Segreto di famiglia mostruoso
 Luogo pessimo dove nascondersi | Luogo perfetto dove nascondersi
-
+Nome per un'impresa funebre ridicolo | Nome per un'impresa funebre rassicurante
+Slogan di un becchino inquietante | Slogan di un becchino convincente
+Oggetto banale in tasca al morto | Oggetto inquietante in tasca al morto
+Nome da setta banale | Nome da setta agghiacciante
+Graffito in cella rassicurante | Graffito in cella terrificante
+Nome per un hotel infestato ridicolo | Nome per un hotel infestato inquietante
+Motivo per esumare futile | Motivo per esumare sconvolgente
+Messaggio nel testamento che scatena litigi | Messaggio nel testamento che mette pace
+Presagio che non fa paura | Presagio che terrorizza tutti
+Esperienza da esorcista banale | Esperienza da esorcista terrificante
+Oggetto dimenticato in un obitorio normale | Oggetto dimenticato in un obitorio inquietante
+Maledizione innocua | Maledizione terribile
+Presentatore di un funerale fuori luogo | Presentatore di un funerale impeccabile
+Scoperta durante un trasloco inquietante | Scoperta durante un trasloco piacevole
 
 
 
@@ -1388,3 +1441,12 @@ Regalo dopo un appuntamento inquietante | Regalo dopo un appuntamento dolcissimo
 Complimento che mette a disagio | Complimento che fa piacere
 Oggetto da mostrare all'ex per vendetta | Oggetto da mostrare all'ex per nostalgia
 Scena imbarazzante in famiglia | Scena perfetta in famiglia
+Nome da sex toy imbarazzante | Nome da sex toy geniale
+Nome da spogliarellista ridicolo | Nome da spogliarellista magnetico
+Scusa per andarsene offensiva | Scusa per andarsene elegante
+Mestiere che ti rende ridicolo | Mestiere che ti rende affascinante
+Domanda da speed date invadente | Domanda da speed date brillante
+Tatuaggio erotico da nascondere | Tatuaggio erotico da mostrare
+Regalo da addio al celibato volgare | Regalo da addio al celibato spiritoso
+Parola di sicurezza ambigua | Parola di sicurezza chiarissima
+Canzone per dichiararsi disastrosa | Canzone per dichiararsi perfetta
