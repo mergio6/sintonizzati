@@ -14,6 +14,9 @@
 # =====================================================================
 
 
+
+
+
 [Radio Merenda]
 # Per i più piccoli: parole semplici e cose di tutti i giorni
 
@@ -79,8 +82,6 @@ Rumore fastidioso | Rumore piacevole
 Parola facile | Parola difficile
 Galleggia | Affonda
 Si rompe subito | Dura per sempre
-
-# --- carte aggiunte a ottobre 2026 ---
 Quadrato | Rotondo
 Sapore disgustoso | Sapore delizioso
 Cibo che sporca tantissimo | Cibo che non sporca affatto
@@ -104,8 +105,6 @@ Meglio servito caldo | Meglio servito freddo
 Rigido | Flessibile
 Colore sgradevole | Colore gradevole
 Animale da salotto | Animale da grandi spazi
-
-# --- copie da altre stazioni (ottobre 2026) ---
 Superpotere nascosto | Superpotere evidente
 Pigrissimo | Pieno di energia
 Sfortunato | Fortunato
@@ -151,10 +150,23 @@ Serve a costruire | Serve a distruggere
 Si usa al buio | Si usa con la luce
 Si perde facilmente | Impossibile da perdere
 Si può annusare | Meglio non annusarlo
+Oggetto pessimo come cappello | Oggetto perfetto come cappello
+Animale rabbioso | Animale angioletto
+Gioco da fare sotto la pioggia | Gioco da fare col sole
+Superpotere che crea pasticci | Superpotere che risolve guai
+Oggetto da gita inutile | Oggetto da gita indispensabile
+Attività che annoia gli amici | Attività che coinvolge tutti
+Cosa che rovina una festa | Cosa che rende bella una festa
+
+
+
+
+
+
 
 
 [Hit Parade]
-# Il mazzo standard: i grandi classici per tutti
+# Per tutti
 
 Freddo | Caldo
 Sottovalutato | Sopravvalutato
@@ -275,8 +287,6 @@ Rumore insopportabile | Rumore rilassante
 Lavoro manuale | Lavoro intellettuale
 Per niente romantico | Romanticissimo
 Fragile | Indistruttibile
-
-# --- carte aggiunte a ottobre 2026 ---
 Persona spregevole | Persona ammirevole
 Nostalgia analogica | Nostalgia digitale
 Divinità vendicativa | Divinità protettrice
@@ -302,6 +312,7 @@ Attore da commedia | Attore da tragedia
 Cambiamento annunciato | Cambiamento inatteso
 Professione sopravvalutata | Professione sottovalutata
 Grifondoro | Serpeverde
+Corvonero | Tassorosso
 Vita brevissima | Vita lunghissima
 Non lo fa quasi nessuno | Lo fanno praticamente tutti
 Senza alcun odore | Odore fortissimo
@@ -384,8 +395,6 @@ Canzone triste | Canzone allegra
 Pericoloso | Innocuo
 Film triste | Film allegro
 Genere musicale insopportabile | Genere musicale fantastico
-
-# --- copie da altre stazioni (ottobre 2026) ---
 Galleggia | Affonda
 Timido | Coraggioso
 Disordinato | Ordinato
@@ -398,9 +407,25 @@ Nome da cucciolo | Nome da bestione
 Animale di casa | Animale selvatico
 Animale da salotto | Animale da grandi spazi
 Esiste davvero | È inventato
+Compagno di viaggio da incubo | Compagno di viaggio ideale
+Oggetto pessimo come ombrello | Oggetto perfetto come ombrello
+Notizia che rovina la giornata | Notizia che migliora la giornata
+Cosa terribile da ricevere per posta | Cosa bellissima da ricevere per posta
+Compagno d'ascensore terribile | Compagno d'ascensore simpatico
+Posto tremendo per aspettare ore | Posto piacevole per aspettare ore
+Oggetto imbarazzante in una valigia | Oggetto indispensabile in valigia
+Sorpresa di compleanno da evitare | Sorpresa di compleanno gradita
+Attività pessima per un appuntamento | Attività perfetta per un appuntamento
+Kit di sopravvivenza inutile | Kit di sopravvivenza utilissimo
+Oggetto del futuro che spaventa | Oggetto del futuro che entusiasma
+
+
+
+
+
 
 [Onde Cerebrali]
-# Concetti astratti e sfumati: per chi vuole ragionarci su
+# Concetti astratti e sfumati
 
 Immorale | Etico
 Non considerato arte | Considerato arte
@@ -474,8 +499,6 @@ Egoista | Altruista
 Spontaneo | Calcolato
 Autentico | Costruito
 Fatto per amore | Fatto per soldi
-
-# --- carte aggiunte a ottobre 2026 ---
 Persona spietata | Persona molto coscienziosa
 Spaventoso | Adrenalinico
 Paura completamente assurda | Paura più che giustificata
@@ -534,12 +557,17 @@ Regola che protegge | Regola che limita
 Paura che protegge | Paura che paralizza
 Critica che aiuta | Critica che ferisce
 Ricordo che consola | Ricordo che tormenta
-
-
-# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
 Introverso | Estroverso
 Red flag | Green flag
 Gelosia tossica | Gelosia sana
+Premio che offende | Premio che valorizza
+Verità che divide | Verità che unisce
+Favore disinteressato | Favore interessato
+Scoperta che spaventa | Scoperta che dà speranza
+
+
+
+
 
 [Amarcord Radio]
 # Nostalgia e italianità: infanzia anni '80-2000, cibo, dialetti, parenti e luoghi comuni
@@ -604,8 +632,6 @@ Tradizione di Natale noiosa | Tradizione di Natale imperdibile
 Lettera d'amore imbarazzante | Lettera d'amore indimenticabile
 Cosa da anni '90 | Cosa da anni 2000
 Gioco in scatola dimenticato | Gioco in scatola immortale
-
-# --- nuove carte (ottobre 2026) ---
 Parente che vedi solo ai matrimoni | Parente che vedi sempre
 Cugino pecora nera | Cugino modello
 Frase da mamma minacciosa | Frase da mamma rassicurante
@@ -637,8 +663,6 @@ Musica da balera | Musica da discoteca
 Spiaggia libera | Stabilimento esclusivo
 Gioco di carte semplice | Gioco di carte complicato
 Usanza italiana normale | Usanza italiana inspiegabile
-
-# --- copie da altre stazioni (ottobre 2026) ---
 Si fa al mare | Si fa in montagna
 Cibo da merenda | Cibo da cena
 Cartone per piccoli | Cartone per grandi
@@ -678,10 +702,20 @@ Primo videogioco deludente | Primo videogioco indimenticabile
 Scherzo tra compagni crudele | Scherzo tra compagni divertente
 Personaggio dei cartoni da evitare | Personaggio dei cartoni da imitare
 Oggetto nell'astuccio che perdevi | Oggetto nell'astuccio che custodivi
-
-
-# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
 Sentirsi a casa | Sentirsi fuori posto
+Ricordo triste | Ricordo felice
+Oggetto retrò da buttare | Oggetto retrò da riscoprire
+Canzone retrò insopportabile | Canzone retrò fantastica
+Scherzo del nonno irritante | Scherzo del nonno divertentissimo
+Cosa da dire a una rimpatriata | Cosa da non dire a una rimpatriata
+Rito odioso | Rito simpatico
+Canzone da oratorio triste | Canzone da oratorio trascinante
+Conoscente invecchiato male | Conoscente invecchiato bene
+Ricordo che fa arrossire | Ricordo che fa sorridere
+
+
+
+
 
 [8-Bit FM]
 # Per nerd: videogiochi, fumetti, anime, giochi di ruolo, fantascienza e tecnologia
@@ -746,8 +780,6 @@ Mappa minuscola | Mappa sterminata
 Armatura fragilissima | Armatura indistruttibile
 Personaggio muto | Personaggio logorroico
 Gioco da cinque minuti | Gioco da maratona notturna
-
-# --- nuove carte (ottobre 2026) ---
 Power-up deludente | Power-up devastante
 Checkpoint introvabili | Checkpoint ovunque
 Gioco per masochisti | Gioco accessibile
@@ -781,8 +813,6 @@ Tecnologia fragile | Tecnologia indistruttibile
 Trucco tech placebo | Trucco tech infallibile
 Scena di hacking ridicola | Scena di hacking realistica
 Postazione sobria | Postazione piena di LED
-
-# --- copie da altre stazioni (ottobre 2026) ---
 Pokémon debolissimo | Pokémon fortissimo
 Supereroe debole | Supereroe fortissimo
 Superpotere discreto | Superpotere appariscente
@@ -821,10 +851,21 @@ Videogioco basato sulla storia | Videogioco basato sull’azione
 Personaggio dei videogiochi bugiardo | Personaggio dei videogiochi affidabile
 Carta Pokémon da scartare | Carta Pokémon da custodire
 Regola di D&D da abolire | Regola di D&D da introdurre
-
-# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
 Lupo mannaro tenero | Lupo mannaro feroce
 Maledizione ingestibile | Maledizione gestibile
+Oggetto inutile per un dungeon | Oggetto salvavita per un dungeon
+Sfida da streamer umiliante | Sfida da streamer esaltante
+Superpotere peggiore | Superpotere migliore
+Mossa Pokemon scarsa | Mossa Pokemon devastante
+Videogioco per una pausa breve | Videogioco per un intero weekend
+Videogioco in cui vivresti | Videogioco da cui scapperesti
+Frase da boss finale ridicola | Frase da boss finale intimidatoria
+Oggetto del futuro che spaventa | Oggetto del futuro che entusiasma
+Frase da alieno spaventosa | Frase da alieno rassicurante
+
+
+
+
 
 [Prima Visione]
 # Cinema, serie TV, musica e star: lo spettacolo in tutte le sue forme
@@ -887,8 +928,6 @@ Biglietto del concerto regalato | Biglietto del concerto carissimo
 Musica da ascensore | Musica da brividi
 Personaggio da fiction scontato | Personaggio da fiction originale
 Telefilm anni '90 dimenticato | Telefilm anni '90 indimenticabile
-
-# --- nuove carte (ottobre 2026) ---
 Basta una volta | Da rivedere all'infinito
 Da vedere al cinema | Da vedere sul divano
 Imbarazzante coi genitori | Da vedere coi genitori
@@ -914,8 +953,6 @@ Da cantare a squarciagola | Da ascoltare in silenzio
 Musica per dormire | Musica per pogare
 Playback spudorato | Live impeccabile
 Voce naturale | Autotune a palla
-
-# --- copie da altre stazioni (ottobre 2026) ---
 Fa piangere | Fa ridere
 Cartone per piccoli | Cartone per grandi
 Personaggio cattivo | Personaggio buono
@@ -959,14 +996,22 @@ Protagonista odioso | Protagonista adorabile
 Coppia che si somiglia | Coppia di opposti
 Reality a cui non parteciperesti | Reality a cui parteciperesti subito
 Canzone imbarazzante | Canzone a tutto volume
-
-# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
 Canzone di Sanremo flop | Canzone di Sanremo cult
 Cinepanettone dimenticabile | Cinepanettone cult
 Ballo di gruppo imbarazzante | Ballo di gruppo irresistibile
 Teoria dei fan assurda | Teoria dei fan geniale
 Spoiler imperdonabile | Spoiler innocuo
 Fandom tossico | Fandom tranquillo
+Attore pessimo come supereroe | Attore perfetto come supereroe
+Film che rovina una festa | Film che salva una festa
+Sigla TV triste | Sigla TV allegra
+Celebrità da non invitare a cena | Celebrità da invitare a cena 
+Personaggio Disney pessimo | Personaggio Disney stupendo
+Finale di serie TV terribile | Finale di serie TV perfetto
+
+
+
+
 
 [Fuori Orario]
 # La vita lavorativa vista dal lato scomodo: capi, colleghi, riunioni e dopo-lavoro
@@ -1017,8 +1062,6 @@ Licenziamento ingiusto | Licenziamento meritato
 Collega che non fa niente | Collega che fa tutto
 Badge dimenticato | Badge perso per sempre
 Lavoro che ti pesa | Lavoro che ti entusiasma
-
-# --- copie da altre stazioni (ottobre 2026) ---
 Mestiere facile | Mestiere difficile
 Lavoro manuale | Lavoro intellettuale
 Lavoro a orari fissi | Lavoro sempre reperibile
@@ -1045,8 +1088,6 @@ Fallimento | Lezione
 Rapporto di convenienza | Amicizia sincera
 Persona spietata | Persona molto coscienziosa
 Impresa senza scrupoli | Impresa responsabile
-
-# --- nuove carte (ottobre 2026, seconda tornata) ---
 Collega ladro di meriti | Collega generoso
 Stipendio in ritardo | Stipendio puntuale
 Nota spese falsificata | Nota spese onesta
@@ -1087,11 +1128,18 @@ Frase da colloquio che ti fa scartare | Frase da colloquio che ti fa assumere
 Errore sul lavoro da nascondere | Errore sul lavoro da ammettere subito
 Lavoro da affidare a un principiante | Lavoro da affidare a un esperto
 Foto del badge imbarazzante | Foto del badge perfetta
-
-
-
-# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
 Critica che aiuta | Critica che ferisce
+Premio inutile | Premio entusiasmante
+Compagno di trasferta pessimo | Compagno di trasferta ideale
+Scusa per un file sparito ridicola | Scusa per un file sparito credibile
+Orario terribile per una riunione | Orario ideale per una riunione
+Promessa del direttore impossibile | Promessa del direttore realistica
+Oggetto per lo smart working ridicolo | Oggetto per lo smart working pratico
+Complimento che mette a disagio | Complimento che fa piacere
+
+
+
+
 
 [Onda Nera]
 # Umorismo nero e macabro, fantasmi, misteri e paure: per adulti, senza contenuti espliciti
@@ -1146,8 +1194,6 @@ Mostro mitologico ridicolo | Mostro mitologico terrificante
 Sorpresa agghiacciante | Sorpresa piacevole
 Ospite invadente | Ospite graditissimo
 Cosa da trovare in soffitta inquietante | Cosa da trovare in soffitta innocua
-
-# --- copie da altre stazioni (ottobre 2026) ---
 Posto pericoloso | Posto sicuro
 Abbraccio che eviti | Abbraccio che cerchi
 Superstizione assurda | Superstizione sensata
@@ -1157,9 +1203,6 @@ Cibo da film horror | Cibo da ristorante stellato
 Mostro da incubo | Mostro da fiaba
 Spaventoso | Adrenalinico
 Paura completamente assurda | Paura più che giustificata
-
-
-# --- nuove carte (ottobre 2026, seconda tornata) ---
 Scheletro nell'armadio piccolo | Scheletro nell'armadio enorme
 Presentimento sbagliato | Presentimento azzeccato
 Esorcismo fallito | Esorcismo riuscito
@@ -1202,10 +1245,20 @@ Ritrovamento ridicolo in una cripta | Ritrovamento terrificante in una cripta
 Oggetto che scaccia i fantasmi | Oggetto che attira i fantasmi
 Nome da serial killer ridicolo | Nome da serial killer terrificante
 Mistero macabro che ignoreresti | Mistero macabro su cui indagheresti
-
-
-# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
 Horror che fa ridere | Horror che terrorizza
+Scoperta normale in obitorio | Scoperta agghiacciante in obitorio
+Mostro guardiano inutile | Mostro guardiano perfetto
+Frase in un film horror ridicola | Frase in un film horror inquietante
+Regalo per un demone offensivo | Regalo per un demone apprezzato
+Rumore normale | Rumore da incubo
+Mestiere per un fantasma ridicolo | Mestiere per un fantasma perfetto
+Movente ridicolo per un omicidio | Movente sensato per un omicidio
+Segreto di famiglia innocente | Segreto di famiglia mostruoso
+Luogo pessimo dove nascondersi | Luogo perfetto dove nascondersi
+
+
+
+
 
 [Dopo Mezzanotte]
 # Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
@@ -1251,21 +1304,15 @@ Bacio da dimenticare | Bacio leggendario
 Scusa per non uscire | Scusa per restare
 Weekend tranquillo | Weekend da raccontare
 Vergogna passeggera | Vergogna eterna
-
-# --- carte aggiunte a ottobre 2026 ---
 Complimento inappropriato | Complimento di classe
 Appuntamento fuori controllo | Appuntamento sotto controllo
 Appuntamento al risparmio | Appuntamento senza badare a spese
 Esperienza da dimenticare | Esperienza da raccontare a tutti
-
-# --- copie da altre stazioni (ottobre 2026) ---
 Cibo disastroso a un appuntamento | Cibo adatto a un appuntamento
 Da fare da soli | Da fare in compagnia
 Legame per abitudine | Legame per amore
 Fatto per amore | Fatto per soldi
 Silenzio imbarazzante | Silenzio d'oro
-
-# --- nuove carte (ottobre 2026, seconda tornata) ---
 Chimica zero | Chimica esplosiva
 Rottura drammatica | Rottura civile
 Lingerie comoda | Lingerie audace
@@ -1333,7 +1380,11 @@ Luogo pessimo per un incontro segreto | Luogo perfetto per un incontro segreto
 Bio di Tinder imbarazzante | Bio di Tinder irresistibile
 Lo bombo | Lo passo
 Scusa per fermarsi a dormire ridicola | Scusa per fermarsi a dormire credibile
-
-# --- ulteriori carte condivise fra stazioni (revisione ottobre 2026) ---
 Scena d'amore imbarazzante | Scena d'amore memorabile
 Film da primo appuntamento sbagliato | Film da primo appuntamento perfetto
+Messaggio dopo mezzanotte indiscreto | Messaggio dopo mezzanotte irresistibile
+Oggetto che rovina una serata piccante | Oggetto che accende una serata piccante
+Regalo dopo un appuntamento inquietante | Regalo dopo un appuntamento dolcissimo
+Complimento che mette a disagio | Complimento che fa piacere
+Oggetto da mostrare all'ex per vendetta | Oggetto da mostrare all'ex per nostalgia
+Scena imbarazzante in famiglia | Scena perfetta in famiglia
