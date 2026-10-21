@@ -161,8 +161,23 @@ Nome buffo per un dinosauro | Nome spaventoso per un dinosauro
 Cosa che fa piangere un robot | Cosa che fa ridere un robot
 Mezzo per la Luna pericoloso | Mezzo per la Luna sicuro
 Insetto spaventoso | Insetto simpatico
-
-
+Cibo che fa arrabbiare un orco | Cibo che rende felice un orco
+Nascondiglio ovvio | Nascondiglio impossibile da scoprire
+Nome per una nave pirata buffo | Nome per una nave pirata spaventoso
+Aiutante del mago che fa pasticci | Aiutante del mago che risolve tutto
+Pranzo leggero | Pranzo pesantissimo
+Strumento musicale silenzioso | Strumento musicale assordante
+Oggetto da trasloco leggero | Oggetto da trasloco pesantissimo
+Attrazione del luna park noiosa | Attrazione del luna park memorabile
+Robot inutile | Robot eccezionale
+Marachella innocua | Marachella gravissima
+Sport poco faticoso | Sport molto faticoso
+Strumento musicale leggerissimo | Strumento musicale pesantissimo
+Animale dello zoo noioso | Animale dello zoo spettacolare
+Oggetto inutile nel deserto | Oggetto indispensabile nel deserto
+Mezzo di trasporto pericoloso | Mezzo di trasporto sicuro
+NPC | Aura
+Costume da Halloween | Costume da carnevale
 
 
 
@@ -427,7 +442,49 @@ Abbigliamento imbarazzante | Abbigliamento ultra-chic
 Grido da stadio classico | Grido da stadio fuori luogo
 Superpotere per un colloquio inutile | Superpotere per un colloquio decisivo
 Oggetto in un museo ridicolo | Oggetto in un museo azzeccato
-
+Mascotte imbarazzante | Mascotte amatissima
+Targa commemorativa fuori luogo | Targa commemorativa azzeccata
+Catena di supermercati peggiore | Catena di supermercati migliore
+Gusto di piadina classico | Gusto di piadina stravagante
+Regalo di S. Valentino pessimo | Regalo di S. Valentino perfetto
+Errore lieve all’esame di guida | Errore da bocciatura all'esame di guida
+Rock band tranquilla | Rock band scatenata
+Biscotto della fortuna ridicolo | Biscotto della fortuna profetico
+Parte dell'auto superflua | Parte dell'auto indispensabile
+Strumento musicale discreto | Strumento musicale assordante
+Oggetto da trasloco leggero | Oggetto da trasloco pesantissimo
+Attrazione del luna park noiosa | Attrazione del luna park memorabile
+Paese poco sviluppato | Paese tecnologicamente avanzato
+Robot inutile | Robot eccezionale
+Dieta pessima | Dieta ottima
+Monumento sottovalutato | Monumento sopravvalutato
+Epoca terribile in cui vivere | Epoca ideale in cui vivere
+Sport poco faticoso | Sport molto faticoso
+Strumento musicale leggerissimo | Strumento musicale pesantissimo
+Attività del weekend terribile | Attività del weekend fantastica
+Motivo per alzarsi rinviabile | Motivo per alzarsi urgente
+Piatto locale | Piatto etnico
+Invenzione inutile | Invenzione rivoluzionaria
+Suoneria quasi impercettibile | Suoneria assordante
+Esercizio in palestra facilissimo | Esercizio in palestra massacrante
+Animale dello zoo noioso | Animale dello zoo spettacolare
+Dessert tradizionale | Dessert sperimentale
+Parte del corpo poco sensibile | Parte del corpo sensibilissima
+Rap | Trap
+Rock | Metal
+Pop | Rock
+Mamma | Papà
+Oggetto inutile nel deserto | Oggetto indispensabile nel deserto
+Nome da wrestler ridicolo | Nome da wrestler convincente
+Allergia comune | Allergia rarissima
+Rimandabile | Urgente
+Acquisto impulsivo | Acquisto ragionato
+Fast food | Slow food
+Legge inutile | Legge necessaria
+Nome da millennial | Nome da Gen Z
+Slang da millennial | Slang da Gen Z
+Moda anni '80 | Moda anni 2000
+Mezzo di trasporto pericoloso | Mezzo di trasporto sicuro
 
 
 
@@ -576,7 +633,18 @@ Scoperta che spaventa | Scoperta che dà speranza
 Decisione che accontenta pochi | Decisione che accontenta tutti
 Successo ottenuto imbrogliando | Successo ottenuto onestamente
 Decisione da presidente impulsiva | Decisione da presidente ponderata
-
+Elogio che crea rivalità | Elogio che incoraggia
+Ministero poco importante | Ministero importantissimo
+Paese poco sviluppato | Paese tecnologicamente avanzato
+Piacere lieve | Estasi totale
+Epoca terribile in cui vivere | Epoca ideale in cui vivere
+Incubo | Sogno
+Vizio facile da correggere | Vizio impossibile da correggere
+Reato lieve | Reato gravissimo
+Complotto assurdo | Complotto plausibile
+Repulsione | Desiderio
+Acquisto impulsivo | Acquisto ragionato
+Legge inutile | Legge necessaria
 
 
 
@@ -732,7 +800,28 @@ Dedica sulla Smemoranda penosa | Dedica sulla Smemoranda bellissima
 Ritrovamento in soffitta banale | Ritrovamento in soffitta prezioso
 Sorpresa ovetto Kinder da dimenticare | Sorpresa ovetto Kinder da collezionare
 Messaggio nel testamento che scatena litigi | Messaggio nel testamento che mette pace
-
+Premio della tombola deludente | Premio della tombola ambitissimo
+Ospite a una sagra noioso | Ospite a una sagra pazzesco
+Nome squadra di calcetto ridicolo | Nome squadra di calcetto leggendario
+Nota sul registro comune | Nota sul registro strampalata
+Regalo per un diciottesimo tristissimo | Regalo da diciottesimo indimenticabile
+Pranzo leggero | Pranzo pesantissimo
+Catena di supermercati peggiore | Catena di supermercati migliore
+Gusto di piadina classico | Gusto di piadina stravagante
+Ricordo Facebook imbarazzante | Ricordo Facebook stupendo
+SMS da amico | SMS da amante
+Attrazione del luna park noiosa | Attrazione del luna park memorabile
+Marachella innocua | Marachella gravissima
+Monumento sottovalutato | Monumento sopravvalutato
+Piatto locale | Piatto etnico
+Suoneria quasi impercettibile | Suoneria assordante
+Dessert tradizionale | Dessert sperimentale
+Pranzo a casa propria | Pranzo da nonna
+Fast food | Slow food
+Nome da millennial | Nome da Gen Z
+Slang da millennial | Slang da Gen Z
+Moda anni '80 | Moda anni 2000
+Costume da Halloween | Costume da carnevale
 
 
 
@@ -888,6 +977,19 @@ Equipaggiamento per il boss ridicolo | Equipaggiamento per il boss perfetto
 Nome da gilda imbarazzante | Nome da gilda leggendario
 Soprannome da supercattivo ridicolo | Soprannome da supercattivo minaccioso
 Superpotere per un colloquio inutile | Superpotere per un colloquio decisivo
+Incantesimo che fa ridere | Incantesimo che mette paura
+Regalo per Bowser offensivo | Regalo per Bowser che lo commuove
+Regola di Mario Kart ingiusta | Regola di Mario Kart divertentissima
+Taverna fantasy da chiudere subito | Taverna fantasy in cui restare
+Famiglio che mette nei guai il mago | Famiglio che salva il mago
+Videogioco facilissimo | Videogioco difficilissimo
+Soundtrack inesistente | Soundtrack incredibile
+Robot inutile | Robot eccezionale
+Missione da supereroe ridicola | Missione da supereroe grandiosa
+Invenzione inutile | Invenzione rivoluzionaria
+Personaggio da lasciare nella tomba | Personaggio da resuscitare
+NPC | Aura
+Auto Rocket League inutilizzata | Auto Rocket League usatissima
 
 
 
@@ -1040,7 +1142,19 @@ Colpo di scena da telenovela ridicolo | Colpo di scena da telenovela credibile
 Canzone per dichiararsi disastrosa | Canzone per dichiararsi perfetta
 Musica da aldilà inappropriata | Musica da aldilà perfetta
 Nome per un hotel infestato ridicolo | Nome per un hotel infestato inquietante
-
+Spot che non ti fa comprare | Spot che fa comprare
+Serie TV per addormentarsi | Serie TV per stare svegli tutta notte
+Duetto cantanti improbabile | Duetto cantanti probabilissimo
+Rock band tranquilla | Rock band scatenata
+Strumento musicale silenzioso | Strumento musicale assordante
+Strumento musicale leggerissimo | Strumento musicale pesantissimo
+Missione da supereroe ridicola | Missione da supereroe grandiosa
+Personaggio da lasciare nella tomba | Personaggio da resuscitare
+Rap | Trap
+Rock | Metal
+Pop | Rock
+Attore emergente | Star indiscussa
+Nome da wrestler ridicolo | Nome da wrestler convincente
 
 
 
@@ -1177,7 +1291,13 @@ Titolo professionale pomposo | Titolo professionale chiarissimo
 Motivo futile per convocare tutti | Motivo importante per convocare tutti 
 Inglesismo insopportabile | Inglesismo accettato
 Successo ottenuto imbrogliando | Successo ottenuto onestamente
-
+Sticker inviato al capo offensivo | Sticker inviato al capo azzeccato
+Domanda allo stagista crudele | Domanda allo stagista accogliente
+Motivo per chiudere ridicolo | Motivo per chiudere sacrosanto
+Premio aziendale che è una punizione | Premio aziendale veramente gradito
+Motivo per alzarsi rinviabile | Motivo per alzarsi urgente
+Lavoro sottopagato | Lavoro redditizio
+Rimandabile | Urgentissimo
 
 
 
@@ -1309,7 +1429,13 @@ Oggetto dimenticato in un obitorio normale | Oggetto dimenticato in un obitorio 
 Maledizione innocua | Maledizione terribile
 Presentatore di un funerale fuori luogo | Presentatore di un funerale impeccabile
 Scoperta durante un trasloco inquietante | Scoperta durante un trasloco piacevole
-
+Recensione per cimitero terribile | Recensione per cimitero fantastico
+Morte senza sofferenza | Morte con lunga agonia
+Incubo | Sogno
+Personaggio da lasciare nella tomba | Personaggio da resuscitare
+Reato lieve | Reato gravissimo
+Complotto assurdo | Complotto plausibile
+Tortura quasi innocua | Tortura disumana
 
 
 
@@ -1450,3 +1576,12 @@ Tatuaggio erotico da nascondere | Tatuaggio erotico da mostrare
 Regalo da addio al celibato volgare | Regalo da addio al celibato spiritoso
 Parola di sicurezza ambigua | Parola di sicurezza chiarissima
 Canzone per dichiararsi disastrosa | Canzone per dichiararsi perfetta
+Soprannome erotico che fa ridere | Soprannome erotico che seduce
+Frase da sussurrare molesta | Frase da sussurrare gradita
+Regalo di S. Valentino pessimo | Regalo di S. Valentino perfetto
+SMS da amico | SMS da amante
+Piacere lieve | Estasi totale
+Vizio facile da correggere | Vizio impossibile da correggere
+Parte del corpo poco sensibile | Parte del corpo sensibilissima
+Repulsione | Desiderio
+Cringe | Romantico
