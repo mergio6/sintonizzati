@@ -7,7 +7,7 @@
 <meta name="format-detection" content="telephone=no, email=no, address=no">
 <meta name="theme-color" content="#DCE3E3" id="meta-tema">
 <title>Sintonizzati</title>
-<meta name="description" content="Siete davvero sulla stessa lunghezza d'onda? Un gioco di gruppo a tema radio anni '80.">
+<meta name="description" content="Siete davvero sulla stessa frequenza? Un gioco di gruppo a tema radio anni '80.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="icone/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icone/icon-192.png">
@@ -112,6 +112,17 @@
     --carta-sx: #F2A93B; --carta-dx: #74C6F2;
     --squadra-b: #E58FC3; --squadra-b-testo: #E58FC3; --bagliore-b: rgba(229, 143, 195, .45);
   }
+  /* Fasce del bersaglio, dalla più lontana (1 punto) al centro (5 punti), e la lancetta rossa del sintonizzatore */
+  :root {
+    --fascia-1: var(--viola); --fascia-2: var(--zona-2); --fascia-3: var(--zona-3); --fascia-4: #F28C28; --fascia-5: var(--zona-4);
+    --lancetta: #E0261B;
+  }
+  :root[data-attivo="scuro"] { --fascia-4: #FF9B42; --lancetta: #FF4A3A; }
+  /* il segnale ha il verde degli "occhi magici" delle vecchie radio a valvole */
+  :root { --segnale-alone: #0E9C68; --segnale-debole: #1A8C96; --segnale-cuore: #46E3A2; --ago-alone: .16; }
+  :root[data-attivo="scuro"] { --segnale-alone: #2FD893; --segnale-debole: #2FB8C8; --segnale-cuore: #E4FFF2; --ago-alone: .34; --segnale-fusione: screen; }
+  :root[data-daltonico] { --fascia-1: #B9E0F7; --fascia-4: #E69F00; }
+  :root[data-daltonico][data-attivo="scuro"] { --fascia-1: #DDF1FC; --fascia-4: #F0E442; }
 
   *, *::before, *::after { box-sizing: inherit; }
 
@@ -275,8 +286,10 @@
   }
   .btn-piccolo:active, .tema:active { filter: brightness(.95); }
 
+  /* i pannelli ai lati restano larghi come prima; il sintonizzatore prende tutto lo spazio in mezzo */
   .campo {
-    display: grid; grid-template-columns: minmax(84px, 1fr) auto minmax(84px, 1fr);
+    --lato-hud: clamp(100px, 30vw - 85px, 190px); --lato-hud: clamp(100px, 30cqw - 85px, 190px);
+    display: grid; grid-template-columns: var(--lato-hud) minmax(0, 1fr) var(--lato-hud);
     align-items: center; gap: clamp(8px, 2vw, 24px); gap: clamp(8px, 2cqw, 24px); min-height: 0; padding-top: 6px;
   }
   .squadra { text-align: center; }
@@ -291,7 +304,7 @@
   .squadra .di-turno[hidden] { display: inline-block; visibility: hidden; }
 
   .quadrante { height: 100%; min-height: 0; display: flex; align-items: center; justify-content: center; }
-  .quadrante svg { height: 100%; width: auto; max-width: 100%; display: block; touch-action: none; cursor: grab; }
+  .quadrante svg { height: 100%; width: 100%; display: block; touch-action: none; cursor: grab; }
   .quadrante svg:active { cursor: grabbing; }
   .quadrante svg:focus { outline: none; }
   .quadrante svg.tastiera:focus { outline: 3px solid var(--corallo); outline-offset: 3px; border-radius: 18px; }
@@ -683,26 +696,113 @@
   .quadrante svg.bloccato { cursor: default; }
   .quadrante svg.scegli-lato { cursor: pointer; }
 
-  #ventaglio { transform-origin: 200px 216px; transform: scale(.12); opacity: 0; transition: transform .55s cubic-bezier(.2, .9, .3, 1.15), opacity .25s; }
+  /* ---------- Il sintonizzatore: finestra della scala, altoparlante, display e manopola ----------
+     Disegno da 600×300 unità; --s (lo calcola misuraQuadrante) dice quanti px vale un'unità,
+     così scritte e linee non scendono mai sotto una misura leggibile anche sui telefoni piccoli. */
+  .sintonia { --s: .7; }
+  .radio-corpo { fill: var(--corpo); }
+  .finestra { fill: var(--vetro); }
+  .finestra-ombra { fill: url(#vetro-luce); stroke: rgba(0, 0, 0, .35); stroke-width: 2; pointer-events: none; }
+  .riga-scala { stroke: var(--vetro-segni); stroke-width: max(1.5px, calc(1px / var(--s))); opacity: .55; }
+  #tacche line { stroke: var(--vetro-segni); stroke-linecap: round; stroke-width: max(1.3px, calc(.8px / var(--s))); opacity: .5; }
+  #tacche line.media { stroke-width: max(2px, calc(1.2px / var(--s))); opacity: .75; }
+  #tacche line.lunga { stroke-width: max(3px, calc(1.7px / var(--s))); opacity: .95; }
+  .cifra-scala { font-family: "Michroma", Verdana, sans-serif; font-size: max(16px, calc(9px / var(--s))); fill: var(--vetro-segni); opacity: .85; text-anchor: middle; }
+  /* la lancetta: rossa, con un bordo del colore del vetro che la stacca da qualunque colore abbia sotto */
+  #ago { transition: none; }
+  /* sui telefoni piccoli il filo si allarga un poco, per restare ben visibile (mai sotto ~2,6 px) */
+  .ago-spessore { transform: scaleX(max(1, calc(.55 / var(--s)))); }
+  /* da ferma la lancetta è solo il filo rosso; il bagliore si accende mentre la si trascina */
+  .ago-alone { stroke: var(--lancetta); stroke-width: 10; stroke-linecap: round; opacity: 0; transition: opacity .25s; }
+  .ago-alone.ampio { stroke-width: 22; }
+  #ago.presa .ago-alone { opacity: calc(var(--ago-alone, .2) * 1.7); transition-duration: .12s; }
+  #ago.presa .ago-alone.ampio { opacity: calc(var(--ago-alone, .2) * .9); }
+  .ago-filo { fill: url(#ago-corpo); stroke: rgba(0, 0, 0, .28); stroke-width: .8; }
+  .ago-ombra { stop-color: color-mix(in srgb, var(--lancetta) 62%, #000); }
+  .ago-pieno { stop-color: var(--lancetta); }
+  .ago-luce { stop-color: color-mix(in srgb, var(--lancetta) 45%, #fff); }
+  .ago-carrello { fill: var(--corpo); stroke: rgba(0, 0, 0, .25); stroke-width: 1; stroke-linejoin: round; }
+  .ago-perno { fill: var(--lancetta); }
+  .fermi-manopola .tacca-manopola { stroke: var(--su-corpo); stroke-width: 2; stroke-linecap: round; opacity: .4; }
+  .fermi-manopola .tacca-manopola.estremo { opacity: .7; stroke-width: 2.6; }
+  .fermi-manopola .fermo { fill: url(#sint-metallo); stroke: rgba(0, 0, 0, .45); stroke-width: 1; }
+  /* altoparlante: lamiera forata */
+  .piastra { fill: var(--griglia); }
+  #fori-altoparlante circle { fill: rgba(0, 0, 0, .55); }
+  .bordo-piastra { fill: none; stroke: rgba(0, 0, 0, .35); stroke-width: 2; }
+  .luce-piastra { fill: url(#piastra-luce); pointer-events: none; }
+  /* display: stesso vetro della scala, retroilluminato nel colore della gamma */
+  /* L'illuminazione della scala cambia con la gamma; la radio resta la stessa.
+     AM: lampadine calde, vetro color crema (il tema di base). FM: luce fredda e vivace, segni blu elettrico.
+     Pirata: vetro quasi nero, segni viola ultravioletto, sempre al buio anche col tema chiaro.
+     Il segnale verde e la lancetta rossa restano ben distinti su ogni vetro. */
+  .quadrante { --luce-scala: #FFB52E; --risposta: var(--inchiostro); }
+  :root:not([data-attivo="scuro"]) .quadrante[data-banda="am"] { --bagliore: .2; }
+  .quadrante[data-banda="fm"] { --vetro: #EAF4F8; --vetro-segni: #11507A; --luce-scala: #6CCBFF; --bagliore: .26; --segnale-debole: #138A70; }
+  :root[data-attivo="scuro"] .quadrante[data-banda="fm"] {
+    --vetro: #0A1B28; --vetro-segni: #62D2FF; --luce-scala: #2C9CFF; --bagliore: .3; --lcd-ombra: 0 0 10px rgba(98, 210, 255, .5);
+  }
+  .quadrante[data-banda="pirata"] {
+    --vetro: #180C21; --vetro-segni: #C59CFF; --luce-scala: #9B3BFF; --bagliore: .42; --lcd-ombra: 0 0 10px rgba(197, 156, 255, .6);
+    --segnale-alone: #2FD893; --segnale-debole: #2FB8C8; --segnale-cuore: #E4FFF2; --segnale-fusione: screen; --risposta: #F1E6FF;
+  }
+  :root[data-attivo="scuro"] .quadrante[data-banda="pirata"] { --vetro: #110817; }
+  .finestra, .lcd-sintonia { transition: fill .6s; }
+  #tacche line, .riga-scala { transition: stroke .6s; }
+  .cifra-scala, .lcd-cifre, .lcd-piccolo { transition: fill .6s; }
+  .sintonia { --display: var(--vetro-segni); }
+  .lcd-sintonia { fill: var(--vetro); stroke: rgba(0, 0, 0, .4); stroke-width: 2.5; }
+  .lcd-riflesso { fill: url(#lcd-luce); pointer-events: none; }
+  .lcd-piccolo { font-family: "Michroma", Verdana, sans-serif; font-size: max(12px, calc(7.5px / var(--s))); fill: var(--display); opacity: .75; }
+  .lcd-cifre { font-family: "Michroma", Verdana, sans-serif; font-size: 31px; fill: var(--display); font-variant-numeric: tabular-nums; }
+  :root[data-attivo="scuro"] .lcd-cifre, :root[data-attivo="scuro"] .lcd-piccolo,
+  .quadrante[data-banda="pirata"] .lcd-cifre, .quadrante[data-banda="pirata"] .lcd-piccolo { filter: drop-shadow(0 0 3px var(--display)); }
+  .quadrante[data-banda="pirata"] .cifra-scala { filter: drop-shadow(0 0 2.5px rgba(197, 156, 255, .55)); }
+  .lcd-cifre.spento { opacity: .35; }
+  #dial-teschio { color: var(--display); }
+  /* manopola di alluminio zigrinata, come quella del menu */
+  .manopola-sintonia .zigrinatura { stroke-width: 6; stroke-dasharray: 2.3 2.2; }
+  .manopola-sintonia .indice { stroke-width: 4.5; }
+  .manopola-sintonia .riflesso-manopola { stroke-width: 3.2; }
+  .manopola-sintonia .ombra-manopola { filter: blur(3px); }
+  #sint-zigrinatura, #sint-indice { transform-origin: 530px 243px; }
+
+  /* il bersaglio: una striscia di luce colorata dietro le tacche, che sfuma da una fascia all'altra */
+  #ventaglio { transform: scaleX(.04); opacity: 0; transition: transform .55s cubic-bezier(.2, .9, .3, 1.15), opacity .25s; }
   #ventaglio.aperto { transform: none; opacity: 1; }
-  .zona { stroke: var(--vetro); stroke-width: 1.2; }
-  .zona.z2 { fill: var(--zona-2); }
-  .zona.z3 { fill: var(--zona-3); }
-  .zona.z4 { fill: var(--zona-4); }
-  .zona.z-oro { fill: var(--zona-oro); }
+  /* il segnale della stazione: una luce dietro il vetro, intensa al centro e sempre più tenue verso i bordi */
+  .segnale-alone { mix-blend-mode: var(--segnale-fusione, normal); }
+  /* Bersagli speciali della collaborativa: stesso stile, colore diverso, e una spia accesa sul display.
+     Sintonia fine: luce azzurra, fredda e precisa. Ricezione amplificata: luce verde-lime che "respira". */
+  .quadrante[data-bersaglio="fine"] { --segnale-alone: #0B86A8; --segnale-debole: #2C66B8; --segnale-cuore: #43DDF5; }
+  .quadrante[data-bersaglio="amplificata"] { --segnale-alone: #5E9A00; --segnale-debole: #8C8A00; --segnale-cuore: #B8F02C; }
+  :root[data-attivo="scuro"] .quadrante[data-bersaglio="fine"], .quadrante[data-banda="pirata"][data-bersaglio="fine"] {
+    --segnale-alone: #38D3F2; --segnale-debole: #5C9BFF; --segnale-cuore: #F0FEFF;
+  }
+  :root[data-attivo="scuro"] .quadrante[data-bersaglio="amplificata"], .quadrante[data-banda="pirata"][data-bersaglio="amplificata"] {
+    --segnale-alone: #B4EE3A; --segnale-debole: #E6D447; --segnale-cuore: #FBFFE4;
+  }
+  .segnale-amplificata { animation: respira 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes respira { 50% { opacity: .82; } }
+  .lcd-spia { font-weight: 700; letter-spacing: .08em; opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .segnale-amplificata { animation: none; } }
   .riflesso { fill: url(#bagliore-oro); animation: riflesso 3.4s ease-in-out infinite; }
   .alone { fill: none; stroke: var(--zona-oro); stroke-width: 4; stroke-linejoin: round; opacity: 0; animation: alone 3.4s ease-in-out infinite; }
   .bordo-oro { fill: none; stroke: #FFF7D6; stroke-width: 1; stroke-linejoin: round; opacity: 0; animation: alone 3.4s ease-in-out infinite; }
   @keyframes alone { 50% { opacity: .35; } }
-  @keyframes riflesso { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(-165px); opacity: 0; } }
+  @keyframes riflesso { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(-112px); opacity: 0; } }
   .scintilla { fill: #FFFBEA; transform-box: fill-box; transform-origin: center; animation: scintilla 4s ease-in-out infinite both; }
   @keyframes scintilla { 0%, 55%, 100% { transform: scale(0) rotate(0deg); opacity: 0; } 70% { transform: scale(1) rotate(45deg); opacity: 1; } 85% { transform: scale(.4) rotate(90deg); opacity: .6; } }
-  .valore.oro { font-weight: 700; }
+  .valore.oro { font-weight: 700; fill: var(--ambra-testo); }
   .valore { font: 12px "Michroma", Verdana, sans-serif; fill: var(--vetro-segni); }
+  #ventaglio .valore { text-anchor: middle; }
+  #ventaglio .valore.centro { fill: var(--inchiostro); }
+  :root[data-attivo="scuro"] #ventaglio .valore.centro { fill: #FFF3D6; }
   .risposta { opacity: 0; animation: compare .35s ease-out forwards; }
-  .risposta line { stroke: var(--inchiostro); stroke-width: 3; stroke-linecap: round; }
-  .risposta circle { fill: var(--inchiostro); }
-  .risposta text { font: 11px "Michroma", Verdana, sans-serif; fill: var(--vetro); }
+  .risposta.subito { animation: none; opacity: 1; }
+  .risposta line { stroke: var(--risposta); stroke-width: max(3px, calc(1.8px / var(--s))); stroke-linecap: round; }
+  .risposta circle { fill: var(--risposta); stroke: var(--vetro); stroke-width: 2; }
+  .risposta text { font-family: "Michroma", Verdana, sans-serif; fill: var(--vetro); text-anchor: middle; }
   @keyframes compare { to { opacity: 1; } }
 
   .passaggio {
@@ -769,16 +869,31 @@
   .turno .chi.sq.a { color: var(--ambra-testo); }
   .turno .chi.sq.b { color: var(--squadra-b-testo); }
   .turno .esito { white-space: pre-line; margin-top: 6px; font-weight: 600; color: var(--inchiostro); }
-  .scelta-lato { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; max-width: 190px; margin: 12px auto 0; }
-  .lato-btn {
-    height: 50px; padding: 0 4px; border-radius: 10px; border: 1px solid var(--bordo); background: var(--superficie);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
-    font-size: 13px; font-weight: 700; cursor: pointer;
+  /* scommessa della squadra avversaria: tre tasti; quello scelto si accende nel colore della squadra */
+  .scommesse { display: grid; gap: 6px; width: 100%; max-width: 190px; margin: 10px auto 0; }
+  .scommessa-btn {
+    --sq: var(--ambra); --su-sq: #2A1C00;
+    display: flex; align-items: center; justify-content: space-between; gap: 6px; min-height: 38px; padding: 4px 8px 4px 11px;
+    border-radius: 10px; border: 1px solid var(--bordo); background: var(--superficie); color: var(--inchiostro);
+    font-size: 12.5px; font-weight: 700; line-height: 1.1; text-align: left; cursor: pointer;
+    transition: background-color .2s, box-shadow .25s, color .2s;
   }
-  .lato-btn svg { width: 18px; height: 18px; flex: none; }
-  .lato-btn[aria-pressed="true"].a { background: var(--ambra); color: #2A1C00; border-color: transparent; }
-  .lato-btn[aria-pressed="true"].b { background: var(--squadra-b); color: var(--su-colore); border-color: transparent; }
-  .scelta-lato + .tasto-ambra.piccolo { margin-top: 8px; }
+  .scommessa-btn.b { --sq: var(--squadra-b); --su-sq: var(--su-colore); }
+  .scommessa-btn b { flex: none; font: 800 13px/1 "Bricolage Grotesque", system-ui, sans-serif; padding: 3px 6px; border-radius: 999px; background: color-mix(in srgb, var(--sq) 22%, transparent); }
+  .scommessa-btn[aria-pressed="true"] {
+    background: var(--sq); color: var(--su-sq); border-color: transparent;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--sq) 45%, transparent), 0 0 16px 2px color-mix(in srgb, var(--sq) 65%, transparent);
+    animation: bagliore-scommessa 1.8s ease-in-out infinite;
+  }
+  .scommessa-btn[aria-pressed="true"] b { background: rgba(255, 255, 255, .35); }
+  @keyframes bagliore-scommessa { 50% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--sq) 35%, transparent), 0 0 24px 5px color-mix(in srgb, var(--sq) 75%, transparent); } }
+  .scommesse + .tasto-ambra.piccolo { margin-top: 8px; }
+  /* sulla scala: la zona della scommessa si illumina attorno alla lancetta */
+  .zona-scommessa { --sq: var(--ambra); animation: compare .3s ease-out; }
+  .zona-scommessa.b { --sq: var(--squadra-b); }
+  .zona-luce { fill: var(--sq); opacity: .2; mask: url(#sfuma-segnale); }
+  .zona-bordo { stroke: var(--sq); stroke-width: max(2px, calc(1.3px / var(--s))); opacity: .85; filter: drop-shadow(0 0 3px var(--sq)); }
+  @media (prefers-reduced-motion: reduce) { .scommessa-btn[aria-pressed="true"] { animation: none; } }
   /* Se i pannelli ai lati della scala non ci stanno in altezza (schermi bassi, tanti giocatori)
      si stringono un poco (compatto), e se non basta anche le scritte (compattissimo): mai sopra la carta */
   .campo.compatto .turno .tasto-ambra.piccolo { margin-top: 6px; height: 40px; }
@@ -788,7 +903,7 @@
   .campo.compatto .turno .esito { margin-top: 2px; }
   .campo.compatto .classifica { gap: 2px; }
   .campo.compatto .tabellone { gap: 6px; } .campo.compatto .tabellone li { padding: 5px 10px 4px; }
-  .campo.compatto .scelta-lato { margin-top: 6px; } .campo.compatto .lato-btn { height: 42px; }
+  .campo.compatto .scommesse { margin-top: 6px; gap: 4px; } .campo.compatto .scommessa-btn { min-height: 32px; }
   .campo.compattissimo .turno .etichetta, .campo.compattissimo .turno .ruolo, .campo.compattissimo .turno .esito { font-size: 12px; line-height: 1.2; }
   .campo.compattissimo .classifica li, .campo.compattissimo .risultati li { font-size: 13px; gap: 6px; }
   .campo.compattissimo .num { width: 17px; height: 17px; font-size: 9px; }
@@ -797,7 +912,7 @@
   .campo.compattissimo .turno .guadagno { font-size: 26px; margin: 0; }
   .campo.compattissimo .turno .tasto-ambra.piccolo { margin-top: 4px; height: auto; min-height: 34px; padding: 4px 6px; font-size: 11px; line-height: 1.15; letter-spacing: 0; }
   .campo.compattissimo .risultati .nome-indizio { display: none; }     /* il numero accanto dice già chi è */
-  .campo.compattissimo .lato-btn { height: 36px; }
+  .campo.compattissimo .scommessa-btn { min-height: 28px; font-size: 11.5px; padding: 2px 6px 2px 9px; }
   .tinta.a { fill: var(--ambra); opacity: .24; }
   .tinta.b { fill: var(--squadra-b); opacity: .22; }
 
@@ -818,7 +933,7 @@
   /* ---------- La radio si accende entrando in partita ---------- */
   #schermata-gioco.accensione .barra { animation: compare-su .4s ease-out both; }
   #schermata-gioco.accensione .quadrante svg { animation: accendi-radio .6s cubic-bezier(.2, .9, .3, 1.1) both; transform-origin: 50% 100%; }
-  #schermata-gioco.accensione #tacche line { animation: accendi-tacca .25s ease-out both; animation-delay: calc(250ms + var(--i) * 12ms); }
+  #schermata-gioco.accensione #tacche > * { animation: accendi-tacca .25s ease-out both; animation-delay: calc(250ms + var(--i) * 12ms); }
   #schermata-gioco.accensione .lato { animation: compare-su .5s ease-out .35s both; }
   #schermata-gioco.accensione .carta { animation: compare-su .5s ease-out .5s both; }
   @keyframes accendi-radio { from { opacity: 0; transform: scale(.9); } }
@@ -1177,12 +1292,14 @@
   .colonna-regole { display: flex; flex-direction: column; justify-content: space-between; gap: 10px; min-width: 0; }
   .figura-regole { margin: 0; display: grid; gap: 6px; justify-items: center; }
   .scala-regole { width: 100%; height: auto; display: block; }
-  .fondo-scala { fill: var(--vetro); }
-  .scala-regole .zona { stroke: var(--vetro); stroke-width: 1.2; }
-  .scala-regole .valore { font: 12px "Michroma", Verdana, sans-serif; fill: var(--su-colore); }
-  #dialogo-regole[data-modo="collab"] .scala-regole .zona.z4 { fill: var(--zona-oro); }
-  .ago-regole { stroke: var(--vetro-segni); stroke-width: 3.2; stroke-linecap: round; }
-  .perno-regole { fill: var(--vetro-segni); }
+  .fondo-scala { fill: var(--vetro); stroke: var(--corpo); stroke-width: 3; }
+  .sg-d { stop-color: var(--segnale-debole); }
+  .sg-a { stop-color: var(--segnale-alone); } .sg-cuore { stop-color: var(--segnale-cuore); }
+  #dialogo-regole[data-modo="collab"] .sg-cuore { stop-color: var(--zona-oro); }
+  .riga-regole, .tacche-regole line { stroke: var(--vetro-segni); stroke-width: 1; opacity: .55; stroke-linecap: round; }
+  .tacche-regole line.lunga { stroke-width: 1.8; opacity: .9; }
+  .ago-regole-bordo { stroke: var(--vetro); stroke-width: 5.5; stroke-linecap: round; }
+  .ago-regole { stroke: var(--lancetta); stroke-width: 2.6; stroke-linecap: round; }
   .tinta-lato { fill: var(--squadra-b); opacity: .18; }
   .lato-regole { font: 9px "Michroma", Verdana, sans-serif; fill: var(--vetro-segni); }
   .figura-regole figcaption { display: grid; gap: 2px; text-align: center; font-size: 12.5px; font-weight: 600; line-height: 1.25; color: var(--su-corpo); }
@@ -1647,9 +1764,9 @@
   .quadrante { position: relative; }
   /* il display sporge sempre sopra la cornice: se la cornice è spessa (schermi grandi) la linguetta si allunga dentro di essa */
   .targhetta {
-    --u: var(--dial-u, .8px); --cornice: calc(12 * var(--u) - 1.5px);   /* dal fondo della linguetta al bordo della cornice */
+    --u: var(--dial-u, .8px); --cornice: calc(14 * var(--u) - 1.5px);   /* dal fondo della linguetta al bordo della cornice */
     position: absolute; z-index: 1; left: 50%; top: calc(var(--dial-top, 0px) + var(--cornice)); transform: translate(-50%, -100%);
-    display: flex; align-items: center; max-width: calc(330 * var(--u));
+    display: flex; align-items: center; max-width: calc(400 * var(--u));
     padding: 3px 4px max(1.5px, calc(var(--cornice) - 9px)); border-radius: 11px 11px 0 0; background: var(--corpo);
   }
   .targhetta[hidden] { display: none; }
@@ -1672,11 +1789,11 @@
   }
   #schermata-gioco .campo { padding-top: 18px; }
 
-  /* Occhio nell'angolo in alto a destra del vetro: copre e scopre il bersaglio di chi dà l'indizio.
-     Sta fuori dall'arco della scala, oltre i numeri del bersaglio, così non copre mai niente. */
+  /* Occhio sul pannello della radio, tra il display e la manopola: copre e scopre il bersaglio di chi
+     dà l'indizio. Sta fuori dalla finestra della scala, così non copre mai niente. */
   .copri-bersaglio {
-    --u: var(--dial-u, .8px); --lato: max(26px, calc(30 * var(--u)));
-    position: absolute; z-index: 1; left: calc(50% + 170 * var(--u)); top: calc(var(--dial-top, 0px) + 70 * var(--u));
+    --u: var(--dial-u, .8px); --lato: max(28px, calc(40 * var(--u)));
+    position: absolute; z-index: 1; left: calc(50% + 134 * var(--u)); top: calc(var(--dial-top, 0px) + 243 * var(--u));
     width: var(--lato); height: var(--lato); transform: translate(-50%, -50%); padding: 0;
     display: grid; place-items: center; border-radius: 50%; cursor: pointer;
     border: 1.5px solid color-mix(in srgb, var(--vetro-segni) 55%, transparent);
@@ -1695,10 +1812,10 @@
   .copri-bersaglio .occhio-chiuso, .copri-bersaglio[aria-pressed="true"] .occhio-aperto { display: none; }
   .copri-bersaglio[aria-pressed="true"] .occhio-chiuso { display: block; }
   .copri-bersaglio[aria-pressed="true"] { background: var(--vetro-segni); color: var(--vetro); border-color: var(--vetro-segni); }
-  .quadrante.coperto #ventaglio { transform: scale(.12); opacity: 0; }
+  .quadrante.coperto #ventaglio { transform: scaleX(.04); opacity: 0; }
   .nota-coperto {
     --u: var(--dial-u, .8px);
-    position: absolute; left: 50%; top: calc(var(--dial-top, 0px) + 128 * var(--u)); transform: translate(-50%, -50%);
+    position: absolute; left: 50%; top: calc(var(--dial-top, 0px) + 104 * var(--u)); transform: translate(-50%, -50%);
     font: 10px "Michroma", Verdana, sans-serif; font-size: max(10px, calc(11 * var(--u))); letter-spacing: .06em; white-space: nowrap;
     color: var(--vetro-segni); opacity: 0; transition: opacity .3s; pointer-events: none;
   }
@@ -1812,8 +1929,11 @@
 #    FM: [Amarcord Radio], [8-Bit FM], [Prima Visione]
 #    Frequenze Pirata (solo 18+): [Fuori Orario], [Onda Nera], [Dopo Mezzanotte]
 #  - se una riga è scritta male, il gioco la salta e usa tutte le altre
-#  - tieni gli estremi brevi (massimo una ventina di caratteri)
+#  - mantieni gli estremi brevi quando possibile; alcuni possono superare 20 caratteri
 # =====================================================================
+
+
+
 
 
 [Radio Merenda]
@@ -1826,7 +1946,7 @@ Freddo | Caldo
 Morbido | Duro
 Facile | Difficile
 Leggero | Pesante
-Pulito | Sporco
+Sporco | Pulito
 Noioso | Divertente
 Triste | Allegro
 Brutto | Bello
@@ -1838,7 +1958,7 @@ Vecchio | Nuovo
 Debole | Forte
 Calmo | Agitato
 Timido | Coraggioso
-Ordinato | Disordinato
+Disordinato | Ordinato
 Liscio | Ruvido
 Bagnato | Asciutto
 Dolce | Salato
@@ -1847,9 +1967,9 @@ Comune | Raro
 Inutile | Utile
 Fragile | Indistruttibile
 Colore scuro | Colore chiaro
-Poco colorato | Coloratissimo
+Colori spenti | Colori sgargianti
 Spaventoso | Coccoloso
-Fa ridere | Fa piangere
+Fa piangere | Fa ridere
 Esiste davvero | È inventato
 Cosa da piccoli | Cosa da grandi
 Da fare di giorno | Da fare di notte
@@ -1861,14 +1981,14 @@ Cibo da merenda | Cibo da cena
 Facile da mangiare | Difficile da mangiare
 Frutta aspra | Frutta dolce
 Facile da disegnare | Difficile da disegnare
-Animale tenero | Animale pauroso
-Animale lento | Animale veloce
+Animale spaventoso | Animale tenero
+Animale lentissimo | Animale velocissimo
 Animale piccolo | Animale enorme
 Animale di casa | Animale selvatico
 Gioco tranquillo | Gioco scatenato
 Giocattolo noioso | Giocattolo fantastico
 Cartone per piccoli | Cartone per grandi
-Personaggio buono | Personaggio cattivo
+Personaggio cattivo | Personaggio buono
 Supereroe debole | Supereroe fortissimo
 Mostro buffo | Mostro spaventoso
 Sport facile | Sport difficile
@@ -1876,62 +1996,120 @@ Mestiere facile | Mestiere difficile
 Mestiere noioso | Mestiere da sogno
 Regalo deludente | Regalo fantastico
 Posto noioso | Posto avventuroso
-Posto sicuro | Posto pericoloso
-Rumore piacevole | Rumore fastidioso
+Posto pericoloso | Posto sicuro
+Rumore fastidioso | Rumore piacevole
 Parola facile | Parola difficile
 Galleggia | Affonda
 Si rompe subito | Dura per sempre
-
-# --- carte aggiunte a ottobre 2026 ---
-Quadrato | Tondo
-Ha un cattivo sapore | Ha un buon sapore
-Cibo con cui ti sporchi | Cibo con cui non ti sporchi
-Amico | Nemico
-Colazione leggera | Colazione pesante
-Primo della classe | Asino
+Quadrato | Rotondo
+Sapore disgustoso | Sapore delizioso
+Cibo che sporca tantissimo | Cibo che non sporca affatto
+Nemico | Amico
+Colazione leggera | Colazione abbondante
+Studente pessimo | Studente modello
 Orizzontale | Verticale
-Ding | Boom
-È difficile sederci sopra | È facile sederci sopra
+Sedia scomodissima | Sedia comodissima
 Liquido | Solido
-Pessima caramella | Ottima caramella
+Caramella da scherzo | Caramella da premio
 Non peloso | Peloso
 Troppo piccolo | Troppo grande
-Da non abbracciare | Da abbracciare
-Pokémon potente | Pokémon scarso
+Abbraccio che eviti | Abbraccio che cerchi
+Pokémon debolissimo | Pokémon fortissimo
 Piccola quantità | Grande quantità
 Spuntino | Pasto
-Materia semplice | Materia difficile
+Materia con tanti numeri | Materia con tante parole
 Diviso | Intero
-Nome da cane | Nome da gatto
-Meglio caldo | Meglio freddo
+Nome da cucciolo | Nome da bestione
+Meglio servito caldo | Meglio servito freddo
 Rigido | Flessibile
-Colore piacevole | Colore spiacevole
-Animale da compagnia comune | Animale da compagnia insolito
-
-# --- copie da altre stazioni (ottobre 2026) ---
-Superpotere inutile | Superpotere utile
-Pigro | Instancabile
-Fortunato | Sfortunato
-Mezzo lento | Mezzo veloce
+Colore sgradevole | Colore gradevole
+Animale da salotto | Animale da grandi spazi
+Superpotere nascosto | Superpotere evidente
+Pigrissimo | Pieno di energia
+Sfortunato | Fortunato
+Mezzo di trasporto lentissimo | Mezzo di trasporto velocissimo
 Croccante | Molle
-Snack sano | Snack spazzatura
-Invenzione inutile | Invenzione geniale
-Robot amichevole | Robot minaccioso
-Alieno pacifico | Alieno invasore
-Videogioco rilassante | Videogioco frustrante
-Costume da supereroe ridicolo | Costume da supereroe iconico
-Gusto di gelato deludente | Gusto di gelato irrinunciabile
-Strega simpatica | Strega malvagia
+Snack spazzatura | Snack sano
+Oggetto del passato | Oggetto del futuro
+Robot minaccioso | Robot amichevole
+Alieno invasore | Alieno pacifico
+Videogioco frustrante | Videogioco rilassante
+Costume da supereroe buffo | Costume da supereroe bellissimo
+Gusto di gelato deludente | Gusto di gelato pazzesco
+Strega malvagia | Strega simpatica
 Costume di Halloween ridicolo | Costume di Halloween terrificante
+Vicino | Lontano
+Stretto | Largo
+Sottile | Spesso
+Acceso | Spento
+Aperto | Chiuso
+Sgonfio | Gonfio
+Si vede attraverso | Non si vede attraverso
+Rimbalza poco | Rimbalza tantissimo
+Fa venire sonno | Tiene svegli
+Si scioglie subito | Non si scioglie mai
+Da usare una volta | Da usare tante volte
+Facile da nascondere | Difficile da nascondere
+Dritto | Storto
+Facile da lavare | Difficile da lavare
+Da condividere | Da tenere per sé
+Da giocare al chiuso | Da giocare all'aperto
+Si gioca con le mani | Si gioca con i piedi
+Da mangiare con le mani | Da mangiare con le posate
+Da usare con il sole | Da usare con la pioggia
+Da fare da soli | Serve l'aiuto di un adulto
+Piace agli insetti | Gli insetti lo evitano
+Si usa da seduti | Si usa in piedi
+Facile da aprire | Difficile da aprire
+Si usa ogni giorno | Non si usa mai
+Si vede da lontano | Si nota solo da vicino
+Si muove con il vento | Non si muove col vento
+Piace ai cani | Fa paura ai cani
+Serve a costruire | Serve a distruggere
+Si usa al buio | Si usa con la luce
+Si perde facilmente | Impossibile da perdere
+Si può annusare | Meglio non annusarlo
+Oggetto pessimo come cappello | Oggetto perfetto come cappello
+Animale rabbioso | Animale angioletto
+Gioco da fare sotto la pioggia | Gioco da fare col sole
+Superpotere che crea pasticci | Superpotere che risolve guai
+Oggetto da gita inutile | Oggetto da gita indispensabile
+Attività che annoia gli amici | Attività che coinvolge tutti
+Cosa che rovina una festa | Cosa che rende bella una festa
+Nome buffo per un dinosauro | Nome spaventoso per un dinosauro
+Cosa che fa piangere un robot | Cosa che fa ridere un robot
+Mezzo per la Luna pericoloso | Mezzo per la Luna sicuro
+Insetto spaventoso | Insetto simpatico
+Cibo che fa arrabbiare un orco | Cibo che rende felice un orco
+Nascondiglio ovvio | Nascondiglio impossibile da scoprire
+Nome per una nave pirata buffo | Nome per una nave pirata spaventoso
+Aiutante del mago che fa pasticci | Aiutante del mago che risolve tutto
+Pranzo leggero | Pranzo pesantissimo
+Strumento musicale silenzioso | Strumento musicale assordante
+Oggetto da trasloco leggero | Oggetto da trasloco pesantissimo
+Attrazione del luna park noiosa | Attrazione del luna park memorabile
+Robot inutile | Robot eccezionale
+Marachella innocua | Marachella gravissima
+Sport poco faticoso | Sport molto faticoso
+Strumento musicale leggerissimo | Strumento musicale pesantissimo
+Animale dello zoo noioso | Animale dello zoo spettacolare
+Oggetto inutile nel deserto | Oggetto indispensabile nel deserto
+Mezzo di trasporto pericoloso | Mezzo di trasporto sicuro
+NPC | Aura
+Costume da Halloween | Costume da carnevale
+
+
+
+
 
 [Hit Parade]
-# Il mazzo standard: i grandi classici per tutti
+# Per tutti
 
 Freddo | Caldo
-Sopravvalutato | Sottovalutato
+Sottovalutato | Sopravvalutato
 Inutile | Utile
 Facile da disegnare | Difficile da disegnare
-Noioso | Emozionante
+Noiosissimo | Entusiasmante
 Cibo da colazione | Cibo da cena
 Animale debole | Animale forte
 Film per bambini | Film per adulti
@@ -1940,37 +2118,37 @@ Brutto | Bello
 Puzza | Profuma
 Hobby da nonni | Hobby da ragazzi
 Economico | Costoso
-Rilassante | Stressante
+Stressante | Rilassante
 Antico | Moderno
 Minuscolo | Enorme
-Salato | Dolce
+Dolce | Salato
 Lento | Veloce
 Silenzioso | Rumoroso
 Da fare in estate | Da fare in inverno
 Morbido | Duro
 Leggero | Pesante
 Da città | Da campagna
-Pigro | Instancabile
+Pigrissimo | Iperattivo
 Prevedibile | Sorprendente
 Snob | Alla mano
-Fa bene | Fa male
+Fa male | Fa bene
 Triste | Allegro
 Inquietante | Rassicurante
-Superpotere inutile | Superpotere utile
+Superpotere discreto | Superpotere appariscente
 Vacanza da incubo | Vacanza da sogno
 Lavoro noioso | Lavoro da sogno
-Personaggio buono | Personaggio cattivo
+Personaggio cattivo | Personaggio buono
 Odiato | Amato
 Fuori moda | Di moda
-Mangiabile | Immangiabile
+Immangiabile | Mangiabile
 Poco italiano | Italianissimo
 Liscio | Ruvido
 Bagnato | Asciutto
-Regalo pessimo | Regalo perfetto
+Regalo impersonale | Regalo personalissimo
 Sport facile | Sport difficile
 Da fare da soli | Da fare in compagnia
 Normale | Strano
-Brutta parola | Bella parola
+Parola da insulto | Parola da poesia
 Talento inutile | Talento utile
 Film brutto | Film capolavoro
 Canzone brutta | Canzone bellissima
@@ -1980,40 +2158,40 @@ Piatto facile | Piatto difficile
 Colazione triste | Colazione da re
 Si beve caldo | Si beve freddo
 Bevanda disgustosa | Bevanda deliziosa
-Invenzione inutile | Invenzione geniale
+Invenzione nostalgica | Invenzione futuristica
 App inutile | App indispensabile
 Oggetto inutile | Oggetto indispensabile
-Facile da ricordare | Difficile da ricordare
+Parola da sussurrare | Parola da urlare
 Facile da dire | Difficile da dire
-Mestiere sottopagato | Mestiere strapagato
-Mestiere sicuro | Mestiere pericoloso
+Lavoro a orari fissi | Lavoro sempre reperibile
+Lavoro da scrivania | Lavoro in movimento
 Si fa al lavoro | Si fa in vacanza
 Hobby economico | Hobby costoso
 Sport noioso | Sport spettacolare
 Sport per pigri | Sport per atleti
 Animale brutto | Animale bellissimo
-Animale innocuo | Animale letale
+Animale letale | Animale innocuo
 Animale sopravvalutato | Animale sottovalutato
 Città brutta | Città bellissima
-Città da visitare | Città da evitare
+Città da evitare | Città da visitare
 Posto rilassante | Posto caotico
 Vacanza economica | Vacanza di lusso
 Viaggio breve | Viaggio infinito
-Mezzo lento | Mezzo veloce
+Mezzo di trasporto lentissimo | Mezzo di trasporto velocissimo
 Festa noiosa | Festa memorabile
 Regalo da riciclare | Regalo da tenere
-Casual | Elegante
+Abbigliamento informale | Abbigliamento elegante
 Vestito estivo | Vestito invernale
 Colore triste | Colore allegro
 Nome antico | Nome moderno
 Lingua facile | Lingua difficile
 Gioco facile | Gioco complicato
-Famoso | Sconosciuto
-Eroe | Cattivo
-Fortunato | Sfortunato
-Ottimista | Pessimista
-Puntuale | Ritardatario
-Tirchio | Spendaccione
+Sconosciuto | Famoso
+Cattivo | Eroe
+Sfortunato | Fortunato
+Pessimista | Ottimista
+Ritardatario | Puntuale
+Tirchio | Generoso
 Introverso | Estroverso
 Vecchio stile | All'avanguardia
 Cosa da boomer | Cosa da Gen Z
@@ -2024,169 +2202,229 @@ Sapore delicato | Sapore forte
 Cibo leggero | Cibo pesante
 Per niente piccante | Piccantissimo
 Croccante | Molle
-Snack sano | Snack spazzatura
+Snack spazzatura | Snack sano
 Piatto del nord | Piatto del sud
 Cibo di strada | Cibo stellato
 Cena veloce | Cena elaborata
 Moda passeggera | Intramontabile
 Programma trash | Programma colto
 Libro noioso | Libro avvincente
-Divertente | Irritante
+Irritante | Divertente
 Imbarazzante | Da vantarsi
 Facile da trovare | Introvabile
 Dura poco | Dura per sempre
-Faccenda odiosa | Faccenda piacevole
+Lavoro di casa odioso | Lavoro di casa piacevole
 Superstizione assurda | Superstizione sensata
-Scusa credibile | Scusa ridicola
+Scusa ridicola | Scusa credibile
 Regola stupida | Regola sacrosanta
-Abitudine sana | Abitudine pessima
-Vizio innocuo | Vizio pericoloso
+Abitudine pessima | Abitudine sana
+Vizio pericoloso | Vizio innocuo
 Da mattinieri | Da nottambuli
-Rumore rilassante | Rumore insopportabile
+Rumore insopportabile | Rumore rilassante
 Lavoro manuale | Lavoro intellettuale
 Per niente romantico | Romanticissimo
 Fragile | Indistruttibile
-
-# --- carte aggiunte a ottobre 2026 ---
-Persona cattiva | Persona buona
-Anni '80 | Anni '90
-Divinità meno potente | Divinità più potente
-Stimato | Disprezzato
-Facile da eliminare | Difficile da eliminare
+Persona spregevole | Persona ammirevole
+Nostalgia analogica | Nostalgia digitale
+Divinità vendicativa | Divinità protettrice
+Disprezzato | Stimato
+Nemico che scappa | Nemico che ti insegue
 Inaffidabile | Affidabile
-Senza valore | Inestimabile
-Ipocalorico | Ipercalorico
+Privo di valore | Di valore incalcolabile
+Poche calorie | Tantissime calorie
 Inefficace | Efficace
-Richiede fortuna | Richiede abilità
-Sciatto | Elegante
-Ha una cattiva reputazione | Ha una buona reputazione
+Sfida da preparare | Sfida da improvvisare
+Trasandato | Raffinato
+Personaggio che divide | Personaggio che unisce
 Impopolare | Popolare
-Star Wars | Star Trek
-Emoji utile | Emoji inutile
-Abilità sottovalutata | Abilità sopravvalutata
+Fantascienza riflessiva | Fantascienza d'azione
+Emoji completamente inutile | Emoji indispensabile
+Talento che spicca subito | Talento che scopri col tempo
 Instabile | Stabile
-Difficile da usare | Facile da usare
-Poco colto | Molto colto
-Cibo di sopravvivenza | Alta cucina
-Tamarro | Chic
-Pessimo attore | Ottimo attore
-Succede lentamente | Succede improvvisamente
-Mestiere sopravvalutato | Mestiere sottovalutato
+Tecnologia intuitiva | Tecnologia da esperti
+Ignorante | Acculturato
+Cibo da emergenza | Cibo da ristorante stellato
+Volgare | Di classe
+Attore da commedia | Attore da tragedia
+Cambiamento annunciato | Cambiamento inatteso
+Professione sopravvalutata | Professione sottovalutata
 Grifondoro | Serpeverde
-Vita breve | Vita lunga
-Non lo fa nessuno | Lo fanno tutti
-Inodore | Odore intenso
-Gioco sottovalutato | Gioco sopravvalutato
-Pessimo consiglio | Ottimo consiglio
-Ottimo | Pessimo
-Sport agonistico | Sport amatoriale
-Lato chiaro della Forza | Lato oscuro della Forza
-Persona brutta | Persona bella
-Cosa normale da possedere | Cosa bizzarra da possedere
-Inutile in un'emergenza | Utile in un'emergenza
-Persona che potrebbe batterti in uno scontro | Persona che potresti battere in uno scontro
+Corvonero | Tassorosso
+Vita brevissima | Vita lunghissima
+Non lo fa quasi nessuno | Lo fanno praticamente tutti
+Senza alcun odore | Odore fortissimo
+Gioco silenzioso | Gioco chiassoso
+Consiglio richiesto | Consiglio non richiesto
+Pessimo | Ottimo
+Sport praticato per competere | Sport praticato per divertimento
+Look discreto | Look appariscente
+Oggetto da nascondere | Oggetto da esporre
+Da portare sempre con sé | Da lasciare a casa
+Avversario scorretto | Avversario leale
 Non abbastanza | Troppo
-Fenomeno passeggero | Stella internazionale
-Evento informale | Evento formale
-Argomento divertente | Argomento serio
-Film sottovalutato | Film sopravvalutato
-Pessimo personaggio dei cartoni | Ottimo personaggio dei cartoni
-Hobby noioso | Hobby interessante
-Tormentone estivo | Grande classico
+Famoso senza meriti | Famoso per talento
+Occasione informale | Occasione formale
+Argomento da aperitivo | Argomento da assemblea
+Film da vedere da soli | Film da vedere in gruppo
+Personaggio animato tenero | Personaggio animato inquietante
+Passatempo soporifero | Passatempo appassionante
+Hit di una sola estate | Classico senza tempo
 Bufala | Verità
-Peggior epoca per viaggiare nel tempo | Miglior epoca per viaggiare nel tempo
-Persona noiosa | Persona divertente
-Libro sottovalutato | Libro sopravvalutato
-Saluto normale | Saluto bizzarro
-Amante dei gatti | Amante dei cani
-Pessimo condimento per la pizza | Ottimo condimento per la pizza
-Cortesia | Scortesia
+Epoca per avventurieri | Epoca per pantofolai
+Persona taciturna | Persona logorroica
+Libro da divorare | Libro da leggere con calma
+Saluto formale | Saluto confidenziale
+Animale pantofolaio | Animale esploratore
+Pizza tradizionale | Pizza sperimentale
+Scortesia | Cortesia
 Persona antipatica | Persona simpatica
-Cosa sottovalutata da possedere | Cosa sopravvalutata da possedere
+Oggetto da collezione | Oggetto d'uso quotidiano
 Fantasy | Fantascienza
-Il peggiore anno nella storia | Il migliore anno nella storia
+Anno di pace | Anno di guerra
 Blu | Verde
-Specie a rischio di estinzione | Specie in sovrappopolazione
+Specie urbana | Specie lontana dall'uomo
 Ordinario | Straordinario
-Film commerciale | Film d'autore
-Poco tatuato | Molto tatuato
+Cinema da botteghino | Cinema d’autore
+Pochissimi tatuaggi | Coperto di tatuaggi
 Fisso | Mobile
-Non vivrà fino a cent'anni | Vivrà fino a cent'anni
-Pessima scuola | Ottima scuola
-Nome banale | Nome originale
-Fatto poco conosciuto | Fatto molto conosciuto
-Peggior atleta di tutti i tempi | Miglior atleta di tutti i tempi
-Pessimo investimento | Buon investimento
-Conversazione leggera | Conversazione pesante
+Stile di vita spericolato | Stile di vita prudente
+Scuola severissima | Scuola molto permissiva
+Nome scontato | Nome fuori dal comune
+Curiosità inquietante | Curiosità divertente
+Atleta da sprint | Atleta da maratona
+Investimento prudente | Investimento azzardato
+Chiacchierata tra sconosciuti | Dialogo tra amici intimi
 Stupido | Geniale
 Bassa qualità | Alta qualità
-Privo di talento | Talentuoso
+Senza alcun talento | Pieno di talento
 Facoltativo | Obbligatorio
 Invendibile | Vendibile
-Cibo secco | Cibo umido
-Arma efficace | Arma non efficace
-Difficile da scrivere | Facile da scrivere
-Non importante | Importante
-Insostituibile | Sostituibile
-Meglio il libro | Meglio il film
-Musicista sottovalutato | Musicista sopravvalutato
-Cibo con pochi ingredienti | Cibo con molti ingredienti
+Cibo asciuttissimo | Cibo molto umido
+Arma quasi inutile | Arma molto efficace
+Parola piena di consonanti | Parola piena di vocali
+Trascurabile | Fondamentale
+Sostituibile | Insostituibile
+Storia fatta di parole | Storia fatta di immagini
+Musicista intimista | Musicista da grandi folle
+Ricetta essenziale | Ricetta ricca di ingredienti
 Eseguito male | Eseguito bene
-Argomento noioso | Argomento interessante
+Argomento che unisce | Argomento che divide
 Insapore | Saporito
-Perdita di tempo | Tempo ben impiegato
-Modello da seguire | Modello da evitare
-Laurea inutile | Laurea utile
+Tempo davanti allo schermo | Tempo all'aria aperta
+Esempio di coraggio | Esempio di prudenza
+Titolo per lavorare subito | Titolo per fare ricerca
 Non igienico | Igienico
-Film che Godzilla rovinerebbe | Film che Godzilla migliorerebbe
+Film senza effetti speciali | Film pieno di effetti speciali
 Proibito | Consigliabile
 Fallimento | Capolavoro
-Cosa sottovalutata da fare | Cosa sopravvalutata da fare
-Attore sottovalutato | Attore sopravvalutato
-Peggior giorno dell'anno | Miglior giorno dell'anno
-Parte del corpo inutile | Parte del corpo utile
+Attività per rilassarsi | Attività per sfogarsi
+Interprete da protagonista | Interprete da spalla
+Giorno da passare soli | Giorno da passare insieme
+Parte del corpo delicata | Parte del corpo resistente
 Comico | Drammatico
-Pessimo programma TV | Ottimo programma TV
-Persona genuina | Persona falsa
+Trasmissione inguardabile | Trasmissione imperdibile
+Persona ipocrita | Persona autentica
 Non addomesticabile | Addomesticabile
 Per bambini | Per adulti
 Obsoleto | Innovativo
-Difficile da pronunciare | Facile da pronunciare
+Parola dal suono dolce | Parola dal suono aspro
 Canzone triste | Canzone allegra
-Innocuo | Pericoloso
+Pericoloso | Innocuo
 Film triste | Film allegro
-Pessimo genere musicale | Ottimo genere musicale
-
-# --- copie da altre stazioni (ottobre 2026) ---
+Genere musicale insopportabile | Genere musicale fantastico
 Galleggia | Affonda
 Timido | Coraggioso
-Ordinato | Disordinato
+Disordinato | Ordinato
 Facile da mangiare | Difficile da mangiare
-Cibo con cui ti sporchi | Cibo con cui non ti sporchi
-Amico | Nemico
-È difficile sederci sopra | È facile sederci sopra
-Da non abbracciare | Da abbracciare
-Nome da cane | Nome da gatto
+Cibo che sporca tantissimo | Cibo che non sporca affatto
+Nemico | Amico
+Seduta da incubo | Seduta da sogno
+Abbraccio che eviti | Abbraccio che cerchi
+Nome da cucciolo | Nome da bestione
 Animale di casa | Animale selvatico
-Animale da compagnia comune | Animale da compagnia insolito
+Animale da salotto | Animale da grandi spazi
 Esiste davvero | È inventato
+Compagno di viaggio da incubo | Compagno di viaggio ideale
+Oggetto pessimo come ombrello | Oggetto perfetto come ombrello
+Notizia che rovina la giornata | Notizia che migliora la giornata
+Cosa terribile da ricevere per posta | Cosa bellissima da ricevere per posta
+Compagno d'ascensore terribile | Compagno d'ascensore simpatico
+Posto tremendo per aspettare ore | Posto piacevole per aspettare ore
+Oggetto imbarazzante in una valigia | Oggetto indispensabile in valigia
+Sorpresa di compleanno da evitare | Sorpresa di compleanno gradita
+Attività pessima per un appuntamento | Attività perfetta per un appuntamento
+Kit di sopravvivenza inutile | Kit di sopravvivenza utilissimo
+Oggetto del futuro che spaventa | Oggetto del futuro che entusiasma
+Soprannome da supercattivo ridicolo | Soprannome da supercattivo minaccioso
+Scoperta durante un trasloco inquietante | Scoperta durante un trasloco piacevole
+Abbigliamento imbarazzante | Abbigliamento ultra-chic
+Grido da stadio classico | Grido da stadio fuori luogo
+Superpotere per un colloquio inutile | Superpotere per un colloquio decisivo
+Oggetto in un museo ridicolo | Oggetto in un museo azzeccato
+Mascotte imbarazzante | Mascotte amatissima
+Targa commemorativa fuori luogo | Targa commemorativa azzeccata
+Catena di supermercati peggiore | Catena di supermercati migliore
+Gusto di piadina classico | Gusto di piadina stravagante
+Regalo di S. Valentino pessimo | Regalo di S. Valentino perfetto
+Errore lieve all’esame di guida | Errore da bocciatura all'esame di guida
+Rock band tranquilla | Rock band scatenata
+Biscotto della fortuna ridicolo | Biscotto della fortuna profetico
+Parte dell'auto superflua | Parte dell'auto indispensabile
+Strumento musicale discreto | Strumento musicale assordante
+Oggetto da trasloco leggero | Oggetto da trasloco pesantissimo
+Attrazione del luna park noiosa | Attrazione del luna park memorabile
+Paese poco sviluppato | Paese tecnologicamente avanzato
+Robot inutile | Robot eccezionale
+Dieta pessima | Dieta ottima
+Monumento sottovalutato | Monumento sopravvalutato
+Epoca terribile in cui vivere | Epoca ideale in cui vivere
+Sport poco faticoso | Sport molto faticoso
+Strumento musicale leggerissimo | Strumento musicale pesantissimo
+Attività del weekend terribile | Attività del weekend fantastica
+Motivo per alzarsi rinviabile | Motivo per alzarsi urgente
+Piatto locale | Piatto etnico
+Invenzione inutile | Invenzione rivoluzionaria
+Suoneria quasi impercettibile | Suoneria assordante
+Esercizio in palestra facilissimo | Esercizio in palestra massacrante
+Animale dello zoo noioso | Animale dello zoo spettacolare
+Dessert tradizionale | Dessert sperimentale
+Parte del corpo poco sensibile | Parte del corpo sensibilissima
+Rap | Trap
+Rock | Metal
+Pop | Rock
+Mamma | Papà
+Oggetto inutile nel deserto | Oggetto indispensabile nel deserto
+Nome da wrestler ridicolo | Nome da wrestler convincente
+Allergia comune | Allergia rarissima
+Rimandabile | Urgente
+Acquisto impulsivo | Acquisto ragionato
+Fast food | Slow food
+Legge inutile | Legge necessaria
+Nome da millennial | Nome da Gen Z
+Slang da millennial | Slang da Gen Z
+Moda anni '80 | Moda anni 2000
+Mezzo di trasporto pericoloso | Mezzo di trasporto sicuro
+
+
+
+
 
 [Onde Cerebrali]
-# Concetti astratti e sfumati: per chi vuole ragionarci su
+# Concetti astratti e sfumati
 
-Etico | Immorale
-Arte | Non arte
+Immorale | Etico
+Non considerato arte | Considerato arte
 Scoperto | Inventato
 Naturale | Artificiale
-Razionale | Irrazionale
+Irrazionale | Razionale
 Destino | Caso
-Ordine | Caos
-Utopia | Distopia
-Mainstream | Di nicchia
+Caos | Ordine
+Distopia | Utopia
+Di massa | Di nicchia
 Concreto | Astratto
 Oggettivo | Soggettivo
 Semplice | Complesso
-Bene comune | Interesse personale
+Interesse personale | Bene comune
 Libertà | Sicurezza
 Tradizione | Progresso
 Corpo | Mente
@@ -2194,99 +2432,141 @@ Emozione | Ragione
 Individuo | Collettività
 Effimero | Eterno
 Reale | Immaginario
-Verità scomoda | Bugia comoda
+Bugia comoda | Verità scomoda
 Sacro | Profano
 Genialità | Follia
-Coraggio | Incoscienza
-Prudenza | Codardia
-Ambizione sana | Ambizione tossica
-Giustizia | Vendetta
-Perdonabile | Imperdonabile
-Diritto | Privilegio
-Bisogno | Capriccio
-Necessario | Superfluo
+Incoscienza | Coraggio
+Codardia | Prudenza
+Ambizione tossica | Ambizione sana
+Vendetta | Giustizia
+Imperdonabile | Perdonabile
+Privilegio per pochi | Diritto per tutti
+Capriccio | Bisogno
+Superfluo | Necessario
 Talento | Fortuna
-Merito | Raccomandazione
+Raccomandazione | Merito
 Natura | Cultura
 Istinto | Riflessione
 Nostalgico | Visionario
 Conservatore | Rivoluzionario
-Ottimismo | Cinismo
-Amore | Abitudine
-Amicizia | Convenienza
+Cinismo | Ottimismo
+Legame per abitudine | Legame per amore
+Rapporto di convenienza | Amicizia sincera
 Ironia | Sarcasmo
-Satira | Offesa
+Offesa gratuita | Satira intelligente
 Cultura alta | Cultura popolare
-Profondo | Superficiale
-Ispirazione | Plagio
+Superficiale | Profondo
+Plagio | Ispirazione
 Minimalista | Barocco
 Funzionale | Decorativo
-Utile alla società | Dannoso alla società
+Dannoso alla società | Utile alla società
 Lavoro | Vocazione
-Successo | Realizzazione
-Ricchezza | Felicità
-Tempo libero | Tempo perso
+Successo di facciata | Realizzazione autentica
+Ricchezza materiale | Ricchezza affettiva
+Tempo sprecato | Tempo libero ben speso
 Dubbio | Certezza
-Fede | Scienza
-Credibile | Assurdo
+Basato sulla fede | Basato su prove scientifiche
+Assurdo | Credibile
 Teoria | Pratica
-Invecchia bene | Invecchia male
+Invecchia male | Invecchia bene
 Cliché | Inaspettato
 Ovvietà | Paradosso
-Silenzio d'oro | Silenzio imbarazzante
+Silenzio imbarazzante | Silenzio d'oro
 Fallimento | Lezione
 Ricordo | Rimpianto
 Quantità | Qualità
 Arte da museo | Arte di strada
-Maturo | Infantile
-Coerente | Contraddittorio
+Infantile | Maturo
+Contraddittorio | Coerente
 Moderato | Estremo
 Pubblico | Privato
 Egoista | Altruista
 Spontaneo | Calcolato
 Autentico | Costruito
 Fatto per amore | Fatto per soldi
-
-# --- carte aggiunte a ottobre 2026 ---
-Persona senza scrupoli | Persona scrupolosa
-Elettrizzante | Terrificante
-Fobia irragionevole | Fobia ragionevole
-Pettegolezzo | Notizia
-Inerme | Potente
-Lineare | Sinuoso
-Arte | Design
+Persona spietata | Persona molto coscienziosa
+Spaventoso | Adrenalinico
+Paura completamente assurda | Paura più che giustificata
+Voce di corridoio | Notizia verificata
+Indifeso | Potentissimo
+Rettilineo | Tortuoso
+Scelta per principio | Scelta per convenienza
 Limitato | Infinito
 Guerrafondaio | Pacifista
-Simile | Identico
-Cattiva amministrazione | Buona amministrazione
-Assurdo | Strano
-Piccolo | Minuscolo
+Simile | Opposto
+Gestione disastrosa | Gestione impeccabile
+Giudicato normale | Giudicato scandaloso
+Scelta senza conseguenze | Scelta che cambia una vita
 Dittatura | Democrazia
 Incomprensibile | Comprensibile
-Storicamente importante | Storicamente irrilevante
-Saggio | Intelligente
-Film d'azione | Film d'avventura
-Culturalmente irrilevante | Culturalmente significativo
+Evento ricordato con dolore | Evento ricordato con gioia
+Imparare dagli altri | Imparare da soli
+Film adrenalinico | Film contemplativo
+Opera legata al suo tempo | Opera senza tempo
 Popolare | Elitario
 Eterogeneo | Omogeneo
-Cibo etico | Cibo non etico
-Scienza | Pseudoscienza
-Problema locale | Problema globale
-Galateo | Buone maniere
+Cibo prodotto senza scrupoli | Cibo prodotto eticamente
+Pseudoscienza | Scienza
+Problema delle campagne | Problema delle metropoli
+Cortesia di facciata | Cortesia spontanea
 Abitudine | Mania
-Argomento non controverso | Argomento controverso
-Probabile | Improbabile
-Azienda eticamente scorretta | Azienda eticamente corretta
-Tagliente | Appuntito
-Prova che Dio non esiste | Prova che Dio esiste
-Bene | Male
-Moderato | Conservatore
-Imparziale | Di parte
-Tradizionalmente femminile | Tradizionalmente maschile
-Tradizionale | Radicale
-Avvantaggia te | Avvantaggia tutti
-Talento innato | Abilità acquisita
+Tema da risata | Tema da litigio
+Improbabile | Probabile
+Impresa senza scrupoli | Impresa responsabile
+Promessa mantenuta | Promessa tradita
+Mistero che spaventa | Mistero che incuriosisce
+Male | Bene
+Cambiare idea | Restare sulle proprie posizioni
+Di parte | Imparziale
+Abitudine di una volta | Abitudine nata online
+Dire la verità | Nascondere la verità
+Scelta utile subito | Scelta utile nel tempo
+Dote creativa | Dote organizzativa
 Pacchiano | Raffinato
+Libero arbitrio | Determinismo
+Morale relativa | Morale assoluta
+Idealismo | Pragmatismo
+Empatia | Indifferenza
+Inclusione | Esclusione
+Autonomia | Dipendenza
+Conformismo | Dissenso
+Conoscenza | Ignoranza
+Legittimo | Illegittimo
+Scelta reversibile | Scelta irreversibile
+Memoria collettiva | Oblio collettivo
+Essere | Apparire
+Proteggere | Controllare
+Sentirsi a casa | Sentirsi fuori posto
+Cambiare per sé stessi | Cambiare per piacere agli altri
+Regola che protegge | Regola che limita
+Paura che protegge | Paura che paralizza
+Critica che aiuta | Critica che ferisce
+Ricordo che consola | Ricordo che tormenta
+Introverso | Estroverso
+Red flag | Green flag
+Gelosia tossica | Gelosia sana
+Premio che offende | Premio che valorizza
+Verità che divide | Verità che unisce
+Favore disinteressato | Favore interessato
+Scoperta che spaventa | Scoperta che dà speranza
+Decisione che accontenta pochi | Decisione che accontenta tutti
+Successo ottenuto imbrogliando | Successo ottenuto onestamente
+Decisione da presidente impulsiva | Decisione da presidente ponderata
+Elogio che crea rivalità | Elogio che incoraggia
+Ministero poco importante | Ministero importantissimo
+Paese poco sviluppato | Paese tecnologicamente avanzato
+Piacere lieve | Estasi totale
+Epoca terribile in cui vivere | Epoca ideale in cui vivere
+Incubo | Sogno
+Vizio facile da correggere | Vizio impossibile da correggere
+Reato lieve | Reato gravissimo
+Complotto assurdo | Complotto plausibile
+Repulsione | Desiderio
+Acquisto impulsivo | Acquisto ragionato
+Legge inutile | Legge necessaria
+
+
+
 
 [Amarcord Radio]
 # Nostalgia e italianità: infanzia anni '80-2000, cibo, dialetti, parenti e luoghi comuni
@@ -2296,7 +2576,7 @@ Gioco da cortile noioso | Gioco da cortile epico
 Giocattolo dimenticato | Giocattolo iconico
 Figurina comune | Figurina introvabile
 Gita scolastica noiosa | Gita scolastica epica
-Compiti delle vacanze leggeri | Compiti delle vacanze infiniti
+Compiti delle vacanze infiniti | Compiti delle vacanze leggeri
 Ricordo d'infanzia sbiadito | Ricordo d'infanzia vivido
 Sogno da bambino realistico | Sogno da bambino impossibile
 Diario segreto noioso | Diario segreto esplosivo
@@ -2318,11 +2598,11 @@ Motorino sfigato | Motorino leggendario
 Campeggio da incubo | Campeggio da sogno
 Rito da spiaggia noioso | Rito da spiaggia irrinunciabile
 Pranzo della domenica leggero | Pranzo della domenica infinito
-Domanda dei parenti innocua | Domanda dei parenti imbarazzante
+Domanda dei parenti imbarazzante | Domanda dei parenti innocua
 Regola della nonna assurda | Regola della nonna sacrosanta
 Rimedio della nonna inutile | Rimedio della nonna miracoloso
-Ricetta della nonna semplice | Ricetta della nonna segreta
-Mamma italiana tranquilla | Mamma italiana apprensiva
+Ricetta della nonna facilissima | Ricetta della nonna complicatissima
+Mamma italiana apprensiva | Mamma italiana tranquilla
 Gesto italiano offensivo | Gesto italiano affettuoso
 Dialetto incomprensibile | Dialetto chiarissimo
 Parola dialettale brutta | Parola dialettale bellissima
@@ -2333,7 +2613,7 @@ Pizza ortodossa | Pizza eretica
 Abbinamento tradizionale | Abbinamento eretico
 Formato di pasta sottovalutato | Formato di pasta sopravvalutato
 Piatto regionale sottovalutato | Piatto regionale sopravvalutato
-Gusto di gelato deludente | Gusto di gelato irrinunciabile
+Gusto di gelato deludente | Gusto di gelato pazzesco
 Caffè fatto male | Caffè perfetto
 Bevanda da nonno | Bevanda da ragazzi
 Sagra noiosa | Sagra imperdibile
@@ -2351,11 +2631,9 @@ Tradizione di Natale noiosa | Tradizione di Natale imperdibile
 Lettera d'amore imbarazzante | Lettera d'amore indimenticabile
 Cosa da anni '90 | Cosa da anni 2000
 Gioco in scatola dimenticato | Gioco in scatola immortale
-
-# --- nuove carte (ottobre 2026) ---
-Parente che vedi spesso | Parente che vedi ai matrimoni
-Cugino modello | Cugino pecora nera
-Frase da mamma rassicurante | Frase da mamma minacciosa
+Parente che vedi solo ai matrimoni | Parente che vedi sempre
+Cugino pecora nera | Cugino modello
+Frase da mamma minacciosa | Frase da mamma rassicurante
 Bugia dei genitori smascherata subito | Bugia dei genitori creduta per anni
 Aneddoto del nonno verosimile | Aneddoto del nonno leggendario
 Porzione normale | Porzione da nonna
@@ -2365,14 +2643,14 @@ Cibo che odiavi da bambino | Cibo che amavi da bambino
 Sapore d'estate | Sapore d'inverno
 Gelato confezionato anonimo | Gelato confezionato mitico
 Prodotto da Autogrill inutile | Prodotto da Autogrill irresistibile
-Maestra dolcissima | Maestra terribile
-Compagno di banco tranquillo | Compagno di banco disastroso
-Giustificazione credibile | Giustificazione assurda
+Maestra terribile | Maestra dolcissima
+Compagno di banco disastroso | Compagno di banco tranquillo
+Giustificazione assurda | Giustificazione credibile
 Punizione blanda | Punizione esemplare
-Soprannome affettuoso | Soprannome spietato
-Penitenza leggera | Penitenza crudele
-Pesce d'aprile innocente | Pesce d'aprile da denuncia
-Cartone d'infanzia dolce | Cartone d'infanzia traumatico
+Soprannome spietato | Soprannome affettuoso
+Penitenza crudele | Penitenza leggera
+Pesce d'aprile da denuncia | Pesce d'aprile innocente
+Cartone d'infanzia traumatico | Cartone d'infanzia dolce
 Sigla dimenticata | Sigla che sai a memoria
 Suono anni '90 dimenticato | Suono anni '90 inconfondibile
 Aggeggio anni '90 superato | Aggeggio anni '90 rimpianto
@@ -2384,14 +2662,12 @@ Musica da balera | Musica da discoteca
 Spiaggia libera | Stabilimento esclusivo
 Gioco di carte semplice | Gioco di carte complicato
 Usanza italiana normale | Usanza italiana inspiegabile
-
-# --- copie da altre stazioni (ottobre 2026) ---
 Si fa al mare | Si fa in montagna
 Cibo da merenda | Cibo da cena
 Cartone per piccoli | Cartone per grandi
-Primo della classe | Asino
-Pessima caramella | Ottima caramella
-Materia semplice | Materia difficile
+Studente pessimo | Studente modello
+Caramella da scherzo | Caramella da premio
+Materia da studiare sui libri | Materia da provare in laboratorio
 Hobby da nonni | Hobby da ragazzi
 Da città | Da campagna
 Fuori moda | Di moda
@@ -2403,17 +2679,75 @@ Cosa da boomer | Cosa da Gen Z
 Fatto in casa | Industriale
 Piatto del nord | Piatto del sud
 Superstizione assurda | Superstizione sensata
-Anni '80 | Anni '90
-Tamarro | Chic
-Pessimo personaggio dei cartoni | Ottimo personaggio dei cartoni
+Nostalgia analogica | Nostalgia digitale
+Volgare | Di classe
+Personaggio animato tenero | Personaggio animato inquietante
 Tradizione | Progresso
 Nostalgico | Visionario
 Ricordo | Rimpianto
+Pranzo da gita terribile | Pranzo da gita eccezionale
+Scambio di figurine truffaldino | Scambio di figurine vantaggioso
+Avviso sul diario da nascondere | Avviso sul diario da mostrare
+Foto di classe in cui esci malissimo | Foto di classe in cui esci benissimo
+Primo cellulare da nascondere | Primo cellulare da esibire
+Merenda da scambiare | Merenda da tenere stretta
+Zaino delle elementari orrendo | Zaino delle elementari fantastico
+Gioco dell'infanzia da dimenticare | Gioco dell'infanzia da rifare
+Cartone del sabato mattina noioso | Cartone del sabato mattina imperdibile
+Ricordo della scuola da cancellare | Ricordo della scuola da rivivere
+Regalo di compleanno deludente | Regalo di compleanno perfetto
+Abitudine di famiglia da abolire | Abitudine di famiglia da tramandare
+Primo videogioco deludente | Primo videogioco indimenticabile
+Scherzo tra compagni crudele | Scherzo tra compagni divertente
+Personaggio dei cartoni da evitare | Personaggio dei cartoni da imitare
+Oggetto nell'astuccio che perdevi | Oggetto nell'astuccio che custodivi
+Sentirsi a casa | Sentirsi fuori posto
+Ricordo triste | Ricordo felice
+Oggetto retrò da buttare | Oggetto retrò da riscoprire
+Canzone retrò insopportabile | Canzone retrò fantastica
+Scherzo del nonno irritante | Scherzo del nonno divertentissimo
+Cosa da dire a una rimpatriata | Cosa da non dire a una rimpatriata
+Rito odioso | Rito simpatico
+Canzone da oratorio triste | Canzone da oratorio trascinante
+Conoscente invecchiato male | Conoscente invecchiato bene
+Ricordo che fa arrossire | Ricordo che fa sorridere
+Frase incisa sul banco terribile | Frase incisa sul banco leggendaria
+Colazione prima della scuola triste | Colazione prima della scuola perfetta
+Scherzo telefonico crudele | Scherzo telefonico divertente
+Vestito da recita scolastica imbarazzante | Vestito da recita scolastica stupendo
+Dedica sulla Smemoranda penosa | Dedica sulla Smemoranda bellissima
+Ritrovamento in soffitta banale | Ritrovamento in soffitta prezioso
+Sorpresa ovetto Kinder da dimenticare | Sorpresa ovetto Kinder da collezionare
+Messaggio nel testamento che scatena litigi | Messaggio nel testamento che mette pace
+Premio della tombola deludente | Premio della tombola ambitissimo
+Ospite a una sagra noioso | Ospite a una sagra pazzesco
+Nome squadra di calcetto ridicolo | Nome squadra di calcetto leggendario
+Nota sul registro comune | Nota sul registro strampalata
+Regalo per un diciottesimo tristissimo | Regalo da diciottesimo indimenticabile
+Pranzo leggero | Pranzo pesantissimo
+Catena di supermercati peggiore | Catena di supermercati migliore
+Gusto di piadina classico | Gusto di piadina stravagante
+Ricordo Facebook imbarazzante | Ricordo Facebook stupendo
+SMS da amico | SMS da amante
+Attrazione del luna park noiosa | Attrazione del luna park memorabile
+Marachella innocua | Marachella gravissima
+Monumento sottovalutato | Monumento sopravvalutato
+Piatto locale | Piatto etnico
+Suoneria quasi impercettibile | Suoneria assordante
+Dessert tradizionale | Dessert sperimentale
+Pranzo a casa propria | Pranzo da nonna
+Fast food | Slow food
+Nome da millennial | Nome da Gen Z
+Slang da millennial | Slang da Gen Z
+Moda anni '80 | Moda anni 2000
+Costume da Halloween | Costume da carnevale
+
+
 
 [8-Bit FM]
 # Per nerd: videogiochi, fumetti, anime, giochi di ruolo, fantascienza e tecnologia
 
-Videogioco rilassante | Videogioco frustrante
+Videogioco frustrante | Videogioco rilassante
 Boss finale ridicolo | Boss finale leggendario
 Console dimenticata | Console leggendaria
 Grafica pixellosa | Grafica realistica
@@ -2438,100 +2772,146 @@ Classe da GdR debole | Classe da GdR fortissima
 Tiro di dado disastroso | Tiro di dado critico
 Gioco da tavolo per principianti | Gioco da tavolo per esperti
 Incantesimo inutile | Incantesimo potentissimo
-Creatura magica innocua | Creatura magica letale
-Mondo immaginario da visitare | Mondo immaginario da evitare
+Creatura magica letale | Creatura magica innocua
+Mondo immaginario da evitare | Mondo immaginario da visitare
 Cattivo dimenticabile | Cattivo iconico
 Finale deludente | Finale perfetto
 Sequel inutile | Sequel migliore dell'originale
-Saga da recuperare | Saga da abbandonare
+Saga da abbandonare | Saga da recuperare
 Trama semplice | Trama complicatissima
 Personaggio secondario inutile | Personaggio secondario che ruba la scena
 Personaggio da odiare | Personaggio da amare
 Teoria dei fan assurda | Teoria dei fan geniale
-Spoiler innocuo | Spoiler imperdonabile
+Spoiler imperdonabile | Spoiler innocuo
 Anime per tutti | Anime per veri fan
 Fumetto per bambini | Fumetto per adulti
 Costume da supereroe ridicolo | Costume da supereroe iconico
 Cosplay facile | Cosplay difficilissimo
 Collezione normale | Collezione ossessiva
 Passione nerd moderata | Passione nerd estrema
-Gergo nerd comprensibile | Gergo nerd incomprensibile
-Robot amichevole | Robot minaccioso
-Alieno pacifico | Alieno invasore
-Pianeta abitabile | Pianeta infernale
+Gergo nerd incomprensibile | Gergo nerd comprensibile
+Robot minaccioso | Robot amichevole
+Alieno invasore | Alieno pacifico
+Pianeta infernale | Pianeta abitabile
 Astronave scassata | Astronave da sogno
-Paradosso temporale innocuo | Paradosso temporale catastrofico
+Paradosso temporale catastrofico | Paradosso temporale innocuo
 Tecnologia impossibile | Tecnologia in arrivo
-IA amichevole | IA inquietante
-Codice leggibile | Codice incomprensibile
-Bug innocuo | Bug catastrofico
+IA inquietante | IA amichevole
+Codice incomprensibile | Codice leggibile
+Bug catastrofico | Bug innocuo
 Password debole | Password inattaccabile
 Meme vecchio | Meme fresco
-Controller comodo | Controller scomodo
+Controller scomodo | Controller comodo
 Gioco per console | Gioco per computer
 Mappa minuscola | Mappa sterminata
-Armatura brutta ma utile | Armatura bella ma inutile
+Armatura fragilissima | Armatura indistruttibile
 Personaggio muto | Personaggio logorroico
-Gioco da maratona notturna | Gioco da cinque minuti
-
-# --- nuove carte (ottobre 2026) ---
+Gioco da cinque minuti | Gioco da maratona notturna
 Power-up deludente | Power-up devastante
-Checkpoint ovunque | Checkpoint introvabili
-Gioco accessibile | Gioco per masochisti
-Gioco onesto | Gioco mangiasoldi
+Checkpoint introvabili | Checkpoint ovunque
+Gioco per masochisti | Gioco accessibile
+Gioco mangiasoldi | Gioco onesto
 Si molla subito | Ancora una partita!
-Gioco che unisce | Gioco che distrugge amicizie
+Gioco che distrugge amicizie | Gioco che unisce
 Hype tradito | Hype ripagato
 Lore inesistente | Lore sterminata
 Segreto facile da trovare | Segreto introvabile
 Effetto sonoro fastidioso | Effetto sonoro iconico
-Cheat code innocuo | Cheat code che rompe il gioco
-NPC prezioso | NPC insopportabile
+Cheat code che rompe il gioco | Cheat code innocuo
+NPC insopportabile | NPC prezioso
 Nemico che non torna più | Nemico che torna sempre
 Personaggio da salvare | Personaggio che salva tutti
-Master generoso | Master sadico
-Legale buono | Caotico malvagio
+Master sadico | Master generoso
+Caotico malvagio | Legale buono
 Forza bruta | Pura magia
 Arma medievale | Arma futuristica
-Rifugio anti-zombie sicuro | Rifugio anti-zombie disastroso
+Inventario senza limiti | Inventario con spazio limitato
 Trasformazione lampo | Trasformazione infinita
 Pettinatura normale | Pettinatura da anime
 Manga breve | Manga infinito
-Identità segreta credibile | Identità segreta ridicola
-Piano del cattivo sensato | Piano del cattivo assurdo
+Identità segreta ridicola | Identità segreta credibile
+Piano del cattivo assurdo | Piano del cattivo sensato
 Poteri di nascita | Solo gadget e soldi
-Fandom tranquillo | Fandom tossico
+Fandom tossico | Fandom tranquillo
 Sapere nerd inutile | Sapere nerd utilissimo
-Fantascienza plausibile | Fantascienza assurda
+Fantascienza assurda | Fantascienza plausibile
 Gadget sci-fi superfluo | Gadget sci-fi da avere subito
 Tecnologia fragile | Tecnologia indistruttibile
 Trucco tech placebo | Trucco tech infallibile
-Scena di hacking realistica | Scena di hacking ridicola
+Scena di hacking ridicola | Scena di hacking realistica
 Postazione sobria | Postazione piena di LED
-
-# --- copie da altre stazioni (ottobre 2026) ---
-Pokémon potente | Pokémon scarso
+Pokémon debolissimo | Pokémon fortissimo
 Supereroe debole | Supereroe fortissimo
-Ding | Boom
-Superpotere inutile | Superpotere utile
-Invenzione inutile | Invenzione geniale
+Superpotere discreto | Superpotere appariscente
+Invenzione nostalgica | Invenzione futuristica
 App inutile | App indispensabile
-Eroe | Cattivo
+Cattivo | Eroe
 Tecnologia vecchia | Tecnologia futuristica
-Divinità meno potente | Divinità più potente
-Facile da eliminare | Difficile da eliminare
-Richiede fortuna | Richiede abilità
-Star Wars | Star Trek
-Difficile da usare | Facile da usare
+Divinità vendicativa | Divinità protettrice
+Nemico che scappa | Nemico che ti insegue
+Sfida da preparare | Sfida da improvvisare
+Fantascienza riflessiva | Fantascienza d'azione
+Tecnologia intuitiva | Tecnologia da esperti
 Grifondoro | Serpeverde
-Gioco sottovalutato | Gioco sopravvalutato
-Lato chiaro della Forza | Lato oscuro della Forza
-Peggior epoca per viaggiare nel tempo | Miglior epoca per viaggiare nel tempo
+Gioco silenzioso | Gioco chiassoso
+Epoca per avventurieri | Epoca per pantofolai
 Fantasy | Fantascienza
-Utopia | Distopia
-Mainstream | Di nicchia
+Distopia | Utopia
+Di massa | Di nicchia
 Reale | Immaginario
-Inerme | Potente
+Indifeso | Potentissimo
+Scambio Pokémon truffaldino | Scambio Pokémon vantaggioso
+Pokémon shiny orrendo | Pokémon shiny spettacolare
+Oggetto in Minecraft inutile | Oggetto in Minecraft utilissimo
+Percorso Mario Kart piacevole | Percorso Mario Kart impossibile
+Trappola di D&D ingiusta | Trappola di D&D geniale
+Combinazione di D&D banale | Combinazione di D&D originale
+Piano contro un drago suicida | Piano contro un drago brillante
+Videogioco senza cutscene | Videogioco pieno di cutscene
+Primo videogioco deludente | Primo videogioco indimenticabile
+Pokémon difficile da catturare | Pokémon facile da catturare
+Skin di un videogioco orrenda | Skin di un videogioco bellissima
+Personaggio di Mario Kart da evitare | Personaggio di Mario Kart da scegliere
+Supereroe coinquilino terribile | Supereroe coinquilino ideale
+Mostro di D&D da cui fuggire | Mostro di D&D da adottare
+Videogioco basato sulla storia | Videogioco basato sull’azione
+Personaggio dei videogiochi bugiardo | Personaggio dei videogiochi affidabile
+Carta Pokémon da scartare | Carta Pokémon da custodire
+Regola di D&D da abolire | Regola di D&D da introdurre
+Lupo mannaro tenero | Lupo mannaro feroce
+Maledizione ingestibile | Maledizione gestibile
+Oggetto inutile per un dungeon | Oggetto salvavita per un dungeon
+Sfida da streamer umiliante | Sfida da streamer esaltante
+Superpotere peggiore | Superpotere migliore
+Mossa Pokemon scarsa | Mossa Pokemon devastante
+Videogioco per una pausa breve | Videogioco per un intero weekend
+Videogioco in cui vivresti | Videogioco da cui scapperesti
+Frase da boss finale ridicola | Frase da boss finale intimidatoria
+Oggetto del futuro che spaventa | Oggetto del futuro che entusiasma
+Frase da alieno spaventosa | Frase da alieno rassicurante
+Nome di una spada magica ridicolo | Nome di una spada magica epico
+Incantesimo inutile | Incantesimo utilissimo
+Maledizione innocua | Maledizione terribile
+Equipaggiamento per il boss ridicolo | Equipaggiamento per il boss perfetto
+Nome da gilda imbarazzante | Nome da gilda leggendario
+Soprannome da supercattivo ridicolo | Soprannome da supercattivo minaccioso
+Superpotere per un colloquio inutile | Superpotere per un colloquio decisivo
+Incantesimo che fa ridere | Incantesimo che mette paura
+Regalo per Bowser offensivo | Regalo per Bowser che lo commuove
+Regola di Mario Kart ingiusta | Regola di Mario Kart divertentissima
+Taverna fantasy da chiudere subito | Taverna fantasy in cui restare
+Famiglio che mette nei guai il mago | Famiglio che salva il mago
+Videogioco facilissimo | Videogioco difficilissimo
+Soundtrack inesistente | Soundtrack incredibile
+Robot inutile | Robot eccezionale
+Missione da supereroe ridicola | Missione da supereroe grandiosa
+Invenzione inutile | Invenzione rivoluzionaria
+Personaggio da lasciare nella tomba | Personaggio da resuscitare
+NPC | Aura
+Auto Rocket League inutilizzata | Auto Rocket League usatissima
+
+
+
 
 [Prima Visione]
 # Cinema, serie TV, musica e star: lo spettacolo in tutte le sue forme
@@ -2545,7 +2925,7 @@ Colpo di scena prevedibile | Colpo di scena sconvolgente
 Inizio lento | Inizio folgorante
 Film troppo corto | Film troppo lungo
 Film da popcorn | Film da festival
-Oscar meritato | Oscar rubato
+Oscar rubato | Oscar meritato
 Cameo dimenticabile | Cameo leggendario
 Effetti speciali ridicoli | Effetti speciali spettacolari
 Horror che fa ridere | Horror che terrorizza
@@ -2561,7 +2941,7 @@ Genere di film sottovalutato | Genere di film sopravvalutato
 Film da primo appuntamento sbagliato | Film da primo appuntamento perfetto
 Maratona di film stancante | Maratona di film epica
 Posto al cinema pessimo | Posto al cinema perfetto
-Vicino di poltrona educato | Vicino di poltrona insopportabile
+Vicino di poltrona insopportabile | Vicino di poltrona educato
 Snack da cinema deludente | Snack da cinema irrinunciabile
 Serie da mollare subito | Serie da divorare
 Episodio di riempimento | Episodio cult
@@ -2576,14 +2956,14 @@ Star antipatica | Star simpatica
 Coppia vip improbabile | Coppia vip perfetta
 Scandalo vip innocuo | Scandalo vip epocale
 Carriera finita presto | Carriera infinita
-Influencer utile | Influencer inutile
+Influencer inutile | Influencer utile
 Concerto da dimenticare | Concerto indimenticabile
 Band da garage | Band da stadio
 Album flop | Album capolavoro
 Ritornello che non ricordi | Ritornello che non ti esce dalla testa
 Videoclip dimenticabile | Videoclip iconico
 Canzone da doccia | Canzone da stadio
-Testo di canzone profondo | Testo di canzone senza senso
+Testo di canzone senza senso | Testo di canzone profondo
 Assolo noioso | Assolo leggendario
 Strumento facile da suonare | Strumento difficilissimo
 Duetto improbabile | Duetto perfetto
@@ -2594,178 +2974,251 @@ Biglietto del concerto regalato | Biglietto del concerto carissimo
 Musica da ascensore | Musica da brividi
 Personaggio da fiction scontato | Personaggio da fiction originale
 Telefilm anni '90 dimenticato | Telefilm anni '90 indimenticabile
-
-# --- nuove carte (ottobre 2026) ---
 Basta una volta | Da rivedere all'infinito
 Da vedere al cinema | Da vedere sul divano
-Da vedere coi genitori | Imbarazzante coi genitori
+Imbarazzante coi genitori | Da vedere coi genitori
 Zero lacrime | Fazzoletti finiti
 Piace alla critica | Piace al pubblico
 Finale aperto | Finale chiuso
 Scena post-credit inutile | Scena post-credit fondamentale
-Ultima stagione all'altezza | Ultima stagione disastrosa
+Ultima stagione disastrosa | Ultima stagione all'altezza
 Miniserie | Serie infinita
-Adattamento fedelissimo | Adattamento irriconoscibile
-Casting perfetto | Casting sbagliatissimo
+Adattamento irriconoscibile | Adattamento fedelissimo
+Casting sbagliatissimo | Casting perfetto
 Attore monoespressivo | Attore trasformista
 Recitazione sobria | Recitazione sopra le righe
-Cattivo da odiare | Cattivo per cui tifi
+Cattivo da odiare | Cattivo per cui fai il tifo
 Film estivo | Film natalizio
-Talk show pacato | Talk show da rissa
+Talk show da rissa | Talk show pacato
 Vincitore di talent dimenticato | Vincitore di talent diventato star
 Star riservata | Star esibizionista
-Look da red carpet elegante | Look da red carpet assurdo
+Look da red carpet assurdo | Look da red carpet elegante
 Canzone da matrimonio | Canzone da funerale
-Canzone d'amore | Canzone di rabbia
+Canzone di rabbia | Canzone d'amore
 Da cantare a squarciagola | Da ascoltare in silenzio
 Musica per dormire | Musica per pogare
 Playback spudorato | Live impeccabile
 Voce naturale | Autotune a palla
-
-# --- copie da altre stazioni (ottobre 2026) ---
-Fa ridere | Fa piangere
+Fa piangere | Fa ridere
 Cartone per piccoli | Cartone per grandi
-Personaggio buono | Personaggio cattivo
+Personaggio cattivo | Personaggio buono
 Film per bambini | Film per adulti
 Film brutto | Film capolavoro
-Film sottovalutato | Film sopravvalutato
+Film da vedere da soli | Film da vedere in gruppo
 Film triste | Film allegro
 Comico | Drammatico
-Meglio il libro | Meglio il film
-Film che Godzilla rovinerebbe | Film che Godzilla migliorerebbe
-Pessimo attore | Ottimo attore
-Attore sottovalutato | Attore sopravvalutato
-Fenomeno passeggero | Stella internazionale
-Privo di talento | Talentuoso
+Storia fatta di parole | Storia fatta di immagini
+Film senza effetti speciali | Film pieno di effetti speciali
+Attore da commedia | Attore da tragedia
+Interprete da protagonista | Interprete da spalla
+Famoso senza meriti | Famoso per talento
+Senza alcun talento | Pieno di talento
 Programma trash | Programma colto
-Pessimo programma TV | Ottimo programma TV
+Trasmissione inguardabile | Trasmissione imperdibile
 Canzone brutta | Canzone bellissima
 Canzone triste | Canzone allegra
-Tormentone estivo | Grande classico
-Musicista sottovalutato | Musicista sopravvalutato
-Pessimo genere musicale | Ottimo genere musicale
-Star Wars | Star Trek
+Hit di una sola estate | Classico senza tempo
+Musicista intimista | Musicista da grandi folle
+Genere musicale insopportabile | Genere musicale fantastico
+Fantascienza riflessiva | Fantascienza d'azione
 Grifondoro | Serpeverde
-Lato chiaro della Forza | Lato oscuro della Forza
 Fantasy | Fantascienza
-Film d'azione | Film d'avventura
-Arte | Non arte
-Mainstream | Di nicchia
-Ispirazione | Plagio
-Invecchia bene | Invecchia male
+Film adrenalinico | Film contemplativo
+Non considerato arte | Considerato arte
+Di massa | Di nicchia
+Plagio | Ispirazione
+Invecchia male | Invecchia bene
 Autentico | Costruito
+Monologo da saltare | Monologo da applausi
+Ospite a Sanremo fuori contesto | Ospite a Sanremo perfetto
+Coppia di conduttori senza intesa | Coppia di conduttori affiatata
+Fuori onda televisivo imbarazzante | Fuori onda diventato cult
+Fan service gratuito | Fan service che funziona
+Film Disney sopravvalutato | Film Disney sottovalutato
+Serie TV terribile | Serie TV perfetta
+Attore che rovina la scena | Attore che salva la scena
+Canzone da karaoke imbarazzante | Canzone da karaoke trascinante
+Protagonista odioso | Protagonista adorabile
+Coppia che si somiglia | Coppia di opposti
+Reality a cui non parteciperesti | Reality a cui parteciperesti subito
+Canzone imbarazzante | Canzone a tutto volume
+Canzone di Sanremo flop | Canzone di Sanremo cult
+Cinepanettone dimenticabile | Cinepanettone cult
+Ballo di gruppo imbarazzante | Ballo di gruppo irresistibile
+Teoria dei fan assurda | Teoria dei fan geniale
+Spoiler imperdonabile | Spoiler innocuo
+Fandom tossico | Fandom tranquillo
+Attore pessimo come supereroe | Attore perfetto come supereroe
+Film che rovina una festa | Film che salva una festa
+Sigla TV triste | Sigla TV allegra
+Celebrità da non invitare a cena | Celebrità da invitare a cena 
+Personaggio Disney pessimo | Personaggio Disney stupendo
+Finale di serie TV terribile | Finale di serie TV perfetto
+Ospite per un podcast soporifero | Ospite per un podcast irresistibile
+Nome da band da dimenticare | Nome da band memorabile
+Presentatore di un funerale fuori luogo | Presentatore di un funerale impeccabile
+Colpo di scena da telenovela ridicolo | Colpo di scena da telenovela credibile
+Canzone per dichiararsi disastrosa | Canzone per dichiararsi perfetta
+Musica da aldilà inappropriata | Musica da aldilà perfetta
+Nome per un hotel infestato ridicolo | Nome per un hotel infestato inquietante
+Spot che non ti fa comprare | Spot che fa comprare
+Serie TV per addormentarsi | Serie TV per stare svegli tutta notte
+Duetto cantanti improbabile | Duetto cantanti probabilissimo
+Rock band tranquilla | Rock band scatenata
+Strumento musicale silenzioso | Strumento musicale assordante
+Strumento musicale leggerissimo | Strumento musicale pesantissimo
+Missione da supereroe ridicola | Missione da supereroe grandiosa
+Personaggio da lasciare nella tomba | Personaggio da resuscitare
+Rap | Trap
+Rock | Metal
+Pop | Rock
+Attore emergente | Star indiscussa
+Nome da wrestler ridicolo | Nome da wrestler convincente
+
+
 
 [Fuori Orario]
 # La vita lavorativa vista dal lato scomodo: capi, colleghi, riunioni e dopo-lavoro
 
 Riunione inutile | Riunione indispensabile
 Presentazione noiosa | Presentazione brillante
-Brainstorming inutile | Brainstorming produttivo
-Capo comprensivo | Capo tiranno
-Capo assente | Capo onnipresente
-Messaggio del capo innocuo | Messaggio del capo terrificante
-Commento sul capo innocuo | Commento sul capo da licenziamento
-Ascensore col capo silenzioso | Ascensore col capo imbarazzante
-Regalo per il capo azzeccato | Regalo per il capo imbarazzante
+Capo tiranno | Capo comprensivo
+Messaggio del capo terrificante | Messaggio del capo innocuo
+Commento sul capo da licenziamento | Commento sul capo innocuo
+Situazione in ascensore imbarazzante | Situazione in ascensore normale
+Regalo per il capo imbarazzante | Regalo per il capo azzeccato
 Leccapiedi discreto | Leccapiedi sfacciato
 Collega silenzioso | Collega logorroico
-Pettegolezzo d'ufficio innocuo | Pettegolezzo d'ufficio esplosivo
-Flirt in ufficio innocuo | Flirt in ufficio pericoloso
+Pettegolezzo d'ufficio esplosivo | Pettegolezzo d'ufficio innocuo
+Flirt in ufficio pericoloso | Flirt in ufficio innocuo
 Storia tra colleghi segreta | Storia tra colleghi nota a tutti
-Email gentile | Email passivo-aggressiva
 Firma email sobria | Firma email esagerata
-Chat di lavoro tranquilla | Chat di lavoro infernale
-Videochiamata tranquilla | Videochiamata imbarazzante
-Smart working serio | Smart working in pigiama
-Lunedì mattina sopportabile | Lunedì mattina infernale
-Venerdì pomeriggio produttivo | Venerdì pomeriggio inutile
+Chat di lavoro infernale | Chat di lavoro tranquilla
+Lunedì mattina infernale | Lunedì mattina sopportabile
+Venerdì pomeriggio inutile | Venerdì pomeriggio produttivo
 Pausa caffè breve | Pausa caffè infinita
 Mensa aziendale deludente | Mensa aziendale stellata
-Furto dal frigo aziendale perdonabile | Furto dal frigo aziendale imperdonabile
-Scrivania ordinata | Scrivania esplosa
-Stampante collaborativa | Stampante diabolica
-Open space silenzioso | Open space infernale
-Pendolarismo breve | Pendolarismo infernale
-Ritardo giustificabile | Ritardo ingiustificabile
-Malattia credibile | Malattia inventata
-Scadenza comoda | Scadenza impossibile
-Multitasking riuscito | Multitasking disastroso
-Obiettivo aziendale realistico | Obiettivo aziendale delirante
-Gergo aziendale comprensibile | Gergo aziendale incomprensibile
-Team building divertente | Team building imbarazzante
+Furto dal frigo imperdonabile | Furto dal frigo perdonabile
+Scrivania esplosa | Scrivania ordinata
+Stampante diabolica | Stampante collaborativa
+Open space infernale | Open space silenzioso
+Pendolarismo breve | Pendolarismo infinito
+Ritardo ingiustificabile | Ritardo giustificabile
+Malattia inventata | Malattia credibile
+Scadenza impossibile | Scadenza comoda
+Multitasking disastroso | Multitasking riuscito
+Obiettivo aziendale delirante | Obiettivo aziendale realistico
+Team building imbarazzante | Team building divertente
 Cena aziendale noiosa | Cena aziendale leggendaria
 Festa aziendale sobria | Festa aziendale fuori controllo
-Aperitivo dopo il lavoro sobrio | Aperitivo dopo il lavoro epico
+Aperitivo post-lavoro sobrio | Aperitivo post-lavoro epico
 Look da ufficio sobrio | Look da ufficio audace
-Battuta in riunione azzeccata | Battuta in riunione disastrosa
 Colloquio di lavoro disastroso | Colloquio di lavoro perfetto
 Domanda da colloquio facile | Domanda da colloquio impossibile
-Curriculum onesto | Curriculum gonfiato
-Primo giorno di lavoro tranquillo | Primo giorno di lavoro traumatico
+Primo giorno di lavoro traumatico | Primo giorno di lavoro tranquillo
 Aumento ridicolo | Aumento da sogno
-Straordinario pagato | Straordinario gratis
-Promozione meritata | Promozione immeritata
-Ferie vere | Ferie col portatile
-Cliente gentile | Cliente da incubo
-Reclamo ragionevole | Reclamo assurdo
+Straordinario gratis | Straordinario pagato
+Promozione immeritata | Promozione meritata
+Ferie col portatile | Ferie vere
+Reclamo assurdo | Reclamo ragionevole
 Dimissioni educate | Dimissioni plateali
-Licenziamento meritato | Licenziamento ingiusto
-Collega che fa tutto | Collega che non fa niente
-Riunione alle 9 del lunedì | Riunione alle 18 del venerdì
+Licenziamento ingiusto | Licenziamento meritato
+Collega che non fa niente | Collega che fa tutto
 Badge dimenticato | Badge perso per sempre
-Lavoro dei sogni da bambino | Lavoro attuale
-
-# --- copie da altre stazioni (ottobre 2026) ---
+Lavoro che ti pesa | Lavoro che ti entusiasma
 Mestiere facile | Mestiere difficile
-Amico | Nemico
-Rigido | Flessibile
-Lavoro noioso | Lavoro da sogno
 Lavoro manuale | Lavoro intellettuale
-Mestiere sottopagato | Mestiere strapagato
-Mestiere sicuro | Mestiere pericoloso
-Mestiere sopravvalutato | Mestiere sottovalutato
-Laurea inutile | Laurea utile
+Lavoro a orari fissi | Lavoro sempre reperibile
+Lavoro da scrivania | Lavoro in movimento
+Professione sopravvalutata | Professione sottovalutata
+Titolo per lavorare subito | Titolo per fare ricerca
 Si fa al lavoro | Si fa in vacanza
-Rilassante | Stressante
-Pigro | Instancabile
-Puntuale | Ritardatario
+Stressante | Rilassante
+Pigrissimo | Iperattivo
+Ritardatario | Puntuale
 Inaffidabile | Affidabile
-Insostituibile | Sostituibile
-Persona genuina | Persona falsa
-Casual | Elegante
+Sostituibile | Insostituibile
+Persona ipocrita | Persona autentica
+Abbigliamento informale | Abbigliamento elegante
 Fisso | Mobile
 Facoltativo | Obbligatorio
-Perdita di tempo | Tempo ben impiegato
-Scusa credibile | Scusa ridicola
-Regola stupida | Regola sacrosanta
+Tempo davanti allo schermo | Tempo all'aria aperta
 App inutile | App indispensabile
-Merito | Raccomandazione
+Raccomandazione | Merito
 Lavoro | Vocazione
-Ambizione sana | Ambizione tossica
-Successo | Realizzazione
-Tempo libero | Tempo perso
+Ambizione tossica | Ambizione sana
+Successo di facciata | Realizzazione autentica
 Fallimento | Lezione
-Amicizia | Convenienza
-Persona senza scrupoli | Persona scrupolosa
-Azienda eticamente scorretta | Azienda eticamente corretta
-
-# --- nuove carte (ottobre 2026, seconda tornata) ---
-Call evitabile | Call necessaria
+Rapporto di convenienza | Amicizia sincera
+Persona spietata | Persona molto coscienziosa
+Impresa senza scrupoli | Impresa responsabile
 Collega ladro di meriti | Collega generoso
-Stipendio puntuale | Stipendio in ritardo
-Nota spese onesta | Nota spese creativa
-Valutazione serena | Valutazione da incubo
+Stipendio in ritardo | Stipendio puntuale
+Nota spese falsificata | Nota spese onesta
+Valutazione da incubo | Valutazione serena
 Telefonata discreta | Telefonata in vivavoce
-Gaffe in call perdonabile | Gaffe in call leggendaria
+Gaffe in call imbarazzante | Gaffe in call esilarante
 Caffè d'ufficio imbevibile | Caffè d'ufficio divino
-Vicino di scrivania ideale | Vicino di scrivania da incubo
-Formazione aziendale utile | Formazione aziendale inutile
-Uscire in orario | Uscire a notte fonda
-Password sicura | Password imbarazzante
-Discorso del capo ispirato | Discorso del capo soporifero
+Vicino di scrivania da incubo | Vicino di scrivania ideale
+Formazione aziendale inutile | Formazione aziendale utile
+PC lasciato sbloccato | PC sempre bloccato
 Ultimo giorno commovente | Ultimo giorno liberatorio
-Pranzo in ufficio discreto | Pranzo in ufficio puzzolente
-Lavoro di squadra vero | Lavoro di squadra finto
+Pranzo in ufficio puzzolente | Pranzo in ufficio discreto
+Lavoro di squadra finto | Lavoro di squadra vero
+Collega che ti ostacola | Collega che ti sostiene
+Scusa per darsi malati assurda | Scusa per darsi malati credibile
+Bugia imperdonabile sul curriculum | Bugia innocente sul curriculum
+Segreto aziendale insignificante | Segreto aziendale scandaloso
+Errore professionale da licenziamento | Errore professionale perdonabile
+Cliente da incubo | Cliente modello
+Capo che ti umilia | Capo che ti valorizza
+Motivo ridicolo per fare un reclamo | Motivo valido per fare un reclamo
+Email passivo-aggressiva | Email che dichiara guerra
+Favoritismo lieve | Favoritismo netto
+Frase che ti rovina in una riunione | Frase innocua in una riunione
+Inaccettabile in smart working | Accettabile in smart working
+Messaggio di dimissioni normale | Messaggio di dimissioni incendiario
+Benefit aziendale ridicolo | Benefit aziendale super
+Webcam accesa nel momento peggiore | Webcam gestita impeccabilmente
+Microfono aperto durante uno sfogo | Microfono spento al momento giusto
+Regalo del Secret Santa da buttare | Regalo del Secret Santa da custodire
+Trasferimento di sede terribile | Trasferimento di sede desiderato
+Mansione da scaricare agli altri | Mansione per cui ti offri volontario
+Telefonata di lavoro da evitare | Telefonata di lavoro attesissima
+Regola aziendale da abolire | Regola aziendale da difendere
+Oggetto d'ufficio che nessuno vuole | Oggetto d'ufficio ambitissimo
+Collega da non portare in trasferta | Collega perfetto per una trasferta
+Frase da colloquio che ti fa scartare | Frase da colloquio che ti fa assumere
+Errore sul lavoro da nascondere | Errore sul lavoro da ammettere subito
+Lavoro da affidare a un principiante | Lavoro da affidare a un esperto
+Foto del badge imbarazzante | Foto del badge perfetta
+Critica che aiuta | Critica che ferisce
+Premio inutile | Premio entusiasmante
+Compagno di trasferta pessimo | Compagno di trasferta ideale
+Scusa per un file sparito ridicola | Scusa per un file sparito credibile
+Orario terribile per una riunione | Orario ideale per una riunione
+Promessa del direttore impossibile | Promessa del direttore realistica
+Oggetto per lo smart working ridicolo | Oggetto per lo smart working pratico
+Complimento che mette a disagio | Complimento che fa piacere
+Nome da start-up ridicolo | Nome da start-up convincente
+Motto aziendale che fa scappare | Motto aziendale che motiva
+Risposta al capo che peggiora tutto | Risposta al capo che risolve tutto
+Momento per chiedere un aumento terribile | Momento per chiedere un aumento ideale
+Regalo per il pensionamento offensivo | Regalo per il pensionamento commovente
+Cartello in ufficio irritante | Cartello in ufficio utile
+Titolo professionale pomposo | Titolo professionale chiarissimo
+Motivo futile per convocare tutti | Motivo importante per convocare tutti 
+Inglesismo insopportabile | Inglesismo accettato
+Successo ottenuto imbrogliando | Successo ottenuto onestamente
+Sticker inviato al capo offensivo | Sticker inviato al capo azzeccato
+Domanda allo stagista crudele | Domanda allo stagista accogliente
+Motivo per chiudere ridicolo | Motivo per chiudere sacrosanto
+Premio aziendale che è una punizione | Premio aziendale veramente gradito
+Motivo per alzarsi rinviabile | Motivo per alzarsi urgente
+Lavoro sottopagato | Lavoro redditizio
+Rimandabile | Urgentissimo
+
+
 
 [Onda Nera]
 # Umorismo nero e macabro, fantasmi, misteri e paure: per adulti, senza contenuti espliciti
@@ -2778,216 +3231,279 @@ Funerale noioso | Funerale memorabile
 Epitaffio banale | Epitaffio geniale
 Necrologio sobrio | Necrologio esagerato
 Bara economica | Bara di lusso
-Fiori da funerale | Fiori da festa
 Testamento prevedibile | Testamento scioccante
-Eredità indesiderata | Eredità desiderata
 Reincarnazione sfigata | Reincarnazione da sogno
 Aldilà noioso | Aldilà divertente
-Fantasma innocuo | Fantasma terrificante
-Casa infestata accogliente | Casa infestata invivibile
-Cimitero tranquillo | Cimitero inquietante
-Cantina accogliente | Cantina da film horror
-Seduta spiritica divertente | Seduta spiritica da incubo
-Maledizione innocua | Maledizione terribile
+Fantasma terrificante | Fantasma innocuo
+Casa infestata invivibile | Casa infestata accogliente
+Cimitero inquietante | Cimitero tranquillo
+Cantina da film horror | Cantina accogliente
+Seduta spiritica da incubo | Seduta spiritica divertente
 Oggetto antico innocuo | Oggetto antico maledetto
 Profezia ottimista | Profezia catastrofica
-Coincidenza innocua | Coincidenza inquietante
-Rumore notturno innocuo | Rumore notturno terrificante
+Coincidenza inquietante | Coincidenza innocua
+Rumore notturno terrificante | Rumore notturno innocuo
 Incubo leggero | Incubo terrificante
-Bambola tenera | Bambola inquietante
-Clown simpatico | Clown terrificante
-Strega simpatica | Strega malvagia
-Vampiro affascinante | Vampiro ripugnante
+Bambola inquietante | Bambola tenera
+Clown terrificante | Clown simpatico
+Strega malvagia | Strega simpatica
+Vampiro ripugnante | Vampiro affascinante
 Zombie lento | Zombie velocissimo
 Rifugio anti-zombie pessimo | Rifugio anti-zombie perfetto
-Alleato per l'apocalisse inutile | Alleato per l'apocalisse perfetto
 Fine del mondo noiosa | Fine del mondo spettacolare
-Esperimento innocuo | Esperimento da scienziato pazzo
-Insetto innocuo | Insetto da incubo
-Visita dal dentista tranquilla | Visita dal dentista da incubo
-Volo tranquillo | Volo da incubo
+Esperimento da scienziato pazzo | Esperimento innocuo
+Insetto da incubo | Insetto innocuo
+Visita dal dentista da incubo | Visita dal dentista tranquilla
+Volo da incubo | Volo tranquillo
 Disgrazia sopportabile | Disgrazia biblica
-Battuta macabra innocua | Battuta macabra imperdonabile
-Morte in un film prevedibile | Morte in un film sconvolgente
-Leggenda metropolitana credibile | Leggenda metropolitana assurda
+Battuta macabra imperdonabile | Battuta macabra innocua
+Leggenda metropolitana assurda | Leggenda metropolitana credibile
 Cena con delitto noiosa | Cena con delitto avvincente
 Alibi debole | Alibi di ferro
-Faccia da innocente | Faccia da colpevole
+Faccia da colpevole | Faccia da innocente
 Testimone inaffidabile | Testimone credibile
 Giallo prevedibile | Giallo imprevedibile
 Indagine banale | Indagine impossibile
-Vicino di casa normale | Vicino di casa sospetto
-Scherzo di Halloween innocuo | Scherzo di Halloween crudele
+Vicino di casa sospetto | Vicino di casa normale
 Costume di Halloween ridicolo | Costume di Halloween terrificante
 Storia di paura per bambini | Storia di paura da non dormire
-Gatto nero porta fortuna | Gatto nero porta sfortuna
-Specchio rotto innocuo | Specchio rotto catastrofico
+Gatto nero porta sfortuna | Gatto nero porta fortuna
+Specchio rotto catastrofico | Specchio rotto innocuo
 Mostro mitologico ridicolo | Mostro mitologico terrificante
-Sorpresa piacevole | Sorpresa agghiacciante
-Ospite che non se ne va mai | Ospite che sparisce nel nulla
-Cosa da trovare in soffitta innocua | Cosa da trovare in soffitta inquietante
-
-# --- copie da altre stazioni (ottobre 2026) ---
-Spaventoso | Coccoloso
-Esiste davvero | È inventato
-Posto sicuro | Posto pericoloso
-Da non abbracciare | Da abbracciare
-Inquietante | Rassicurante
-Innocuo | Pericoloso
-Animale innocuo | Animale letale
-Fortunato | Sfortunato
+Sorpresa agghiacciante | Sorpresa piacevole
+Ospite invadente | Ospite graditissimo
+Cosa da trovare in soffitta inquietante | Cosa da trovare in soffitta innocua
+Posto pericoloso | Posto sicuro
+Abbraccio che eviti | Abbraccio che cerchi
 Superstizione assurda | Superstizione sensata
-Bufala | Verità
-Vita breve | Vita lunga
-Non vivrà fino a cent'anni | Vivrà fino a cent'anni
-Succede lentamente | Succede improvvisamente
-Inutile in un'emergenza | Utile in un'emergenza
-Arma efficace | Arma non efficace
-Cibo di sopravvivenza | Alta cucina
-Destino | Caso
-Sacro | Profano
-Genialità | Follia
-Giustizia | Vendetta
-Satira | Offesa
-Elettrizzante | Terrificante
-Fobia irragionevole | Fobia ragionevole
-Scienza | Pseudoscienza
-
-# --- nuove carte (ottobre 2026, seconda tornata) ---
+Morte lenta | Morte improvvisa
+Inutile in un'apocalisse zombie | Utile in un'apocalisse zombie
+Cibo da film horror | Cibo da ristorante stellato
+Mostro da incubo | Mostro da fiaba
+Spaventoso | Adrenalinico
+Paura completamente assurda | Paura più che giustificata
 Scheletro nell'armadio piccolo | Scheletro nell'armadio enorme
-Cattivo ridicolo | Cattivo terrificante
 Presentimento sbagliato | Presentimento azzeccato
-Esorcismo riuscito | Esorcismo fallito
+Esorcismo fallito | Esorcismo riuscito
 Lupo mannaro tenero | Lupo mannaro feroce
-Mummia ben conservata | Mummia a pezzi
 Delitto maldestro | Delitto perfetto
 Scena del crimine pulita | Scena del crimine splatter
 Piano di fuga disastroso | Piano di fuga geniale
-Telefonata anonima innocua | Telefonata anonima minacciosa
+Telefonata anonima minacciosa | Telefonata anonima innocua
 Stanza segreta deludente | Stanza segreta agghiacciante
-Nebbia romantica | Nebbia da film horror
-Bosco incantato | Bosco maledetto
-Animale impagliato elegante | Animale impagliato inquietante
-Rimedio della nonna efficace | Rimedio della nonna letale
-Museo delle cere carino | Museo delle cere inquietante
-Sonnambulo innocuo | Sonnambulo pericoloso
-Polizza sulla vita normale | Polizza sulla vita sospetta
-Medium credibile | Medium ciarlatano
-Oroscopo rassicurante | Oroscopo minaccioso
-Tè della suocera innocuo | Tè della suocera sospetto
-Urlo nella notte lontano | Urlo nella notte vicinissimo
+Nebbia da film horror | Nebbia romantica
+Bosco maledetto | Bosco incantato
+Animale impagliato inquietante | Animale impagliato elegante
+Pozione della strega innocua | Pozione della strega letale
+Museo delle cere inquietante | Museo delle cere carino
+Sonnambulo pericoloso | Sonnambulo innocuo
+Medium ciarlatano | Medium credibile
+Oroscopo minaccioso | Oroscopo rassicurante
+Tè della suocera sospetto | Tè della suocera innocuo
+Persona che non merita di morire | Persona che merita di morire
+Scherzo macabro imperdonabile | Scherzo macabro innocuo
+Frase crudele a un condannato | Frase di conforto a un condannato
+Ritrovamento di un cadavere devastante | Ritrovamento di un cadavere poco traumatico
+Eredità che rovina la vita | Eredità che risolve la vita
+Patto col diavolo catastrofico | Patto col diavolo vantaggioso
+Maledizione ingestibile | Maledizione gestibile
+Segreto che ti tormenta | Segreto che puoi dimenticare
+Peggior alleato in un'apocalisse zombie | Miglior alleato in un'apocalisse zombie
+Esperimento medico completamente disumano | Esperimento medico comprensibile
+Motivo banale per finire all'inferno | Motivo imperdonabile per finire all'inferno
+Epitaffio irrispettoso | Epitaffio rispettoso
+Tragedia comunicata con cinismo | Tragedia comunicata con tatto
+Minaccia soprannaturale trascurabile | Minaccia soprannaturale apocalittica
+Errore medico senza conseguenze | Errore medico da prima pagina
+Risposta tavola Ouija banale | Risposta tavola Ouija agghiacciante
+Trappola alla Saw facilissima | Trappola alla Saw impossibile
+Foto paranormale falsa | Foto paranormale inspiegabile
+Arma anti-zombie terribile | Arma anti-zombie perfetta
+Mostro debole | Mostro temibile
+Ritrovamento ridicolo in una cripta | Ritrovamento terrificante in una cripta
+Oggetto che scaccia i fantasmi | Oggetto che attira i fantasmi
+Nome da serial killer ridicolo | Nome da serial killer terrificante
+Mistero macabro che ignoreresti | Mistero macabro su cui indagheresti
+Horror che fa ridere | Horror che terrorizza
+Scoperta normale in obitorio | Scoperta agghiacciante in obitorio
+Mostro guardiano inutile | Mostro guardiano perfetto
+Frase in un film horror ridicola | Frase in un film horror inquietante
+Regalo per un demone offensivo | Regalo per un demone apprezzato
+Rumore normale | Rumore da incubo
+Mestiere per un fantasma ridicolo | Mestiere per un fantasma perfetto
+Movente ridicolo per un omicidio | Movente sensato per un omicidio
+Segreto di famiglia innocente | Segreto di famiglia mostruoso
+Luogo pessimo dove nascondersi | Luogo perfetto dove nascondersi
+Nome per un'impresa funebre ridicolo | Nome per un'impresa funebre rassicurante
+Slogan di un becchino inquietante | Slogan di un becchino convincente
+Oggetto banale in tasca al morto | Oggetto inquietante in tasca al morto
+Nome da setta banale | Nome da setta agghiacciante
+Graffito in cella rassicurante | Graffito in cella terrificante
+Nome per un hotel infestato ridicolo | Nome per un hotel infestato inquietante
+Motivo per esumare futile | Motivo per esumare sconvolgente
+Messaggio nel testamento che scatena litigi | Messaggio nel testamento che mette pace
+Presagio che non fa paura | Presagio che terrorizza tutti
+Esperienza da esorcista banale | Esperienza da esorcista terrificante
+Oggetto dimenticato in un obitorio normale | Oggetto dimenticato in un obitorio inquietante
+Maledizione innocua | Maledizione terribile
+Presentatore di un funerale fuori luogo | Presentatore di un funerale impeccabile
+Scoperta durante un trasloco inquietante | Scoperta durante un trasloco piacevole
+Recensione per cimitero terribile | Recensione per cimitero fantastico
+Morte senza sofferenza | Morte con lunga agonia
+Incubo | Sogno
+Personaggio da lasciare nella tomba | Personaggio da resuscitare
+Reato lieve | Reato gravissimo
+Complotto assurdo | Complotto plausibile
+Tortura quasi innocua | Tortura disumana
+
+
 
 [Dopo Mezzanotte]
 # Solo per adulti: serate, appuntamenti, segreti e un po' di malizia
 
 Appuntamento flop | Appuntamento da sogno
 Abbordaggio pessimo | Abbordaggio geniale
-Bacio imbarazzante | Bacio da film
-Per niente sexy | Sexyssimo
+Per niente sexy | Irresistibilmente sexy
 Mestiere poco sexy | Mestiere sexy
 Accento poco sexy | Accento sexy
 Cocktail leggero | Cocktail micidiale
-Sbronza leggera | Sbronza epica
-Postumi leggeri | Postumi devastanti
-Messaggio innocuo | Messaggio da ubriachi
-Idea da sobri | Idea da ubriachi
-Canzone da sobri | Canzone da ubriachi
-Segreto innocente | Segreto inconfessabile
-Bugia bianca | Bugia imperdonabile
+Postumi devastanti | Postumi leggeri
+Messaggio di cui ti penti | Messaggio che conquista
+Pessima idea da ubriachi | Ottima idea da sobri
 Peccato veniale | Peccato mortale
 Fantasia innocente | Fantasia proibita
 Da dire a cena | Da dire a letto
 Si fa in pubblico | Si fa in privato
-Relazione noiosa | Relazione passionale
 Ex dimenticabile | Ex indimenticabile
-Flirt innocente | Flirt pericoloso
 Regalo romantico | Regalo piccante
 Posto poco romantico | Posto romanticissimo
 Look da divano | Look da seduzione
-Serata tranquilla | Serata leggendaria
-Notte tranquilla | Notte brava
 Festa noiosa | Festa senza limiti
 Vizio accettabile | Vizio inconfessabile
 Imbarazzo lieve | Imbarazzo cosmico
-Domanda innocente | Domanda indiscreta
+Domanda indiscreta | Domanda innocente
 Gossip noioso | Gossip succoso
-Tradimento perdonabile | Imperdonabile
 Red flag | Green flag
 Profilo inquietante | Profilo irresistibile
 Foto imbarazzante | Foto da profilo
-Da raccontare a mamma | Da non raccontare mai
-Da vedere coi genitori | Da vedere da soli
+Da non raccontare a mamma | Da raccontare a mamma
+Inutilizzabile come dildo | Utilizzabile come dildo
 Parolaccia leggera | Parolaccia pesante
 Battuta pulita | Battuta sporca
-Humor innocente | Humor nero
-Gelosia sana | Gelosia tossica
-Locale squallido | Locale esclusivo
-Single felice | Single disperato
-Matrimonio da favola | Matrimonio da incubo
+Gelosia tossica | Gelosia sana
+Locale squallido | Locale da sogno
+Single disperato | Single felice
+Matrimonio da incubo | Matrimonio da favola
 Tatuaggio da pentirsi | Tatuaggio azzeccato
-Confessione leggera | Confessione scioccante
-Rischio calcolato | Follia totale
 Posizione comoda | Posizione acrobatica
 Detto ad alta voce | Pensato e mai detto
-Coinquilino perfetto | Coinquilino da incubo
-Suocera adorabile | Suocera terribile
-Collega simpatico | Collega insopportabile
-Vino da cartone | Vino pregiato
+Collega con cui non usciresti mai | Collega con cui flirteresti
 Bacio da dimenticare | Bacio leggendario
 Scusa per non uscire | Scusa per restare
 Weekend tranquillo | Weekend da raccontare
-Spesa da adulti | Spesa da ragazzini
 Vergogna passeggera | Vergogna eterna
-
-# --- carte aggiunte a ottobre 2026 ---
-Crea poca dipendenza | Crea molta dipendenza
-Complimento fuori luogo | Complimento elegante
-Fuori controllo | In controllo
-Segreto | Di pubblico dominio
-Vizio | Virtù
-
-# --- copie da altre stazioni (ottobre 2026) ---
-Da fare di giorno | Da fare di notte
-Cibo con cui ti sporchi | Cibo con cui non ti sporchi
-Orizzontale | Verticale
-Troppo piccolo | Troppo grande
-Non peloso | Peloso
-Per niente piccante | Piccantissimo
-Per niente romantico | Romanticissimo
+Complimento inappropriato | Complimento di classe
+Appuntamento fuori controllo | Appuntamento sotto controllo
+Appuntamento al risparmio | Appuntamento senza badare a spese
+Esperienza da dimenticare | Esperienza da raccontare a tutti
+Cibo disastroso a un appuntamento | Cibo adatto a un appuntamento
 Da fare da soli | Da fare in compagnia
-Non lo fa nessuno | Lo fanno tutti
-Proibito | Consigliabile
-Fa bene | Fa male
-Tirchio | Spendaccione
-Conversazione leggera | Conversazione pesante
-Imbarazzante | Da vantarsi
-Poco tatuato | Molto tatuato
-Non addomesticabile | Addomesticabile
-Amore | Abitudine
+Legame per abitudine | Legame per amore
 Fatto per amore | Fatto per soldi
-Verità scomoda | Bugia comoda
-Silenzio d'oro | Silenzio imbarazzante
-
-# --- nuove carte (ottobre 2026, seconda tornata) ---
-Il giorno dopo imbarazzante | Il giorno dopo romantico
+Silenzio imbarazzante | Silenzio d'oro
 Chimica zero | Chimica esplosiva
-Rottura civile | Rottura drammatica
+Rottura drammatica | Rottura civile
 Lingerie comoda | Lingerie audace
 Musica d'atmosfera ridicola | Musica d'atmosfera azzeccata
-Ritorno di fiamma tiepido | Ritorno di fiamma travolgente
 Dichiarazione d'amore goffa | Dichiarazione d'amore epica
-App di incontri disastrosa | App di incontri fortunata
 Gioco di coppia innocente | Gioco di coppia spinto
 Ballo goffo | Ballo sensuale
 Sguardo innocente | Sguardo malizioso
 Doppio senso involontario | Doppio senso voluto
-Brindisi commosso | Brindisi imbarazzante
 Rientro all'alba silenzioso | Rientro all'alba rumoroso
 Coppia riservata | Coppia appiccicosa
 Conto alla romana | Conto offerto
-Nomignolo tenero | Nomignolo imbarazzante
-Addio al nubilato tranquillo | Addio al nubilato scandaloso
+Nomignolo imbarazzante | Nomignolo tenero
+Addio al nubilato imbarazzante | Addio al nubilato memorabile
 Cotta passeggera | Amore eterno
+Fetish comune | Fetish insolito
+Luogo assurdo per fare sesso | Luogo eccitante per fare sesso
+Messaggio da non mandare mai a un ex | Messaggio da mandare a un ex
+Motivo imperdonabile per tradire | Motivo perdonabile per tradire
+Bugia enorme sulla propria vita sessuale | Bugia innocente sulla propria vita sessuale
+Fetish difficile da confessare | Fetish facile da confessare
+Frase terribile da dire durante il sesso | Frase sexy da dire durante il sesso
+Pessimo amante | Buon amante
+Motivo imperdonabile per ghostare | Motivo accettabile per ghostare
+Segreto da portare nella tomba | Segreto confessabile al partner
+Esperienza sessuale convenzionale | Esperienza sessuale estrema
+Modo disperato di provarci | Modo elegante di provarci
+Cronologia internet terrificante | Cronologia internet innocua
+Tradimento emotivo imperdonabile | Tradimento emotivo lieve
+Foto intima compromettente | Foto intima innocua
+Cosa imperdonabile dopo una sbronza | Cosa perdonabile dopo una sbronza
+Esperienza sessuale da non raccontare a nessuno | Esperienza sessuale da raccontare
+Preliminare sottovalutato | Preliminare sopravvalutato
+Interruzione distruggi-atmosfera | Interruzione innocua
+Scusa assurda per non fare sesso | Scusa credibile per non fare sesso
+Esperienza psichedelica terrificante | Esperienza psichedelica rassicurante
+Persona peggiore con cui sballarsi | Persona migliore con cui sballarsi
+Opinione impopolare grave | Opinione impopolare innocua
+Confessione che fa calare il silenzio | Confessione che fa ridere tutti
+Dipendenza nascosta | Dipendenza dichiarata
+Collezione inquietante | Collezione innocente
+Vizio che ti rende insopportabile | Vizio che ti rende interessante
+Posizione che richiede flessibilità | Posizione che richiede resistenza
+Posizione da primo appuntamento | Posizione da veterani
+Sex toy discreto | Sex toy impossibile da nascondere
+Sex toy da lasciare a casa | Sex toy da viaggio
+Intimo che fa ridere | Intimo che seduce
+Costume erotico ridicolo | Costume erotico sexy
+Playlist erotica imbarazzante | Playlist erotica raffinata
+Imprevisto imbarazzante in hotel | Imprevisto innocuo in hotel
+Sexting viscido | Sexting arrapante
+Spogliarello comico | Spogliarello magnetico
+Bacio timido | Bacio passionale
+Flirt invadente | Flirt discreto
+Messaggio su Tinder disastroso | Messaggio su Tinder brillante
+Scelta per Netflix and chill ingenua | Scelta per Netflix and chill maliziosa
+Frase dopo il sesso disastrosa | Frase dopo il sesso perfetta
+Alibi per rientrare all'alba assurdo | Alibi per rientrare all'alba inattaccabile
+Emoji in una chat piccante fuori luogo | Emoji in una chat piccante azzeccata
+Celebrità con cui non usciresti | Celebrità con cui usciresti subito
+Emoji che spegne il flirt | Emoji che accende il flirt
+Cosa da non dire dopo un bacio | Cosa da dire dopo un bacio
+Oggetto che rovina l'atmosfera | Oggetto che migliora l'atmosfera
+Luogo pessimo per un incontro segreto | Luogo perfetto per un incontro segreto
+Bio di Tinder imbarazzante | Bio di Tinder irresistibile
+Lo bombo | Lo passo
+Scusa per fermarsi a dormire ridicola | Scusa per fermarsi a dormire credibile
+Scena d'amore imbarazzante | Scena d'amore memorabile
+Film da primo appuntamento sbagliato | Film da primo appuntamento perfetto
+Messaggio dopo mezzanotte indiscreto | Messaggio dopo mezzanotte irresistibile
+Oggetto che rovina una serata piccante | Oggetto che accende una serata piccante
+Regalo dopo un appuntamento inquietante | Regalo dopo un appuntamento dolcissimo
+Complimento che mette a disagio | Complimento che fa piacere
+Oggetto da mostrare all'ex per vendetta | Oggetto da mostrare all'ex per nostalgia
+Scena imbarazzante in famiglia | Scena perfetta in famiglia
+Nome da sex toy imbarazzante | Nome da sex toy geniale
+Nome da spogliarellista ridicolo | Nome da spogliarellista magnetico
+Scusa per andarsene offensiva | Scusa per andarsene elegante
+Mestiere che ti rende ridicolo | Mestiere che ti rende affascinante
+Domanda da speed date invadente | Domanda da speed date brillante
+Tatuaggio erotico da nascondere | Tatuaggio erotico da mostrare
+Regalo da addio al celibato volgare | Regalo da addio al celibato spiritoso
+Parola di sicurezza ambigua | Parola di sicurezza chiarissima
+Canzone per dichiararsi disastrosa | Canzone per dichiararsi perfetta
+Soprannome erotico che fa ridere | Soprannome erotico che seduce
+Frase da sussurrare molesta | Frase da sussurrare gradita
+Regalo di S. Valentino pessimo | Regalo di S. Valentino perfetto
+SMS da amico | SMS da amante
+Piacere lieve | Estasi totale
+Vizio facile da correggere | Vizio impossibile da correggere
+Parte del corpo poco sensibile | Parte del corpo sensibilissima
+Repulsione | Desiderio
+Cringe | Romantico
 </script>
 <div class="app" id="app" data-schermata="schermata-inizio">
   <canvas id="onde" aria-hidden="true"></canvas>
@@ -3018,7 +3534,7 @@ Cotta passeggera | Amore eterno
 </svg>
       <div>
         <h1>Sintonizzati</h1>
-        <p class="sub">Siete davvero sulla stessa lunghezza d'onda?</p>
+        <p class="sub">Siete davvero sulla stessa frequenza?</p>
         <div class="tuner" id="tuner">
           <button class="loader invito" id="loader" aria-label="Trova la frequenza">
             <span class="invito-testo" aria-hidden="true">Trova la frequenza</span>
@@ -3069,7 +3585,7 @@ Cotta passeggera | Amore eterno
               </svg>
               <span class="titolo">Giocatori singoli</span>
               <span class="led"></span>
-              <span class="descr"><span class="motto">Ognuno per sé</span><span class="conteggio">Da 2 a 5 giocatori</span></span>
+              <span class="descr"><span class="motto">Ognuno per sé</span><span class="conteggio">Da 3 a 5 giocatori</span></span>
             </button>
             <button class="tasto decorato" data-modo="squadre" style="--k:1">
               <span class="sfondo" aria-hidden="true"><svg class="deco-walkie" viewBox="0 0 168 62" preserveAspectRatio="xMinYMin meet"><path class="linea-radio" d="M40 10H128"/><g class="segnale segnale-a"><path d="M28.24 5.76A6 6 0 0 1 28.24 14.24"/><path d="M31.78 2.22A11 11 0 0 1 31.78 17.78"/><path d="M35.31 -1.31A16 16 0 0 1 35.31 21.31"/></g><g class="segnale segnale-b"><path d="M139.76 5.76A6 6 0 0 0 139.76 14.24"/><path d="M136.22 2.22A11 11 0 0 0 136.22 17.78"/><path d="M132.69 -1.31A16 16 0 0 0 132.69 21.31"/></g><g class="walkie walkie-a"><path class="antenna" d="M24 16V4"/><circle class="pomello" cx="24" cy="4" r="2.4"/><rect class="corpo-walkie" x="4" y="15" width="26" height="45" rx="5"/><rect class="schermo" x="9" y="21" width="16" height="9" rx="1.5"/><path class="altoparlante" d="M10 39h14M10 45h14M10 51h14"/></g><g class="walkie walkie-b"><path class="antenna" d="M144 16V4"/><circle class="pomello" cx="144" cy="4" r="2.4"/><rect class="corpo-walkie" x="138" y="15" width="26" height="45" rx="5"/><rect class="schermo" x="143" y="21" width="16" height="9" rx="1.5"/><path class="altoparlante" d="M144 39h14M144 45h14M144 51h14"/></g></svg></span>
@@ -3301,7 +3817,7 @@ Cotta passeggera | Amore eterno
               <h3>Come funziona</h3>
               <ul class="regole">
                 <li><span class="segno">7</span><span>Avete a disposizione 7 turni di gioco. La carta indizio si può cambiare una sola volta per turno.</span></li>
-                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22 7.5 3.5h9z" style="fill:var(--zona-oro)"/><path d="M12 22 3 6l4.5-2.5zM12 22l9-16-4.5-2.5z" style="fill:var(--zona-3)"/></svg></span><span>Lo spicchio dorato centrale vale solo 3 punti ma vi fa guadagnare un turno extra di gioco.</span></li>
+                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9.5" y="3" width="5" height="18" rx="1.2" style="fill:var(--zona-oro)"/><rect x="3" y="3" width="5" height="18" rx="1.2" style="fill:var(--fascia-4)"/><rect x="16" y="3" width="5" height="18" rx="1.2" style="fill:var(--fascia-4)"/></svg></span><span>La fascia dorata al centro vale 4 punti, come quelle accanto, ma vi fa guadagnare un turno extra di gioco.</span></li>
               </ul>
             </div>
             <div class="scheda misuratore">
@@ -3400,43 +3916,108 @@ Cotta passeggera | Amore eterno
             <svg class="occhio-chiuso" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.9 10.9 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.2M6.6 6.6C3.7 8.5 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
           </button>
           <div class="nota-coperto" aria-hidden="true">Bersaglio coperto</div>
-          <!-- Quadrante stile VU-meter di uno stereo anni 80 -->
-          <svg id="dial" viewBox="0 0 400 236" role="slider" tabindex="0"
-               aria-label="Lancetta" aria-valuemin="-90" aria-valuemax="90" aria-valuenow="0">
+          <!-- Sintonizzatore di una radio anni 80: la finestra con la scala delle frequenze, l'altoparlante,
+               il display della sintonia e la manopola. La scala va da 0 a 100. -->
+          <svg id="dial" class="sintonia" viewBox="0 0 600 300" role="slider" tabindex="0"
+               aria-label="Sintonia" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
             <defs>
-              <radialGradient id="bagliore" cx="50%" cy="100%" r="85%">
-                <stop offset="0" style="stop-color:#FFB52E;stop-opacity:var(--bagliore)"/>
-                <stop offset="1" style="stop-color:#FFB52E;stop-opacity:0"/>
+              <radialGradient id="bagliore" cx="50%" cy="100%" r="90%">
+                <stop offset="0" style="stop-color:var(--luce-scala);stop-opacity:var(--bagliore)"/>
+                <stop offset="1" style="stop-color:var(--luce-scala);stop-opacity:0"/>
               </radialGradient>
-              <clipPath id="taglio"><rect x="12" y="12" width="376" height="204"/></clipPath>
+              <linearGradient id="vetro-luce" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#000" stop-opacity=".16"/>
+                <stop offset=".18" stop-color="#000" stop-opacity="0"/>
+                <stop offset=".86" stop-color="#000" stop-opacity="0"/>
+                <stop offset="1" stop-color="#000" stop-opacity=".08"/>
+              </linearGradient>
+              <clipPath id="taglio"><rect x="14" y="14" width="572" height="172" rx="12"/></clipPath>
+              <clipPath id="taglio-scala"><rect x="58" y="14" width="484" height="172"/></clipPath>
               <linearGradient id="bagliore-oro" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/>
                 <stop offset=".5" stop-color="#FFFFFF" stop-opacity=".6"/>
                 <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
               </linearGradient>
+              <linearGradient id="segnale-alone" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="0"></linearGradient>
+              <linearGradient id="segnale-verticale" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".3" stop-color="#fff" stop-opacity="1"/>
+                <stop offset=".72" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+              </linearGradient>
+              <mask id="sfuma-segnale" maskUnits="userSpaceOnUse" x="0" y="14" width="600" height="172">
+                <rect x="0" y="22" width="600" height="164" fill="url(#segnale-verticale)"/>
+              </mask>
+              <linearGradient id="ago-corpo" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" class="ago-ombra"/><stop offset=".38" class="ago-pieno"/><stop offset=".5" class="ago-luce"/>
+                <stop offset=".62" class="ago-pieno"/><stop offset="1" class="ago-ombra"/>
+              </linearGradient>
+              <pattern id="fori-altoparlante" width="10" height="8.66" patternUnits="userSpaceOnUse" x="3" y="3">
+                <circle cx="2.5" cy="2.17" r="2.15"/><circle cx="7.5" cy="6.5" r="2.15"/>
+              </pattern>
+              <linearGradient id="piastra-luce" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#fff" stop-opacity=".22"/>
+                <stop offset=".55" stop-color="#fff" stop-opacity="0"/>
+                <stop offset="1" stop-color="#000" stop-opacity=".18"/>
+              </linearGradient>
+              <linearGradient id="lcd-luce" x1="0" y1="0" x2=".6" y2="1">
+                <stop offset="0" stop-color="#fff" stop-opacity=".2"/>
+                <stop offset=".45" stop-color="#fff" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="sint-metallo" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" class="metallo-chiaro"/><stop offset="1" class="metallo-scuro"/></linearGradient>
+              <radialGradient id="sint-cappello" cx=".36" cy=".3" r=".85"><stop offset="0" class="cappello-luce"/><stop offset=".6" class="cappello-medio"/><stop offset="1" class="cappello-bordo"/></radialGradient>
             </defs>
-            <rect x="0" y="0" width="400" height="236" rx="22" style="fill:var(--corpo)"/>
-            <rect x="12" y="12" width="376" height="212" rx="12" style="fill:var(--vetro)"/>
-            <rect x="12" y="12" width="376" height="212" rx="12" fill="url(#bagliore)"/>
-            <g id="lato-scelto" aria-hidden="true"></g>
-            <g clip-path="url(#taglio)"><g id="ventaglio" aria-hidden="true"></g></g>
-            <path d="M28 216 A172 172 0 0 1 372 216" fill="none" stroke-width="2" style="stroke:var(--vetro-segni)" opacity=".45"/>
-            <g id="tacche" stroke-linecap="round" style="stroke:var(--vetro-segni)"></g>
-            <text id="dial-banda" x="34" y="44" font-family="Michroma, Verdana, sans-serif" font-size="11" style="fill:var(--vetro-segni)" opacity=".7">FM</text>
-            <g id="dial-teschio" transform="translate(72 39.5)" opacity=".75" style="display:none">
-              <g stroke-width="2.2" stroke-linecap="round" style="stroke:var(--vetro-segni)"><path d="M-8-6.5 8 8M8-6.5-8 8"/></g>
-              <g style="fill:var(--vetro-segni)"><circle cx="-8.3" cy="-6.8" r="1.6"/><circle cx="8.3" cy="-6.8" r="1.6"/><circle cx="-8.3" cy="8.3" r="1.6"/><circle cx="8.3" cy="8.3" r="1.6"/>
-                <path d="M0-7.5c-4.1 0-6.8 2.7-6.8 6.2 0 2.3 1.2 3.9 2.6 4.8V6.3c0 .7.5 1.2 1.2 1.2h6c.7 0 1.2-.5 1.2-1.2V3.5c1.4-.9 2.6-2.5 2.6-4.8 0-3.5-2.7-6.2-6.8-6.2z"/></g>
-              <g style="fill:var(--vetro)"><circle cx="-2.6" cy="-1" r="1.9"/><circle cx="2.6" cy="-1" r="1.9"/><path d="M0 1.6-1 3.4h2z"/><rect x="-1.9" y="5" width=".8" height="2.6"/><rect x="1.1" y="5" width=".8" height="2.6"/></g>
+            <rect class="radio-corpo" x="0" y="0" width="600" height="300" rx="26"/>
+            <rect class="finestra" x="14" y="14" width="572" height="172" rx="12"/>
+            <rect x="14" y="14" width="572" height="172" rx="12" fill="url(#bagliore)"/>
+            <g clip-path="url(#taglio)">
+              <g id="lato-scelto" aria-hidden="true"></g>
+              <g clip-path="url(#taglio-scala)"><g id="ventaglio" aria-hidden="true"></g></g>
+              <g id="tacche" aria-hidden="true"></g>
+              <g id="risposte" aria-hidden="true"></g>
+              <!-- la lancetta: un filo di plastica rossa retroilluminata, agganciato al carrello che scorre dietro la cornice -->
+              <g id="ago" aria-hidden="true">
+                <g class="ago-spessore">
+                  <line class="ago-alone ampio" x1="0" y1="26" x2="0" y2="176"/>
+                  <line class="ago-alone" x1="0" y1="24" x2="0" y2="178"/>
+                  <rect class="ago-filo" x="-2.4" y="16" width="4.8" height="168" rx="2.4"/>
+                </g>
+                <path class="ago-carrello" d="M-9 14h18l-3.5 9h-11z"/>
+                <path class="ago-carrello" d="M-6 177h12l3.5 9h-19z"/>
+                <circle class="ago-perno" cx="0" cy="17.5" r="2.1"/>
+              </g>
             </g>
-            <text id="dial-unita" x="366" y="44" text-anchor="end" font-family="Michroma, Verdana, sans-serif" font-size="11" style="fill:var(--vetro-segni)" opacity=".7">MHz</text>
-            <g id="risposte" aria-hidden="true"></g>
-            <g id="ago" style="transform-origin:200px 216px">
-              <line x1="200" y1="216" x2="200" y2="48" stroke-width="9" stroke-linecap="round" style="stroke:var(--vetro)"/>
-              <line x1="200" y1="216" x2="200" y2="48" stroke-width="5" stroke-linecap="round" style="stroke:var(--corallo)"/>
+            <rect class="finestra-ombra" x="14" y="14" width="572" height="172" rx="12"/>
+            <!-- altoparlante: solo lamiera forata -->
+            <g class="altoparlante" aria-hidden="true">
+              <rect class="piastra" x="24" y="202" width="166" height="82" rx="10"/>
+              <rect x="24" y="202" width="166" height="82" rx="10" fill="url(#fori-altoparlante)"/>
+              <rect class="luce-piastra" x="24" y="202" width="166" height="82" rx="10"/>
+              <rect class="bordo-piastra" x="24" y="202" width="166" height="82" rx="10"/>
             </g>
-            <path d="M166 224 A34 34 0 0 1 234 224 Z" style="fill:var(--corpo)"/>
-            <circle cx="200" cy="214" r="5" style="fill:var(--griglia)"/>
+            <!-- display della sintonia -->
+            <g class="display-sintonia" aria-hidden="true">
+              <rect class="lcd-sintonia" x="206" y="204" width="188" height="78" rx="9"/>
+              <text id="dial-banda" class="lcd-piccolo" x="219" y="229">FM</text>
+              <g id="dial-teschio" transform="translate(259 223.5) scale(.82)" style="display:none">
+                <g stroke-width="2.2" stroke-linecap="round" stroke="currentColor"><path d="M-8-6.5 8 8M8-6.5-8 8"/></g>
+                <g fill="currentColor"><circle cx="-8.3" cy="-6.8" r="1.6"/><circle cx="8.3" cy="-6.8" r="1.6"/><circle cx="-8.3" cy="8.3" r="1.6"/><circle cx="8.3" cy="8.3" r="1.6"/>
+                  <path d="M0-7.5c-4.1 0-6.8 2.7-6.8 6.2 0 2.3 1.2 3.9 2.6 4.8V6.3c0 .7.5 1.2 1.2 1.2h6c.7 0 1.2-.5 1.2-1.2V3.5c1.4-.9 2.6-2.5 2.6-4.8 0-3.5-2.7-6.2-6.8-6.2z"/></g>
+                <g style="fill:var(--vetro)"><circle cx="-2.6" cy="-1" r="1.9"/><circle cx="2.6" cy="-1" r="1.9"/><path d="M0 1.6-1 3.4h2z"/><rect x="-1.9" y="5" width=".8" height="2.6"/><rect x="1.1" y="5" width=".8" height="2.6"/></g>
+              </g>
+              <text id="dial-unita" class="lcd-piccolo" x="381" y="229" text-anchor="end">MHz</text>
+              <text id="dial-tipo" class="lcd-piccolo lcd-spia" x="306" y="229" text-anchor="middle"></text>
+              <text id="dial-valore" class="lcd-cifre" x="300" y="268" text-anchor="middle">50.0</text>
+              <rect class="lcd-riflesso" x="206" y="204" width="188" height="78" rx="9"/>
+            </g>
+            <!-- manopola della sintonia: gira insieme alla lancetta, tra un fermo a sinistra (0) e uno a destra (100) -->
+            <g class="manopola-sintonia" aria-hidden="true">
+              <g class="fermi-manopola"></g>
+              <ellipse class="ombra-manopola" cx="533" cy="249" rx="46" ry="44"/>
+              <g id="sint-zigrinatura"><circle class="zigrinatura" cx="530" cy="243" r="43"/></g>
+              <circle cx="530" cy="243" r="37.5" fill="url(#sint-metallo)"/>
+              <circle class="cappello" cx="530" cy="243" r="26.5" fill="url(#sint-cappello)"/>
+              <path class="riflesso-manopola" d="M500 230A32 32 0 0 1 523 211.8"/>
+              <g id="sint-indice"><line class="indice" x1="530" y1="236" x2="530" y2="213"/><circle class="punta-indice" cx="530" cy="213" r="4"/></g>
+            </g>
           </svg>
         </div>
 
@@ -3497,7 +4078,7 @@ Cotta passeggera | Amore eterno
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.09l</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.22</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -3521,14 +4102,19 @@ Cotta passeggera | Amore eterno
         <div class="scheda"><ol class="regole passi" id="regole-passi"></ol></div>
         <div class="colonna-regole">
         <figure class="figura-regole">
-              <svg class="scala-regole" viewBox="0 0 200 118" aria-hidden="true">
-                <path class="fondo-scala" d="M4 104A96 96 0 0 1 196 104Z"/>
-                <path class="tinta-lato solo-squadre" d="M100 104L4 104A96 96 0 0 1 114.4 13.1Z"/>
-                <path class="zona z2" d="M38.6 38.2A90 90 0 0 1 56.4 25.3L89.3 84.8A22 22 0 0 0 85 87.9Z"/><path class="zona z3" d="M56.4 25.3A90 90 0 0 1 76.7 17.1L94.3 82.7A22 22 0 0 0 89.3 84.8Z"/><path class="zona z4" d="M76.7 17.1A90 90 0 0 1 98.4 14L99.6 82A22 22 0 0 0 94.3 82.7Z"/><path class="zona z3" d="M98.4 14A90 90 0 0 1 120.2 16.3L104.9 82.6A22 22 0 0 0 99.6 82Z"/><path class="zona z2" d="M120.2 16.3A90 90 0 0 1 140.9 23.8L110 84.4A22 22 0 0 0 104.9 82.6Z"/><text class="valore" x="56.5" y="48.1" text-anchor="middle">2</text><text class="valore" x="72.3" y="39.4" text-anchor="middle">3</text><text class="valore" x="89.7" y="34.7" text-anchor="middle">4</text><text class="valore" x="107.7" y="34.4" text-anchor="middle">3</text><text class="valore" x="125.3" y="38.5" text-anchor="middle">2</text>
-                <line class="ago-regole" x1="100" y1="104" x2="109.4" y2="44.7"/>
-                <circle class="perno-regole" cx="100" cy="104" r="6"/>
-                <text class="lato-regole solo-squadre" x="33.5" y="98" text-anchor="middle">sinistra?</text>
-                <text class="lato-regole solo-squadre" x="170" y="98" text-anchor="middle">destra?</text>
+              <svg class="scala-regole" viewBox="0 0 200 100" aria-hidden="true">
+                <defs>
+                  <linearGradient id="regole-alone"><stop offset="0.0000" class="sg-d" stop-opacity="0.000"/><stop offset="0.0075" class="sg-d" stop-opacity="0.267"/><stop offset="0.1725" class="sg-d" stop-opacity="0.300"/><stop offset="0.2025" class="sg-d" stop-opacity="0.374"/><stop offset="0.2975" class="sg-d" stop-opacity="0.420"/><stop offset="0.3275" class="sg-a" stop-opacity="0.516"/><stop offset="0.3850" class="sg-a" stop-opacity="0.580"/><stop offset="0.4150" class="sg-a" stop-opacity="0.694"/><stop offset="0.4475" class="sg-a" stop-opacity="0.780"/><stop offset="0.4775" class="sg-cuore" stop-opacity="0.970"/><stop offset="0.5000" class="sg-cuore" stop-opacity="1.000"/><stop offset="0.5225" class="sg-cuore" stop-opacity="0.970"/><stop offset="0.5525" class="sg-a" stop-opacity="0.780"/><stop offset="0.5850" class="sg-a" stop-opacity="0.694"/><stop offset="0.6150" class="sg-a" stop-opacity="0.580"/><stop offset="0.6725" class="sg-a" stop-opacity="0.516"/><stop offset="0.7025" class="sg-d" stop-opacity="0.420"/><stop offset="0.7975" class="sg-d" stop-opacity="0.374"/><stop offset="0.8275" class="sg-d" stop-opacity="0.300"/><stop offset="0.9925" class="sg-d" stop-opacity="0.267"/><stop offset="1.0000" class="sg-d" stop-opacity="0.000"/></linearGradient>
+                  <linearGradient id="regole-verticale" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".3" stop-color="#fff"/><stop offset=".72" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                  <mask id="regole-maschera" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="84"><rect x="0" y="6" width="200" height="76" fill="url(#regole-verticale)"/></mask>
+                </defs>
+                <rect class="fondo-scala" x="2" y="2" width="196" height="80" rx="9"/>
+                <g class="solo-squadre"><rect class="tinta-lato" x="76.5" y="2" width="30" height="80"/><rect class="tinta-lato" x="130.5" y="2" width="30" height="80"/></g>
+                <g mask="url(#regole-maschera)"><rect class="segnale-alone" x="40" y="6" width="120" height="76" fill="url(#regole-alone)"/></g>
+                <line class="riga-regole" x1="12" y1="12" x2="188" y2="12"/>
+                <g class="tacche-regole"><line x1="12.0" y1="12" x2="12.0" y2="21" class="lunga"/><line x1="16.4" y1="12" x2="16.4" y2="16.5"/><line x1="20.8" y1="12" x2="20.8" y2="16.5"/><line x1="25.2" y1="12" x2="25.2" y2="16.5"/><line x1="29.6" y1="12" x2="29.6" y2="21" class="lunga"/><line x1="34.0" y1="12" x2="34.0" y2="16.5"/><line x1="38.4" y1="12" x2="38.4" y2="16.5"/><line x1="42.8" y1="12" x2="42.8" y2="16.5"/><line x1="47.2" y1="12" x2="47.2" y2="21" class="lunga"/><line x1="51.6" y1="12" x2="51.6" y2="16.5"/><line x1="56.0" y1="12" x2="56.0" y2="16.5"/><line x1="60.4" y1="12" x2="60.4" y2="16.5"/><line x1="64.8" y1="12" x2="64.8" y2="21" class="lunga"/><line x1="69.2" y1="12" x2="69.2" y2="16.5"/><line x1="73.6" y1="12" x2="73.6" y2="16.5"/><line x1="78.0" y1="12" x2="78.0" y2="16.5"/><line x1="82.4" y1="12" x2="82.4" y2="21" class="lunga"/><line x1="86.8" y1="12" x2="86.8" y2="16.5"/><line x1="91.2" y1="12" x2="91.2" y2="16.5"/><line x1="95.6" y1="12" x2="95.6" y2="16.5"/><line x1="100.0" y1="12" x2="100.0" y2="21" class="lunga"/><line x1="104.4" y1="12" x2="104.4" y2="16.5"/><line x1="108.8" y1="12" x2="108.8" y2="16.5"/><line x1="113.2" y1="12" x2="113.2" y2="16.5"/><line x1="117.6" y1="12" x2="117.6" y2="21" class="lunga"/><line x1="122.0" y1="12" x2="122.0" y2="16.5"/><line x1="126.4" y1="12" x2="126.4" y2="16.5"/><line x1="130.8" y1="12" x2="130.8" y2="16.5"/><line x1="135.2" y1="12" x2="135.2" y2="21" class="lunga"/><line x1="139.6" y1="12" x2="139.6" y2="16.5"/><line x1="144.0" y1="12" x2="144.0" y2="16.5"/><line x1="148.4" y1="12" x2="148.4" y2="16.5"/><line x1="152.8" y1="12" x2="152.8" y2="21" class="lunga"/><line x1="157.2" y1="12" x2="157.2" y2="16.5"/><line x1="161.6" y1="12" x2="161.6" y2="16.5"/><line x1="166.0" y1="12" x2="166.0" y2="16.5"/><line x1="170.4" y1="12" x2="170.4" y2="21" class="lunga"/><line x1="174.8" y1="12" x2="174.8" y2="16.5"/><line x1="179.2" y1="12" x2="179.2" y2="16.5"/><line x1="183.6" y1="12" x2="183.6" y2="16.5"/><line x1="188.0" y1="12" x2="188.0" y2="21" class="lunga"/></g>
+                <line class="ago-regole-bordo" x1="118.5" y1="6" x2="118.5" y2="78"/><line class="ago-regole" x1="118.5" y1="6" x2="118.5" y2="78"/>
+                <text class="lato-regole solo-squadre" x="118.5" y="95" text-anchor="middle">quanto è lontana?</text>
               </svg>
           <figcaption><span>Più la lancetta è vicina al centro, più fai punti.</span></figcaption>
         </figure>
@@ -4057,15 +4643,17 @@ Cotta passeggera | Amore eterno
           fruscio({ t, dur: 0.12, vol: 0.09, f: 900, q: 1, pan });
           return;
         }
-        const n = { 2: 72, 3: 76, 4: 79 }[o.punti];
+        const n = { 1: 67, 2: 72, 3: 76, 4: 79, 5: 84 }[o.punti];
         campana({ f: NOTA(n), t, dur: 0.6, vol: 0.12, pan });
-        if (o.punti === 4) campana({ f: NOTA(n + 5), t: t + 0.06, dur: 0.8, vol: 0.1, pan });
+        if (o.punti === 5) campana({ f: NOTA(n + 5), t: t + 0.06, dur: 0.8, vol: 0.1, pan });
       },
       esito(o) {
         const t = o.t || 0, p = o.punti;
-        if (o.centro || p === 4) return S.centro({ t });
+        if (o.centro || p === 5) return S.centro({ t });
+        if (p === 4) { campana({ f: NOTA(79), t, dur: 0.6, vol: 0.12 }); campana({ f: NOTA(84), t: t + 0.11, dur: 0.9, vol: 0.12 }); return; }
         if (p === 3) { campana({ f: NOTA(76), t, dur: 0.6, vol: 0.12 }); campana({ f: NOTA(79), t: t + 0.12, dur: 0.9, vol: 0.12 }); return; }
         if (p === 2) { campana({ f: NOTA(72), t, dur: 0.6, vol: 0.1 }); campana({ f: NOTA(76), t: t + 0.14, dur: 0.8, vol: 0.09 }); return; }
+        if (p === 1) { campana({ f: NOTA(67), t, dur: 0.5, vol: 0.09 }); campana({ f: NOTA(72), t: t + 0.15, dur: 0.6, vol: 0.07 }); return; }
         S.mancato({ t });
       },
       centro(o) {
@@ -4878,13 +5466,15 @@ Cotta passeggera | Amore eterno
   const INIZI_TURNO = { singoli: () => nuovoTurno, squadre: () => turnoSquadra, collab: () => turnoCollab };
   function salvaPartita() {
     if (!partita) return;
-    try { localStorage.setItem(CHIAVE_PARTITA, JSON.stringify({ quando: Date.now(), partita, ultima: ultimaPartita, stazione: stazioneScelta })); } catch (e) {}
+    try { localStorage.setItem(CHIAVE_PARTITA, JSON.stringify({ quando: Date.now(), scala: 100, partita, ultima: ultimaPartita, stazione: stazioneScelta })); } catch (e) {}
   }
   function dimenticaPartita() { try { localStorage.removeItem(CHIAVE_PARTITA); } catch (e) {} }
   function partitaSalvata() {
     let s = null;
     try { s = JSON.parse(localStorage.getItem(CHIAVE_PARTITA)); } catch (e) {}
     if (!s || !s.partita || !INIZI_TURNO[s.partita.modo] || Date.now() - s.quando > VALIDITA_PARTITA) { if (s) dimenticaPartita(); return null; }
+    // partite salvate con il vecchio quadrante (gradi da -90 a 90): le distanze per i premi passano alla scala da 0 a 100
+    if (!s.scala && s.partita.storico) s.partita.storico.forEach(t => t.tentativi.forEach(x => { x.distanza *= 100 / 180; }));
     return s;
   }
   const spiaPausa = document.getElementById('pausa');
@@ -5360,24 +5950,24 @@ Cotta passeggera | Amore eterno
   const dialogoRegole = document.getElementById('dialogo-regole');
   const REGOLE = {
     singoli: { titolo: 'Giocatori singoli', passi: [
-      '<b>A turno uno di voi dà l’indizio.</b> Solo lui guarda lo schermo: vede in basso la carta parola (es. brutto/bello) e sopra un quadrante con un bersaglio. Se la carta non lo ispira può cambiarla due volte.',
+      '<b>A turno uno di voi dà l’indizio</b> (si gioca da 3 a 5). Solo lui guarda lo schermo: vede in basso la carta parola (es. brutto/bello) e sopra la scala della radio con un bersaglio. Se la carta non lo ispira può cambiarla due volte.',
       '<b>Dice un indizio ad alta voce</b> che possa far ricondurre alla posizione del bersaglio.',
-      '<b>Gli altri rispondono uno alla volta di nascosto:</b> ognuno porta la lancetta dove pensa che sia il centro del bersaglio.',
-      '<b>Si rivela il bersaglio.</b> Chi lo centra prende 4, 3 o 2 punti; chi ha dato l’indizio prende 1 punto per ogni giocatore andato a segno.',
-      '<b>Vince chi arriva a 10 punti</b>, ma il giro si chiude sempre, così tutti giocano lo stesso numero di turni. Se più giocatori hanno 10 o più punti vince chi ne ha di più.'
+      '<b>Gli altri rispondono uno alla volta di nascosto:</b> ognuno porta la lancetta dove pensa che sia il centro del bersaglio. Le risposte restano segrete fino alla fine.',
+      '<b>Si rivelano tutte le lancette insieme.</b> Ogni ascoltatore prende da 0 a 5 punti; chi ha dato l’indizio prende la somma dei punti di tutti gli ascoltatori. Nessuno perde punti.',
+      '<b>Ognuno dà due indizi:</b> si fanno due giri completi, sempre nello stesso ordine. Alla fine vince chi ha più punti; chi è pari al primo posto vince a pari merito.'
     ] },
     squadre: { titolo: 'A squadre', passi: [
-      '<b>La squadra di turno sceglie un caposquadra</b>, diverso ogni volta. Solo lui guarda lo schermo: vede in basso la carta parola (es. brutto/bello) e sopra un quadrante con un bersaglio. Può cambiare carta due volte.',
-      '<b>Il caposquadra dice un indizio ad alta voce</b> che possa far ricondurre alla posizione del bersaglio: la sua squadra ne discute e decide dove posizionare la lancetta.',
-      '<b>L’altra squadra scommette</b>: il centro del bersaglio è a sinistra o a destra della lancetta?',
-      '<b>Si rivela il bersaglio.</b> La squadra di turno prende 4, 3 o 2 punti se ha colpito il bersaglio; l’altra squadra fa 1 punto se ha indovinato il lato, ma nessun punto se la lancetta è sul 4.',
-      '<b>Il turno passa alla seconda squadra</b> che ripete le azioni.',
-      '<b>Vince la prima squadra che arriva a 10.</b> Chi gioca per seconda parte da 1 punto. Se superate i 10 punti insieme, vince chi ha più punti.'
+      '<b>La squadra di turno sceglie un caposquadra</b>, diverso ogni volta. Solo lui guarda lo schermo: vede in basso la carta parola (es. brutto/bello) e sopra la scala della radio con un bersaglio. Può cambiare carta due volte.',
+      '<b>Il caposquadra dice un indizio ad alta voce</b>: la sua squadra ne discute, posiziona la lancetta e la conferma.',
+      '<b>L’altra squadra scommette</b> su quanto è lontana la lancetta dalla frequenza segreta: <b>Segnale perfetto</b> (è sul 5 o sul 4, errore fino al 2%: +2), <b>Segnale disturbato</b> (errore tra il 2% e il 7%: +1) o <b>Fuori frequenza</b> (errore oltre il 7%: +3).',
+      '<b>Si rivela il bersaglio.</b> La squadra di turno prende da 0 a 5 punti; l’altra prende i punti della scommessa, se l’ha indovinata.',
+      '<b>Tre turni a testa</b>, alternati: alla fine vince la squadra con più punti.',
+      '<b>Se siete pari</b> si gioca uno spareggio, un turno a testa con le stesse regole. Se la parità resta, è pareggio.'
     ] },
     collab: { titolo: 'Collaborativa', passi: [
-      '<b>Scegliete insieme un caposquadra</b>, diverso ogni volta. Solo lui guarda lo schermo: vede in basso la carta parola (es. brutto/bello) e sopra un quadrante con un bersaglio. Può cambiare carta una sola volta.',
+      '<b>Scegliete insieme un caposquadra</b>, diverso ogni volta. Solo lui guarda lo schermo: vede in basso la carta parola (es. brutto/bello) e sopra la scala della radio con un bersaglio. Può cambiare carta una sola volta.',
       '<b>Il caposquadra dice un indizio ad alta voce</b> che possa far ricondurre alla posizione del bersaglio: gli altri giocatori ne discutono e posizionano la lancetta.',
-      '<b>Si rivela il bersaglio.</b> Se la lancetta lo ha colpito guadagnate 3 o 2 punti; se centra lo spicchio dorato guadagnate anche un turno extra.',
+      '<b>Si rivela il bersaglio.</b> Se la lancetta lo ha colpito guadagnate da 1 a 4 punti; se centra la fascia dorata al centro guadagnate anche un turno extra.',
       '<b>Alla fine dei 7 turni</b> (più quelli extra guadagnati) si valuta lo stato della connessione in base al punteggio.'
     ] }
   };
@@ -5390,9 +5980,9 @@ Cotta passeggera | Amore eterno
     document.getElementById('regole-modo').textContent = r.titolo;
     document.getElementById('regole-passi').innerHTML = r.passi.map((t, i) => `<li><span class="segno">${i + 1}</span><span>${t}</span></li>`).join('');
     const coop = modo === 'collab';
-    dialogoRegole.querySelectorAll('.scala-regole .valore')[2].textContent = coop ? '3' : '4';
+    dialogoRegole.querySelector('.scala-regole').setAttribute('viewBox', modo === 'squadre' ? '0 0 200 100' : '0 0 200 84');
     dialogoRegole.querySelector('.figura-regole figcaption span').textContent = coop
-      ? 'Lo spicchio dorato vale 3 punti e un turno extra.' : 'Più la lancetta è vicina al centro, più fai punti.';
+      ? 'Il cuore dorato del segnale vale 4 punti e un turno extra.' : 'Più la lancetta è vicina al cuore del segnale, più fai punti: da 1 ai bordi fino a 5 al centro.';
     dialogoRegole.hidden = false;
     dialogoRegole.querySelector('.pannello').scrollTop = 0;
     suona('finestra');
@@ -5460,7 +6050,9 @@ Cotta passeggera | Amore eterno
     const pieni = nomi.filter(Boolean);
     const doppio = new Set(pieni.map(n => n.toLowerCase())).size !== pieni.length;
     contatore.textContent = `${pieni.length}/5`;
-    suggSingoli.textContent = doppio ? 'Due giocatori hanno lo stesso nome' : '';
+    // in due non si gioca da soli: si consiglia la collaborativa
+    suggSingoli.textContent = doppio ? 'Due giocatori hanno lo stesso nome'
+      : pieni.length && pieni.length < 3 ? 'Servono almeno 3 giocatori: in due provate la Collaborativa' : '';
     if (silenzioso !== true) {
       if (doppio && !erroreSingoli) { suona('errore'); vibra('errore'); }
       else if (accese) suona('led');
@@ -5468,7 +6060,7 @@ Cotta passeggera | Amore eterno
     }
     erroreSingoli = doppio;
     suggSingoli.classList.toggle('errore', doppio);
-    iniziaSingoli.disabled = pieni.length < 2 || doppio;
+    iniziaSingoli.disabled = pieni.length < 3 || doppio;
     return pieni;
   }
   campiGiocatori.forEach(c => { formattaMentreScrivi(c); c.addEventListener('input', () => verificaSingoli()); });
@@ -5675,67 +6267,173 @@ Cotta passeggera | Amore eterno
     }, p => { display.textContent = `Cerco la frequenza… ${(88 + p * 20).toFixed(1).replace('.', ',')} MHz`; });
   }
 
-  /* ---------- Quadrante: tacche e lancetta trascinabile ---------- */
+  /* ---------- Sintonizzatore: lancetta trascinabile su una scala di frequenze vere ----------
+     Dentro il gioco la sintonia va da 0 a 100 (serve per le fasce del bersaglio e per le modalità);
+     sul vetro e sul display si leggono invece le frequenze della gamma: 600–1600 kHz in AM, 88–108 MHz in FM. */
   const NS = 'http://www.w3.org/2000/svg';
-  const CX = 200, CY = 216;
+  const VB_L = 600, VB_A = 300;                         // misure del disegno
+  const SCALA_X0 = 58, SCALA_X1 = 542;                  // dove stanno lo 0 e il 100 nella finestra
+  const PASSO = (SCALA_X1 - SCALA_X0) / 100;            // unità del disegno per ogni punto della scala
+  const MANOPOLA = { x: 530, y: 243 };
+  const CORSA_MANOPOLA = 150;                           // la manopola gira da -150° (fermo a sinistra) a +150° (fermo a destra)
+  const GAMME = {
+    am: { da: 600, a: 1600, unita: 'kHz', nome: 'AM', etichette: 20, lunghe: 10, medie: 0, corte: 2, cifre: 0 },
+    fm: { da: 88, a: 108, unita: 'MHz', nome: 'FM', etichette: 20, lunghe: 10, medie: 5, corte: 1, cifre: 1 }
+  };
+  let gamma = GAMME.fm;
+  const xDi = v => SCALA_X0 + v * PASSO;
+  const frequenza = v => gamma.da + (gamma.a - gamma.da) * v / 100;
+  const testoFrequenza = v => frequenza(Math.max(0, Math.min(100, v))).toFixed(gamma.cifre);
   const tacche = document.getElementById('tacche');
-  for (let i = 0; i <= 40; i++) {
-    const a = Math.PI - (i / 40) * Math.PI;
-    const lunga = i % 5 === 0;
-    const r1 = lunga ? 144 : 156, r2 = 168;
-    const l = document.createElementNS(NS, 'line');
-    l.setAttribute('x1', CX + r1 * Math.cos(a)); l.setAttribute('y1', CY - r1 * Math.sin(a));
-    l.setAttribute('x2', CX + r2 * Math.cos(a)); l.setAttribute('y2', CY - r2 * Math.sin(a));
-    l.setAttribute('stroke-width', lunga ? 3.5 : 2);
-    l.setAttribute('opacity', lunga ? 0.9 : 0.55);
-    l.style.setProperty('--i', i);
-    tacche.appendChild(l);
+  // la scala si ridisegna quando cambia la gamma: in AM le centinaia di kHz, in FM i MHz
+  function costruisciScala(banda) {
+    gamma = banda === 'am' ? GAMME.am : GAMME.fm;
+    tacche.replaceChildren();
+    const riga = document.createElementNS(NS, 'line');
+    riga.setAttribute('class', 'riga-scala');
+    riga.setAttribute('x1', SCALA_X0); riga.setAttribute('x2', SCALA_X1); riga.setAttribute('y1', 56); riga.setAttribute('y2', 56);
+    tacche.appendChild(riga);
+    for (let i = 0; i <= 100; i += gamma.corte) {
+      const lunga = i % gamma.lunghe === 0, media = !lunga && gamma.medie && i % gamma.medie === 0;
+      const l = document.createElementNS(NS, 'line');
+      l.setAttribute('x1', xDi(i)); l.setAttribute('x2', xDi(i));
+      l.setAttribute('y1', 56); l.setAttribute('y2', 56 + (lunga ? 27 : media ? 18 : 10));
+      if (lunga || media) l.setAttribute('class', lunga ? 'lunga' : 'media');
+      l.style.setProperty('--i', Math.round(i / 2.5));
+      tacche.appendChild(l);
+      if (i % gamma.etichette === 0) {
+        const t = document.createElementNS(NS, 'text');
+        t.setAttribute('class', 'cifra-scala'); t.setAttribute('x', xDi(i)); t.setAttribute('y', 46);
+        t.style.setProperty('--i', Math.round(i / 2.5));
+        t.textContent = Math.round(frequenza(i));
+        tacche.appendChild(t);
+      }
+    }
+    document.getElementById('dial-banda').textContent = gamma.nome;
+    document.getElementById('dial-unita').textContent = gamma.unita;
+    aggiornaDisplay();
+  }
+  // attorno alla manopola: tacchette sul pannello e i due fermi oltre i quali non gira
+  {
+    const fermi = document.querySelector('.fermi-manopola');
+    const punto = (a, r) => [MANOPOLA.x + r * Math.sin(a * Math.PI / 180), MANOPOLA.y - r * Math.cos(a * Math.PI / 180)];
+    for (let a = -CORSA_MANOPOLA; a <= CORSA_MANOPOLA; a += 30) {
+      const [x1, y1] = punto(a, 49), [x2, y2] = punto(a, Math.abs(a) === CORSA_MANOPOLA ? 55 : 53);
+      const l = document.createElementNS(NS, 'line');
+      l.setAttribute('class', 'tacca-manopola' + (Math.abs(a) === CORSA_MANOPOLA ? ' estremo' : ''));
+      l.setAttribute('x1', x1.toFixed(1)); l.setAttribute('y1', y1.toFixed(1)); l.setAttribute('x2', x2.toFixed(1)); l.setAttribute('y2', y2.toFixed(1));
+      fermi.appendChild(l);
+    }
+    [-1, 1].forEach(k => {
+      const [x, y] = punto(k * (CORSA_MANOPOLA + 13), 51);
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('class', 'fermo'); c.setAttribute('cx', x.toFixed(1)); c.setAttribute('cy', y.toFixed(1)); c.setAttribute('r', 3.6);
+      fermi.appendChild(c);
+    });
   }
 
   const dial = document.getElementById('dial');
   const ago = document.getElementById('ago');
-  let angolo = 0, trascina = false;
+  const zigrinaturaSint = document.getElementById('sint-zigrinatura');
+  const indiceSint = document.getElementById('sint-indice');
+  const valoreDisplay = document.getElementById('dial-valore');
+  let sintonia = 50, presaSint = null, restoRotella = 0, segueDisplay = 0, displaySpento = false;
 
-  function impostaAngolo(g) {
-    angolo = Math.max(-90, Math.min(90, g));
-    ago.style.transform = `rotate(${angolo}deg)`;
-    dial.setAttribute('aria-valuenow', Math.round(angolo));
+  function scriviDisplay(v) { if (!displaySpento) valoreDisplay.textContent = testoFrequenza(v); }
+  function aggiornaDisplay() {
+    valoreDisplay.classList.toggle('spento', displaySpento);
+    if (displaySpento) valoreDisplay.textContent = gamma.cifre ? '--.-' : '----';
+    else if (!ago.style.transition) scriviDisplay(sintonia);
   }
-  function daPuntatore(ev) {
+  // lancetta, manopola e display si muovono sempre insieme.
+  // La manopola è solo un ornamento: segue la lancetta e si ferma ai due estremi.
+  function impostaSintonia(v) {
+    sintonia = Math.max(0, Math.min(100, v));          // valore continuo: lancetta disegnata e punteggio usano lo stesso numero
+    ago.style.transform = `translateX(${xDi(sintonia)}px)`;
+    const giro = `rotate(${(sintonia / 50 - 1) * CORSA_MANOPOLA}deg)`;
+    zigrinaturaSint.style.transform = giro; indiceSint.style.transform = giro;
+    if (!ago.style.transition) scriviDisplay(sintonia);
+    dial.setAttribute('aria-valuenow', sintonia.toFixed(2));
+    dial.setAttribute('aria-valuetext', `${testoFrequenza(sintonia)} ${gamma.unita}`);
+  }
+  // durante le corse automatiche (estrazione) il display legge la lancetta mentre si muove
+  function transizioneLancetta(t) {
+    [ago, zigrinaturaSint, indiceSint].forEach(x => { x.style.transition = t; });
+    cancelAnimationFrame(segueDisplay);
+    if (!t) { scriviDisplay(sintonia); return; }
+    const passo = () => {
+      const m = getComputedStyle(ago).transform;
+      if (m && m !== 'none') scriviDisplay((new DOMMatrixReadOnly(m).e - SCALA_X0) / PASSO);
+      if (ago.style.transition) segueDisplay = requestAnimationFrame(passo);
+    };
+    passo();
+  }
+  // muove la lancetta a mano: a ogni tacca si sente lo scatto, ogni 5 si sente anche nella mano.
+  // Gli scatti sono gli stessi per tutti i bersagli: non dicono niente su dove sia il centro.
+  function muoviLancetta(v) {
+    const prima = sintonia;
+    impostaSintonia(v);
+    if (sintonia === prima) return;
+    if (Math.round(prima) !== Math.round(sintonia)) suona('tacca', { pan: (sintonia - 50) / 50 * 0.6 });
+    if (sintonia <= 0 || sintonia >= 100) { ultimoScatto = performance.now(); vibra('fondoScala'); }   // l'arresto si sente sempre
+    else if (Math.round(prima / 5) !== Math.round(sintonia / 5)) vibraScatto(Math.round(sintonia / 5) % 2 ? 'tacca' : 'taccaLunga');
+  }
+  costruisciScala('fm');
+  function puntoScala(e) {
     const pt = dial.createSVGPoint();
-    pt.x = ev.clientX; pt.y = ev.clientY;
-    const p = pt.matrixTransform(dial.getScreenCTM().inverse());
-    muoviLancetta(Math.atan2(p.x - CX, Math.max(CY - p.y, 0.001)) * 180 / Math.PI);
+    pt.x = e.clientX; pt.y = e.clientY;
+    return pt.matrixTransform(dial.getScreenCTM().inverse());
   }
-  // muove la lancetta a mano: a ogni tacca superata si sente lo scatto della manopola
-  function muoviLancetta(g) {
-    const prima = Math.round(angolo / 4.5);
-    impostaAngolo(g);
-    const tacca = Math.round(angolo / 4.5);
-    if (tacca === prima) return;
-    suona('tacca', { pan: angolo / 90 * 0.6 });
-    // le tacche lunghe della scala (ogni 5) scattano più forte; in fondo alla scala un colpo d'arresto.
-    // Sono le stesse per tutti i bersagli: la vibrazione non dice niente su dove sia il centro.
-    if (Math.abs(angolo) >= 89.5) { ultimoScatto = performance.now(); vibra('fondoScala'); }   // l'arresto si sente sempre
-    else vibraScatto(tacca % 5 === 0 ? 'taccaLunga' : 'tacca');
-  }
+  const valoreDaX = x => (x - SCALA_X0) / PASSO;
   dial.addEventListener('pointerdown', e => {
-    if (partita && partita.modo === 'squadre' && partita.fase === 'lato') {
-      const pt = dial.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
-      const q = pt.matrixTransform(dial.getScreenCTM().inverse());
-      const g = Math.atan2(q.x - CX, Math.max(CY - q.y, 0.001)) * 180 / Math.PI;
-      scegliLato(g < partita.angolo ? 'sx' : 'dx');
+    const q = puntoScala(e);
+    if (partita && partita.modo === 'squadre' && partita.fase === 'scommessa') {
+      // toccando la scala si sceglie la scommessa della zona toccata, rispetto alla lancetta
+      const d = Math.abs(valoreDaX(q.x) - partita.sintonia);
+      if (q.y < 192) scegliScommessa(d <= 2 ? 'perfetto' : d <= 7 ? 'disturbato' : 'fuori');
       return;
     }
-    if (!lancettaLibera()) return; dial.classList.remove('tastiera'); trascina = true; dial.setPointerCapture(e.pointerId); daPuntatore(e); });
-  dial.addEventListener('pointermove', e => { if (trascina) daPuntatore(e); });
-  dial.addEventListener('pointerup', () => { trascina = false; });
-  dial.addEventListener('pointercancel', () => { trascina = false; });
+    if (!lancettaLibera() || q.y > 194) return;         // si tocca solo la finestra della scala
+    dial.classList.remove('tastiera');
+    const s = scalaQuadrante || 0.7;
+    // presa vicino alla lancetta: si trascina senza saltare; toccando altrove ci salta sopra
+    const scarto = q.x - xDi(sintonia);
+    const vicino = Math.abs(scarto) <= Math.max(16, 24 / s);
+    if (!vicino) muoviLancetta(valoreDaX(q.x));
+    presaSint = { x: q.x, t: e.timeStamp || performance.now() };
+    ago.classList.add('presa');
+    dial.setPointerCapture(e.pointerId);
+  });
+  // Trascinamento di precisione: la lancetta segue il dito 1:1 quando ci si muove svelti; quando si va piano
+  // si sposta solo di un quarto, così anche la fascia più stretta (0,8%) si centra con calma su ogni telefono.
+  dial.addEventListener('pointermove', e => {
+    if (!presaSint) return;
+    const q = puntoScala(e), ora = e.timeStamp || performance.now();
+    const dx = q.x - presaSint.x, dt = Math.max(8, ora - presaSint.t);
+    presaSint.x = q.x; presaSint.t = ora;
+    if (!dx) return;
+    const velocita = Math.abs(dx) * (scalaQuadrante || 0.7) / dt;      // px veri al millisecondo
+    const guadagno = velocita >= 0.3 ? 1 : velocita <= 0.05 ? 0.25 : 0.25 + 0.75 * (velocita - 0.05) / 0.25;
+    muoviLancetta(sintonia + dx / PASSO * guadagno);
+  });
+  const lasciaPresa = () => { presaSint = null; ago.classList.remove('presa'); };
+  dial.addEventListener('pointerup', lasciaPresa);
+  dial.addEventListener('pointercancel', lasciaPresa);
+  // rotellina del mouse e trackpad: regolazione fine
+  dial.addEventListener('wheel', e => {
+    if (!lancettaLibera()) return;
+    e.preventDefault();
+    restoRotella += (e.deltaX - e.deltaY) * 0.005;
+    const passo = Math.trunc(restoRotella * 10) / 10;
+    if (passo) { restoRotella -= passo; muoviLancetta(sintonia + passo); }
+  }, { passive: false });
   dial.addEventListener('keydown', e => {
     if (!lancettaLibera()) return;
+    const passo = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageDown: -10, PageUp: 10 }[e.key];
+    if (!passo) return;
     dial.classList.add('tastiera');
-    if (e.key === 'ArrowLeft') { muoviLancetta(angolo - 3); e.preventDefault(); }
-    if (e.key === 'ArrowRight') { muoviLancetta(angolo + 3); e.preventDefault(); }
+    muoviLancetta(sintonia + passo * (e.shiftKey && Math.abs(passo) === 1 ? 0.1 : 1));
+    e.preventDefault();
   });
 
   /* ---------- Stazioni: i quattro mazzi di carte ----------
@@ -5899,13 +6597,22 @@ Cotta passeggera | Amore eterno
   /* La targhetta della tematica sta sulla cornice della scala: qui si misura dove cade davvero il disegno
      (in alto nel riquadro, o più giù se la scala è limitata dalla larghezza) e quanto vale un'unità del disegno. */
   const scala = document.getElementById('dial'), riquadroScala = scala.parentElement;
+  let scalaQuadrante = 0;
   function misuraQuadrante() {
-    // misure di impaginazione (non quelle animate: all'accensione la scala entra ingrandendosi)
+    // misure di impaginazione (non quelle animate: all'accensione la radio entra ingrandendosi)
     const largo = scala.clientWidth, alto0 = scala.clientHeight;
-    if (!alto0) return;
-    const alto = Math.min(alto0, largo * 236 / 400);
-    riquadroScala.style.setProperty('--dial-top', ((riquadroScala.clientHeight - alto0) / 2 + (alto0 - alto) / 2).toFixed(2) + 'px');
-    riquadroScala.style.setProperty('--dial-u', (alto / 236).toFixed(4) + 'px');
+    if (!alto0 || !largo) return;
+    const u = Math.min(largo / VB_L, alto0 / VB_A);
+    riquadroScala.style.setProperty('--dial-top', ((riquadroScala.clientHeight - alto0) / 2 + (alto0 - VB_A * u) / 2).toFixed(2) + 'px');
+    riquadroScala.style.setProperty('--dial-u', u.toFixed(4) + 'px');
+    scala.style.setProperty('--s', u.toFixed(4));
+    // le scritte del bersaglio e i numeri delle risposte si ridispongono se la radio cambia molto di misura
+    const prima = scalaQuadrante;
+    scalaQuadrante = u;
+    if (prima && Math.abs(u - prima) / prima > 0.04) {
+      if (ventaglio.childElementCount && centroDisegnato != null) disegnaVentaglio(centroDisegnato, tipoDisegnato);
+      if (risposte.childElementCount && partita && partita.tentativi) disegnaRisposte(true);
+    }
   }
   if (window.ResizeObserver) new ResizeObserver(misuraQuadrante).observe(scala);
   else addEventListener('resize', misuraQuadrante);
@@ -5964,71 +6671,91 @@ Cotta passeggera | Amore eterno
     musicaAlta = false;
     passaggio.hidden = true;
     schermataGioco.classList.remove('accensione');
-    ago.style.transition = '';
+    transizioneLancetta('');
     partita = null;
   }
 
-  /* ---------- Bersaglio: largo quanto due tacche lunghe, diviso in 5 spicchi ---------- */
-  const BORDI = [-11.25, -6.75, -2.25, 2.25, 6.75, 11.25];
-  function classiZona() { return partita && partita.modo === 'collab' ? ['z2', 'z3', 'z-oro', 'z3', 'z2'] : ['z2', 'z3', 'z4', 'z3', 'z2']; }
-  // Regola di posizionamento: il bersaglio può uscire in parte dalla radio ai lati,
-  // ma lo spicchio centrale deve restare sempre tutto visibile.
-  const LIMITE_CENTRO = 90 - 2.25;
-  function nuovoCentro() { return (Math.random() * 2 - 1) * LIMITE_CENTRO; }
-  function valoriBersaglio() { return partita && partita.modo === 'collab' ? ['2', '3', '3', '3', '2'] : ['2', '3', '4', '3', '2']; }
-
-  function punto(g, r) { const a = g * Math.PI / 180; return [CX + r * Math.sin(a), CY - r * Math.cos(a)]; }
-  function spicchio(g0, g1, r0, r1) {
-    const [ax, ay] = punto(g0, r1), [bx, by] = punto(g1, r1), [cx, cy] = punto(g1, r0), [dx, dy] = punto(g0, r0);
-    return `M${dx} ${dy}L${ax} ${ay}A${r1} ${r1} 0 0 1 ${bx} ${by}L${cx} ${cy}A${r0} ${r0} 0 0 0 ${dx} ${dy}Z`;
+  /* ---------- Bersagli: il segnale di una stazione ----------
+     Si vede come una luce dietro il vetro, fortissima al centro e sempre più tenue verso i bordi.
+     Le fasce dei punti non si disegnano: si sentono nell'intensità del segnale.
+     Le misure sono in punti della scala (0–100, cioè in %), uguali su ogni schermo: cambia solo il disegno,
+     non le probabilità. Per ogni bersaglio: larghezza totale di ogni punteggio, dal più alto al più basso
+     (sinistra + destra insieme; la fascia centrale compare una volta sola).
+     - Standard: quello di tutte le modalità.
+     - Sintonia fine e Ricezione amplificata: SOLO nella modalità collaborativa. */
+  const BERSAGLI = {
+    standard:    { nome: 'Standard',              larghezze: [1.5, 2.5, 3.5, 5, 7.5] },          // 20%: 5-4-3-2-1
+    fine:        { nome: 'Sintonia fine',         larghezze: [0.8, 2.2, 3, 3.5, 4, 3.17] },      // 16,67%: 6-5-4-3-2-1
+    amplificata: { nome: 'Ricezione amplificata', larghezze: [1.5, 2.5, 4, 6, 11] }              // 25%: 5-4-3-2-1
+  };
+  // fin dove arriva ogni fascia, misurato dal centro (metà della fascia centrale, poi una fascia per parte alla volta)
+  Object.values(BERSAGLI).forEach(b => {
+    let fino = 0;
+    b.mezze = b.larghezze.map((l, k) => (fino += k ? l / 2 : l / 2));
+    b.massimo = b.larghezze.length;
+  });
+  const MEZZE_FASCE = BERSAGLI.standard.mezze;          // 0,75 - 2 - 3,75 - 6,25 - 10
+  const LUCE_SEGNALE = { y: 22, alto: 164 };
+  // il bersaglio del turno: la collaborativa può sceglierne uno diverso, tutte le altre modalità usano lo standard
+  function tipoBersaglio() { return (partita && BERSAGLI[partita.bersaglio]) ? partita.bersaglio : 'standard'; }
+  // Regola di posizionamento: il segnale può uscire in parte dalla scala ai lati,
+  // ma il cuore (la fascia più alta) deve restare sempre tutto visibile.
+  function nuovoCentro(tipo = tipoBersaglio()) {
+    const m = BERSAGLI[tipo].mezze[0];
+    return m + Math.random() * (100 - 2 * m);
   }
-  function disegnaVentaglio(centro) {
+  // riempie un gradiente orizzontale centrato sul segnale: [distanza dal centro, colore, opacità]
+  function sfumaSegnale(id, centro, meta, punti) {
+    const g = document.getElementById(id);
+    g.setAttribute('x1', xDi(centro - meta)); g.setAttribute('x2', xDi(centro + meta));
+    const tutti = punti.slice(1).reverse().map(([d, c, o]) => [-d, c, o]).concat(punti);
+    g.replaceChildren(...tutti.map(([d, c, o]) => {
+      const st = svg('stop', { offset: ((d + meta) / (2 * meta)).toFixed(5) });
+      st.style.stopColor = c; st.style.stopOpacity = o;
+      return st;
+    }));
+  }
+  // Intensità del segnale fascia per fascia, dal centro verso l'esterno: ogni fascia sfuma un poco e il passaggio
+  // alla successiva si vede come un piccolo calo di luce; al bordo del bersaglio la luce si spegne di colpo,
+  // così si capisce bene fin dove arriva l'1.
+  function profiloSegnale(tipo, cuore) {
+    const mezze = BERSAGLI[tipo].mezze, n = mezze.length, p = [], bordo = 0.15;
+    const luce = k => k ? 0.3 + 0.7 * Math.pow((n - 1 - k) / (n - 1), 1.25) : 1;
+    const colore = k => !k ? cuore : k >= n - 2 ? 'var(--segnale-debole)' : 'var(--segnale-alone)';
+    // il passaggio tra due fasce è morbido, ma mai più largo di un terzo della fascia più stretta
+    const passaggio = k => Math.min(0.3, 0.3 * Math.min(mezze[k] - (k ? mezze[k - 1] : 0), mezze[k + 1] - mezze[k]));
+    mezze.forEach((fine, k) => {
+      const inizio = k ? mezze[k - 1] + passaggio(k - 1) : 0;
+      const fineLuce = k === n - 1 ? fine - bordo : fine - passaggio(k);
+      p.push([inizio, colore(k), luce(k)], [fineLuce, colore(k), luce(k) * (k ? 0.89 : 0.97)]);
+    });
+    p.push([mezze[n - 1], colore(n - 1), 0]);
+    return p;
+  }
+  // il tipo di bersaglio si riconosce dal colore del segnale e da una spia sul display
+  const SPIA_BERSAGLIO = { standard: '', fine: 'FINE', amplificata: 'AMPL' };
+  function mostraTipoBersaglio(tipo) {
+    riquadroScala.dataset.bersaglio = tipo;
+    document.getElementById('dial-tipo').textContent = SPIA_BERSAGLIO[tipo];
+  }
+  let centroDisegnato = null, tipoDisegnato = 'standard';
+  function disegnaVentaglio(centro, tipo = tipoBersaglio()) {
+    centroDisegnato = centro; tipoDisegnato = tipo;
+    mostraTipoBersaglio(tipo);
     ventaglio.replaceChildren();
-    const valori = valoriBersaglio(), classi = classiZona();
-    let formaOro = null;
-    // dove va ogni numero: fuori dallo spicchio, ma dentro il vetro della radio
-    const posti = valori.map((v, i) => {
-      const medio = centro + (BORDI[i] + BORDI[i + 1]) / 2;
-      if (Math.abs(medio) >= 88.5) return null;          // spicchio fuori dalla radio o rasente al fondo: niente numero
-      const s = Math.abs(Math.sin(medio * Math.PI / 180));
-      const mezzo = v.length > 1 ? 10 : 5;               // metà larghezza del numero
-      const stretto = Math.min(190, (181 - mezzo) / Math.max(s, 0.01)) < 186;
-      // vicino ai bordi il numero finirebbe sopra lo spicchio: va rimpicciolito per stare tra la punta e il bordo
-      const scala = stretto ? Math.max(0.6, Math.min(0.78, (186 - 177 * s) / (mezzo * (1 + s)))) : 1;
-      return { medio, s, mezzo, stretto, scala };
-    });
-    // tutti i numeri dello stesso bersaglio hanno la stessa grandezza e, se anche uno solo deve stare
-    // vicino agli spicchi, stanno tutti alla stessa distanza dalla punta: niente numeri staccati
-    const visibili = posti.filter(Boolean);
-    const scala = Math.min(1, ...visibili.map(p => p.scala));
-    const vicini = visibili.some(p => p.stretto);
-    valori.forEach((v, i) => {
-      const forma = spicchio(centro + BORDI[i], centro + BORDI[i + 1], 40, 176);
-      ventaglio.append(svg('path', { d: forma, class: 'zona ' + classi[i] }));
-      if (classi[i] === 'z-oro') formaOro = forma;
-      const p = posti[i];
-      if (!p) return;
-      const r = vicini ? 177 + p.mezzo * scala : Math.min(190, (181 - p.mezzo * scala) / Math.max(p.s, 0.01));
-      const [x, y] = punto(p.medio, r);
-      const t = svg('text', { x, y: y + 4 * scala, 'text-anchor': 'middle', class: 'valore' + (classi[i] === 'z-oro' ? ' oro' : '') });
-      if (scala < 1) t.style.fontSize = (12 * scala).toFixed(1) + 'px';
-      t.textContent = v;
-      ventaglio.append(t);
-    });
-    if (formaOro) luccichio(formaOro, centro);
+    const meta = BERSAGLI[tipo].mezze[BERSAGLI[tipo].mezze.length - 1];
+    ventaglio.style.transformOrigin = `${xDi(centro)}px ${LUCE_SEGNALE.y + LUCE_SEGNALE.alto / 2}px`;
+    const coop = !!partita && partita.modo === 'collab';
+    sfumaSegnale('segnale-alone', centro, meta, profiloSegnale(tipo, coop ? 'var(--zona-oro)' : 'var(--segnale-cuore)'));
+    const gruppo = svg('g', { mask: 'url(#sfuma-segnale)', class: 'segnale segnale-' + tipo });
+    gruppo.append(svg('rect', { class: 'segnale-alone', x: xDi(centro - meta), y: LUCE_SEGNALE.y, width: 2 * meta * PASSO, height: LUCE_SEGNALE.alto, fill: 'url(#segnale-alone)' }));
+    ventaglio.append(gruppo);
+    if (coop) luccichio(centro);
   }
-  // Lo spicchio d'oro brilla: un riflesso che scorre verso l'esterno e qualche scintilla
-  function luccichio(forma, centro) {
-    const taglio = svg('clipPath', { id: 'taglio-oro' });
-    taglio.append(svg('path', { d: forma }));
-    const riflesso = svg('g', { 'clip-path': 'url(#taglio-oro)' });
-    const asse = svg('g', { transform: `rotate(${centro} ${CX} ${CY})` });
-    asse.append(svg('rect', { x: CX - 20, y: CY - 40, width: 40, height: 28, class: 'riflesso' }));
-    riflesso.append(asse);
-    ventaglio.append(svg('path', { d: forma, class: 'alone' }), taglio, riflesso, svg('path', { d: forma, class: 'bordo-oro' }));
-    [[96, -4, 0], [146, 4, 2]].forEach(([r, scarto, ritardo]) => {
-      const [x, y] = punto(centro + scarto, r);
-      const g = svg('g', { transform: `translate(${x} ${y})` });
+  // Il centro d'oro della cooperativa manda qualche scintilla
+  function luccichio(centro) {
+    [[64, -1, 0], [150, 1, 2]].forEach(([sy, lato, ritardo]) => {
+      const g = svg('g', { transform: `translate(${xDi(centro) + lato * (PASSO * 1.6 + 6)} ${sy})` });
       const stella = svg('path', { d: 'M0-6 1.3-1.3 6 0 1.3 1.3 0 6-1.3 1.3-6 0-1.3-1.3z', class: 'scintilla' });
       stella.style.animationDelay = ritardo + 's';
       g.append(stella);
@@ -6041,11 +6768,13 @@ Cotta passeggera | Amore eterno
     ventaglio.classList.remove('aperto');
     requestAnimationFrame(() => requestAnimationFrame(() => ventaglio.classList.add('aperto')));
   }
-  function chiudiVentaglio() { ventaglio.classList.remove('aperto'); ventaglio.replaceChildren(); }
+  function chiudiVentaglio() { ventaglio.classList.remove('aperto'); ventaglio.replaceChildren(); centroDisegnato = null; }
   function pulisciQuadrante() { chiudiVentaglio(); risposte.replaceChildren(); latoScelto.replaceChildren(); }
-  function punteggio(g, centro) {
-    const d = Math.abs(g - centro);
-    return d <= 2.25 ? 4 : d <= 6.75 ? 3 : d <= 11.25 ? 2 : 0;
+  // in che fascia cade la lancetta: la distanza dal centro è un numero continuo, senza arrotondamenti
+  function punteggio(v, centro, tipo = tipoBersaglio()) {
+    const b = BERSAGLI[tipo], d = Math.abs(v - centro) - 1e-9;
+    const k = b.mezze.findIndex(m => d <= m);
+    return k < 0 ? 0 : b.massimo - k;
   }
 
   /* ---------- Passaggio del telefono ---------- */
@@ -6107,9 +6836,9 @@ Cotta passeggera | Amore eterno
     if (tasto) targhetta.style.setProperty('--colore-tema', tasto.style.getPropertyValue('--colore'));
     requestAnimationFrame(misuraQuadrante);
     const banda = bandaDi(id);
-    document.getElementById('dial-banda').textContent = banda === 'am' ? 'AM' : 'FM';
-    document.getElementById('dial-unita').textContent = banda === 'am' ? 'kHz' : 'MHz';
+    if ((banda === 'am' ? GAMME.am : GAMME.fm) !== gamma) costruisciScala(banda);
     document.getElementById('dial-teschio').style.display = banda === 'pirata' ? '' : 'none';
+    dial.dataset.banda = banda; dial.parentElement.dataset.banda = banda;
     if (!cerca) return;
     clearTimeout(fineCercaGioco);
     [nome.parentElement, targhetta].forEach(x => { x.classList.remove('cerca'); void x.offsetWidth; x.classList.add('cerca'); });
@@ -6120,8 +6849,8 @@ Cotta passeggera | Amore eterno
     mostraInOndaInGioco(stazioneDiPartita(), false);
     passaggio.hidden = true;
     pulisciQuadrante();
-    ago.style.transition = '';
-    impostaAngolo(0);
+    transizioneLancetta('');
+    impostaSintonia(50);
     vai('schermata-gioco');
     animaOnde(1, 800);
     aggiorna();
@@ -6142,19 +6871,18 @@ Cotta passeggera | Amore eterno
       p.candidato = finale; p.scelto = true;
       suona('trovato');
       vibra('trovato');
-      ago.style.transition = 'transform .6s cubic-bezier(.3, 1.5, .5, 1)';
-      impostaAngolo(0);
-      if (p.modo === 'squadre') p.squadre[altra(finale)].punti = 1;   // la seconda squadra parte da 1 punto
+      transizioneLancetta('transform .6s cubic-bezier(.3, 1.5, .5, 1)');
+      impostaSintonia(50);
       aggiorna();
-      dopo(riduciMoto ? 800 : (p.modo === 'squadre' ? 2400 : 1600), () => { ago.style.transition = ''; poi(); });
+      dopo(riduciMoto ? 800 : 1600, () => { transizioneLancetta(''); poi(); });
     };
     const passo = () => {
       p.candidato = (inizio + k) % n;
       const ritardo = 60 + Math.pow(k / passi, 3) * 340;
-      const ampiezza = 80 * (1 - k / passi) + 5;
-      ago.style.transition = `transform ${ritardo}ms ease-in-out`;
-      impostaAngolo(k % 2 ? ampiezza : -ampiezza);
-      suona('scansione', { pan: (k % 2 ? 1 : -1) * ampiezza / 90 * 0.7 });
+      const ampiezza = 44 * (1 - k / passi) + 3;
+      transizioneLancetta(`transform ${ritardo}ms ease-in-out`);
+      impostaSintonia(50 + (k % 2 ? ampiezza : -ampiezza));
+      suona('scansione', { pan: (k % 2 ? 1 : -1) * ampiezza / 50 * 0.7 });
       aggiorna();
       k++;
       if (riduciMoto) fine();
@@ -6216,8 +6944,11 @@ Cotta passeggera | Amore eterno
   }
 
   /* =====================================================================
-     Giocatori singoli: vince chi arriva a 10, ma si finisce sempre il giro
+     Giocatori singoli (3-5): ognuno dà esattamente due indizi, quindi si giocano due giri
+     completi sempre nello stesso ordine. Non c'è un punteggio da raggiungere: alla fine
+     vince chi ha più punti, e chi è pari al primo posto vince a pari merito.
      ===================================================================== */
+  const GIRI_SINGOLI = 2;
   function avviaSingoli(nomi) {
     ultimaPartita = { modo: 'singoli', nomi };
     const turno = Math.floor(Math.random() * nomi.length);
@@ -6240,7 +6971,8 @@ Cotta passeggera | Amore eterno
     p.fase = 'attesa';
     pulisciQuadrante(); aggiorna();
     const chi = nomeDi(p.turno);
-    chiediPassaggio({ sopra: 'Passa il telefono a', nome: chi, bottone: `Sono ${chi}`, nota: 'Gli altri non devono vedere lo schermo', inOnda: true },
+    const giro = Math.floor(p.turniGiocati / n) + 1;
+    chiediPassaggio({ sopra: `Giro ${giro} di ${GIRI_SINGOLI} · passa il telefono a`, nome: chi, bottone: `Sono ${chi}`, nota: 'Gli altri non devono vedere lo schermo', inOnda: true },
       () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
   }
 
@@ -6255,13 +6987,13 @@ Cotta passeggera | Amore eterno
     }, iniziaTentativo);
   }
 
-  function iniziaTentativo() { partita.fase = 'tentativo'; impostaAngolo(0); aggiorna(); }
+  function iniziaTentativo() { partita.fase = 'tentativo'; impostaSintonia(50); aggiorna(); }
 
   function confermaTentativo() {
     const p = partita;
     suona('conferma');
     vibra('conferma');
-    p.tentativi.push({ chi: p.ordine[p.corrente], angolo });
+    p.tentativi.push({ chi: p.ordine[p.corrente], sintonia });
     const appena = nomeDi(p.ordine[p.corrente]);
     p.corrente++;
     p.fase = 'attesa'; aggiorna();
@@ -6275,18 +7007,15 @@ Cotta passeggera | Amore eterno
 
   function rivela() {
     const p = partita, n = p.giocatori.length;
-    p.tentativi.forEach(t => { t.punti = punteggio(t.angolo, p.centro); p.giocatori[t.chi].punti += t.punti; });
-    // chi ha dato l'indizio prende 1 punto per ogni giocatore che ha colpito il bersaglio
-    p.puntiIndizio = p.tentativi.filter(t => t.punti > 0).length;
+    p.tentativi.forEach(t => { t.punti = punteggio(t.sintonia, p.centro); p.giocatori[t.chi].punti += t.punti; });
+    // chi ha dato l'indizio prende la somma esatta dei punti di tutti gli ascoltatori
+    p.puntiIndizio = p.tentativi.reduce((s, t) => s + t.punti, 0);
     p.giocatori[p.turno].punti += p.puntiIndizio;
     // per i premi di fine partita: chi ha dato l'indizio, su che carta, e quanto lontano è andata ogni lancetta
-    p.storico.push({ da: p.turno, carta: p.carta, tentativi: p.tentativi.map(t => ({ chi: t.chi, distanza: Math.abs(t.angolo - p.centro), punti: t.punti })) });
+    p.storico.push({ da: p.turno, carta: p.carta, tentativi: p.tentativi.map(t => ({ chi: t.chi, distanza: Math.abs(t.sintonia - p.centro), punti: t.punti })) });
     segnaZap(p.tentativi.reduce((s, t) => s + t.punti, 0) + p.puntiIndizio);
     p.turniGiocati++;
-    const max = Math.max(...p.giocatori.map(g => g.punti));
-    const fineGiro = p.turniGiocati % n === 0;
-    p.finita = fineGiro && max >= 10;          // tutti devono aver dato lo stesso numero di indizi
-    p.ultimoGiro = !p.finita && max >= 10;
+    p.finita = p.turniGiocati >= GIRI_SINGOLI * n;     // ognuno ha dato i suoi due indizi
     p.fase = 'rivelazione';
     disegnaVentaglio(p.centro);
     disegnaRisposte();
@@ -6295,7 +7024,7 @@ Cotta passeggera | Amore eterno
     // una nota per ogni lancetta che compare, poi il commento al risultato migliore
     const n2 = p.tentativi.length, migliore = Math.max(...p.tentativi.map(t => t.punti));
     suona('esito', { punti: migliore, t: (450 + n2 * 160 + 250) / 1000 });
-    if (migliore === 4) dopo(450 + n2 * 160 + 250, () => vibra('centro'));
+    if (migliore === 5) dopo(450 + n2 * 160 + 250, () => vibra('centro'));
     if (p.puntiIndizio) suona('bonus', { t: (450 + n2 * 160 + 1100) / 1000 });
   }
 
@@ -6305,22 +7034,29 @@ Cotta passeggera | Amore eterno
     nuovoTurno();
   }
 
-  // Una lancetta per ogni risposta, con il numero del giocatore sulla punta
-  function disegnaRisposte() {
+  // Una lancetta per ogni risposta, con il numero del giocatore in cima: i numeri vicini si mettono
+  // uno sotto l'altro, così non si coprono mai
+  function disegnaRisposte(subito) {
     risposte.replaceChildren();
-    const ordinate = partita.tentativi.slice().sort((a, b) => a.angolo - b.angolo);
+    const s = scalaQuadrante || 0.7;
+    const r = Math.max(11, 8.5 / s);
+    const livelli = [0, 1, 2, 3].map(k => 18 + r + k * (2 * r + 4));
+    const ordinate = partita.tentativi.slice().sort((a, b) => a.sintonia - b.sintonia);
     const piazzati = [];
     ordinate.forEach((t, i) => {
-      // targhetta il più in alto possibile senza sovrapporsi alle altre
-      const raggi = [156, 128, 100, 72];
-      const r = raggi.find(rr => { const [x, y] = punto(t.angolo, rr); return piazzati.every(([px, py]) => Math.hypot(px - x, py - y) > 26); }) || raggi[i % 4];
-      piazzati.push(punto(t.angolo, r));
-      const [x1, y1] = punto(t.angolo, 30), [x2, y2] = punto(t.angolo, r - 12), [cx, cy] = punto(t.angolo, r);
-      const g = svg('g', { class: 'risposta' });
-      g.style.animationDelay = `${450 + i * 160}ms`;
-      suona('colpo', { punti: t.punti, t: (450 + i * 160) / 1000, pan: t.angolo / 90 * 0.7 });
-      g.append(svg('line', { x1, y1, x2, y2 }), svg('circle', { cx, cy, r: 12 }));
-      const num = svg('text', { x: cx, y: cy + 4, 'text-anchor': 'middle' });
+      const x = xDi(t.sintonia);
+      let k = livelli.findIndex((_, kk) => piazzati.every(p => p.k !== kk || Math.abs(p.x - x) > 2 * r + 3));
+      if (k < 0) k = i % livelli.length;
+      piazzati.push({ x, k });
+      const cy = livelli[k];
+      const g = svg('g', { class: 'risposta' + (subito ? ' subito' : '') });
+      if (!subito) {
+        g.style.animationDelay = `${450 + i * 160}ms`;
+        suona('colpo', { punti: t.punti, t: (450 + i * 160) / 1000, pan: (t.sintonia - 50) / 50 * 0.7 });
+      }
+      g.append(svg('line', { x1: x, y1: cy + r, x2: x, y2: 182 }), svg('circle', { cx: x, cy, r }));
+      const num = svg('text', { x, y: cy + r * 0.4 });
+      num.style.fontSize = (r * 1.08).toFixed(1) + 'px';
       num.textContent = t.chi + 1;
       g.append(num);
       risposte.append(g);
@@ -6374,7 +7110,7 @@ Cotta passeggera | Amore eterno
       box.append(ol);
       if (p.finita) box.append(el('div', 'ruolo esito', 'Partita finita!'), bottone('Risultato finale', mostraFine));
       else {
-        if (p.ultimoGiro) box.append(el('div', 'ruolo esito', 'Qualcuno è a 10 punti: si finisce il giro'));
+        if (p.turniGiocati === (GIRI_SINGOLI - 1) * p.giocatori.length) box.append(el('div', 'ruolo esito', 'Fine del primo giro'));
         box.append(bottone('Prossimo turno', prossimoTurno));
       }
     }
@@ -6389,40 +7125,42 @@ Cotta passeggera | Amore eterno
   const altra = i => 1 - i;
   const lettera = i => (i === 0 ? 'a' : 'b');
 
+  /* Tre turni a testa, alternati (A → B → A → B → A → B); vince chi ha più punti alla fine.
+     Mentre una squadra gioca, l'altra scommette su quanto è lontana la lancetta dalla frequenza segreta.
+     In caso di parità, uno spareggio: un turno a testa, nello stesso ordine; se resta pari è pareggio. */
+  const TURNI_SQUADRA = 3;
+  // le tre scommesse: distanza tra lancetta e centro, in punti della scala (2% = 2, 7% = 7)
+  const SCOMMESSE = [
+    { id: 'perfetto', nome: 'Segnale perfetto', punti: 2, vinta: d => d <= MEZZE_FASCE[1] + 1e-9 },   // sul 5 o sul 4 (entro il 2%)
+    { id: 'disturbato', nome: 'Segnale disturbato', punti: 1, vinta: d => d > 2 + 1e-9 && d <= 7 + 1e-9 },
+    { id: 'fuori', nome: 'Fuori frequenza', punti: 3, vinta: d => d > 7 + 1e-9 }
+  ];
+  const scommessaDi = id => SCOMMESSE.find(x => x.id === id);
+
   function avviaSquadre(nomi) {
     ultimaPartita = { modo: 'squadre', nomi };
     const turno = Math.floor(Math.random() * 2);
     const zap = preparaZap();
-    partita = { modo: 'squadre', squadre: nomi.map(nome => ({ nome, punti: 0 })), turno, primo: turno, turniSquadra: [0, 0], zap, carta: pesca(zap ? zap.stazione : stazioneScelta), cartaPronta: true, fase: 'accensione' };
-    entraInPartita(() => estrai(nomi, turno, spiegaVantaggio));
-  }
-
-  // Prima del primo turno: perché la seconda squadra parte con un punto
-  function spiegaVantaggio() {
-    const p = partita, prima = p.squadre[p.turno].nome, seconda = p.squadre[altra(p.turno)].nome;
-    chiediPassaggio({
-      sopra: 'La squadra che gioca per seconda parte con 1 punto',
-      nome: seconda,
-      nota: `${prima} dà il primo indizio e ha un turno di vantaggio: il punto di ${seconda} serve a pareggiare i conti.`,
-      bottone: 'Ho capito', suono: 'vantaggio'
-    }, turnoSquadra);
+    partita = { modo: 'squadre', squadre: nomi.map(nome => ({ nome, punti: 0 })), turno, primo: turno, turniSquadra: [0, 0], spareggio: false, zap, carta: pesca(zap ? zap.stazione : stazioneScelta), cartaPronta: true, fase: 'accensione' };
+    entraInPartita(() => estrai(nomi, turno, turnoSquadra));
   }
 
   function turnoSquadra() {
     salvaPartita(turnoSquadra);
     const p = partita;
     prendiCarta(p);
-    p.centro = nuovoCentro(); p.lato = null; p.esito = null; p.fase = 'attesa';
+    p.centro = nuovoCentro(); p.scommessa = null; p.esito = null; p.fase = 'attesa';
     p.cambiRimasti = CAMBI_PER_TURNO;
     p.turniSquadra[p.turno]++;
     pulisciQuadrante(); aggiorna();
     // dal secondo turno di ogni squadra il caposquadra deve cambiare
     const nuovo = p.turniSquadra[p.turno] > 1;
+    const quale = p.spareggio ? 'Spareggio' : `Turno ${p.turniSquadra[p.turno]} di ${TURNI_SQUADRA}`;
     chiediPassaggio({
-      sopra: 'Tocca alla squadra', nome: p.squadre[p.turno].nome,
+      sopra: `${quale} · tocca alla squadra`, nome: p.squadre[p.turno].nome,
       avviso: nuovo ? 'Cambiate caposquadra' : null,
       iconaAvviso: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/></svg>',
-      nota: nuovo ? 'Il telefono va a un giocatore diverso da chi ha dato l\u2019indizio la volta scorsa. Gli altri non guardano.'
+      nota: nuovo ? 'Il telefono va a un giocatore diverso da chi ha dato l’indizio la volta scorsa. Gli altri non guardano.'
                   : 'Scegliete un caposquadra: prende il telefono, gli altri non guardano',
       bottone: nuovo ? 'Sono il nuovo caposquadra' : 'Sono il caposquadra',
       suono: nuovo ? 'cambioCapo' : 'passaggio', inOnda: true
@@ -6434,56 +7172,80 @@ Cotta passeggera | Amore eterno
     suona('nascondi');
     p.fase = 'attesa'; chiudiVentaglio(); aggiorna();
     chiediPassaggio({
-      sopra: 'Caposquadra, di\u2019 l\u2019indizio ad alta voce alla squadra', nome: p.squadre[p.turno].nome,
+      sopra: 'Caposquadra, di’ l’indizio ad alta voce alla squadra', nome: p.squadre[p.turno].nome,
       bottone: 'Pronti', nota: 'Poi mettete il telefono dove lo vede tutta la squadra'
-    }, () => { p.fase = 'tentativo'; impostaAngolo(0); aggiorna(); });
+    }, () => { p.fase = 'tentativo'; impostaSintonia(50); aggiorna(); });
   }
 
+  // la squadra di turno blocca la lancetta: ora scommettono gli avversari
   function confermaSquadra() {
     const p = partita;
     suona('conferma');
     vibra('conferma');
-    p.angolo = angolo; p.lato = null; p.fase = 'lato';
+    p.sintonia = sintonia; p.scommessa = null; p.fase = 'scommessa';
     aggiorna();
   }
 
-  function scegliLato(l) { partita.lato = l; suona('lato', { pan: l === 'sx' ? -0.7 : 0.7 }); vibra('tocco'); disegnaLato(); aggiorna(); }
+  function scegliScommessa(id) {
+    const p = partita;
+    if (!p || p.fase !== 'scommessa' || p.scommessa === id) return;
+    p.scommessa = id;
+    suona('lato', { pan: { perfetto: 0, disturbato: -0.5, fuori: 0.7 }[id] });
+    vibra('tocco');
+    disegnaScommessa(); aggiorna();
+  }
 
-  // Zona colorata dal lato scelto dalla squadra avversaria
-  function disegnaLato() {
+  // La zona della scommessa si illumina sulla scala, attorno alla lancetta, nel colore della squadra che scommette:
+  // perfetto = entro 2 per parte (le fasce del 5 e del 4), disturbato = da 2 a 7 per parte, fuori = oltre 7 per parte
+  function disegnaScommessa() {
     latoScelto.replaceChildren();
     const p = partita;
-    if (!p || p.modo !== 'squadre' || !p.lato) return;
-    const g0 = p.lato === 'sx' ? -90 : p.angolo, g1 = p.lato === 'sx' ? p.angolo : 90;
-    if (g1 - g0 < 0.5) return;
-    latoScelto.append(svg('path', { d: spicchio(g0, g1, 36, 176), class: 'tinta ' + lettera(altra(p.turno)) }));
+    if (!p || p.modo !== 'squadre' || !p.scommessa) return;
+    const v = p.sintonia, tratti = {
+      perfetto: [[v - MEZZE_FASCE[1], v + MEZZE_FASCE[1]]],
+      disturbato: [[v - 7, v - 2], [v + 2, v + 7]],
+      fuori: [[-20, v - 7], [v + 7, 120]]
+    }[p.scommessa];
+    const g = svg('g', { class: 'zona-scommessa ' + lettera(altra(p.turno)) });
+    tratti.forEach(([a, b]) => {
+      const x0 = Math.max(14, a <= 0 ? 14 : xDi(a)), x1 = Math.min(586, b >= 100 ? 586 : xDi(b));
+      if (x1 - x0 < 0.5) return;
+      g.append(svg('rect', { class: 'zona-luce', x: x0, y: 14, width: x1 - x0, height: 172 }));
+      [[a, x0], [b, x1]].forEach(([vv, x]) => { if (vv > 0 && vv < 100) g.append(svg('line', { class: 'zona-bordo', x1: x, x2: x, y1: 14, y2: 186 })); });
+    });
+    latoScelto.append(g);
   }
 
   function rivelaSquadre() {
     const p = partita, att = p.turno, opp = altra(att);
-    const punti = punteggio(p.angolo, p.centro);
-    const latoGiusto = p.centro < p.angolo ? 'sx' : 'dx';
-    // 4 centrato: l'altra squadra non prende nulla. Altrimenti 1 punto se ha indovinato il lato.
-    const bonus = punti === 4 ? 0 : (p.lato === latoGiusto ? 1 : 0);
+    const punti = punteggio(p.sintonia, p.centro);
+    const scommessa = scommessaDi(p.scommessa);
+    const vinta = scommessa.vinta(Math.abs(p.sintonia - p.centro));
+    const bonus = vinta ? scommessa.punti : 0;
     p.squadre[att].punti += punti;
     p.squadre[opp].punti += bonus;
     segnaZap(punti + bonus);
-    p.esito = { punti, bonus };
+    p.esito = { punti, bonus, vinta };
     const pa = p.squadre[0].punti, pb = p.squadre[1].punti;
-    p.finita = pa >= 10 || pb >= 10;
+    const giocati = p.turniSquadra[0] + p.turniSquadra[1];
+    const fineOrdinari = !p.spareggio && giocati >= 2 * TURNI_SQUADRA;
+    p.finita = (fineOrdinari && pa !== pb) || (p.spareggio && giocati >= 2 * TURNI_SQUADRA + 2);
+    p.versoSpareggio = fineOrdinari && pa === pb;
     p.pareggio = p.finita && pa === pb;
     p.vincitrice = !p.finita || p.pareggio ? -1 : pa > pb ? 0 : 1;
     p.fase = 'rivelazione';
     disegnaVentaglio(p.centro); aggiorna(); apriVentaglio();
     suona('esito', { punti, t: 0.45 });
-    if (punti === 4) dopo(450, () => vibra('centro'));
+    if (punti === 5) dopo(450, () => vibra('centro'));
     if (bonus) suona('bonus', { t: 1.3 });
   }
 
   function prossimoSquadre() {
-    partita.turno = altra(partita.turno);
+    const p = partita;
+    if (p.versoSpareggio) { p.spareggio = true; p.versoSpareggio = false; }
+    p.turno = altra(p.turno);
     // con lo zapping la stazione cambia a ogni giro: entrambe le squadre giocano sulla stessa, per essere giusti
-    if (partita.zap && partita.turno === partita.primo) cambiaStazione();
+    if (p.zap && p.turno === p.primo) cambiaStazione();
     turnoSquadra();
   }
 
@@ -6512,27 +7274,26 @@ Cotta passeggera | Amore eterno
     const p = partita, box = el('div', 'turno'), att = p.turno, opp = altra(att);
     const nomeSq = i => el('div', 'chi sq ' + lettera(i), p.squadre[i].nome);
     if (p.fase === 'estrazione') {
-      pannelloEstrazione(box, p.squadre[p.candidato].nome, `${p.squadre[altra(p.candidato)].nome} parte da 1 punto`);
+      pannelloEstrazione(box, p.squadre[p.candidato].nome, 'Dà il primo indizio');
     } else if (p.fase === 'segreto') {
       box.append(el('div', 'etichetta', 'Caposquadra di'), nomeSq(att),
         el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottoneSicuro('Nascondi', nascondiSquadra));
     } else if (p.fase === 'tentativo') {
       box.append(el('div', 'etichetta', 'Indizio per'), nomeSq(att),
-        el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il 4'), bottoneSicuro('Conferma', confermaSquadra));
-    } else if (p.fase === 'lato') {
-      box.append(el('div', 'etichetta', 'Tocca a'), nomeSq(opp),
-        el('div', 'ruolo', 'Il 4 è a sinistra o a destra della lancetta?'));
-      const scelta = el('div', 'scelta-lato');
-      [['sx', 'Sinistra', 'M15 5l-7 7 7 7'], ['dx', 'Destra', 'M9 5l7 7-7 7']].forEach(([l, testo, d]) => {
-        const b = el('button', 'lato-btn ' + lettera(opp));
-        b.setAttribute('aria-pressed', String(p.lato === l));
-        b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
-        b.append(testo);
-        b.addEventListener('click', () => scegliLato(l));
+        el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il 5'), bottoneSicuro('Conferma', confermaSquadra));
+    } else if (p.fase === 'scommessa') {
+      box.append(el('div', 'etichetta', 'Scommette'), nomeSq(opp),
+        el('div', 'ruolo', 'Quanto è lontana la frequenza segreta?'));
+      const scelta = el('div', 'scommesse');
+      SCOMMESSE.forEach(sc => {
+        const b = el('button', 'scommessa-btn ' + lettera(opp));
+        b.setAttribute('aria-pressed', String(p.scommessa === sc.id));
+        b.append(el('span', '', sc.nome), el('b', '', `+${sc.punti}`));
+        b.addEventListener('click', () => scegliScommessa(sc.id));
         scelta.append(b);
       });
-      const rivelaBtn = bottone('Rivela', rivelaSquadre);
-      rivelaBtn.disabled = !p.lato;
+      const rivelaBtn = bottoneSicuro('Rivela', rivelaSquadre);
+      rivelaBtn.disabled = !p.scommessa;
       box.append(scelta, rivelaBtn);
     } else if (p.fase === 'rivelazione') {
       box.append(el('div', 'etichetta', 'Risultato'));
@@ -6542,18 +7303,18 @@ Cotta passeggera | Amore eterno
         li.append(el('span', 'led'), el('span', '', p.squadre[i].nome), el('b', '', n ? `+${n}` : '0'));
         ol.append(li);
       });
-      const nomeOpp = p.squadre[opp].nome;
-      const esito = p.esito.punti === 4 ? 'Centro preso in pieno!'
-        : p.esito.bonus ? `${nomeOpp} ha indovinato il lato` : `${nomeOpp} ha sbagliato lato`;
+      const nomeSc = scommessaDi(p.scommessa).nome;
+      let esito = `${nomeSc}: ${p.esito.vinta ? 'scommessa vinta' : 'scommessa persa'}`;
+      if (p.versoSpareggio) esito += '\nParità: si va allo spareggio!';
       box.append(ol, el('div', 'ruolo esito', esito),
-        p.finita ? bottone('Risultato finale', mostraFine) : bottone('Prossimo turno', prossimoSquadre));
+        p.finita ? bottone('Risultato finale', mostraFine) : bottone(p.versoSpareggio ? 'Spareggio' : 'Prossimo turno', prossimoSquadre));
     }
     latoDx.append(box);
   }
 
   /* =====================================================================
      Modalità collaborativa: tutti contro il gioco, 7 turni.
-     Il centro vale 3 punti e regala un turno in più.
+     Il centro dorato vale 4 punti, come le fasce accanto, e regala un turno in più.
      ===================================================================== */
   const TURNI_COLLAB = 7;
   const LIVELLI = [
@@ -6591,15 +7352,15 @@ Cotta passeggera | Amore eterno
     chiediPassaggio({
       sopra: 'Di\u2019 l\u2019indizio ad alta voce', nome: 'Tutti insieme', bottone: 'Pronti',
       nota: 'Mettete il telefono dove lo vedono tutti'
-    }, () => { p.fase = 'tentativo'; impostaAngolo(0); aggiorna(); });
+    }, () => { p.fase = 'tentativo'; impostaSintonia(50); aggiorna(); });
   }
 
   function confermaCollab() {
     const p = partita;
-    p.angolo = angolo;
-    const d = Math.abs(p.angolo - p.centro);
-    const centro = d <= 2.25;
-    const punti = d <= 6.75 ? 3 : d <= 11.25 ? 2 : 0;
+    p.sintonia = sintonia;
+    const colpo = punteggio(p.sintonia, p.centro);
+    const centro = colpo === 5;
+    const punti = Math.min(colpo, 4);
     if (centro) p.totale++;                     // centro: un turno (e una carta) in più
     p.punti += punti;
     segnaZap(punti);
@@ -6631,8 +7392,8 @@ Cotta passeggera | Amore eterno
     }
     box.append(pallini);
     const legenda = el('div', 'legenda');
-    legenda.innerHTML = '<svg viewBox="0 0 14 18" aria-hidden="true"><path d="M7 18 2 1h10z" style="fill:var(--zona-oro)"/><path class="scintilla" d="M8-3 9 1 12 2 9 3 8 6 7 3 4 2 7 1z" transform="translate(-1 3)"/></svg>';
-    legenda.append('3 punti + turno extra');
+    legenda.innerHTML = '<svg viewBox="0 0 14 18" aria-hidden="true"><rect x="4.5" y="1" width="5" height="17" rx="1.2" style="fill:var(--zona-oro)"/><path class="scintilla" d="M8-3 9 1 12 2 9 3 8 6 7 3 4 2 7 1z" transform="translate(-1 3)"/></svg>';
+    legenda.append('4 punti + turno extra');
     box.append(legenda);
     latoSx.append(box);
   }
@@ -6647,7 +7408,7 @@ Cotta passeggera | Amore eterno
         el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il centro'), bottoneSicuro('Conferma', confermaCollab));
     } else if (p.fase === 'rivelazione') {
       const e = p.esito;
-      const testo = e.centro ? 'Centro!\n3 punti + turno extra' : e.punti === 3 ? 'Spicchio da 3 punti' : e.punti === 2 ? 'Spicchio da 2 punti' : 'Fuori dal bersaglio';
+      const testo = e.centro ? 'Centro!\n4 punti + turno extra' : e.punti ? `Fascia da ${e.punti} punt${e.punti === 1 ? 'o' : 'i'}` : 'Fuori dal bersaglio';
       box.append(el('div', 'etichetta', 'Risultato'), el('div', 'guadagno' + (e.punti ? '' : ' zero'), e.punti ? `+${e.punti}` : '0'),
         el('div', 'ruolo esito', testo),
         p.finita ? bottone('Risultato finale', mostraFine) : bottone('Prossimo turno', prossimoCollab));
@@ -6669,10 +7430,12 @@ Cotta passeggera | Amore eterno
     mescola.setAttribute('aria-label', cambiRimasti > 0 ? `Cambia carta, ancora ${cambiRimasti} ${cambiRimasti === 1 ? 'cambio' : 'cambi'}` : 'Nessun cambio di carta rimasto');
     const libera = lancettaLibera();
     const agoVisibile = libera || p.fase === 'estrazione' || p.fase === 'accensione'
-      || (p.modo !== 'singoli' && (p.fase === 'lato' || p.fase === 'rivelazione'));
+      || (p.modo !== 'singoli' && (p.fase === 'scommessa' || p.fase === 'rivelazione'));
     ago.style.display = agoVisibile ? '' : 'none';
+    displaySpento = !agoVisibile; aggiornaDisplay();
+    mostraTipoBersaglio(tipoBersaglio());
     dial.classList.toggle('bloccato', !libera);
-    dial.classList.toggle('scegli-lato', p.modo === 'squadre' && p.fase === 'lato');
+    dial.classList.toggle('scegli-lato', p.modo === 'squadre' && p.fase === 'scommessa');
     dial.setAttribute('tabindex', libera ? '0' : '-1');
     const segreto = p.fase === 'segreto';
     copriBersaglio.hidden = !segreto;
@@ -6743,7 +7506,8 @@ Cotta passeggera | Amore eterno
       const ordinati = p.giocatori.map((g, i) => ({ ...g, i })).sort((a, b) => b.punti - a.punti);
       const max = ordinati[0].punti;
       const vincitori = ordinati.filter(g => g.punti === max);
-      titolo = vincitori.length > 1 ? 'Pareggio!' : `Vince ${vincitori[0].nome}!`;
+      titolo = vincitori.length === 1 ? `Vince ${vincitori[0].nome}!` : vincitori.length === 2
+        ? `Vincono ${vincitori[0].nome} e ${vincitori[1].nome}!` : 'Vittoria a pari merito!';
       fanfara = vincitori.length > 1 ? 'pareggio' : 'vittoria';
       const scheda = el('div', 'scheda'), ol = el('ol', 'podio');
       ordinati.forEach((g, k) => {
@@ -6761,7 +7525,7 @@ Cotta passeggera | Amore eterno
         fineCorpo.append(griglia);
       } else fineCorpo.append(scheda);
     } else if (p.modo === 'squadre') {
-      titolo = p.pareggio ? 'Pareggio!' : `Vince ${p.squadre[p.vincitrice].nome}!`;
+      titolo = p.pareggio ? 'Pareggio!' : `Vince ${p.squadre[p.vincitrice].nome}${p.spareggio ? ' allo spareggio' : ''}!`;
       fanfara = p.pareggio ? 'pareggio' : 'vittoria';
       const sfida = el('div', 'fine-sfida');
       p.squadre.forEach((sq, i) => {
@@ -6821,11 +7585,12 @@ Cotta passeggera | Amore eterno
     if (!tutte.length) return [];
     const premi = [];
     const colpi = p.giocatori.map(() => 0);
-    tutte.forEach(x => { if (x.punti > 0) colpi[x.chi]++; });
+    // con il bersaglio largo quasi tutti vanno a segno: il disco d'oro va a chi ha preso più volte il 5
+    tutte.forEach(x => { if (x.punti === 5) colpi[x.chi]++; });
     const piuColpi = Math.max(...colpi);
     const primi = colpi.map((c, i) => c === piuColpi ? i : -1).filter(i => i >= 0);
     if (piuColpi > 0 && primi.length < n) {
-      premi.push({ tipo: 'disco', titolo: 'Disco d\u2019oro', chi: elencoNomi(primi.map(nome)), perche: piuColpi === 1 ? '1 volta sul bersaglio' : `${piuColpi} volte sul bersaglio` });
+      premi.push({ tipo: 'disco', titolo: 'Disco d\u2019oro', chi: elencoNomi(primi.map(nome)), perche: piuColpi === 1 ? '1 centro perfetto' : `${piuColpi} centri perfetti` });
     }
     const vicina = tutte.reduce((a, b) => b.distanza < a.distanza ? b : a);
     if (vicina.punti > 0) premi.push({ tipo: 'antenna', titolo: 'Antenna perfetta', chi: nome(vicina.chi), perche: 'la più vicina al centro', carta: vicina.carta });
