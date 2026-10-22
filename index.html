@@ -424,6 +424,7 @@
   .tasto[data-modo="singoli"].premuto .led { background: var(--menta); box-shadow: 0 0 10px var(--menta); }
   .tasto[data-modo="squadre"].premuto .led { background: var(--ambra); box-shadow: 0 0 10px var(--ambra); }
   .tasto[data-modo="collab"].premuto .led { background: var(--zona-2); box-shadow: 0 0 10px var(--zona-2); }
+  .tasto[data-modo="impostore"].nego .led { background: var(--corallo); box-shadow: 0 0 10px var(--corallo); }
 
   /* ---------- Chi gioca? I tasti di preselezione della radio ----------
      Ogni giocatore è un tasto di preselezione, come sulle autoradio. Scrivendo il nome il tasto si
@@ -1390,7 +1391,7 @@
   .stazioni.cambio .tasto:not(.banda) { animation: tasto-su .45s cubic-bezier(.2, .9, .3, 1.2) both; animation-delay: calc(var(--k) * 70ms); }
   /* Il sintonizzatore: un modulo incassato nella radio, con il display della frequenza,
      la griglia dell'altoparlante e una manopola di alluminio zigrinata */
-  .stazioni .tasto.banda {
+  :is(.stazioni, .modi) .tasto.banda {
     --modulo: var(--corpo); --scala: #DCE5E5;
     position: relative; container-type: inline-size;
     display: flex; flex-direction: column; align-items: stretch; gap: clamp(3px, 1.2vh, 7px); gap: clamp(3px, 1.2cqh, 7px);
@@ -1399,8 +1400,8 @@
     background: radial-gradient(circle, rgba(220, 229, 229, .1) 0 1px, transparent 1.4px) 0 0 / 6px 6px, var(--modulo);
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07), inset 0 3px 10px rgba(0, 0, 0, .45), 0 6px 0 var(--tasto-ombra);
   }
-  :root[data-attivo="scuro"] .stazioni .tasto.banda { --modulo: #0C2126; }
-  .stazioni .tasto.banda:active { transform: none; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07), inset 0 3px 10px rgba(0, 0, 0, .45), 0 6px 0 var(--tasto-ombra); }
+  :root[data-attivo="scuro"] :is(.stazioni, .modi) .tasto.banda { --modulo: #0C2126; }
+  :is(.stazioni, .modi) .tasto.banda:active { transform: none; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07), inset 0 3px 10px rgba(0, 0, 0, .45), 0 6px 0 var(--tasto-ombra); }
   /* display retroilluminato: il colore cambia con la gamma della stazione in ascolto */
   .display-radio {
     --display: var(--vetro-segni); --display-ombra: var(--lcd-ombra);
@@ -1639,7 +1640,7 @@
   #schermata-modi .tasto.decorato { position: relative; isolation: isolate; }
   #schermata-modi .tasto.decorato .icona { visibility: hidden; }
   .tasto[data-modo] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 12px), transparent calc(var(--testo, 999px) + 2px)); mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 12px), transparent calc(var(--testo, 999px) + 2px)); }
-  .deco-microfono, .deco-walkie {
+  .deco-microfono, .deco-walkie, .deco-maschera {
     left: 10px; width: auto;
     top: calc(clamp(12px, 3.4vh, 18px) - 5px); top: calc(clamp(12px, 3.4cqh, 18px) - 5px);
     height: clamp(30px, calc(var(--testo, 999px) - clamp(12px, 3.4vh, 18px) - 2px), 64px);
@@ -1680,6 +1681,22 @@
   @keyframes segnale-b { 0%, 50% { opacity: 0; transform: translateX(0); } 58%, 84% { opacity: .85; } 94%, 100% { opacity: 0; transform: translateX(-76px); } }
   @keyframes trasmette-a { 0%, 38% { fill: var(--colore); opacity: 1; } 46%, 100% { fill: var(--su-tasto); opacity: .35; } }
   @keyframes trasmette-b { 0%, 50% { fill: var(--su-tasto); opacity: .35; } 54%, 88% { fill: var(--colore); opacity: 1; } 96%, 100% { fill: var(--su-tasto); opacity: .35; } }
+  /* Impostore: una maschera che si guarda intorno, con un po' di disturbo sul segnale */
+  .deco-maschera { aspect-ratio: 112 / 44; max-width: calc(100% - 46px); }
+  .maschera { fill: var(--viola); opacity: .55; }
+  :root[data-attivo="scuro"] .maschera { opacity: .8; }
+  .laccio { fill: none; stroke: var(--su-tasto); stroke-width: 1.6; stroke-linecap: round; opacity: .3; }
+  .foro { fill: var(--tasto); }
+  .pupilla { fill: var(--su-tasto); opacity: .75; animation: sguardo 5s ease-in-out infinite; }
+  .occhio { transform-box: fill-box; transform-origin: center; animation: battito-ciglia 5s ease-in-out infinite; }
+  @keyframes sguardo { 0%, 18% { transform: translateX(0); } 24%, 40% { transform: translateX(-4px); } 46%, 62% { transform: translateX(4px); } 68%, 100% { transform: translateX(0); } }
+  @keyframes battito-ciglia { 0%, 80%, 86%, 100% { transform: scaleY(1); } 83% { transform: scaleY(.1); } }
+  .disturbo path { fill: none; stroke: var(--corallo); stroke-width: 2.4; stroke-linecap: round; opacity: 0; animation: disturbo 2.6s steps(1) calc(var(--i) * .37s) infinite; }
+  @keyframes disturbo { 0%, 100% { opacity: 0; } 12% { opacity: .7; transform: translateX(-3px); } 24% { opacity: .2; transform: translateX(2px); } 36% { opacity: 0; } }
+  .tasto[data-modo="impostore"] .conteggio { border-style: dashed; }
+  .tasto[data-modo="impostore"].nego .conteggio { color: var(--corallo); border-color: var(--corallo); }
+  #schermata-modi .tasto.nego { animation: nego .4s ease-in-out; }
+  @media (prefers-reduced-motion: reduce) { .pupilla, .occhio, .disturbo path { animation: none; } .disturbo path { opacity: .4; } }
   /* Collaborativa: un favo che si riempie di miele una cella alla volta, con l'ape che ci gira attorno */
   .tasto[data-modo="collab"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 26px), transparent calc(var(--testo, 999px) + 2px)); mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 26px), transparent calc(var(--testo, 999px) + 2px)); }
   .deco-alveare { inset: 0; width: 100%; height: 100%; }
@@ -1724,6 +1741,37 @@
   .stazioni.zapping .tasto.scelto:not(.in-ascolto) .sfondo * { animation-play-state: paused; }
   .stazioni.zapping .tasto.in-ascolto { box-shadow: inset 0 0 0 3px var(--colore), 0 1px 0 var(--tasto-ombra), 0 0 16px -2px var(--colore); }
   .stazioni .tasto.nego { animation: nego .4s ease-in-out; }
+  /* Scelta della modalità: due tasti per volta, il selettore a destra passa da Sfida a Insieme */
+  .modi[data-gamma="sfida"] .tasto[data-gamma="insieme"], .modi[data-gamma="insieme"] .tasto[data-gamma="sfida"] { display: none; }
+  .modi.cambio .tasto:not(.banda) { animation: tasto-su .45s cubic-bezier(.2, .9, .3, 1.2) both; animation-delay: calc(var(--k) * 80ms); }
+  .tasti.modi { grid-template-columns: repeat(2, minmax(0, 1fr)) auto; }
+  /* l'interruttore: un cursore di metallo che scorre in una fessura della radio; due spie dicono dove si trova */
+  .interruttore-modi {
+    align-self: center; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 6px 2px; border: 0; background: none; cursor: pointer; touch-action: manipulation;
+  }
+  .interruttore-modi:focus-visible { outline: 3px solid var(--ambra); outline-offset: 2px; border-radius: 14px; }
+  .binario {
+    position: relative; display: block; width: 26px; height: clamp(64px, 26vh, 112px); height: clamp(64px, 26cqh, 112px); border-radius: 13px;
+    background: var(--corpo); box-shadow: inset 0 2px 6px rgba(0, 0, 0, .55), inset 0 0 0 1px rgba(255, 255, 255, .06), 0 1px 0 rgba(255, 255, 255, .15);
+  }
+  .binario::before { content: ""; position: absolute; left: 50%; top: 9px; bottom: 9px; width: 3px; transform: translateX(-50%); border-radius: 2px; background: rgba(0, 0, 0, .45); }
+  .cursore {
+    position: absolute; left: 3px; right: 3px; top: 3px; height: 40%; border-radius: 10px;
+    background: linear-gradient(90deg, #8A9DA0, #F5F8F8 45%, #C9D4D5 60%, #7C8F92);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .45), inset 0 0 0 1px rgba(0, 0, 0, .15);
+    transition: top .32s cubic-bezier(.3, 1.4, .5, 1);
+  }
+  /* righe zigrinate sul cursore, per dare presa al dito */
+  .cursore::before { content: ""; position: absolute; left: 4px; right: 4px; top: 50%; height: 9px; transform: translateY(-50%);
+    background: repeating-linear-gradient(180deg, rgba(0, 0, 0, .35) 0 1.4px, transparent 1.4px 3px); border-radius: 2px; }
+  .modi[data-gamma="insieme"] .cursore { top: calc(60% - 3px); }
+  .spia-modi { width: 7px; height: 7px; border-radius: 50%; background: var(--led-spento); transition: background-color .2s, box-shadow .2s; }
+  .modi[data-gamma="sfida"] .spia-modi:first-child, .modi[data-gamma="insieme"] .spia-modi:last-child { background: var(--ambra); box-shadow: 0 0 8px var(--ambra); }
+  /* una partita in sospeso nell'altra posizione: la sua spia lampeggia */
+  .spia-modi.sospesa { background: var(--ambra); animation: pausa-led 2.2s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .cursore { transition: none; } }
+  /* una partita in sospeso nell'altra pagina: un led ambra lampeggia sul display */
   @keyframes nego { 20%, 60% { translate: -5px 0; } 40%, 80% { translate: 5px 0; } }
   /* il tasto Zapping, come lo SCAN di un'autoradio: led spento, oppure acceso e lampeggiante mentre scansiona */
   .tasto-zap {
@@ -1938,6 +1986,7 @@
   @keyframes appari { from { opacity: 0; } }
   #schermata-modi.rivela .pannello { animation: pannello-su .5s cubic-bezier(.2, .9, .3, 1.1) both; }
   #schermata-modi.rivela .tasto { animation: tasto-su .5s cubic-bezier(.2, .9, .3, 1.25) both; animation-delay: calc(220ms + var(--k) * 110ms); }
+  #schermata-modi.rivela .interruttore-modi { animation: appari .4s ease-out both; animation-delay: 520ms; }
   @keyframes pannello-su { from { opacity: 0; transform: translateY(18px) scale(.96); } }
   @keyframes tasto-su { from { opacity: 0; transform: translateY(26px); } }
 
@@ -3618,8 +3667,8 @@ Cringe | Romantico
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Come giocate?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
-          <div class="tasti">
-            <button class="tasto decorato" data-modo="singoli" style="--k:0">
+          <div class="tasti modi" id="tasti-modi" data-gamma="sfida">
+            <button class="tasto decorato" data-modo="singoli" data-gamma="sfida" style="--k:0">
               <span class="sfondo" aria-hidden="true"><svg class="deco-microfono" viewBox="0 0 106 50" preserveAspectRatio="xMinYMin meet"><g class="onde-voce"><path class="arco" style="--i:0" d="M31.86 2.62A20 20 0 0 1 31.86 29.38"/><path class="arco" style="--i:1" d="M37.81 -2.74A28 28 0 0 1 37.81 34.74"/><path class="arco" style="--i:2" d="M45.16 -8.00A37 37 0 0 1 45.16 40.00"/><path class="arco" style="--i:3" d="M57.41 -8.00A47 47 0 0 1 57.41 40.00"/><path class="arco" style="--i:4" d="M69.80 -8.00A58 58 0 0 1 69.80 40.00"/><path class="arco" style="--i:5" d="M82.76 -8.00A70 70 0 0 1 82.76 40.00"/><path class="arco" style="--i:6" d="M96.45 -8.00A83 83 0 0 1 96.45 40.00"/></g><g class="microfono"><path class="forcella" d="M4.5 14v8a12.5 12.5 0 0 0 25 0v-8"/><path class="asta" d="M17 34.5V42M12 44.5h10"/><rect class="capsula" x="8" y="1" width="18" height="30" rx="9"/><path class="griglia" d="M11.5 6.5h11M10.5 10.5h13M10.5 14.5h13"/><path class="fascia-mic" d="M8.6 19.5h16.8"/></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="24" cy="16" r="7"/><path d="M11 40c0-8 6-13 13-13s13 5 13 13"/>
@@ -3628,7 +3677,7 @@ Cringe | Romantico
               <span class="led"></span>
               <span class="descr"><span class="motto">Ognuno per sé</span><span class="conteggio">Da 3 a 5 giocatori</span></span>
             </button>
-            <button class="tasto decorato" data-modo="squadre" style="--k:1">
+            <button class="tasto decorato" data-modo="squadre" data-gamma="sfida" style="--k:1">
               <span class="sfondo" aria-hidden="true"><svg class="deco-walkie" viewBox="0 0 168 62" preserveAspectRatio="xMinYMin meet"><path class="linea-radio" d="M40 10H128"/><g class="segnale segnale-a"><path d="M28.24 5.76A6 6 0 0 1 28.24 14.24"/><path d="M31.78 2.22A11 11 0 0 1 31.78 17.78"/><path d="M35.31 -1.31A16 16 0 0 1 35.31 21.31"/></g><g class="segnale segnale-b"><path d="M139.76 5.76A6 6 0 0 0 139.76 14.24"/><path d="M136.22 2.22A11 11 0 0 0 136.22 17.78"/><path d="M132.69 -1.31A16 16 0 0 0 132.69 21.31"/></g><g class="walkie walkie-a"><path class="antenna" d="M24 16V4"/><circle class="pomello" cx="24" cy="4" r="2.4"/><rect class="corpo-walkie" x="4" y="15" width="26" height="45" rx="5"/><rect class="schermo" x="9" y="21" width="16" height="9" rx="1.5"/><path class="altoparlante" d="M10 39h14M10 45h14M10 51h14"/></g><g class="walkie walkie-b"><path class="antenna" d="M144 16V4"/><circle class="pomello" cx="144" cy="4" r="2.4"/><rect class="corpo-walkie" x="138" y="15" width="26" height="45" rx="5"/><rect class="schermo" x="143" y="21" width="16" height="9" rx="1.5"/><path class="altoparlante" d="M144 39h14M144 45h14M144 51h14"/></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="15" cy="17" r="6"/><path d="M4 39c0-7 5-11 11-11 3 0 5.5 1 7 2.5"/>
@@ -3638,7 +3687,7 @@ Cringe | Romantico
               <span class="led"></span>
               <span class="descr"><span class="motto">Gruppo contro gruppo</span><span class="conteggio">Da 6 giocatori in su</span></span>
             </button>
-            <button class="tasto decorato" data-modo="collab" style="--k:2">
+            <button class="tasto decorato" data-modo="collab" data-gamma="insieme" style="--k:0">
               <span class="sfondo" aria-hidden="true"><svg class="deco-alveare"><defs><pattern id="favo" x="6" y="4" width="33" height="19.053" patternUnits="userSpaceOnUse"><path class="favo-linee" d="M0.00 9.53L5.50 -0.00L16.50 -0.00L22.00 9.53L16.50 19.05L5.50 19.05ZM16.50 0.00L22.00 -9.53L33.00 -9.53L38.50 0.00L33.00 9.53L22.00 9.53ZM16.50 19.05L22.00 9.53L33.00 9.53L38.50 19.05L33.00 28.58L22.00 28.58ZM-16.50 0.00L-11.00 -9.53L0.00 -9.53L5.50 0.00L0.00 9.53L-11.00 9.53ZM-16.50 19.05L-11.00 9.53L0.00 9.53L5.50 19.05L0.00 28.58L-11.00 28.58Z"/></pattern></defs><rect class="favo" width="100%" height="100%" fill="url(#favo)"/><g class="celle-oro"><path class="cella" style="--i:0" d="M22.50 23.05L28.00 13.52L39.00 13.52L44.50 23.05L39.00 32.58L28.00 32.58Z"/><path class="cella" style="--i:1" d="M39.00 13.53L44.50 4.00L55.50 4.00L61.00 13.53L55.50 23.06L44.50 23.06Z"/><path class="cella" style="--i:2" d="M55.50 23.05L61.00 13.52L72.00 13.52L77.50 23.05L72.00 32.58L61.00 32.58Z"/><path class="cella" style="--i:3" d="M39.00 32.58L44.50 23.05L55.50 23.05L61.00 32.58L55.50 42.11L44.50 42.11Z"/><path class="cella" style="--i:4" d="M72.00 13.53L77.50 4.00L88.50 4.00L94.00 13.53L88.50 23.06L77.50 23.06Z"/><path class="cella" style="--i:5" d="M55.50 4.00L61.00 -5.53L72.00 -5.53L77.50 4.00L72.00 13.53L61.00 13.53Z"/></g><g class="ape"><g class="ape-corpo"><ellipse class="ali" cx="-1" cy="-4" rx="3.2" ry="4.4"/><ellipse class="ali ali-2" cx="2.4" cy="-3.6" rx="2.6" ry="3.8"/><ellipse class="addome" cx="0" cy="0" rx="5.2" ry="3.6"/><path class="strisce-ape" d="M-1.4-3.2v6.4M1.6-3.4v6.8"/><circle class="testa-ape" cx="-5.6" cy="-.6" r="2.2"/></g></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="10" cy="19" r="5"/><circle cx="24" cy="14" r="5.5"/><circle cx="38" cy="19" r="5"/>
@@ -3647,6 +3696,27 @@ Cringe | Romantico
               <span class="titolo">Modalità collaborativa</span>
               <span class="led"></span>
               <span class="descr"><span class="motto">Tutti contro il gioco</span><span class="conteggio">Adatto per 2-6 giocatori</span></span>
+            </button>
+            <button class="tasto decorato" data-modo="impostore" data-gamma="insieme" style="--k:1">
+              <span class="sfondo" aria-hidden="true"><svg class="deco-maschera" viewBox="0 0 112 44" preserveAspectRatio="xMinYMin meet">
+                <g class="disturbo"><path style="--i:0" d="M78 9h14"/><path style="--i:1" d="M84 16h22"/><path style="--i:2" d="M76 23h10"/><path style="--i:3" d="M90 23h12"/><path style="--i:4" d="M80 30h18"/></g>
+                <path class="laccio" d="M4 15C-2 14-3 20 1 22M66 15c6-1 7 5 3 7"/>
+                <path class="maschera" d="M35 11C29 3 9 3 4 13c-3 9 3 18 15 19 8 1 12-5 16-5s8 6 16 5c12-1 18-10 15-19-5-10-25-10-31-2z"/>
+                <g class="occhio"><ellipse class="foro" cx="20.5" cy="16.5" rx="8" ry="5"/><circle class="pupilla" cx="20.5" cy="17" r="2.6"/></g>
+                <g class="occhio"><ellipse class="foro" cx="49.5" cy="16.5" rx="8" ry="5"/><circle class="pupilla" cx="49.5" cy="17" r="2.6"/></g>
+              </svg></span>
+              <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
+                <path d="M24 14c-4-5-15-5-18 1-2 6 2 12 9 12 4 0 6-3 9-3s5 3 9 3c7 0 11-6 9-12-3-6-14-6-18-1z"/>
+              </svg>
+              <span class="titolo">Impostore</span>
+              <span class="led"></span>
+              <span class="descr"><span class="motto">Qualcuno è fuori frequenza</span><span class="conteggio">Prossimamente</span></span>
+            </button>
+            <!-- interruttore verticale: in alto le modalità di sfida, in basso quelle da giocare insieme -->
+            <button class="interruttore-modi" id="selettore-modi" type="button" role="switch" aria-checked="false" aria-label="Altre modalità" data-gamma="sfida" style="--k:2">
+              <span class="spia-modi" aria-hidden="true"></span>
+              <span class="binario" aria-hidden="true"><span class="cursore"></span></span>
+              <span class="spia-modi" aria-hidden="true"></span>
             </button>
           </div>
         </div>
@@ -5528,13 +5598,18 @@ Cringe | Romantico
   const spiaPausa = document.getElementById('pausa');
   const MODO_PAUSA = { singoli: 'a giocatori singoli', squadre: 'a squadre', collab: 'collaborativa' };
   let daRiprendere = null;
-  function segnaPausa(modo) { document.querySelectorAll('.tasto[data-modo]').forEach(b => b.classList.toggle('in-pausa', b.dataset.modo === modo)); }
+  function segnaPausa(modo) {
+    document.querySelectorAll('.tasto[data-modo]').forEach(b => b.classList.toggle('in-pausa', b.dataset.modo === modo));
+    modoInSospeso = modo;
+    aggiornaSpiaGamma();
+  }
   // entrando nel menu: se c'è una partita lasciata a metà compare la spia, altrimenti niente
   function proponiRipresa() {
     daRiprendere = partitaSalvata();
     spiaPausa.classList.remove('via');
     if (!daRiprendere) { spiaPausa.hidden = true; segnaPausa(null); return; }
     const modo = daRiprendere.partita.modo;
+    mostraGammaModi(gammaDelModo(modo), true);       // si mostra la gamma con la partita in sospeso
     const testo = document.getElementById('pausa-testo');
     testo.replaceChildren('C’è una partita ', el('b', '', MODO_PAUSA[modo]), ' in sospeso');
     spiaPausa.hidden = false;
@@ -5586,7 +5661,7 @@ Cringe | Romantico
   /* ---------- Scelta della modalità ---------- */
   const SCHERMATA_DI = { singoli: 'schermata-singoli', squadre: 'schermata-squadre', collab: 'schermata-collab' };
   let modoScelto = 'singoli';
-  document.querySelectorAll('.tasto[data-modo]').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.tasto[data-modo]:not([data-modo="impostore"])').forEach(b => b.addEventListener('click', () => {
     b.classList.add('premuto');
     modoScelto = b.dataset.modo;
     animaOnde(0, 1700, null, null, 'subito');   // le onde iniziano a separarsi già alla pressione del tasto
@@ -5602,6 +5677,55 @@ Cringe | Romantico
       if (inAscoltoStazioni() === daStazione) Suoni.abbassaMusica(0.25, 1.2);   // stessa stazione: la musica si abbassa sotto il fruscio
     }, riduciMoto ? 0 : 240);
   }));
+
+  // Impostore: la modalità arriverà più avanti. Per ora il tasto fa "no" e lo dice
+  const tastoImpostore = document.querySelector('.tasto[data-modo="impostore"]');
+  tastoImpostore.addEventListener('click', () => {
+    tastoImpostore.classList.remove('nego'); void tastoImpostore.offsetWidth; tastoImpostore.classList.add('nego');
+    suona('led', { spento: true }); vibra('errore');
+  });
+  tastoImpostore.addEventListener('animationend', e => { if (e.animationName === 'nego') tastoImpostore.classList.remove('nego'); });
+
+  /* Le modalità stanno su due "gamme", due tasti per volta: Sfida (singoli e squadre) e Insieme (collaborativa
+     e impostore). Il selettore a destra passa dall'una all'altra; la radio ricorda l'ultima scelta. */
+  const GAMME_MODI = {
+    sfida: { nome: 'Sfida', descr: 'giocatori singoli e squadre' },
+    insieme: { nome: 'Insieme', descr: 'collaborativa e impostore' }
+  };
+  const gammaDelModo = modo => (document.querySelector(`.tasto[data-modo="${modo}"]`) || {}).dataset?.gamma || 'sfida';
+  const tastiModi = document.getElementById('tasti-modi');
+  const selettoreModi = document.getElementById('selettore-modi');
+  let gammaModi = 'sfida', modoInSospeso = null;
+  function mostraGammaModi(g, muto) {
+    if (!GAMME_MODI[g]) g = 'sfida';
+    const cambia = g !== gammaModi;
+    gammaModi = g;
+    tastiModi.dataset.gamma = selettoreModi.dataset.gamma = g;
+    selettoreModi.setAttribute('aria-checked', String(g === 'insieme'));
+    selettoreModi.setAttribute('aria-label', `Altre modalità: ${GAMME_MODI[g === 'sfida' ? 'insieme' : 'sfida'].descr}`);
+    aggiornaSpiaGamma();
+    try { localStorage.setItem('sintonizzati-gamma-modi', g); } catch (e) {}
+    if (!cambia || muto) return;
+    suona('cambioBanda', { fm: g === 'insieme' });
+    vibraScatto('scatto');
+    tastiModi.classList.remove('cambio'); void tastiModi.offsetWidth; tastiModi.classList.add('cambio');
+    requestAnimationFrame(misuraTitoli);
+  }
+  tastiModi.addEventListener('animationend', e => { if (e.target.classList.contains('tasto')) tastiModi.classList.remove('cambio'); });
+  // se la partita in sospeso sta nell'altra gamma, sul display lampeggia il suo puntino
+  function aggiornaSpiaGamma() {
+    const altra = modoInSospeso && gammaDelModo(modoInSospeso) !== gammaModi;
+    const punti = selettoreModi.querySelectorAll('.spia-modi');
+    punti.forEach((p, k) => p.classList.toggle('sospesa', !!altra && (k === 0) === (gammaDelModo(modoInSospeso) === 'sfida')));
+  }
+  selettoreModi.addEventListener('click', () => mostraGammaModi(gammaModi === 'sfida' ? 'insieme' : 'sfida'));
+  selettoreModi.addEventListener('keydown', e => {
+    if (e.key === 'ArrowUp') mostraGammaModi('sfida');
+    else if (e.key === 'ArrowDown') mostraGammaModi('insieme');
+    else return;
+    e.preventDefault();
+  });
+  try { mostraGammaModi(localStorage.getItem('sintonizzati-gamma-modi') || 'sfida', true); } catch (e) { mostraGammaModi('sfida', true); }
 
   /* ---------- Scelta della stazione: i tasti funzionano come i preset di una radio,
      ne resta abbassato uno solo ---------- */
