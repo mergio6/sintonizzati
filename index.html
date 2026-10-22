@@ -812,6 +812,47 @@
     margin: 0 calc(-1 * var(--padx)) -12px;      /* arriva fino ai bordi: le onde sotto non si vedono */
   }
   .passaggio[hidden] { display: none; }
+  /* Collaborativa: scelta della ricezione per il prossimo round, due schede da toccare */
+  .scelta-radio {
+    grid-area: 2 / 1 / 4 / 2; z-index: 3; background: var(--sfondo);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: clamp(8px, 2.4vh, 14px); gap: clamp(8px, 2.4cqh, 14px); padding: 6px calc(8px + var(--padx)) 16px; text-align: center;
+    margin: 0 calc(-1 * var(--padx)) -12px;
+  }
+  .scelta-radio[hidden] { display: none; }
+  .scelta-radio .sopra { margin: 0; font-size: clamp(15px, 4.4vh, 20px); font-size: clamp(15px, 4.4cqh, 20px); font-weight: 700; color: var(--inchiostro); text-wrap: balance; }
+  .scelta-opzioni { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(8px, 2vw, 16px); gap: clamp(8px, 2cqw, 16px); width: min(720px, 100%); }
+  .opzione-radio {
+    --luce: var(--segnale-alone);
+    position: relative; display: grid; align-content: start; gap: 4px; padding: clamp(8px, 2.4vh, 14px) 14px; padding: clamp(8px, 2.4cqh, 14px) 14px;
+    border-radius: 16px; border: 1.5px solid var(--bordo); background: var(--superficie); color: var(--inchiostro);
+    text-align: left; cursor: pointer; transition: box-shadow .25s, border-color .25s, transform .15s;
+  }
+  .opzione-radio.fine { --luce: #1597BD; } .opzione-radio.amplificata { --luce: #6FA300; }
+  :root[data-attivo="scuro"] .opzione-radio.fine { --luce: #38D3F2; } :root[data-attivo="scuro"] .opzione-radio.amplificata { --luce: #B4EE3A; }
+  .opzione-radio:active { transform: scale(.98); }
+  .opzione-radio[aria-pressed="true"] {
+    border-color: var(--luce);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--luce) 45%, transparent), 0 0 22px 2px color-mix(in srgb, var(--luce) 55%, transparent);
+  }
+  .opzione-testa { display: flex; align-items: center; gap: 9px; }
+  .opzione-nome { font: 800 clamp(16px, 4.8vh, 21px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; font-size: clamp(16px, 4.8cqh, 21px); }
+  /* un piccolo segnale luminoso: stretto per la sintonia fine, largo per la ricezione amplificata */
+  .opzione-segnale { flex: none; width: 26px; height: 22px; border-radius: 5px; background: var(--vetro); position: relative; overflow: hidden; box-shadow: inset 0 0 0 1.5px var(--corpo); }
+  .opzione-segnale::after { content: ""; position: absolute; top: 2px; bottom: 2px; left: 50%; width: 12px; transform: translateX(-50%);
+    background: linear-gradient(90deg, transparent, var(--luce, var(--segnale-alone)), transparent); }
+  .fine .opzione-segnale::after { width: 7px; }
+  .amplificata .opzione-segnale::after { width: 20px; }
+  .opzione-dati { font: 700 12px/1.2 "Bricolage Grotesque", system-ui, sans-serif; color: var(--tenue); letter-spacing: .02em; text-transform: uppercase; }
+  .opzione-descr { font-size: clamp(12.5px, 3.6vh, 14.5px); font-size: clamp(12.5px, 3.6cqh, 14.5px); line-height: 1.3; font-weight: 600; }
+  .opzione-dopo { font-size: clamp(11.5px, 3.3vh, 13px); font-size: clamp(11.5px, 3.3cqh, 13px); line-height: 1.3; color: var(--tenue); }
+  .opzione-attuale { position: absolute; top: 8px; right: 10px; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: color-mix(in srgb, var(--luce) 20%, transparent); color: var(--inchiostro); }
+  .scelta-radio .tasto-ambra:disabled { cursor: default; }
+  /* nel pannello della cooperativa: la radio in uso */
+  .radio-in-uso { --luce: var(--segnale-alone); }
+  .radio-in-uso.fine { --luce: #1597BD; } .radio-in-uso.amplificata { --luce: #6FA300; }
+  :root[data-attivo="scuro"] .radio-in-uso.fine { --luce: #38D3F2; } :root[data-attivo="scuro"] .radio-in-uso.amplificata { --luce: #B4EE3A; }
+  .radio-in-uso .opzione-segnale { width: 20px; height: 16px; border-radius: 4px; }
   .passaggio .sopra { margin: 0; font-size: clamp(15px, 4.4vh, 20px); font-size: clamp(15px, 4.4cqh, 20px); font-weight: 600; color: var(--tenue); max-width: 38ch; line-height: 1.3; text-wrap: balance; }
   .passaggio .lcd { width: min(480px, 100%); justify-content: center; gap: 18px; padding: clamp(10px, 3vh, 18px) 20px; padding: clamp(10px, 3cqh, 18px) 20px; box-shadow: inset 0 0 0 3px var(--corpo), inset 0 2px 8px rgba(0, 0, 0, .2); }
   .passaggio .lcd h2 { font-size: clamp(22px, 9vh, 40px); font-size: clamp(22px, 9cqh, 40px); overflow-wrap: anywhere; }
@@ -920,7 +961,8 @@
   @container app (max-height: 340px) { .turno .ruolo:not(.esito) { display: none; } .turno .esito { font-size: 13px; } .risultati li.sq span:nth-child(2) { font-size: 13px; } .tabellone li { padding-block: 6px 4px; } .classifica li, .risultati li { padding-block: 3px; } }
 
   /* ---------- Testo che ondeggia lettera per lettera ---------- */
-  .onda-testo span { display: inline-block; animation: lettera .7s ease-in-out both; animation-delay: calc(var(--i) * 45ms + 180ms); }
+  .onda-testo > span { display: inline-block; }
+  .onda-testo > span > span { display: inline-block; animation: lettera .7s ease-in-out both; animation-delay: calc(var(--i) * 45ms + 180ms); }
   @keyframes lettera {
     0%, 100% { transform: translateY(0); }
     45% { transform: translateY(-7px); color: var(--corallo); }
@@ -1295,7 +1337,6 @@
   .fondo-scala { fill: var(--vetro); stroke: var(--corpo); stroke-width: 3; }
   .sg-d { stop-color: var(--segnale-debole); }
   .sg-a { stop-color: var(--segnale-alone); } .sg-cuore { stop-color: var(--segnale-cuore); }
-  #dialogo-regole[data-modo="collab"] .sg-cuore { stop-color: var(--zona-oro); }
   .riga-regole, .tacche-regole line { stroke: var(--vetro-segni); stroke-width: 1; opacity: .55; stroke-linecap: round; }
   .tacche-regole line.lunga { stroke-width: 1.8; opacity: .9; }
   .ago-regole-bordo { stroke: var(--vetro); stroke-width: 5.5; stroke-linecap: round; }
@@ -3816,17 +3857,17 @@ Cringe | Romantico
             <div class="scheda">
               <h3>Come funziona</h3>
               <ul class="regole">
-                <li><span class="segno">7</span><span>Avete a disposizione 7 turni di gioco. La carta indizio si può cambiare una sola volta per turno.</span></li>
-                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9.5" y="3" width="5" height="18" rx="1.2" style="fill:var(--zona-oro)"/><rect x="3" y="3" width="5" height="18" rx="1.2" style="fill:var(--fascia-4)"/><rect x="16" y="3" width="5" height="18" rx="1.2" style="fill:var(--fascia-4)"/></svg></span><span>La fascia dorata al centro vale 4 punti, come quelle accanto, ma vi fa guadagnare un turno extra di gioco.</span></li>
+                <li><span class="segno">6</span><span>Sei round: a ogni round cambia il Conduttore, che dà l’indizio. La carta si può cambiare una volta per round.</span></li>
+                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" style="fill:var(--vetro);stroke:var(--corpo);stroke-width:1.6"/><rect x="5" y="7" width="3" height="10" rx="1.5" style="fill:#1597BD"/><rect x="10.5" y="7" width="3" height="10" rx="1.5" style="fill:var(--segnale-alone)"/><rect x="16" y="7" width="3" height="10" rx="1.5" style="fill:#6FA300"/></svg></span><span>Con un 5 cambiate radio: Sintonia fine (stretta, fino a 6 punti) o Ricezione amplificata (larga). Se all’ultimo round fate il massimo, si gioca un round bonus.</span></li>
               </ul>
             </div>
             <div class="scheda misuratore">
               <h3>Verifica della connessione in corso…</h3>
               <ol class="livelli">
-                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity=".25"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>0–14</b><span>Errore 404: frequenza non trovata</span></li>
-                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>15–19</b><span>Sintonizzazione avvenuta correttamente</span></li>
-                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>20–23</b><span>Avete un’intesa fuori dal comune!</span></li>
-                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity="1"/></svg><b>24+</b><span>Mente alveare</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity=".25"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>0–15</b><span>Errore 404: frequenza non trovata</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>16–21</b><span>Sintonizzazione avvenuta correttamente</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>22–27</b><span>Avete un’intesa fuori dal comune!</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity="1"/></svg><b>28+</b><span>Mente alveare</span></li>
               </ol>
             </div>
           </div>
@@ -4033,6 +4074,12 @@ Cringe | Romantico
         <div class="estremo dx" id="estremo-dx">Caldo</div>
       </div>
 
+      <!-- Collaborativa: con il segnale pieno si sceglie la ricezione del prossimo round -->
+      <div class="scelta-radio" id="scelta-radio" hidden>
+        <p class="sopra" id="scelta-sopra"></p>
+        <div class="scelta-opzioni" id="scelta-opzioni"></div>
+        <button class="tasto-ambra" id="scelta-ok" disabled>Sintonizza</button>
+      </div>
       <div class="passaggio" id="passaggio" hidden>
         <p class="zap-onda" id="pass-zap" hidden><span class="zap-etichetta">Zapping</span><span class="zap-display"><span class="zap-nome" id="pass-zap-nome"></span><span class="zap-tema" id="pass-zap-tema"></span></span></p>
         <p class="sopra" id="pass-sopra">Passa il telefono a</p>
@@ -5474,6 +5521,7 @@ Cringe | Romantico
     try { s = JSON.parse(localStorage.getItem(CHIAVE_PARTITA)); } catch (e) {}
     if (!s || !s.partita || !INIZI_TURNO[s.partita.modo] || Date.now() - s.quando > VALIDITA_PARTITA) { if (s) dimenticaPartita(); return null; }
     // partite salvate con il vecchio quadrante (gradi da -90 a 90): le distanze per i premi passano alla scala da 0 a 100
+    if (s.partita.modo === 'collab' && !s.partita.bersaglio) { dimenticaPartita(); return null; }   // vecchia cooperativa a 7 turni
     if (!s.scala && s.partita.storico) s.partita.storico.forEach(t => t.tentativi.forEach(x => { x.distanza *= 100 / 180; }));
     return s;
   }
@@ -5965,10 +6013,11 @@ Cringe | Romantico
       '<b>Se siete pari</b> si gioca uno spareggio, un turno a testa con le stesse regole. Se la parità resta, è pareggio.'
     ] },
     collab: { titolo: 'Collaborativa', passi: [
-      '<b>Scegliete insieme un caposquadra</b>, diverso ogni volta. Solo lui guarda lo schermo: vede in basso la carta parola (es. brutto/bello) e sopra la scala della radio con un bersaglio. Può cambiare carta una sola volta.',
-      '<b>Il caposquadra dice un indizio ad alta voce</b> che possa far ricondurre alla posizione del bersaglio: gli altri giocatori ne discutono e posizionano la lancetta.',
-      '<b>Si rivela il bersaglio.</b> Se la lancetta lo ha colpito guadagnate da 1 a 4 punti; se centra la fascia dorata al centro guadagnate anche un turno extra.',
-      '<b>Alla fine dei 7 turni</b> (più quelli extra guadagnati) si valuta lo stato della connessione in base al punteggio.'
+      '<b>Siete tutti nella stessa squadra.</b> A ogni round un Conduttore, diverso ogni volta, guarda lo schermo: vede in basso la carta parola e sopra la scala della radio con il bersaglio. Può cambiare carta una volta.',
+      '<b>Il Conduttore dice un indizio ad alta voce</b>: gli altri ne discutono, posizionano la lancetta e la confermano.',
+      '<b>Si rivela il bersaglio</b> e i punti si sommano a quelli dei round precedenti.',
+      '<b>Con un 5 potete cambiare radio</b>: <b>Sintonia fine</b> (segnale stretto, fino a 6 punti; resta se fate almeno 4) o <b>Ricezione amplificata</b> (segnale largo, fino a 5; resta se fate almeno 1). Altrimenti si torna in Ricezione standard.',
+      '<b>Sei round in tutto.</b> Se all’ultimo fate il punteggio massimo del bersaglio in uso, si gioca un round bonus. Alla fine il totale dice lo stato della connessione.'
     ] }
   };
   let regoleDa = null;
@@ -5982,7 +6031,7 @@ Cringe | Romantico
     const coop = modo === 'collab';
     dialogoRegole.querySelector('.scala-regole').setAttribute('viewBox', modo === 'squadre' ? '0 0 200 100' : '0 0 200 84');
     dialogoRegole.querySelector('.figura-regole figcaption span').textContent = coop
-      ? 'Il cuore dorato del segnale vale 4 punti e un turno extra.' : 'Più la lancetta è vicina al cuore del segnale, più fai punti: da 1 ai bordi fino a 5 al centro.';
+      ? 'Il segnale cambia con la radio: più stretto in Sintonia fine, più largo in Ricezione amplificata.' : 'Più la lancetta è vicina al cuore del segnale, più fai punti: da 1 ai bordi fino a 5 al centro.';
     dialogoRegole.hidden = false;
     dialogoRegole.querySelector('.pannello').scrollTop = 0;
     suona('finestra');
@@ -6237,11 +6286,19 @@ Cringe | Romantico
   // Scrive un testo lettera per lettera, così può "ondeggiare"
   function ondaTesto(elemento, testo) {
     elemento.replaceChildren();
-    [...testo].forEach((ch, i) => {
-      const s = document.createElement('span');
-      s.textContent = ch === ' ' ? '\u00A0' : ch;
-      s.style.setProperty('--i', i);
-      elemento.append(s);
+    // ogni parola resta intera: se il titolo è lungo va a capo tra una parola e l'altra, mai a metà
+    let i = 0;
+    testo.split(' ').forEach((parola, k) => {
+      if (k) { elemento.append(' '); i++; }
+      const p = document.createElement('span');
+      p.style.whiteSpace = 'nowrap';
+      [...parola].forEach(ch => {
+        const s = document.createElement('span');
+        s.textContent = ch;
+        s.style.setProperty('--i', i++);
+        p.append(s);
+      });
+      elemento.append(p);
     });
     elemento.classList.add('onda-testo');
   }
@@ -6670,6 +6727,7 @@ Cringe | Romantico
     passOk.disabled = false;
     musicaAlta = false;
     passaggio.hidden = true;
+    document.getElementById('scelta-radio').hidden = true;
     schermataGioco.classList.remove('accensione');
     transizioneLancetta('');
     partita = null;
@@ -6745,26 +6803,13 @@ Cringe | Romantico
     ventaglio.replaceChildren();
     const meta = BERSAGLI[tipo].mezze[BERSAGLI[tipo].mezze.length - 1];
     ventaglio.style.transformOrigin = `${xDi(centro)}px ${LUCE_SEGNALE.y + LUCE_SEGNALE.alto / 2}px`;
-    const coop = !!partita && partita.modo === 'collab';
-    sfumaSegnale('segnale-alone', centro, meta, profiloSegnale(tipo, coop ? 'var(--zona-oro)' : 'var(--segnale-cuore)'));
+    sfumaSegnale('segnale-alone', centro, meta, profiloSegnale(tipo, 'var(--segnale-cuore)'));
     const gruppo = svg('g', { mask: 'url(#sfuma-segnale)', class: 'segnale segnale-' + tipo });
     gruppo.append(svg('rect', { class: 'segnale-alone', x: xDi(centro - meta), y: LUCE_SEGNALE.y, width: 2 * meta * PASSO, height: LUCE_SEGNALE.alto, fill: 'url(#segnale-alone)' }));
     ventaglio.append(gruppo);
-    if (coop) luccichio(centro);
-  }
-  // Il centro d'oro della cooperativa manda qualche scintilla
-  function luccichio(centro) {
-    [[64, -1, 0], [150, 1, 2]].forEach(([sy, lato, ritardo]) => {
-      const g = svg('g', { transform: `translate(${xDi(centro) + lato * (PASSO * 1.6 + 6)} ${sy})` });
-      const stella = svg('path', { d: 'M0-6 1.3-1.3 6 0 1.3 1.3 0 6-1.3 1.3-6 0-1.3-1.3z', class: 'scintilla' });
-      stella.style.animationDelay = ritardo + 's';
-      g.append(stella);
-      ventaglio.append(g);
-    });
   }
   function apriVentaglio() {
     suona('apriBersaglio');
-    if (partita && partita.modo === 'collab') suona('oro', { t: 0.35 });
     ventaglio.classList.remove('aperto');
     requestAnimationFrame(() => requestAnimationFrame(() => ventaglio.classList.add('aperto')));
   }
@@ -7313,22 +7358,48 @@ Cringe | Romantico
   }
 
   /* =====================================================================
-     Modalità collaborativa: tutti contro il gioco, 7 turni.
-     Il centro dorato vale 4 punti, come le fasce accanto, e regala un turno in più.
+     Modalità collaborativa: tutti nella stessa squadra, 6 round, punteggio unico.
+     A ogni round un Conduttore (diverso ogni volta) dà l'indizio, gli altri decidono la lancetta.
+     La radio può cambiare ricezione, e quindi bersaglio:
+     - Standard: con 5 punti si sceglie tra Sintonia fine e Ricezione amplificata, altrimenti resta Standard.
+     - Sintonia fine: con 4, 5 o 6 punti resta, con 0-3 si torna in Standard.
+     - Ricezione amplificata: con 1-4 resta, con 5 si sceglie se restare o passare a Sintonia fine, con 0 si torna in Standard.
+     I cambi valgono dal round dopo. Se al 6° round si fa il massimo del bersaglio in uso, si gioca un round bonus;
+     dopo il round bonus la partita finisce comunque.
      ===================================================================== */
-  const TURNI_COLLAB = 7;
+  const ROUND_COLLAB = 6;
   const LIVELLI = [
     { min: 0, testo: 'Errore 404: frequenza non trovata' },
-    { min: 15, testo: 'Sintonizzazione avvenuta correttamente' },
-    { min: 20, testo: 'Avete un\u2019intesa fuori dal comune!' },
-    { min: 24, testo: 'Mente alveare' }
+    { min: 16, testo: 'Sintonizzazione avvenuta correttamente' },
+    { min: 22, testo: 'Avete un’intesa fuori dal comune!' },
+    { min: 28, testo: 'Mente alveare' }
   ];
   function livelloCollab(punti) { let l = 0; LIVELLI.forEach((v, i) => { if (punti >= v.min) l = i; }); return l; }
+  // come si presenta ogni ricezione: nome, cosa fa, cosa succede dopo
+  const RICEZIONI = {
+    standard: { nome: 'Ricezione standard', breve: 'Standard' },
+    fine: {
+      nome: 'Sintonia fine', breve: 'Sintonia fine',
+      descrizione: 'Il segnale è stretto e va cercato con precisione, ma vale fino a 6 punti.',
+      conseguenze: 'Resta attiva se fate 4, 5 o 6 punti. Con 3 o meno si torna in Ricezione standard.'
+    },
+    amplificata: {
+      nome: 'Ricezione amplificata', breve: 'Amplificata',
+      descrizione: 'L’antenna allarga il segnale: si aggancia più facilmente, fino a 5 punti.',
+      conseguenze: 'Resta attiva con 1, 2, 3 o 4 punti; con 5 potete scegliere di nuovo. Con 0 si torna in Ricezione standard.'
+    }
+  };
+  // dopo la rivelazione: che radio si userà nel prossimo round (o quali si possono scegliere)
+  function prossimaRicezione(tipo, punti) {
+    if (tipo === 'fine') return { tipo: punti >= 4 ? 'fine' : 'standard' };
+    if (tipo === 'amplificata') return punti === 5 ? { scelta: ['amplificata', 'fine'] } : { tipo: punti >= 1 ? 'amplificata' : 'standard' };
+    return punti === 5 ? { scelta: ['fine', 'amplificata'] } : { tipo: 'standard' };
+  }
 
   function avviaCollab() {
     ultimaPartita = { modo: 'collab' };
     const zap = preparaZap();
-    partita = { modo: 'collab', punti: 0, turno: 1, totale: TURNI_COLLAB, zap, carta: pesca(zap ? zap.stazione : stazioneScelta), cartaPronta: true, fase: 'accensione' };
+    partita = { modo: 'collab', punti: 0, turno: 1, totale: ROUND_COLLAB, roundBonus: false, bersaglio: 'standard', zap, carta: pesca(zap ? zap.stazione : stazioneScelta), cartaPronta: true, fase: 'accensione' };
     entraInPartita(turnoCollab);
   }
 
@@ -7336,12 +7407,17 @@ Cringe | Romantico
     salvaPartita(turnoCollab);
     const p = partita;
     prendiCarta(p);
-    p.centro = nuovoCentro(); p.esito = null; p.fase = 'attesa';
-    p.cambiRimasti = 1;                 // nella cooperativa: un cambio di carta per turno
+    p.centro = nuovoCentro(); p.esito = null; p.prossima = null; p.fase = 'attesa';
+    p.cambiRimasti = 1;                 // nella cooperativa: un cambio di carta per round
     pulisciQuadrante(); aggiorna();
+    const bonus = p.turno > ROUND_COLLAB;
     chiediPassaggio({
-      sopra: p.turno === 1 ? 'Scegliete chi dà il primo indizio' : 'Passate il telefono a chi dà il prossimo indizio',
-      nome: `Turno ${p.turno} di ${p.totale}`, bottone: 'Mostra il bersaglio', nota: 'Gli altri non guardano lo schermo', inOnda: true
+      sopra: (bonus ? 'Round bonus' : `Round ${p.turno} di ${ROUND_COLLAB}`) + ' · ' + (p.turno === 1 ? 'scegliete il Conduttore' : 'passate il telefono al nuovo Conduttore'),
+      nome: RICEZIONI[p.bersaglio].nome,
+      avviso: p.turno > 1 ? 'Cambiate Conduttore' : null,
+      iconaAvviso: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/></svg>',
+      bottone: 'Mostra il bersaglio', nota: 'Solo il Conduttore guarda lo schermo', inOnda: true,
+      suono: p.turno > 1 ? 'cambioCapo' : 'passaggio'
     }, () => { p.fase = 'segreto'; disegnaVentaglio(p.centro); aggiorna(); apriVentaglio(); });
   }
 
@@ -7350,7 +7426,7 @@ Cringe | Romantico
     suona('nascondi');
     p.fase = 'attesa'; chiudiVentaglio(); aggiorna();
     chiediPassaggio({
-      sopra: 'Di\u2019 l\u2019indizio ad alta voce', nome: 'Tutti insieme', bottone: 'Pronti',
+      sopra: 'Conduttore, di’ l’indizio ad alta voce', nome: 'Tutti insieme', bottone: 'Pronti',
       nota: 'Mettete il telefono dove lo vedono tutti'
     }, () => { p.fase = 'tentativo'; impostaSintonia(50); aggiorna(); });
   }
@@ -7358,60 +7434,111 @@ Cringe | Romantico
   function confermaCollab() {
     const p = partita;
     p.sintonia = sintonia;
-    const colpo = punteggio(p.sintonia, p.centro);
-    const centro = colpo === 5;
-    const punti = Math.min(colpo, 4);
-    if (centro) p.totale++;                     // centro: un turno (e una carta) in più
+    const tipo = p.bersaglio, massimo = BERSAGLI[tipo].massimo;
+    const punti = punteggio(p.sintonia, p.centro, tipo);
     p.punti += punti;
     segnaZap(punti);
-    p.esito = { punti, centro };
+    const pieno = punti === massimo;
+    // il round bonus si guadagna solo al 6° round, facendo il massimo del bersaglio in uso
+    const bonus = p.turno === ROUND_COLLAB && pieno && !p.roundBonus;
+    if (bonus) { p.roundBonus = true; p.totale = ROUND_COLLAB + 1; }
     p.finita = p.turno >= p.totale;
+    // a partita finita non si propone nessun cambio di radio
+    p.prossima = p.finita ? null : prossimaRicezione(tipo, punti);
+    p.esito = { punti, pieno, bonus, tipo };
     p.fase = 'rivelazione';
     suona('conferma');
     vibra('conferma');
     disegnaVentaglio(p.centro); aggiorna(); apriVentaglio();
-    suona('esito', { punti, centro, t: 0.45 });
-    if (centro) dopo(450, () => vibra('centro'));
-    if (centro) suona('turnoExtra', { t: 1.25 });
+    suona('esito', { punti, centro: pieno, t: 0.45 });
+    if (pieno) dopo(450, () => vibra('centro'));
+    if (bonus) suona('turnoExtra', { t: 1.25 });
   }
 
-  function prossimoCollab() { partita.turno++; if (partita.zap) cambiaStazione(); turnoCollab(); }
+  function prossimoCollab() {
+    const p = partita, dopoScelta = tipo => {
+      p.bersaglio = tipo;
+      p.turno++;
+      if (p.zap) cambiaStazione();
+      turnoCollab();
+    };
+    if (p.prossima && p.prossima.scelta) chiediRicezione(p.prossima.scelta, dopoScelta);
+    else dopoScelta(p.prossima ? p.prossima.tipo : 'standard');
+  }
+
+  // Segnale pieno: la squadra sceglie come ricevere il prossimo round
+  const sceltaRadio = document.getElementById('scelta-radio');
+  function chiediRicezione(opzioni, poi) {
+    const p = partita;
+    let scelta = null;
+    document.getElementById('scelta-sopra').textContent = `Segnale pieno! Scegliete la radio per ${p.turno + 1 > ROUND_COLLAB ? 'il round bonus' : `il round ${p.turno + 1}`}`;
+    const carte = document.getElementById('scelta-opzioni');
+    const ok = document.getElementById('scelta-ok');
+    carte.replaceChildren(...opzioni.map(tipo => {
+      const r = RICEZIONI[tipo], b = BERSAGLI[tipo];
+      const c = el('button', 'opzione-radio ' + tipo);
+      c.type = 'button';
+      c.setAttribute('aria-pressed', 'false');
+      const testa = el('span', 'opzione-testa');
+      testa.append(el('span', 'opzione-segnale'), el('span', 'opzione-nome', r.nome));
+      const dati = el('span', 'opzione-dati', `Bersaglio ${String(+(b.larghezze.reduce((x, y) => x + y, 0)).toFixed(2)).replace('.', ',')}% · fino a ${b.massimo} punti`);
+      c.append(testa, dati, el('span', 'opzione-descr', r.descrizione), el('span', 'opzione-dopo', r.conseguenze));
+      if (tipo === p.bersaglio) c.append(el('span', 'opzione-attuale', 'Radio attuale'));
+      c.addEventListener('click', () => {
+        scelta = tipo;
+        carte.querySelectorAll('.opzione-radio').forEach(x => x.setAttribute('aria-pressed', String(x === c)));
+        ok.disabled = false;
+        suona('lato', { pan: tipo === 'fine' ? -0.5 : 0.5 }); vibra('tocco');
+      });
+      return c;
+    }));
+    ok.disabled = true;
+    ok.onclick = () => { if (!scelta) return; sceltaRadio.hidden = true; suona('scansione'); poi(scelta); };
+    sceltaRadio.hidden = false;
+    suona('finestra');
+  }
 
   function disegnaCollab() {
     const p = partita, box = el('div', 'collab-box');
     box.append(el('div', 'etichetta', 'Punti'));
     const tot = el('b', 'totale' + (p.fase === 'rivelazione' && p.esito.punti ? ' segnato' : ''), p.punti);
-    box.append(tot, el('div', 'etichetta', `Turno ${p.turno} di ${p.totale}`));
+    const bonus = p.turno > ROUND_COLLAB;
+    box.append(tot, el('div', 'etichetta', bonus ? 'Round bonus' : `Round ${p.turno} di ${ROUND_COLLAB}`));
     const pallini = el('div', 'pallini');
     for (let i = 1; i <= p.totale; i++) {
       const pal = el('i');
       if (i < p.turno || (i === p.turno && p.fase === 'rivelazione')) pal.className = 'giocato';
       else if (i === p.turno) pal.className = 'corrente';
-      if (i > TURNI_COLLAB) pal.classList.add('extra');
+      if (i > ROUND_COLLAB) pal.classList.add('extra');
       pallini.append(pal);
     }
     box.append(pallini);
-    const legenda = el('div', 'legenda');
-    legenda.innerHTML = '<svg viewBox="0 0 14 18" aria-hidden="true"><rect x="4.5" y="1" width="5" height="17" rx="1.2" style="fill:var(--zona-oro)"/><path class="scintilla" d="M8-3 9 1 12 2 9 3 8 6 7 3 4 2 7 1z" transform="translate(-1 3)"/></svg>';
-    legenda.append('4 punti + turno extra');
-    box.append(legenda);
+    // la radio in uso in questo round
+    const radio = el('div', 'legenda radio-in-uso ' + p.bersaglio);
+    radio.append(el('span', 'opzione-segnale'), RICEZIONI[p.bersaglio].nome);
+    box.append(radio);
     latoSx.append(box);
   }
 
   function disegnaTurnoCollab() {
     const p = partita, box = el('div', 'turno');
+    const quale = p.turno > ROUND_COLLAB ? 'Round bonus' : `Round ${p.turno} di ${ROUND_COLLAB}`;
     if (p.fase === 'segreto') {
-      box.append(el('div', 'etichetta', `Turno ${p.turno} di ${p.totale}`), el('div', 'chi', 'Tocca a te'),
+      box.append(el('div', 'etichetta', quale), el('div', 'chi', 'Conduttore'),
         el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottoneSicuro('Nascondi', nascondiCollab));
     } else if (p.fase === 'tentativo') {
-      box.append(el('div', 'etichetta', `Turno ${p.turno} di ${p.totale}`), el('div', 'chi', 'Tutti insieme'),
+      box.append(el('div', 'etichetta', quale), el('div', 'chi', 'Tutti insieme'),
         el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il centro'), bottoneSicuro('Conferma', confermaCollab));
     } else if (p.fase === 'rivelazione') {
       const e = p.esito;
-      const testo = e.centro ? 'Centro!\n4 punti + turno extra' : e.punti ? `Fascia da ${e.punti} punt${e.punti === 1 ? 'o' : 'i'}` : 'Fuori dal bersaglio';
+      const righe = [e.pieno ? 'Segnale pieno!' : e.punti ? `Fascia da ${e.punti} punt${e.punti === 1 ? 'o' : 'i'}` : 'Fuori frequenza'];
+      if (e.bonus) righe.push('Avete conquistato il round bonus!');
+      else if (p.prossima && p.prossima.scelta) righe.push('Potete cambiare radio');
+      else if (p.prossima && p.prossima.tipo !== e.tipo) righe.push(p.prossima.tipo === 'standard' ? 'Si torna in Ricezione standard' : `Prossimo round: ${RICEZIONI[p.prossima.tipo].nome}`);
+      const etichettaBtn = p.finita ? 'Risultato finale' : p.prossima && p.prossima.scelta ? 'Scegli la radio' : p.turno + 1 > ROUND_COLLAB ? 'Round bonus' : 'Prossimo round';
       box.append(el('div', 'etichetta', 'Risultato'), el('div', 'guadagno' + (e.punti ? '' : ' zero'), e.punti ? `+${e.punti}` : '0'),
-        el('div', 'ruolo esito', testo),
-        p.finita ? bottone('Risultato finale', mostraFine) : bottone('Prossimo turno', prossimoCollab));
+        el('div', 'ruolo esito', righe.join('\n')),
+        bottone(etichettaBtn, p.finita ? mostraFine : prossimoCollab));
     }
     latoDx.append(box);
   }
