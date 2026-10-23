@@ -1066,6 +1066,9 @@
   /* schermi bassi: la schermata delle regole si compatta per far stare anche il tasto Inizia */
   @media (max-height: 400px) {
     .slot.wt { padding-top: 20px; } .wt-corpo { gap: 6px; padding-top: 8px; } .wt-griglia { gap: 4px; }
+  }
+  /* riepilogo e collaborativa si compattano già sotto i 460 px di altezza (telefoni 915×412 e simili) */
+  @media (max-height: 460px) {
     :is(#schermata-collab, #schermata-riepilogo) .scheda.misuratore h3 { font-size: 9px; margin-bottom: 4px; }
     :is(#schermata-collab, #schermata-riepilogo) .setup { padding-top: 6px; padding-bottom: 8px; }
     :is(#schermata-collab, #schermata-riepilogo) .contenuto { gap: 8px; padding-top: 4px; }
@@ -1083,6 +1086,9 @@
   }
   @container app (max-height: 400px) {
     .slot.wt { padding-top: 20px; } .wt-corpo { gap: 6px; padding-top: 8px; } .wt-griglia { gap: 4px; }
+  }
+  /* riepilogo e collaborativa si compattano già sotto i 460 px di altezza (telefoni 915×412 e simili) */
+  @container app (max-height: 460px) {
     :is(#schermata-collab, #schermata-riepilogo) .scheda.misuratore h3 { font-size: 9px; margin-bottom: 4px; }
     :is(#schermata-collab, #schermata-riepilogo) .setup { padding-top: 6px; padding-bottom: 8px; }
     :is(#schermata-collab, #schermata-riepilogo) .contenuto { gap: 8px; padding-top: 4px; }
@@ -2085,6 +2091,15 @@
   /* misuratore della collaborativa: titolo centrato e contenuto centrato nel riquadro */
   :is(#schermata-collab, #schermata-riepilogo) .scheda.misuratore { display: flex; flex-direction: column; justify-content: center; }
   :is(#schermata-collab, #schermata-riepilogo) .scheda.misuratore h3 { text-align: center; }
+  /* collaborativa: anche qui il riquadro di destra (i livelli) non ruba spazio a "Come funziona" */
+  #schermata-collab .info-collab { grid-template-columns: minmax(0, 1fr) minmax(0, min(42%, 340px)) !important; }
+  @media (max-width: 700px) { #schermata-collab .info-collab { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) !important; } }
+  @media (max-height: 340px) {
+    #schermata-collab .livelli li { font-size: 11.5px; line-height: 1.2; padding-block: 1px; }
+    #schermata-collab .regole li { font-size: 12px; line-height: 1.2; }
+  }
+  /* il tasto Gioca non tocca mai il bordo in basso */
+  .riepilogo .piede { padding-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -6531,11 +6546,11 @@ Cringe | Romantico
       const [a, b] = nomiSquadre(), sfida = el('div', 'sfida-riepilogo');
       const squadra = (nome, cls) => { const d = el('div', 'squadra-riepilogo ' + cls); d.append(el('span', '', nome)); return d; };
       sfida.append(squadra(a, 'a'), el('span', 'vs-riepilogo', 'VS'), squadra(b, 'b'));
-      box.replaceChildren(sfida, el('p', 'nota-chi', 'La radio sceglie quale squadra inizia.'));
+      box.replaceChildren(sfida);
     } else {
       const ol = el('ol', 'elenco-nomi');
       verificaSingoli(true).forEach((nome, i) => { const li = el('li'); li.append(el('i', 'num', i + 1), el('span', '', nome)); ol.append(li); });
-      box.replaceChildren(ol, el('p', 'nota-chi', 'La radio sceglie chi dà il primo indizio, poi si va in ordine.'));
+      box.replaceChildren(ol);
     }
   }
   giocaRiepilogo.addEventListener('click', () => {
