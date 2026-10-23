@@ -2074,6 +2074,17 @@
     .riepilogo .scheda h3 { margin-bottom: 3px; }
   }
   .segno.icona-regola svg { width: 19px; height: 19px; }
+  /* Riepilogo: il riquadro di destra (chi gioca / le squadre) ha una larghezza massima,
+     così "Come funziona" ha più spazio e il tasto Gioca resta sempre visibile */
+  #schermata-riepilogo .info-collab { grid-template-columns: minmax(0, 1fr) minmax(150px, min(34%, 280px)); }
+  @media (max-height: 400px) { #schermata-riepilogo .info-collab { grid-template-columns: minmax(0, 1fr) minmax(130px, min(32%, 240px)); } }
+  /* le squadre sempre una sopra l'altra */
+  .sfida-riepilogo { grid-template-columns: minmax(0, 1fr); justify-items: stretch; gap: 4px; }
+  .vs-riepilogo { justify-self: center; font-size: 10px; }
+  .squadra-riepilogo { padding: 8px 6px; }
+  /* misuratore della collaborativa: titolo centrato e contenuto centrato nel riquadro */
+  :is(#schermata-collab, #schermata-riepilogo) .scheda.misuratore { display: flex; flex-direction: column; justify-content: center; }
+  :is(#schermata-collab, #schermata-riepilogo) .scheda.misuratore h3 { text-align: center; }
 </style>
 </head>
 <body>
