@@ -1020,26 +1020,26 @@
 
   /* Il riquadro dei livelli è un secondo display della radio: un misuratore di segnale.
      Entrando, la verifica scorre i livelli uno dopo l'altro (le tacche si accendono) e si ferma su Mente alveare. */
-  #schermata-collab .misuratore {
+  :is(#schermata-collab, #schermata-riepilogo) .misuratore {
     background: var(--vetro); color: var(--vetro-segni); text-shadow: var(--lcd-ombra);
     box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--vetro-segni) 16%, transparent), inset 0 2px 8px rgba(0, 0, 0, .16), 0 4px 0 var(--tasto-ombra);
   }
-  #schermata-collab .scheda.misuratore h3 { font: 10.5px/1.35 "Michroma", Verdana, sans-serif; letter-spacing: .02em; color: inherit; opacity: .85; }
-  #schermata-collab .misuratore .livelli li { position: relative; isolation: isolate; animation: verifica 1s ease-out both; }
-  #schermata-collab .misuratore .livelli li:nth-child(1) { animation-delay: .5s; }
-  #schermata-collab .misuratore .livelli li:nth-child(2) { animation-delay: 1.15s; }
-  #schermata-collab .misuratore .livelli li:nth-child(3) { animation-delay: 1.8s; }
-  #schermata-collab .misuratore .livelli li:nth-child(4) { animation: verifica 1s ease-out 2.45s both, alveare 1.1s ease-out 3s both; }
+  :is(#schermata-collab, #schermata-riepilogo) .scheda.misuratore h3 { font: 10.5px/1.35 "Michroma", Verdana, sans-serif; letter-spacing: .02em; color: inherit; opacity: .85; }
+  :is(#schermata-collab, #schermata-riepilogo) .misuratore .livelli li { position: relative; isolation: isolate; animation: verifica 1s ease-out both; }
+  :is(#schermata-collab, #schermata-riepilogo) .misuratore .livelli li:nth-child(1) { animation-delay: .5s; }
+  :is(#schermata-collab, #schermata-riepilogo) .misuratore .livelli li:nth-child(2) { animation-delay: 1.15s; }
+  :is(#schermata-collab, #schermata-riepilogo) .misuratore .livelli li:nth-child(3) { animation-delay: 1.8s; }
+  :is(#schermata-collab, #schermata-riepilogo) .misuratore .livelli li:nth-child(4) { animation: verifica 1s ease-out 2.45s both, alveare 1.1s ease-out 3s both; }
   @keyframes verifica {
     0% { opacity: .38; background-color: transparent; }
     35% { opacity: 1; background-color: color-mix(in srgb, var(--vetro-segni) 20%, transparent); }
     100% { opacity: 1; background-color: transparent; }
   }
   /* Mente alveare: la riga resta accesa, dorata, con il favo che compare sotto */
-  #schermata-collab .misuratore .livelli li:last-child { background-color: color-mix(in srgb, var(--zona-oro) 24%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--zona-oro) 80%, transparent); }
-  #schermata-collab .misuratore .livelli li:last-child svg { color: var(--zona-oro); }
-  :root[data-attivo="chiaro"] #schermata-collab .misuratore .livelli li:last-child svg { color: #C98A00; }
-  #schermata-collab .misuratore .livelli li:last-child::before {
+  :is(#schermata-collab, #schermata-riepilogo) .misuratore .livelli li:last-child { background-color: color-mix(in srgb, var(--zona-oro) 24%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--zona-oro) 80%, transparent); }
+  :is(#schermata-collab, #schermata-riepilogo) .misuratore .livelli li:last-child svg { color: var(--zona-oro); }
+  :root[data-attivo="chiaro"] :is(#schermata-collab, #schermata-riepilogo) .misuratore .livelli li:last-child svg { color: #C98A00; }
+  :is(#schermata-collab, #schermata-riepilogo) .misuratore .livelli li:last-child::before {
     content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; opacity: .45;
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='33' height='19.05' viewBox='0 0 33 19.05'%3E%3Cpath d='M0%209.53L5.5%200L16.5%200L22%209.53L16.5%2019.05L5.5%2019.05ZM16.5%200L22%20-9.53L33%20-9.53L38.5%200L33%209.53L22%209.53ZM16.5%2019.05L22%209.53L33%209.53L38.5%2019.05L33%2028.58L22%2028.58Z' fill='none' stroke='%23F2A900' stroke-width='1.2'/%3E%3C/svg%3E") right center / 22px 12.7px;
     -webkit-mask-image: linear-gradient(90deg, transparent 30%, #000); mask-image: linear-gradient(90deg, transparent 30%, #000);
@@ -1066,37 +1066,37 @@
   /* schermi bassi: la schermata delle regole si compatta per far stare anche il tasto Inizia */
   @media (max-height: 400px) {
     .slot.wt { padding-top: 20px; } .wt-corpo { gap: 6px; padding-top: 8px; } .wt-griglia { gap: 4px; }
-    #schermata-collab .scheda.misuratore h3 { font-size: 9px; margin-bottom: 4px; }
-    #schermata-collab .setup { padding-top: 6px; padding-bottom: 8px; }
-    #schermata-collab .contenuto { gap: 8px; padding-top: 4px; }
-    #schermata-collab .pannello { padding: 10px; gap: 8px; }
-    #schermata-collab .lcd { padding-block: 6px; }
-    #schermata-collab .scheda { padding: 7px 10px; }
-    #schermata-collab .scheda h3 { margin-bottom: 4px; font-size: 13px; }
-    #schermata-collab .regole { gap: 6px; }
-    #schermata-collab .regole li { font-size: 12.5px; line-height: 1.25; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; }
-    #schermata-collab .segno { width: 26px; height: 26px; font-size: 12px; }
-    #schermata-collab .segno svg { width: 16px; height: 16px; }
-    #schermata-collab .livelli li { padding-block: 2px; font-size: 12.5px; grid-template-columns: 20px 50px minmax(0, 1fr); gap: 6px; }
-    #schermata-collab .info-collab { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-    #schermata-collab .tasto-ambra { height: 46px; }
+    :is(#schermata-collab, #schermata-riepilogo) .scheda.misuratore h3 { font-size: 9px; margin-bottom: 4px; }
+    :is(#schermata-collab, #schermata-riepilogo) .setup { padding-top: 6px; padding-bottom: 8px; }
+    :is(#schermata-collab, #schermata-riepilogo) .contenuto { gap: 8px; padding-top: 4px; }
+    :is(#schermata-collab, #schermata-riepilogo) .pannello { padding: 10px; gap: 8px; }
+    :is(#schermata-collab, #schermata-riepilogo) .lcd { padding-block: 6px; }
+    :is(#schermata-collab, #schermata-riepilogo) .scheda { padding: 7px 10px; }
+    :is(#schermata-collab, #schermata-riepilogo) .scheda h3 { margin-bottom: 4px; font-size: 13px; }
+    :is(#schermata-collab, #schermata-riepilogo) .regole { gap: 6px; }
+    :is(#schermata-collab, #schermata-riepilogo) .regole li { font-size: 12.5px; line-height: 1.25; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; }
+    :is(#schermata-collab, #schermata-riepilogo) .segno { width: 26px; height: 26px; font-size: 12px; }
+    :is(#schermata-collab, #schermata-riepilogo) .segno svg { width: 16px; height: 16px; }
+    :is(#schermata-collab, #schermata-riepilogo) .livelli li { padding-block: 2px; font-size: 12.5px; grid-template-columns: 20px 50px minmax(0, 1fr); gap: 6px; }
+    :is(#schermata-collab, #schermata-riepilogo) .info-collab { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    :is(#schermata-collab, #schermata-riepilogo) .tasto-ambra { height: 46px; }
   }
   @container app (max-height: 400px) {
     .slot.wt { padding-top: 20px; } .wt-corpo { gap: 6px; padding-top: 8px; } .wt-griglia { gap: 4px; }
-    #schermata-collab .scheda.misuratore h3 { font-size: 9px; margin-bottom: 4px; }
-    #schermata-collab .setup { padding-top: 6px; padding-bottom: 8px; }
-    #schermata-collab .contenuto { gap: 8px; padding-top: 4px; }
-    #schermata-collab .pannello { padding: 10px; gap: 8px; }
-    #schermata-collab .lcd { padding-block: 6px; }
-    #schermata-collab .scheda { padding: 7px 10px; }
-    #schermata-collab .scheda h3 { margin-bottom: 4px; font-size: 13px; }
-    #schermata-collab .regole { gap: 6px; }
-    #schermata-collab .regole li { font-size: 12.5px; line-height: 1.25; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; }
-    #schermata-collab .segno { width: 26px; height: 26px; font-size: 12px; }
-    #schermata-collab .segno svg { width: 16px; height: 16px; }
-    #schermata-collab .livelli li { padding-block: 2px; font-size: 12.5px; grid-template-columns: 20px 50px minmax(0, 1fr); gap: 6px; }
-    #schermata-collab .info-collab { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-    #schermata-collab .tasto-ambra { height: 46px; }
+    :is(#schermata-collab, #schermata-riepilogo) .scheda.misuratore h3 { font-size: 9px; margin-bottom: 4px; }
+    :is(#schermata-collab, #schermata-riepilogo) .setup { padding-top: 6px; padding-bottom: 8px; }
+    :is(#schermata-collab, #schermata-riepilogo) .contenuto { gap: 8px; padding-top: 4px; }
+    :is(#schermata-collab, #schermata-riepilogo) .pannello { padding: 10px; gap: 8px; }
+    :is(#schermata-collab, #schermata-riepilogo) .lcd { padding-block: 6px; }
+    :is(#schermata-collab, #schermata-riepilogo) .scheda { padding: 7px 10px; }
+    :is(#schermata-collab, #schermata-riepilogo) .scheda h3 { margin-bottom: 4px; font-size: 13px; }
+    :is(#schermata-collab, #schermata-riepilogo) .regole { gap: 6px; }
+    :is(#schermata-collab, #schermata-riepilogo) .regole li { font-size: 12.5px; line-height: 1.25; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; }
+    :is(#schermata-collab, #schermata-riepilogo) .segno { width: 26px; height: 26px; font-size: 12px; }
+    :is(#schermata-collab, #schermata-riepilogo) .segno svg { width: 16px; height: 16px; }
+    :is(#schermata-collab, #schermata-riepilogo) .livelli li { padding-block: 2px; font-size: 12.5px; grid-template-columns: 20px 50px minmax(0, 1fr); gap: 6px; }
+    :is(#schermata-collab, #schermata-riepilogo) .info-collab { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    :is(#schermata-collab, #schermata-riepilogo) .tasto-ambra { height: 46px; }
   }
 
   /* telefoni molto bassi: ancora un po' più compatta */
@@ -1114,16 +1114,16 @@
     .wt-corpo { gap: 6px; padding: 8px 12px 9px; }
     .wt-griglia { gap: 3px; } .wt-griglia i { height: 4px; }
     .etere-filo { margin-top: -7.5px; }
-    #schermata-collab .barra .btn-piccolo, #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { height: 34px; }
-    #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { width: 34px; }
-    #schermata-collab .setup { padding-top: 4px; padding-bottom: 6px; }
-    #schermata-collab .pannello { padding: 8px; gap: 6px; }
-    #schermata-collab .lcd { padding-block: 4px; }
-    #schermata-collab .lcd h2 { font-size: 13px; }
-    #schermata-collab .scheda { padding: 6px 9px; margin-bottom: 3px; }
-    #schermata-collab .regole li, #schermata-collab .livelli li { font-size: 12px; line-height: 1.2; }
-    #schermata-collab .livelli li { padding-block: 1px; }
-    #schermata-collab .tasto-ambra { height: 42px; }
+    :is(#schermata-collab, #schermata-riepilogo) .barra .btn-piccolo, :is(#schermata-collab, #schermata-riepilogo) .barra .tema, :is(#schermata-collab, #schermata-riepilogo) .barra .ingranaggio { height: 34px; }
+    :is(#schermata-collab, #schermata-riepilogo) .barra .tema, :is(#schermata-collab, #schermata-riepilogo) .barra .ingranaggio { width: 34px; }
+    :is(#schermata-collab, #schermata-riepilogo) .setup { padding-top: 4px; padding-bottom: 6px; }
+    :is(#schermata-collab, #schermata-riepilogo) .pannello { padding: 8px; gap: 6px; }
+    :is(#schermata-collab, #schermata-riepilogo) .lcd { padding-block: 4px; }
+    :is(#schermata-collab, #schermata-riepilogo) .lcd h2 { font-size: 13px; }
+    :is(#schermata-collab, #schermata-riepilogo) .scheda { padding: 6px 9px; margin-bottom: 3px; }
+    :is(#schermata-collab, #schermata-riepilogo) .regole li, :is(#schermata-collab, #schermata-riepilogo) .livelli li { font-size: 12px; line-height: 1.2; }
+    :is(#schermata-collab, #schermata-riepilogo) .livelli li { padding-block: 1px; }
+    :is(#schermata-collab, #schermata-riepilogo) .tasto-ambra { height: 42px; }
   }
   @container app (max-height: 340px) {
     #schermata-singoli .setup, #schermata-squadre .setup { padding-top: 6px; padding-bottom: 8px; }
@@ -1139,30 +1139,29 @@
     .wt-corpo { gap: 6px; padding: 8px 12px 9px; }
     .wt-griglia { gap: 3px; } .wt-griglia i { height: 4px; }
     .etere-filo { margin-top: -7.5px; }
-    #schermata-collab .barra .btn-piccolo, #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { height: 34px; }
-    #schermata-collab .barra .tema, #schermata-collab .barra .ingranaggio { width: 34px; }
-    #schermata-collab .setup { padding-top: 4px; padding-bottom: 6px; }
-    #schermata-collab .pannello { padding: 8px; gap: 6px; }
-    #schermata-collab .lcd { padding-block: 4px; }
-    #schermata-collab .lcd h2 { font-size: 13px; }
-    #schermata-collab .scheda { padding: 6px 9px; margin-bottom: 3px; }
-    #schermata-collab .regole li, #schermata-collab .livelli li { font-size: 12px; line-height: 1.2; }
-    #schermata-collab .livelli li { padding-block: 1px; }
-    #schermata-collab .tasto-ambra { height: 42px; }
+    :is(#schermata-collab, #schermata-riepilogo) .barra .btn-piccolo, :is(#schermata-collab, #schermata-riepilogo) .barra .tema, :is(#schermata-collab, #schermata-riepilogo) .barra .ingranaggio { height: 34px; }
+    :is(#schermata-collab, #schermata-riepilogo) .barra .tema, :is(#schermata-collab, #schermata-riepilogo) .barra .ingranaggio { width: 34px; }
+    :is(#schermata-collab, #schermata-riepilogo) .setup { padding-top: 4px; padding-bottom: 6px; }
+    :is(#schermata-collab, #schermata-riepilogo) .pannello { padding: 8px; gap: 6px; }
+    :is(#schermata-collab, #schermata-riepilogo) .lcd { padding-block: 4px; }
+    :is(#schermata-collab, #schermata-riepilogo) .lcd h2 { font-size: 13px; }
+    :is(#schermata-collab, #schermata-riepilogo) .scheda { padding: 6px 9px; margin-bottom: 3px; }
+    :is(#schermata-collab, #schermata-riepilogo) .regole li, :is(#schermata-collab, #schermata-riepilogo) .livelli li { font-size: 12px; line-height: 1.2; }
+    :is(#schermata-collab, #schermata-riepilogo) .livelli li { padding-block: 1px; }
+    :is(#schermata-collab, #schermata-riepilogo) .tasto-ambra { height: 42px; }
   }
 
   /* ---------- Fine partita ---------- */
   .podio { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 3px; max-width: 460px; }
   .podio li {
-    display: grid; grid-template-columns: 34px auto minmax(0, 1fr) auto; gap: 10px; align-items: center;
+    display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: center;
     padding: 5px 12px 5px 8px; border-radius: 8px; font-size: clamp(14px, 4.2vh, 17px); font-size: clamp(14px, 4.2cqh, 17px); font-weight: 600;
     animation: compare-su .4s ease-out both; animation-delay: calc(var(--i) * 90ms + 300ms);
   }
-  .podio li span:nth-child(3) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .podio li .nome-podio { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .podio .pos { font: 13px "Michroma", Verdana, sans-serif; }
   .podio b { font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; }
   .podio li.vince { background: var(--ambra); color: #2A1C00; }
-  .podio li.vince .num { background: #2A1C00; color: var(--ambra); }
   .fine-sfida { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: clamp(8px, 2vw, 16px); gap: clamp(8px, 2cqw, 16px); }
   .fine-squadra {
     background: var(--tasto); color: var(--su-tasto); border-radius: 12px; padding: 12px 14px; text-align: center;
@@ -1775,7 +1774,7 @@
   /* l'interruttore: un cursore di metallo che scorre in una fessura della radio; due spie dicono dove si trova */
   .interruttore-modi {
     align-self: center; display: flex; flex-direction: column; align-items: center; gap: 8px;
-    padding: 6px 2px; border: 0; background: none; cursor: pointer; touch-action: manipulation;
+    padding: 6px 2px; border: 0; background: none; cursor: pointer;
   }
   .interruttore-modi:focus-visible { outline: 3px solid var(--ambra); outline-offset: 2px; border-radius: 14px; }
   .binario {
@@ -1793,6 +1792,9 @@
   .cursore::before { content: ""; position: absolute; left: 4px; right: 4px; top: 50%; height: 9px; transform: translateY(-50%);
     background: repeating-linear-gradient(180deg, rgba(0, 0, 0, .35) 0 1.4px, transparent 1.4px 3px); border-radius: 2px; }
   .modi[data-gamma="insieme"] .cursore { top: calc(60% - 3px); }
+  /* mentre lo si trascina il cursore segue il dito, senza animazione */
+  .interruttore-modi { touch-action: none; }
+  .interruttore-modi.trascina .cursore { transition: none; top: calc(3px + var(--tira, 0) * (60% - 6px)); }
   .spia-modi { width: 7px; height: 7px; border-radius: 50%; background: var(--led-spento); transition: background-color .2s, box-shadow .2s; }
   .modi[data-gamma="sfida"] .spia-modi:first-child, .modi[data-gamma="insieme"] .spia-modi:last-child { background: var(--ambra); box-shadow: 0 0 8px var(--ambra); }
   /* una partita in sospeso nell'altra posizione: la sua spia lampeggia */
@@ -1956,7 +1958,7 @@
   /* ---------- Firma ---------- */
   .credito {
     position: absolute; left: 0; right: 0; bottom: 6px; margin: 0; text-align: center;
-    font-size: 12px; font-weight: 600; letter-spacing: .02em; color: var(--tenue); opacity: .85;
+    font: 10px "Michroma", Verdana, sans-serif; letter-spacing: .22em; text-transform: uppercase; color: var(--tenue); opacity: .8;
   }
   .dialogo .credito-imp { margin: 0 auto 0 4px; padding: 0; align-self: center; font-size: 13px; font-weight: 600; color: var(--su-corpo); opacity: .75; }
   .dialogo .versione-app { display: block; margin-top: 3px; font: 9px/1.2 "Michroma", Verdana, sans-serif; letter-spacing: .04em; font-variant-numeric: tabular-nums; opacity: .85; }
@@ -2023,13 +2025,55 @@
     #manopola-corpo, .indice-manopola { transition: none; } .scintilla { opacity: 0; }
     .sfondo *, .cerca .led, .cerca .ascolto-nome, .in-onda.cerca .nome-onda { animation: none !important; }
     .copri-bersaglio, .lampada-onair, .voce-onda.nuova, .on-air, .on-air.spegne { animation: none !important; }
-    .tasto-zap .led, .stazioni .tasto.nego, .zap-onda.cerca *, .zap-onda.cerca .zap-display::before, .targhetta.cerca .tema-testo, .fine-zap .voce, .tasto-preset, .slot.memorizza .canale-tag, .wt .led, .etere *, #schermata-collab .misuratore li, #schermata-collab .misuratore li::before { animation: none !important; }
+    .tasto-zap .led, .stazioni .tasto.nego, .zap-onda.cerca *, .zap-onda.cerca .zap-display::before, .targhetta.cerca .tema-testo, .fine-zap .voce, .tasto-preset, .slot.memorizza .canale-tag, .wt .led, .etere *, :is(#schermata-collab, #schermata-riepilogo) .misuratore li, :is(#schermata-collab, #schermata-riepilogo) .misuratore li::before { animation: none !important; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .premio, .premio .medaglia svg, .fine-squadra, .totale-fine { animation: none !important; }
     #ventaglio, .risposta, .classifica li.segnato b { transition: none; animation: none; opacity: 1; }
     .loader.pronto, .loader.invito, .loader.invito .invito-testo { animation: none; }
     .loader, .loader .label, body { transition: none; }
   }
+
+  /* ---------- Riepilogo prima di giocare (e schermata della collaborativa) ---------- */
+  .in-onda-riepilogo {
+    font: 10px "Michroma", Verdana, sans-serif; letter-spacing: .03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: 46vw; padding: 3px 9px 3px 8px; border-radius: 999px; background: color-mix(in srgb, var(--vetro-segni) 14%, transparent);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .in-onda-riepilogo::before { content: ""; width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--colore-onda, var(--ambra)); box-shadow: 0 0 6px var(--colore-onda, var(--ambra)); }
+  .riepilogo .lcd .lcd-destra { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+  .nota-regole-complete { display: flex; align-items: center; gap: 6px; margin: 10px 0 0; font-size: 12px; font-weight: 600; color: var(--su-tasto-tenue); line-height: 1.25; }
+  .nota-regole-complete svg { width: 14px; height: 14px; flex: none; color: var(--ambra-testo); }
+  /* chi gioca: i nomi in ordine, con il loro numero; per le squadre i due walkie-talkie */
+  .chi-gioca { display: flex; flex-direction: column; }
+  #riepilogo-giocatori { flex: 1; display: grid; align-content: center; }
+  .elenco-nomi { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .elenco-nomi li { display: flex; align-items: center; gap: 10px; font-size: clamp(14px, 4vh, 17px); font-size: clamp(14px, 4cqh, 17px); font-weight: 700; min-width: 0; }
+  .elenco-nomi li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nota-chi { margin: 10px 0 0; font-size: 12px; font-weight: 600; color: var(--su-tasto-tenue); }
+  .sfida-riepilogo { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; }
+  .squadra-riepilogo { display: grid; justify-items: center; gap: 4px; padding: 10px 6px; border-radius: 12px; text-align: center; min-width: 0;
+    font: 800 clamp(15px, 4.6vh, 20px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; font-size: clamp(15px, 4.6cqh, 20px); }
+  .squadra-riepilogo span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .squadra-riepilogo small { font: 600 11px/1.2 "Bricolage Grotesque", system-ui, sans-serif; opacity: .8; }
+  .squadra-riepilogo.a { background: var(--ambra); color: #2A1C00; }
+  .squadra-riepilogo.b { background: var(--squadra-b); color: var(--su-colore); }
+  .vs-riepilogo { font: 12px "Michroma", Verdana, sans-serif; color: var(--su-tasto-tenue); }
+  @media (max-height: 400px) { .nota-regole-complete, .nota-chi { margin-top: 6px; font-size: 11px; } .elenco-nomi { gap: 3px; } }
+  /* telefoni bassi: il riepilogo si stringe perché il tasto Gioca resti sempre visibile */
+  @media (max-height: 400px) {
+    #schermata-riepilogo .info-collab { grid-template-columns: minmax(0, 1.3fr) minmax(0, .7fr); }
+    .sfida-riepilogo { grid-template-columns: minmax(0, 1fr); justify-items: stretch; gap: 3px; }
+    .vs-riepilogo { justify-self: center; font-size: 10px; }
+    .riepilogo .regole { gap: 5px; }
+    .riepilogo .nota-regole-complete { margin-top: 5px; }
+    .riepilogo .elenco-nomi li { font-size: 14px; }
+    .riepilogo .squadra-riepilogo { padding: 7px 6px; }
+  }
+  @media (max-height: 340px) {
+    .riepilogo .nota-chi { display: none; }
+    .riepilogo .scheda h3 { margin-bottom: 3px; }
+  }
+  .segno.icona-regola svg { width: 19px; height: 19px; }
 </style>
 </head>
 <body>
@@ -3627,7 +3671,7 @@ Cringe | Romantico
 
   <!-- Schermata iniziale -->
   <section class="screen" id="schermata-inizio" aria-label="Schermata iniziale">
-    <p class="credito">Creato da Mergio</p>
+    <p class="credito">Mergio Studios</p>
     <div class="azioni angolo"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div>
     <div class="intro">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="logo" role="img" aria-label="Logo Sintonizzati">
@@ -3783,7 +3827,7 @@ Cringe | Romantico
   <!-- Scelta della stazione (mazzo di carte) -->
   <section class="screen" id="schermata-stazione" aria-label="Scelta delle carte" hidden>
     <div class="setup">
-      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><button class="btn-piccolo indietro" id="indietro-stazioni" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2 id="titolo-stazioni">Su che stazione giocate?</h2><span class="contatore" id="conta-carte"></span></div>
@@ -3891,7 +3935,7 @@ Cringe | Romantico
   <!-- Nomi dei giocatori singoli -->
   <section class="screen" id="schermata-singoli" aria-label="Nomi dei giocatori" hidden>
     <div class="setup">
-      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-stazione"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-singoli" aria-live="polite"></p><div class="azioni"><button class="btn-piccolo regole-btn" data-regole="singoli"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01" stroke-width="3"/></svg>Come si gioca</button><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-singoli" aria-live="polite"></p><div class="azioni"><button class="btn-piccolo regole-btn" data-regole="singoli"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01" stroke-width="3"/></svg>Come si gioca</button><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Chi gioca?</h2><span class="lcd-destra"><button class="svuota" id="svuota-singoli" type="button" hidden>Svuota</button><span class="contatore" id="contatore">0/5</span></span></div>
@@ -3920,7 +3964,7 @@ Cringe | Romantico
           </div>
         </div>
         <div class="piede">
-          <button class="tasto-ambra" id="inizia-singoli" disabled>Inizia</button>
+          <button class="tasto-ambra" id="inizia-singoli" disabled>Avanti</button>
         </div>
       </div>
     </div>
@@ -3929,7 +3973,7 @@ Cringe | Romantico
   <!-- Nomi delle squadre -->
   <section class="screen" id="schermata-squadre" aria-label="Nomi delle squadre" hidden>
     <div class="setup">
-      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-stazione"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-squadre" aria-live="polite"></p><div class="azioni"><button class="btn-piccolo regole-btn" data-regole="squadre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01" stroke-width="3"/></svg>Come si gioca</button><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-modi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-squadre" aria-live="polite"></p><div class="azioni"><button class="btn-piccolo regole-btn" data-regole="squadre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01" stroke-width="3"/></svg>Come si gioca</button><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Come si chiamano le squadre?</h2><span class="lcd-destra"><button class="svuota" id="svuota-squadre" type="button" hidden>Svuota</button><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></span></div>
@@ -3938,7 +3982,7 @@ Cringe | Romantico
               <span class="wt-antenna" aria-hidden="true"></span>
               <span class="wt-corpo">
                 <span class="testa"><span class="led"></span>Prima squadra</span>
-                <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Ambra" aria-label="Nome della prima squadra">
+                <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Walkman" aria-label="Nome della prima squadra">
                 <span class="wt-griglia" aria-hidden="true"><i></i><i></i><i></i></span>
               </span>
             </label>
@@ -3950,14 +3994,14 @@ Cringe | Romantico
               <span class="wt-antenna" aria-hidden="true"></span>
               <span class="wt-corpo">
                 <span class="testa"><span class="led"></span>Seconda squadra</span>
-                <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Corallo" aria-label="Nome della seconda squadra">
+                <input type="text" maxlength="8" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Jukebox" aria-label="Nome della seconda squadra">
                 <span class="wt-griglia" aria-hidden="true"><i></i><i></i><i></i></span>
               </span>
             </label>
           </div>
         </div>
         <div class="piede">
-          <button class="tasto-ambra" id="inizia-squadre">Inizia</button>
+          <button class="tasto-ambra" id="inizia-squadre">Avanti</button>
         </div>
       </div>
     </div>
@@ -3965,19 +4009,20 @@ Cringe | Romantico
 
 
   <!-- Informazioni della modalità collaborativa -->
-  <section class="screen" id="schermata-collab" aria-label="Modalità collaborativa" hidden>
+  <section class="screen riepilogo" id="schermata-collab" aria-label="Modalità collaborativa" hidden>
     <div class="setup">
       <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-stazione"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-collab" aria-live="polite"></p><div class="azioni"><button class="btn-piccolo regole-btn" data-regole="collab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01" stroke-width="3"/></svg>Come si gioca</button><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
-          <div class="lcd"><h2>Tutti contro il gioco</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="lcd"><h2>Tutti contro il gioco</h2><span class="lcd-destra"><span class="in-onda-riepilogo" aria-label="Stazione"></span><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></span></div>
           <div class="info-collab">
             <div class="scheda">
               <h3>Come funziona</h3>
               <ul class="regole">
-                <li><span class="segno">6</span><span>Sei round: a ogni round cambia il Conduttore, che dà l’indizio. La carta si può cambiare una volta per round.</span></li>
-                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" style="fill:var(--vetro);stroke:var(--corpo);stroke-width:1.6"/><rect x="5" y="7" width="3" height="10" rx="1.5" style="fill:#1597BD"/><rect x="10.5" y="7" width="3" height="10" rx="1.5" style="fill:var(--segnale-alone)"/><rect x="16" y="7" width="3" height="10" rx="1.5" style="fill:#6FA300"/></svg></span><span>Con un 4 la radio passa alla Ricezione amplificata (larga), con un 5 scegliete voi: amplificata o Sintonia fine (stretta, fino a 6 punti). Se all’ultimo round fate il massimo, si gioca un round bonus.</span></li>
+                <li><span class="segno icona-regola"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/></svg></span><span>Sei round: il Conduttore cambia ogni volta e dà l’indizio. Un cambio di carta per round.</span></li>
+                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" style="fill:var(--vetro);stroke:var(--corpo);stroke-width:1.6"/><rect x="5" y="7" width="3" height="10" rx="1.5" style="fill:#1597BD"/><rect x="10.5" y="7" width="3" height="10" rx="1.5" style="fill:var(--segnale-alone)"/><rect x="16" y="7" width="3" height="10" rx="1.5" style="fill:#6FA300"/></svg></span><span>Con un 4 la radio si amplifica, con un 5 scegliete voi la ricezione. Il massimo all’ultimo round vale un round bonus!</span></li>
               </ul>
+              <p class="nota-regole-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>Regole complete in «Come si gioca», in alto.</p>
             </div>
             <div class="scheda misuratore">
               <h3>Verifica della connessione in corso…</h3>
@@ -3991,7 +4036,33 @@ Cringe | Romantico
           </div>
         </div>
         <div class="piede">
-          <button class="tasto-ambra" id="inizia-collab">Inizia</button>
+          <button class="tasto-ambra" id="inizia-collab">Gioca</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Riepilogo prima di giocare (singoli e squadre): come funziona, chi gioca, e il tasto Gioca -->
+  <section class="screen riepilogo" id="schermata-riepilogo" aria-label="Riepilogo della partita" hidden>
+    <div class="setup">
+      <header class="barra"><button class="btn-piccolo indietro" data-vai="schermata-stazione"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Indietro</button><p class="suggerimento" id="suggerimento-riepilogo" aria-live="polite"></p><div class="azioni"><button class="btn-piccolo regole-btn" data-regole="singoli" id="regole-riepilogo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01" stroke-width="3"/></svg>Come si gioca</button><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <div class="contenuto">
+        <div class="pannello">
+          <div class="lcd"><h2 id="riepilogo-titolo">Ognuno per sé</h2><span class="lcd-destra"><span class="in-onda-riepilogo" aria-label="Stazione"></span><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></span></div>
+          <div class="info-collab">
+            <div class="scheda">
+              <h3>Come funziona</h3>
+              <ul class="regole" id="riepilogo-regole"></ul>
+              <p class="nota-regole-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>Regole complete in «Come si gioca», in alto.</p>
+            </div>
+            <div class="scheda chi-gioca">
+              <h3 id="riepilogo-chi">Chi gioca</h3>
+              <div id="riepilogo-giocatori"></div>
+            </div>
+          </div>
+        </div>
+        <div class="piede">
+          <button class="tasto-ambra" id="gioca-riepilogo">Gioca</button>
         </div>
       </div>
     </div>
@@ -4243,7 +4314,7 @@ Cringe | Romantico
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">Creato da Mergio<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.22</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">© 2026 Mergio Studios<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.23</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -5455,13 +5526,17 @@ Cringe | Romantico
 
   /* ---------- Navigazione tra le schermate ---------- */
   const schermate = [...document.querySelectorAll('.screen')];
-  const SCHERMATE_PREPARTITA = ['schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab'];
+  const SCHERMATE_PREPARTITA = ['schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-riepilogo'];
+  // schermate dei nomi, per le modalità che li chiedono prima delle stazioni
+  const SCHERMATA_NOMI = { singoli: 'schermata-singoli', squadre: 'schermata-squadre' };
+  const SCHERMATE_NOMI = Object.values(SCHERMATA_NOMI);
+  let stazioneDecisa = false;          // la stazione è stata scelta (si è passati dalle stazioni) in questa preparazione
   function vai(id) {
     const da = app.dataset.schermata;
     if (id === 'schermata-modi' && SCHERMATE_PREPARTITA.includes(da)) suona('riunisci');
     // tornando al menu con lo zapping acceso, lo zapping si spegne e la radio si sintonizza a caso
     // su una delle sei stazioni AM/FM: rientrando nelle stazioni si ritrova quella, con lo zapping spento
-    const spegniZapping = da === 'schermata-stazione' && id === 'schermata-modi' && zapping;
+    const spegniZapping = SCHERMATE_PREPARTITA.includes(da) && id === 'schermata-modi' && zapping;
     if (spegniZapping) {
       const scelte = STAZIONI_BASE.filter(s => s !== inScansione);
       zapping = false; fermaScansione(); fermaNastro();
@@ -5474,15 +5549,16 @@ Cringe | Romantico
     svegliaOnde();
     // prima della partita le onde si separano, tornando alla scelta si riuniscono
     if (SCHERMATE_PREPARTITA.includes(id)) {
-      if (id === 'schermata-stazione') entraInStazioni(); else preparaNomi(id);
+      if (id === 'schermata-stazione') entraInStazioni(da); else preparaNomi(id);
       const giaSeparate = animOnde ? animOnde.meta === 0 : progresso < 0.02;
       if (!giaSeparate) separaOnde();
     }
     else if (id === 'schermata-modi') animaOnde(1, 900);
     const sc = document.getElementById(id).querySelector('.setup');
     if (sc) sc.scrollTop = 0;
-    if (id === 'schermata-modi') { preparaRadioMenu(da, spegniZapping); proponiRipresa(); }
+    if (id === 'schermata-modi') { preparaRadioMenu(da, spegniZapping); stazioneDecisa = false; proponiRipresa(); }
     else { clearTimeout(attesaMenu); radioMenuInAttesa = false; }
+    if (id === 'schermata-stazione') stazioneDecisa = true;
     if (id !== 'schermata-stazione') { fermaScansione(); fermaNastro(); }   // lo zapping scansiona solo nella scelta delle stazioni
     aggiornaGuardia();
     aggiornaMusica();
@@ -5490,13 +5566,13 @@ Cringe | Romantico
 
   // La musica della stazione scelta accompagna la scelta dei nomi e la partita;
   // si spegne nel menu delle modalità e nella schermata finale, dove parte la fanfara
-  const SCHERMATE_MUSICA = ['schermata-modi', 'schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-gioco'];
+  const SCHERMATE_MUSICA = ['schermata-modi', 'schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-riepilogo', 'schermata-gioco'];
   function aggiornaMusica() {
     // in partita la musica scende a un sottofondo minimo, per non stancare (tranne durante un cambio di stazione dello zapping)
     Suoni.livelloMusica(app.dataset.schermata === 'schermata-gioco' && !musicaAlta ? 0.35 : 1);
     const qui = app.dataset.schermata;
     if (qui === 'schermata-modi' && radioMenuInAttesa) return;     // la radio sta per cercare una stazione
-    const id = qui === 'schermata-modi' ? stazioneMenu
+    const id = qui === 'schermata-modi' || (!stazioneDecisa && SCHERMATE_NOMI.includes(qui)) ? stazioneMenu
       : qui === 'schermata-gioco' && partita && partita.zap ? partita.zap.stazione : inAscoltoStazioni();
     if (impostazioni.audio && impostazioni.musica && id && SCHERMATE_MUSICA.includes(qui)) Suoni.musica(id);
     else Suoni.fermaMusica();
@@ -5527,7 +5603,9 @@ Cringe | Romantico
   function preparaRadioMenu(da, cambiaStazione) {
     clearTimeout(attesaMenu);
     if (SCHERMATE_PREPARTITA.includes(da) && (stazioneMenu || cambiaStazione)) {
-      stazioneMenu = stazioneScelta; radioMenuInAttesa = false;
+      // se si torna dai nomi senza aver scelto la stazione, la radio del menu resta dov'era
+      if (stazioneDecisa || cambiaStazione) stazioneMenu = stazioneScelta;
+      radioMenuInAttesa = false;
       if (cambiaStazione) suona('cercaStazione');        // fruscio e nuova stazione, come quando si preme Gioca
       mostraInOnda(cambiaStazione);
       return;
@@ -5543,7 +5621,7 @@ Cringe | Romantico
      o quando c'è una finestra aperta, teniamo una voce in più nella cronologia: il tasto indietro
      la consuma e noi decidiamo cosa fare, invece di chiudere l'app.
      Nella schermata iniziale e nella scelta della modalità, invece, l'app si chiude come al solito. */
-  const SCHERMATE_PROTETTE = ['schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-gioco', 'schermata-fine'];
+  const SCHERMATE_PROTETTE = ['schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-riepilogo', 'schermata-gioco', 'schermata-fine'];
   let guardiaAttiva = false, ignoraIndietro = false;
   function serveGuardia() {
     return SCHERMATE_PROTETTE.includes(app.dataset.schermata) || [...document.querySelectorAll('.dialogo')].some(d => !d.hidden);
@@ -5562,8 +5640,10 @@ Cringe | Romantico
     else if (!dialogoRegole.hidden) chiudiRegole();
     else if (!dialogoEsci.hidden) chiudiDialogo();                   // come "Continua a giocare"
     else if (qui === 'schermata-gioco') apriDialogoEsci();          // chiede se abbandonare la partita
-    else if (qui === 'schermata-stazione') vai('schermata-modi');
-    else if (SCHERMATE_PREPARTITA.includes(qui)) { if (!sintonizzando) vai('schermata-stazione'); }
+    else if (SCHERMATE_PREPARTITA.includes(qui)) {
+      const indietro = document.getElementById(qui).querySelector('.indietro');
+      if (!sintonizzando && indietro) vai(indietro.dataset.vai);
+    }
     else if (qui === 'schermata-fine') vai('schermata-modi');
     aggiornaGuardia();
   });
@@ -5657,7 +5737,6 @@ Cringe | Romantico
     spiaPausa.classList.remove('via');
     if (!daRiprendere) { spiaPausa.hidden = true; segnaPausa(null); return; }
     const modo = daRiprendere.partita.modo;
-    mostraGammaModi(gammaDelModo(modo), true);       // si mostra la gamma con la partita in sospeso
     const testo = document.getElementById('pausa-testo');
     testo.replaceChildren('C’è una partita ', el('b', '', MODO_PAUSA[modo]), ' in sospeso');
     spiaPausa.hidden = false;
@@ -5706,23 +5785,32 @@ Cringe | Romantico
 
   function separaOnde() { animaOnde(0, 1700, null, null, 'subito'); suona('separa'); }
 
-  /* ---------- Scelta della modalità ---------- */
-  const SCHERMATA_DI = { singoli: 'schermata-singoli', squadre: 'schermata-squadre', collab: 'schermata-collab' };
+  /* ---------- Scelta della modalità ----------
+     Singoli e squadre: prima i nomi, poi le stazioni, poi il riepilogo con il tasto Gioca.
+     Collaborativa: prima le stazioni, poi la sua schermata (che spiega come si gioca) con il tasto Gioca. */
   let modoScelto = 'singoli';
-  document.querySelectorAll('.tasto[data-modo]:not([data-modo="impostore"])').forEach(b => b.addEventListener('click', () => {
-    b.classList.add('premuto');
-    modoScelto = b.dataset.modo;
-    animaOnde(0, 1700, null, null, 'subito');   // le onde iniziano a separarsi già alla pressione del tasto
-    // la radio lascia la stazione del menu e cerca quella delle carte: fruscio, cifre che corrono, nuova musica.
-    // Si parte sempre da Hit Parade; se nel menu suonava già Hit Parade, da Onde Cerebrali (così il fruscio porta sempre a una stazione nuova)
+  // la radio lascia la stazione del menu e cerca quella delle carte: fruscio, cifre che corrono, nuova musica.
+  // Si parte sempre da Hit Parade; se nel menu suonava già Hit Parade, da Onde Cerebrali (così il fruscio porta sempre a una stazione nuova).
+  // Se le stazioni sono già state scelte (si è tornati indietro ai nomi) si ritrovano come si erano lasciate.
+  function vaiAlleStazioni() {
+    if (stazioneDecisa) { vai('schermata-stazione'); return; }
     const daStazione = stazioneMenu;
     stazioneScelta = stazioneDiPartenza();
     suona('cercaStazione');
+    vai('schermata-stazione');
+    arrivoInStazioni(daStazione);
+    if (inAscoltoStazioni() === daStazione) Suoni.abbassaMusica(0.25, 1.2);   // stessa stazione: la musica si abbassa sotto il fruscio
+  }
+  document.querySelectorAll('.tasto[data-modo]:not([data-modo="impostore"])').forEach(b => b.addEventListener('click', () => {
+    b.classList.add('premuto');
+    modoScelto = b.dataset.modo;
+    stazioneDecisa = false;
+    animaOnde(0, 1700, null, null, 'subito');   // le onde iniziano a separarsi già alla pressione del tasto
+    const nomi = SCHERMATA_NOMI[modoScelto];
     setTimeout(() => {
       b.classList.remove('premuto');
-      vai('schermata-stazione');
-      arrivoInStazioni(daStazione);
-      if (inAscoltoStazioni() === daStazione) Suoni.abbassaMusica(0.25, 1.2);   // stessa stazione: la musica si abbassa sotto il fruscio
+      if (nomi) vai(nomi);
+      else { stazioneDecisa = false; vaiAlleStazioni(); }
     }, riduciMoto ? 0 : 240);
   }));
 
@@ -5752,7 +5840,6 @@ Cringe | Romantico
     selettoreModi.setAttribute('aria-checked', String(g === 'insieme'));
     selettoreModi.setAttribute('aria-label', `Altre modalità: ${GAMME_MODI[g === 'sfida' ? 'insieme' : 'sfida'].descr}`);
     aggiornaSpiaGamma();
-    try { localStorage.setItem('sintonizzati-gamma-modi', g); } catch (e) {}
     if (!cambia || muto) return;
     suona('cambioBanda', { fm: g === 'insieme' });
     vibraScatto('scatto');
@@ -5766,14 +5853,51 @@ Cringe | Romantico
     const punti = selettoreModi.querySelectorAll('.spia-modi');
     punti.forEach((p, k) => p.classList.toggle('sospesa', !!altra && (k === 0) === (gammaDelModo(modoInSospeso) === 'sfida')));
   }
-  selettoreModi.addEventListener('click', () => mostraGammaModi(gammaModi === 'sfida' ? 'insieme' : 'sfida'));
+  // L'interruttore si tocca (scatta nell'altra posizione) oppure si trascina: il cursore segue il dito
+  // e, lasciandolo, va nella posizione più vicina
+  const binarioModi = selettoreModi.querySelector('.binario');
+  let tiraModi = null, ignoraClic = false;
+  const posizioneDito = e => {
+    const r = binarioModi.getBoundingClientRect();
+    return Math.max(0, Math.min(1, (e.clientY - r.top - r.height * 0.2) / (r.height * 0.6)));
+  };
+  selettoreModi.addEventListener('pointerdown', e => {
+    tiraModi = { y: e.clientY, mosso: false };
+    selettoreModi.setPointerCapture(e.pointerId);
+  });
+  selettoreModi.addEventListener('pointermove', e => {
+    if (!tiraModi) return;
+    if (!tiraModi.mosso && Math.abs(e.clientY - tiraModi.y) < 6) return;
+    tiraModi.mosso = true;
+    selettoreModi.classList.add('trascina');
+    selettoreModi.style.setProperty('--tira', posizioneDito(e).toFixed(3));
+  });
+  const lasciaModi = e => {
+    if (!tiraModi) return;
+    const mosso = tiraModi.mosso;
+    tiraModi = null;
+    selettoreModi.classList.remove('trascina');
+    selettoreModi.style.removeProperty('--tira');
+    if (!mosso || !e || e.type === 'pointercancel') return;
+    ignoraClic = true;                     // il clic che segue un trascinamento non deve far scattare di nuovo
+    setTimeout(() => { ignoraClic = false; }, 400);
+    mostraGammaModi(posizioneDito(e) > 0.5 ? 'insieme' : 'sfida');
+  };
+  selettoreModi.addEventListener('pointerup', lasciaModi);
+  selettoreModi.addEventListener('pointercancel', lasciaModi);
+  selettoreModi.addEventListener('click', () => {
+    if (ignoraClic) { ignoraClic = false; return; }
+    mostraGammaModi(gammaModi === 'sfida' ? 'insieme' : 'sfida');
+  });
   selettoreModi.addEventListener('keydown', e => {
     if (e.key === 'ArrowUp') mostraGammaModi('sfida');
     else if (e.key === 'ArrowDown') mostraGammaModi('insieme');
     else return;
     e.preventDefault();
   });
-  try { mostraGammaModi(localStorage.getItem('sintonizzati-gamma-modi') || 'sfida', true); } catch (e) { mostraGammaModi('sfida', true); }
+  // a ogni avvio dell'app si parte da Singoli e Squadre (durante la sessione l'interruttore resta dove lo si lascia)
+  try { localStorage.removeItem('sintonizzati-gamma-modi'); } catch (e) {}
+  mostraGammaModi('sfida', true);
 
   /* ---------- Scelta della stazione: i tasti funzionano come i preset di una radio,
      ne resta abbassato uno solo ---------- */
@@ -6128,7 +6252,10 @@ Cringe | Romantico
       aggiornaMusica();
     }
   });
-  document.getElementById('avanti-stazione').addEventListener('click', () => vai(SCHERMATA_DI[modoScelto]));
+  document.getElementById('avanti-stazione').addEventListener('click', () => {
+    if (modoScelto === 'collab') vai('schermata-collab');
+    else { compilaRiepilogo(); vai('schermata-riepilogo'); }
+  });
 
   // Frequenze Pirata: la conferma dei maggiorenni vale solo finché si resta in questa schermata.
   // Ogni volta che si (ri)entra nelle stazioni va data di nuovo, e se era rimasta
@@ -6137,17 +6264,21 @@ Cringe | Romantico
   let maggiorenniConfermato = false;
   try { localStorage.removeItem('sintonizzati-maggiorenni'); } catch (e) {}
   function maggiorenni() { return maggiorenniConfermato; }
-  function entraInStazioni() {
-    maggiorenniConfermato = false;
+  function entraInStazioni(da) {
+    // Indietro porta ai nomi (singoli e squadre) o alle modalità (collaborativa)
+    document.getElementById('indietro-stazioni').dataset.vai = SCHERMATA_NOMI[modoScelto] || 'schermata-modi';
+    // tornando indietro dal riepilogo la scelta resta com'era (anche una stazione pirata già confermata)
+    const ritorno = da === 'schermata-riepilogo' || da === 'schermata-collab';
+    if (!ritorno) maggiorenniConfermato = false;
     if (zappingGiocato) {                // dopo una partita con lo zapping si riparte come sempre: Hit Parade (o Onde Cerebrali), zapping spento
       zappingGiocato = false;
       zapping = false; inScansione = null; stazioneScelta = stazioneDiPartenza();
       scalettaZapping = new Set(STAZIONI_BASE);
       fermaScansione(); fermaNastro();
     }
-    if (bandaDi(stazioneScelta) === 'pirata') stazioneScelta = 'hitparade';
+    if (!ritorno && bandaDi(stazioneScelta) === 'pirata') stazioneScelta = 'hitparade';
     // lo zapping resta acceso, ma le stazioni pirata escono dalla scaletta finché non si riconferma l'età
-    [...scalettaZapping].forEach(id => { if (bandaDi(id) === 'pirata') scalettaZapping.delete(id); });
+    if (!ritorno) [...scalettaZapping].forEach(id => { if (bandaDi(id) === 'pirata') scalettaZapping.delete(id); });
     STAZIONI_BASE.forEach(id => { if (scalettaZapping.size < MIN_ZAPPING) scalettaZapping.add(id); });   // senza le pirata se ne aggiungono quante servono
     if (zapping && !scalettaZapping.has(inScansione)) inScansione = scalettaOrdinata()[0];
     bandaVisibile = bandaDi(inAscoltoStazioni());    // si apre sulla banda della stazione in ascolto
@@ -6292,10 +6423,12 @@ Cringe | Romantico
   catena(campiGiocatori);
   verificaSingoli(true);
 
+  // i nomi sono pronti: si passa alla scelta delle stazioni
   iniziaSingoli.addEventListener('click', () => {
-    const nomi = verificaSingoli(true);
+    verificaSingoli(true);
     if (iniziaSingoli.disabled || sintonizzando) return;
-    sintonizzaEAvvia(suggSingoli, iniziaSingoli, campiGiocatori, () => avviaSingoli(nomi));
+    if (document.activeElement) document.activeElement.blur();
+    vaiAlleStazioni();
   });
 
   /* ---------- Modalità a squadre ---------- */
@@ -6327,8 +6460,77 @@ Cringe | Romantico
 
   iniziaSquadre.addEventListener('click', () => {
     if (iniziaSquadre.disabled || sintonizzando) return;
-    const nomi = nomiSquadre();
-    sintonizzaEAvvia(suggSquadre, iniziaSquadre, campiSquadre, () => avviaSquadre(nomi));
+    if (document.activeElement) document.activeElement.blur();
+    vaiAlleStazioni();
+  });
+
+  /* ---------- Riepilogo prima di giocare (singoli e squadre) ----------
+     Come funziona in tre righe, chi gioca, la stazione in onda e il tasto Gioca.
+     Le regole complete restano nel tasto "Come si gioca" in alto. */
+  const giocaRiepilogo = document.getElementById('gioca-riepilogo');
+  const suggRiepilogo = document.getElementById('suggerimento-riepilogo');
+  const ICONE_REGOLE = {
+    indizio: '<path d="M5 5h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-7l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01" stroke-width="3"/>',
+    punti: '<path d="M5 20v-4M10 20v-8M15 20V8M20 20V4"/>',
+    trofeo: '<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5.5a2.5 2.5 0 0 0 2.6 3.7M16 6h2.5a2.5 2.5 0 0 1-2.6 3.7M12 13v4M8.5 20h7M10 17h4"/>',
+    dado: '<rect x="4" y="4" width="16" height="16" rx="3.5"/><path d="M8.5 8.5h.01M15.5 8.5h.01M12 12h.01M8.5 15.5h.01M15.5 15.5h.01" stroke-width="3"/>',
+    giro: '<path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/>'
+  };
+  const RIEPILOGHI = {
+    singoli: {
+      titolo: 'Ognuno per sé', chi: 'Chi gioca',
+      regole: [
+        ['indizio', 'A turno uno dà l\u2019indizio, gli altri spostano la lancetta di nascosto.'],
+        ['punti', 'Da 0 a 5 punti a testa; chi dà l\u2019indizio prende la somma di tutti.'],
+        ['trofeo', 'Due indizi a testa: alla fine vince chi ha più punti.']
+      ]
+    },
+    squadre: {
+      titolo: 'Gruppo contro gruppo', chi: 'Le squadre',
+      regole: [
+        ['indizio', 'Tre turni a testa: il caposquadra dà l\u2019indizio, la squadra sposta la lancetta.'],
+        ['dado', 'Gli avversari scommettono: perfetto +2, disturbato +1, fuori frequenza +3.'],
+        ['trofeo', 'Vince chi ha più punti; se siete pari, spareggio.']
+      ]
+    }
+  };
+  // sul display, a destra: la stazione su cui si gioca (o lo zapping)
+  function mostraOndaRiepilogo() {
+    const testo = zapping ? `Zapping \u00b7 ${scalettaOrdinata().length} stazioni` : nomeStazione(stazioneScelta);
+    const tasto = tastiStazione.find(b => b.dataset.stazione === stazioneScelta);
+    document.querySelectorAll('.in-onda-riepilogo').forEach(x => {
+      x.textContent = testo;
+      x.style.setProperty('--colore-onda', zapping ? 'var(--ambra)' : (tasto ? tasto.style.getPropertyValue('--colore') : 'var(--ambra)'));
+    });
+  }
+  function compilaRiepilogo() {
+    const r = RIEPILOGHI[modoScelto] || RIEPILOGHI.singoli;
+    const titolo = document.getElementById('riepilogo-titolo');
+    titolo.dataset.titolo = titolo.textContent = r.titolo;
+    document.getElementById('regole-riepilogo').dataset.regole = modoScelto;
+    document.getElementById('riepilogo-regole').replaceChildren(...r.regole.map(([icona, testo]) => {
+      const li = el('li'), segno = el('span', 'segno icona-regola');
+      segno.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONE_REGOLE[icona]}</svg>`;
+      li.append(segno, el('span', '', testo));
+      return li;
+    }));
+    document.getElementById('riepilogo-chi').textContent = r.chi;
+    const box = document.getElementById('riepilogo-giocatori');
+    if (modoScelto === 'squadre') {
+      const [a, b] = nomiSquadre(), sfida = el('div', 'sfida-riepilogo');
+      const squadra = (nome, cls) => { const d = el('div', 'squadra-riepilogo ' + cls); d.append(el('span', '', nome)); return d; };
+      sfida.append(squadra(a, 'a'), el('span', 'vs-riepilogo', 'VS'), squadra(b, 'b'));
+      box.replaceChildren(sfida, el('p', 'nota-chi', 'La radio sceglie quale squadra inizia.'));
+    } else {
+      const ol = el('ol', 'elenco-nomi');
+      verificaSingoli(true).forEach((nome, i) => { const li = el('li'); li.append(el('i', 'num', i + 1), el('span', '', nome)); ol.append(li); });
+      box.replaceChildren(ol, el('p', 'nota-chi', 'La radio sceglie chi dà il primo indizio, poi si va in ordine.'));
+    }
+  }
+  giocaRiepilogo.addEventListener('click', () => {
+    if (sintonizzando) return;
+    if (modoScelto === 'squadre') { const nomi = nomiSquadre(); sintonizzaEAvvia(suggRiepilogo, giocaRiepilogo, [], () => avviaSquadre(nomi)); }
+    else { const nomi = verificaSingoli(true); sintonizzaEAvvia(suggRiepilogo, giocaRiepilogo, [], () => avviaSingoli(nomi)); }
   });
 
   /* ---------- Modalità collaborativa ---------- */
@@ -6440,8 +6642,10 @@ Cringe | Romantico
     const conf = {
       'schermata-singoli': [campiGiocatori, iniziaSingoli, suggSingoli, verificaSingoli, svuotaSingoli],
       'schermata-squadre': [campiSquadre, iniziaSquadre, suggSquadre, verificaSquadre, svuotaSquadre],
-      'schermata-collab': [[], iniziaCollab, suggCollab, () => { suggCollab.textContent = TESTO_COLLAB; }, () => {}]
+      'schermata-collab': [[], iniziaCollab, suggCollab, () => { suggCollab.textContent = TESTO_COLLAB; }, () => {}],
+      'schermata-riepilogo': [[], giocaRiepilogo, suggRiepilogo, () => {}, () => {}]
     }[id];
+    if (id === 'schermata-collab' || id === 'schermata-riepilogo') mostraOndaRiepilogo();
     const [campi, pulsante, sugg, verifica, svuota] = conf;
     campi.forEach(c => { c.disabled = false; });
     pulsante.classList.remove('premuto');
@@ -7063,7 +7267,7 @@ Cringe | Romantico
   }
   function entraInPartita(poi) {
     musicaAlta = false;
-    mostraInOndaInGioco(stazioneDiPartita(), false);
+    mostraInOndaInGioco(stazioneDiPartita(), !!(partita && partita.zap));   // con lo zapping il nome si aggancia tremolando
     passaggio.hidden = true;
     pulisciQuadrante();
     transizioneLancetta('');
@@ -7130,9 +7334,11 @@ Cringe | Romantico
     if (!zapping) return null;
     const scaletta = scalettaOrdinata();
     if (scaletta.length < MIN_ZAPPING) return null;
-    const prima = scaletta.includes(inScansione) ? inScansione : scaletta[0];   // si parte da quella che si stava ascoltando
+    // il primo round è su una stazione a caso tra quelle scelte (non sull'ultima aggiunta)
+    const prima = scaletta[Math.floor(Math.random() * scaletta.length)];
     zappingGiocato = true;
-    return { scaletta, stazione: prima, coda: mescolata(scaletta.filter(s => s !== prima)), punti: {}, turni: {}, ordine: [], appena: false };
+    // "appena": appena entrati in partita la radio si sintonizza, come a ogni cambio di stazione
+    return { scaletta, stazione: prima, coda: mescolata(scaletta.filter(s => s !== prima)), punti: {}, turni: {}, ordine: [], appena: true };
   }
   function prossimaStazione(z) {
     if (!z.coda.length) {
@@ -7815,7 +8021,7 @@ Cringe | Romantico
         const pos = ordinati.findIndex(o => o.punti === g.punti) + 1;   // a pari punti, stessa posizione
         const li = el('li', g.punti === max ? 'vince' : '');
         li.style.setProperty('--i', k);
-        li.append(el('span', 'pos', `${pos}°`), el('i', 'num', g.i + 1), el('span', '', g.nome), el('b', '', g.punti));
+        li.append(el('span', 'pos', `${pos}°`), el('span', 'nome-podio', g.nome), el('b', '', g.punti));   // a fine partita basta la posizione
         ol.append(li);
       });
       scheda.append(ol);
