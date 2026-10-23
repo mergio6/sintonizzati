@@ -2094,6 +2094,8 @@
   /* collaborativa: anche qui il riquadro di destra (i livelli) non ruba spazio a "Come funziona" */
   #schermata-collab .info-collab { grid-template-columns: minmax(0, 1fr) minmax(0, min(42%, 340px)) !important; }
   @media (max-width: 700px) { #schermata-collab .info-collab { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) !important; } }
+  /* telefoni piccoli e stretti: la regola del gruppo non ci sta, resta in «Come si gioca» */
+  @media (max-width: 700px) and (max-height: 400px) { #schermata-collab .regola-gruppo { display: none; } }
   @media (max-height: 340px) {
     #schermata-collab .livelli li { font-size: 11.5px; line-height: 1.2; padding-block: 1px; }
     #schermata-collab .regole li { font-size: 12px; line-height: 1.2; }
@@ -4046,6 +4048,7 @@ Cringe | Romantico
               <h3>Come funziona</h3>
               <ul class="regole">
                 <li><span class="segno icona-regola"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/></svg></span><span>Sei round: il Conduttore cambia ogni volta e dà l’indizio. Un cambio di carta per round.</span></li>
+                <li class="regola-gruppo"><span class="segno icona-regola"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="16.5" cy="9" r="2.6"/><path d="M15.5 14.2A4.6 4.6 0 0 1 21 18.5"/></svg></span><span>Gli altri discutono e spostano la lancetta insieme: i punti di ogni round finiscono in un unico totale di gruppo.</span></li>
                 <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" style="fill:var(--vetro);stroke:var(--corpo);stroke-width:1.6"/><rect x="5" y="7" width="3" height="10" rx="1.5" style="fill:#1597BD"/><rect x="10.5" y="7" width="3" height="10" rx="1.5" style="fill:var(--segnale-alone)"/><rect x="16" y="7" width="3" height="10" rx="1.5" style="fill:#6FA300"/></svg></span><span>Con un 4 la radio si amplifica, con un 5 scegliete voi la ricezione. Il massimo all’ultimo round vale un round bonus!</span></li>
               </ul>
               <p class="nota-regole-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>Regole complete in «Come si gioca», in alto.</p>
@@ -4054,7 +4057,7 @@ Cringe | Romantico
               <h3>Verifica della connessione in corso…</h3>
               <ol class="livelli">
                   <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity=".25"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>0–15</b><span>Errore 404: frequenza non trovata</span></li>
-                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>16–21</b><span>Sintonizzazione avvenuta correttamente</span></li>
+                  <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity=".25"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>16–21</b><span>Sintonizzazione completata!</span></li>
                   <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity=".25"/></svg><b>22–27</b><span>Avete un’intesa fuori dal comune!</span></li>
                   <li><svg viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="1"/><rect x="6" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="1"/><rect x="12" y="4" width="4" height="14" rx="1" fill="currentColor" opacity="1"/><rect x="18" y="0" width="4" height="18" rx="1" fill="currentColor" opacity="1"/></svg><b>28+</b><span>Mente alveare</span></li>
               </ol>
@@ -7775,7 +7778,7 @@ Cringe | Romantico
   const ROUND_COLLAB = 6;
   const LIVELLI = [
     { min: 0, testo: 'Errore 404: frequenza non trovata' },
-    { min: 16, testo: 'Sintonizzazione avvenuta correttamente' },
+    { min: 16, testo: 'Sintonizzazione completata!' },
     { min: 22, testo: 'Avete un’intesa fuori dal comune!' },
     { min: 28, testo: 'Mente alveare' }
   ];
