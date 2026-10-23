@@ -1640,7 +1640,7 @@
   #schermata-modi .tasto.decorato { position: relative; isolation: isolate; }
   #schermata-modi .tasto.decorato .icona { visibility: hidden; }
   .tasto[data-modo] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 12px), transparent calc(var(--testo, 999px) + 2px)); mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 12px), transparent calc(var(--testo, 999px) + 2px)); }
-  .deco-microfono, .deco-walkie, .deco-maschera {
+  .deco-microfono, .deco-walkie, .deco-radioline {
     left: 10px; width: auto;
     top: calc(clamp(12px, 3.4vh, 18px) - 5px); top: calc(clamp(12px, 3.4cqh, 18px) - 5px);
     height: clamp(30px, calc(var(--testo, 999px) - clamp(12px, 3.4vh, 18px) - 2px), 64px);
@@ -1681,25 +1681,43 @@
   @keyframes segnale-b { 0%, 50% { opacity: 0; transform: translateX(0); } 58%, 84% { opacity: .85; } 94%, 100% { opacity: 0; transform: translateX(-76px); } }
   @keyframes trasmette-a { 0%, 38% { fill: var(--colore); opacity: 1; } 46%, 100% { fill: var(--su-tasto); opacity: .35; } }
   @keyframes trasmette-b { 0%, 50% { fill: var(--su-tasto); opacity: .35; } 54%, 88% { fill: var(--colore); opacity: 1; } 96%, 100% { fill: var(--su-tasto); opacity: .35; } }
-  /* Impostore: una maschera che si guarda intorno, con un po' di disturbo sul segnale */
-  .deco-maschera { aspect-ratio: 112 / 44; max-width: calc(100% - 46px); }
-  .maschera { fill: var(--viola); opacity: .55; }
-  :root[data-attivo="scuro"] .maschera { opacity: .8; }
-  .laccio { fill: none; stroke: var(--su-tasto); stroke-width: 1.6; stroke-linecap: round; opacity: .3; }
-  .foro { fill: var(--tasto); }
-  .pupilla { fill: var(--su-tasto); opacity: .75; animation: sguardo 5s ease-in-out infinite; }
-  .occhio { transform-box: fill-box; transform-origin: center; animation: battito-ciglia 5s ease-in-out infinite; }
-  @keyframes sguardo { 0%, 18% { transform: translateX(0); } 24%, 40% { transform: translateX(-4px); } 46%, 62% { transform: translateX(4px); } 68%, 100% { transform: translateX(0); } }
-  @keyframes battito-ciglia { 0%, 80%, 86%, 100% { transform: scaleY(1); } 83% { transform: scaleY(.1); } }
-  .disturbo path { fill: none; stroke: var(--corallo); stroke-width: 2.4; stroke-linecap: round; opacity: 0; animation: disturbo 2.6s steps(1) calc(var(--i) * .37s) infinite; }
-  @keyframes disturbo { 0%, 100% { opacity: 0; } 12% { opacity: .7; transform: translateX(-3px); } 24% { opacity: .2; transform: translateX(2px); } 36% { opacity: 0; } }
-  .tasto[data-modo="impostore"] .conteggio { border-style: dashed; }
-  .tasto[data-modo="impostore"].nego .conteggio { color: var(--corallo); border-color: var(--corallo); }
+  /* Impostore: quattro radioline ballano a tempo, una va fuori ritmo e il suo schermo disturba;
+     una lente le passa in rassegna e si ferma proprio su quella */
+  .deco-radioline { aspect-ratio: 118 / 33; max-width: calc(100% - 46px); }
+  .radiolina { transform-box: fill-box; transform-origin: 50% 100%; animation: balla .9s ease-in-out infinite alternate; }
+  @keyframes balla { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-2.5px) rotate(3deg); } }
+  .radiolina.impostore { animation: stona 1.3s ease-in-out .2s infinite alternate; }
+  @keyframes stona { 0% { transform: rotate(4deg); } 40% { transform: translateY(-1px) rotate(-6deg); } 70% { transform: rotate(2deg); } 100% { transform: translateY(-3px) rotate(-2deg); } }
+  .scocca { fill: var(--viola); opacity: .55; }
+  :root[data-attivo="scuro"] .scocca { opacity: .8; }
+  .cassa { fill: none; stroke: var(--tasto); stroke-width: 1.8; opacity: .8; }
+  .cassa-centro { fill: var(--tasto); opacity: .8; }
+  .schermino { fill: var(--tasto); opacity: .85; }
+  .pomellino { fill: var(--tasto); opacity: .7; }
+  .antennina { fill: none; stroke: var(--su-tasto); stroke-width: 1.6; stroke-linecap: round; opacity: .35; }
+  .pallino-antenna { fill: var(--su-tasto); opacity: .35; }
+  .impostore .schermino { animation: schermo-disturbo 2.4s steps(1) infinite; }
+  .impostore .pallino-antenna { animation: schermo-disturbo 2.4s steps(1) .3s infinite; }
+  @keyframes schermo-disturbo { 0%, 100% { fill: var(--tasto); opacity: .85; } 10% { fill: var(--corallo); opacity: 1; } 18% { fill: var(--tasto); } 26% { fill: var(--corallo); opacity: 1; } 34% { fill: var(--tasto); opacity: .85; } }
+  .lente { transform-box: view-box; animation: indaga 7s ease-in-out infinite; }
+  @keyframes indaga {
+    0% { transform: translate(-6px, 15px) scale(.85); opacity: 0; } 8% { opacity: 1; }
+    20% { transform: translate(14px, 15px) scale(.85); } 38% { transform: translate(44px, 15px) scale(.85); }
+    50%, 82% { transform: translate(72px, 14px) scale(1.05); } 92% { opacity: 1; } 100% { transform: translate(120px, 15px) scale(.85); opacity: 0; }
+  }
+  .vetro-lente { fill: color-mix(in srgb, #fff 30%, transparent); stroke: var(--su-tasto); stroke-width: 2.4; opacity: .75; }
+  .manico-lente { fill: none; stroke: var(--su-tasto); stroke-width: 3.4; stroke-linecap: round; opacity: .6; }
+  @media (prefers-reduced-motion: reduce) { .radiolina, .impostore .schermino, .impostore .pallino-antenna, .lente { animation: none; } .lente { transform: translate(72px, 14px); } }
+  .pillole { display: flex; flex-wrap: wrap; gap: 5px; }
+  .conteggio.prossimamente { border-style: dashed; }
+  .tasto[data-modo="impostore"].nego .prossimamente { color: var(--corallo); border-color: var(--corallo); }
   #schermata-modi .tasto.nego { animation: nego .4s ease-in-out; }
-  @media (prefers-reduced-motion: reduce) { .pupilla, .occhio, .disturbo path { animation: none; } .disturbo path { opacity: .4; } }
   /* Collaborativa: un favo che si riempie di miele una cella alla volta, con l'ape che ci gira attorno */
   .tasto[data-modo="collab"] .sfondo { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 26px), transparent calc(var(--testo, 999px) + 2px)); mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--testo, 999px) - 26px), transparent calc(var(--testo, 999px) + 2px)); }
   .deco-alveare { inset: 0; width: 100%; height: 100%; }
+  /* con i tasti più larghi il favo e l'ape crescono un po' */
+  .favo-scala { transform: scale(1.45); }
+  .ape-scala { transform: scale(1.3); transform-box: fill-box; transform-origin: center; }
   .favo-linee { fill: none; stroke: var(--su-tasto); stroke-width: 1.1; opacity: .15; }
   .cella { --miele: .62; fill: var(--zona-oro); opacity: var(--miele); animation: miele 7s ease-in-out calc(var(--i) * .55s) infinite both; }
   :root[data-attivo="scuro"] .cella { --miele: .88; }
@@ -1745,6 +1763,15 @@
   .modi[data-gamma="sfida"] .tasto[data-gamma="insieme"], .modi[data-gamma="insieme"] .tasto[data-gamma="sfida"] { display: none; }
   .modi.cambio .tasto:not(.banda) { animation: tasto-su .45s cubic-bezier(.2, .9, .3, 1.2) both; animation-delay: calc(var(--k) * 80ms); }
   .tasti.modi { grid-template-columns: repeat(2, minmax(0, 1fr)) auto; }
+  /* le righe dei tasti sono condivise: titoli, motti e pillole stanno alla stessa altezza in tutti e due i tasti */
+  @supports (grid-template-rows: subgrid) {
+    .tasti.modi { grid-template-rows: 1fr auto auto auto; row-gap: 0; }
+    .modi .tasto { grid-row: span 4; grid-template-rows: subgrid; row-gap: 4px; grid-template-areas: "icona led" "titolo titolo" "motto motto" "chip chip"; }
+    .modi .tasto .descr { display: contents; }
+    .modi .tasto .motto { grid-area: motto; align-self: start; margin-bottom: 4px; }
+    .modi .tasto .descr > .conteggio, .modi .tasto .pillole { grid-area: chip; align-self: start; justify-self: start; }
+    .modi .interruttore-modi { grid-row: 1 / -1; grid-column: 3; }
+  }
   /* l'interruttore: un cursore di metallo che scorre in una fessura della radio; due spie dicono dove si trova */
   .interruttore-modi {
     align-self: center; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -3685,32 +3712,53 @@ Cringe | Romantico
               </svg>
               <span class="titolo">Modalità a squadre</span>
               <span class="led"></span>
-              <span class="descr"><span class="motto">Gruppo contro gruppo</span><span class="conteggio">Da 6 giocatori in su</span></span>
+              <span class="descr"><span class="motto">Gruppo contro gruppo</span><span class="conteggio">Da 4 giocatori in su</span></span>
             </button>
             <button class="tasto decorato" data-modo="collab" data-gamma="insieme" style="--k:0">
-              <span class="sfondo" aria-hidden="true"><svg class="deco-alveare"><defs><pattern id="favo" x="6" y="4" width="33" height="19.053" patternUnits="userSpaceOnUse"><path class="favo-linee" d="M0.00 9.53L5.50 -0.00L16.50 -0.00L22.00 9.53L16.50 19.05L5.50 19.05ZM16.50 0.00L22.00 -9.53L33.00 -9.53L38.50 0.00L33.00 9.53L22.00 9.53ZM16.50 19.05L22.00 9.53L33.00 9.53L38.50 19.05L33.00 28.58L22.00 28.58ZM-16.50 0.00L-11.00 -9.53L0.00 -9.53L5.50 0.00L0.00 9.53L-11.00 9.53ZM-16.50 19.05L-11.00 9.53L0.00 9.53L5.50 19.05L0.00 28.58L-11.00 28.58Z"/></pattern></defs><rect class="favo" width="100%" height="100%" fill="url(#favo)"/><g class="celle-oro"><path class="cella" style="--i:0" d="M22.50 23.05L28.00 13.52L39.00 13.52L44.50 23.05L39.00 32.58L28.00 32.58Z"/><path class="cella" style="--i:1" d="M39.00 13.53L44.50 4.00L55.50 4.00L61.00 13.53L55.50 23.06L44.50 23.06Z"/><path class="cella" style="--i:2" d="M55.50 23.05L61.00 13.52L72.00 13.52L77.50 23.05L72.00 32.58L61.00 32.58Z"/><path class="cella" style="--i:3" d="M39.00 32.58L44.50 23.05L55.50 23.05L61.00 32.58L55.50 42.11L44.50 42.11Z"/><path class="cella" style="--i:4" d="M72.00 13.53L77.50 4.00L88.50 4.00L94.00 13.53L88.50 23.06L77.50 23.06Z"/><path class="cella" style="--i:5" d="M55.50 4.00L61.00 -5.53L72.00 -5.53L77.50 4.00L72.00 13.53L61.00 13.53Z"/></g><g class="ape"><g class="ape-corpo"><ellipse class="ali" cx="-1" cy="-4" rx="3.2" ry="4.4"/><ellipse class="ali ali-2" cx="2.4" cy="-3.6" rx="2.6" ry="3.8"/><ellipse class="addome" cx="0" cy="0" rx="5.2" ry="3.6"/><path class="strisce-ape" d="M-1.4-3.2v6.4M1.6-3.4v6.8"/><circle class="testa-ape" cx="-5.6" cy="-.6" r="2.2"/></g></g></svg></span>
+              <span class="sfondo" aria-hidden="true"><svg class="deco-alveare"><defs><pattern id="favo" x="6" y="4" width="33" height="19.053" patternUnits="userSpaceOnUse"><path class="favo-linee" d="M0.00 9.53L5.50 -0.00L16.50 -0.00L22.00 9.53L16.50 19.05L5.50 19.05ZM16.50 0.00L22.00 -9.53L33.00 -9.53L38.50 0.00L33.00 9.53L22.00 9.53ZM16.50 19.05L22.00 9.53L33.00 9.53L38.50 19.05L33.00 28.58L22.00 28.58ZM-16.50 0.00L-11.00 -9.53L0.00 -9.53L5.50 0.00L0.00 9.53L-11.00 9.53ZM-16.50 19.05L-11.00 9.53L0.00 9.53L5.50 19.05L0.00 28.58L-11.00 28.58Z"/></pattern></defs><g class="favo-scala"><rect class="favo" width="100%" height="100%" fill="url(#favo)"/><g class="celle-oro"><path class="cella" style="--i:0" d="M22.50 23.05L28.00 13.52L39.00 13.52L44.50 23.05L39.00 32.58L28.00 32.58Z"/><path class="cella" style="--i:1" d="M39.00 13.53L44.50 4.00L55.50 4.00L61.00 13.53L55.50 23.06L44.50 23.06Z"/><path class="cella" style="--i:2" d="M55.50 23.05L61.00 13.52L72.00 13.52L77.50 23.05L72.00 32.58L61.00 32.58Z"/><path class="cella" style="--i:3" d="M39.00 32.58L44.50 23.05L55.50 23.05L61.00 32.58L55.50 42.11L44.50 42.11Z"/><path class="cella" style="--i:4" d="M72.00 13.53L77.50 4.00L88.50 4.00L94.00 13.53L88.50 23.06L77.50 23.06Z"/><path class="cella" style="--i:5" d="M55.50 4.00L61.00 -5.53L72.00 -5.53L77.50 4.00L72.00 13.53L61.00 13.53Z"/></g><g class="ape"><g class="ape-scala"><g class="ape-corpo"><ellipse class="ali" cx="-1" cy="-4" rx="3.2" ry="4.4"/><ellipse class="ali ali-2" cx="2.4" cy="-3.6" rx="2.6" ry="3.8"/><ellipse class="addome" cx="0" cy="0" rx="5.2" ry="3.6"/><path class="strisce-ape" d="M-1.4-3.2v6.4M1.6-3.4v6.8"/><circle class="testa-ape" cx="-5.6" cy="-.6" r="2.2"/></g></g></g></g></svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <circle cx="10" cy="19" r="5"/><circle cx="24" cy="14" r="5.5"/><circle cx="38" cy="19" r="5"/>
                 <path d="M3 40c0-6 3-10 8-10M45 40c0-6-3-10-8-10M13 40c0-8 5-13 11-13s11 5 11 13"/>
               </svg>
               <span class="titolo">Modalità collaborativa</span>
               <span class="led"></span>
-              <span class="descr"><span class="motto">Tutti contro il gioco</span><span class="conteggio">Adatto per 2-6 giocatori</span></span>
+              <span class="descr"><span class="motto">Tutti contro il gioco</span><span class="conteggio">Da 2 giocatori in su</span></span>
             </button>
             <button class="tasto decorato" data-modo="impostore" data-gamma="insieme" style="--k:1">
-              <span class="sfondo" aria-hidden="true"><svg class="deco-maschera" viewBox="0 0 112 44" preserveAspectRatio="xMinYMin meet">
-                <g class="disturbo"><path style="--i:0" d="M78 9h14"/><path style="--i:1" d="M84 16h22"/><path style="--i:2" d="M76 23h10"/><path style="--i:3" d="M90 23h12"/><path style="--i:4" d="M80 30h18"/></g>
-                <path class="laccio" d="M4 15C-2 14-3 20 1 22M66 15c6-1 7 5 3 7"/>
-                <path class="maschera" d="M35 11C29 3 9 3 4 13c-3 9 3 18 15 19 8 1 12-5 16-5s8 6 16 5c12-1 18-10 15-19-5-10-25-10-31-2z"/>
-                <g class="occhio"><ellipse class="foro" cx="20.5" cy="16.5" rx="8" ry="5"/><circle class="pupilla" cx="20.5" cy="17" r="2.6"/></g>
-                <g class="occhio"><ellipse class="foro" cx="49.5" cy="16.5" rx="8" ry="5"/><circle class="pupilla" cx="49.5" cy="17" r="2.6"/></g>
+              <span class="sfondo" aria-hidden="true"><svg class="deco-radioline" viewBox="0 -4 118 33" preserveAspectRatio="xMinYMin meet">
+                <g transform="translate(2 0)"><g class="radiolina" style="--i:0">
+                  <path class="antennina" d="M17 5 21-5"/><circle class="pallino-antenna" cx="21" cy="-5.5" r="1.6"/>
+                  <rect class="scocca" x="0" y="5" width="25" height="19" rx="4"/>
+                  <circle class="cassa" cx="8" cy="14.5" r="5"/><circle class="cassa-centro" cx="8" cy="14.5" r="1.6"/>
+                  <rect class="schermino" x="15" y="9" width="7" height="5" rx="1"/>
+                  <circle class="pomellino" cx="18.5" cy="19" r="1.7"/>
+                </g></g><g transform="translate(32 0)"><g class="radiolina" style="--i:1">
+                  <path class="antennina" d="M17 5 21-5"/><circle class="pallino-antenna" cx="21" cy="-5.5" r="1.6"/>
+                  <rect class="scocca" x="0" y="5" width="25" height="19" rx="4"/>
+                  <circle class="cassa" cx="8" cy="14.5" r="5"/><circle class="cassa-centro" cx="8" cy="14.5" r="1.6"/>
+                  <rect class="schermino" x="15" y="9" width="7" height="5" rx="1"/>
+                  <circle class="pomellino" cx="18.5" cy="19" r="1.7"/>
+                </g></g><g transform="translate(62 0)"><g class="radiolina impostore" style="--i:2">
+                  <path class="antennina" d="M17 5 21-5"/><circle class="pallino-antenna" cx="21" cy="-5.5" r="1.6"/>
+                  <rect class="scocca" x="0" y="5" width="25" height="19" rx="4"/>
+                  <circle class="cassa" cx="8" cy="14.5" r="5"/><circle class="cassa-centro" cx="8" cy="14.5" r="1.6"/>
+                  <rect class="schermino" x="15" y="9" width="7" height="5" rx="1"/>
+                  <circle class="pomellino" cx="18.5" cy="19" r="1.7"/>
+                </g></g><g transform="translate(92 0)"><g class="radiolina" style="--i:3">
+                  <path class="antennina" d="M17 5 21-5"/><circle class="pallino-antenna" cx="21" cy="-5.5" r="1.6"/>
+                  <rect class="scocca" x="0" y="5" width="25" height="19" rx="4"/>
+                  <circle class="cassa" cx="8" cy="14.5" r="5"/><circle class="cassa-centro" cx="8" cy="14.5" r="1.6"/>
+                  <rect class="schermino" x="15" y="9" width="7" height="5" rx="1"/>
+                  <circle class="pomellino" cx="18.5" cy="19" r="1.7"/>
+                </g></g>
+                <g class="lente"><circle class="vetro-lente" cx="0" cy="0" r="10"/><path class="manico-lente" d="M7 7l7 7"/></g>
               </svg></span>
               <svg class="icona" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
                 <path d="M24 14c-4-5-15-5-18 1-2 6 2 12 9 12 4 0 6-3 9-3s5 3 9 3c7 0 11-6 9-12-3-6-14-6-18-1z"/>
               </svg>
               <span class="titolo">Impostore</span>
               <span class="led"></span>
-              <span class="descr"><span class="motto">Qualcuno è fuori frequenza</span><span class="conteggio">Prossimamente</span></span>
+              <span class="descr"><span class="motto">Occhio alle interferenze…</span><span class="pillole"><span class="conteggio">Da 5 a 10 giocatori</span><span class="conteggio prossimamente">Prossimamente</span></span></span>
             </button>
             <!-- interruttore verticale: in alto le modalità di sfida, in basso quelle da giocare insieme -->
             <button class="interruttore-modi" id="selettore-modi" type="button" role="switch" aria-checked="false" aria-label="Altre modalità" data-gamma="sfida" style="--k:2">
@@ -3928,7 +3976,7 @@ Cringe | Romantico
               <h3>Come funziona</h3>
               <ul class="regole">
                 <li><span class="segno">6</span><span>Sei round: a ogni round cambia il Conduttore, che dà l’indizio. La carta si può cambiare una volta per round.</span></li>
-                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" style="fill:var(--vetro);stroke:var(--corpo);stroke-width:1.6"/><rect x="5" y="7" width="3" height="10" rx="1.5" style="fill:#1597BD"/><rect x="10.5" y="7" width="3" height="10" rx="1.5" style="fill:var(--segnale-alone)"/><rect x="16" y="7" width="3" height="10" rx="1.5" style="fill:#6FA300"/></svg></span><span>Con un 5 cambiate radio: Sintonia fine (stretta, fino a 6 punti) o Ricezione amplificata (larga). Se all’ultimo round fate il massimo, si gioca un round bonus.</span></li>
+                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" style="fill:var(--vetro);stroke:var(--corpo);stroke-width:1.6"/><rect x="5" y="7" width="3" height="10" rx="1.5" style="fill:#1597BD"/><rect x="10.5" y="7" width="3" height="10" rx="1.5" style="fill:var(--segnale-alone)"/><rect x="16" y="7" width="3" height="10" rx="1.5" style="fill:#6FA300"/></svg></span><span>Con un 4 la radio passa alla Ricezione amplificata (larga), con un 5 scegliete voi: amplificata o Sintonia fine (stretta, fino a 6 punti). Se all’ultimo round fate il massimo, si gioca un round bonus.</span></li>
               </ul>
             </div>
             <div class="scheda misuratore">
@@ -6140,7 +6188,7 @@ Cringe | Romantico
       '<b>Siete tutti nella stessa squadra.</b> A ogni round un Conduttore, diverso ogni volta, guarda lo schermo: vede in basso la carta parola e sopra la scala della radio con il bersaglio. Può cambiare carta una volta.',
       '<b>Il Conduttore dice un indizio ad alta voce</b>: gli altri ne discutono, posizionano la lancetta e la confermano.',
       '<b>Si rivela il bersaglio</b> e i punti si sommano a quelli dei round precedenti.',
-      '<b>Con un 5 potete cambiare radio</b>: <b>Sintonia fine</b> (segnale stretto, fino a 6 punti; resta se fate almeno 4) o <b>Ricezione amplificata</b> (segnale largo, fino a 5; resta se fate almeno 1). Altrimenti si torna in Ricezione standard.',
+      '<b>Con un 5 potete cambiare radio</b>: <b>Sintonia fine</b> (segnale stretto, fino a 6 punti; resta se fate almeno 4) o <b>Ricezione amplificata</b> (segnale largo, fino a 5; resta se fate almeno 1). Con un 4 in Ricezione standard si passa da soli alla Ricezione amplificata. Negli altri casi si torna (o si resta) in Ricezione standard.',
       '<b>Sei round in tutto.</b> Se all’ultimo fate il punteggio massimo del bersaglio in uso, si gioca un round bonus. Alla fine il totale dice lo stato della connessione.'
     ] }
   };
@@ -7485,7 +7533,8 @@ Cringe | Romantico
      Modalità collaborativa: tutti nella stessa squadra, 6 round, punteggio unico.
      A ogni round un Conduttore (diverso ogni volta) dà l'indizio, gli altri decidono la lancetta.
      La radio può cambiare ricezione, e quindi bersaglio:
-     - Standard: con 5 punti si sceglie tra Sintonia fine e Ricezione amplificata, altrimenti resta Standard.
+     - Standard: con 5 punti si sceglie tra Sintonia fine e Ricezione amplificata, con 4 si passa da soli
+       alla Ricezione amplificata, con 0-3 resta Standard.
      - Sintonia fine: con 4, 5 o 6 punti resta, con 0-3 si torna in Standard.
      - Ricezione amplificata: con 1-4 resta, con 5 si sceglie se restare o passare a Sintonia fine, con 0 si torna in Standard.
      I cambi valgono dal round dopo. Se al 6° round si fa il massimo del bersaglio in uso, si gioca un round bonus;
@@ -7517,7 +7566,7 @@ Cringe | Romantico
   function prossimaRicezione(tipo, punti) {
     if (tipo === 'fine') return { tipo: punti >= 4 ? 'fine' : 'standard' };
     if (tipo === 'amplificata') return punti === 5 ? { scelta: ['amplificata', 'fine'] } : { tipo: punti >= 1 ? 'amplificata' : 'standard' };
-    return punti === 5 ? { scelta: ['fine', 'amplificata'] } : { tipo: 'standard' };
+    return punti === 5 ? { scelta: ['fine', 'amplificata'] } : { tipo: punti === 4 ? 'amplificata' : 'standard' };
   }
 
   function avviaCollab() {
@@ -7658,7 +7707,8 @@ Cringe | Romantico
       const righe = [e.pieno ? 'Segnale pieno!' : e.punti ? `Fascia da ${e.punti} punt${e.punti === 1 ? 'o' : 'i'}` : 'Fuori frequenza'];
       if (e.bonus) righe.push('Avete conquistato il round bonus!');
       else if (p.prossima && p.prossima.scelta) righe.push('Potete cambiare radio');
-      else if (p.prossima && p.prossima.tipo !== e.tipo) righe.push(p.prossima.tipo === 'standard' ? 'Si torna in Ricezione standard' : `Prossimo round: ${RICEZIONI[p.prossima.tipo].nome}`);
+      else if (p.prossima && p.prossima.tipo !== e.tipo) righe.push(p.prossima.tipo === 'standard' ? 'Si torna in Ricezione standard'
+        : e.tipo === 'standard' && p.prossima.tipo === 'amplificata' ? 'Segnale forte: si passa alla Ricezione amplificata!' : `Prossimo round: ${RICEZIONI[p.prossima.tipo].nome}`);
       const etichettaBtn = p.finita ? 'Risultato finale' : p.prossima && p.prossima.scelta ? 'Scegli la radio' : p.turno + 1 > ROUND_COLLAB ? 'Round bonus' : 'Prossimo round';
       box.append(el('div', 'etichetta', 'Risultato'), el('div', 'guadagno' + (e.punti ? '' : ' zero'), e.punti ? `+${e.punti}` : '0'),
         el('div', 'ruolo esito', righe.join('\n')),
