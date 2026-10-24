@@ -190,20 +190,42 @@
   }
   .intro > div { min-width: min(360px, 52vw); min-width: min(360px, 52cqw); }
   .intro .logo { width: clamp(110px, 42vh, 250px); width: clamp(110px, 42cqh, 250px); height: auto; display: block; border-radius: 23%; box-shadow: var(--ombra-tile); }
-  /* Il logo della schermata iniziale partecipa alla ricerca: prima di trovare la frequenza le tacche
-     del segnale sull'antenna sono spente e la lancetta corre avanti e indietro sulla scala; quando le onde
-     si allineano la lancetta si ferma al suo posto e le due tacche si accendono, una dopo l'altra. */
-  .logo-segnale path { transition: opacity .3s; }
-  #schermata-inizio:not(.sintonizzata) .logo-segnale path { opacity: .22; }
-  #schermata-inizio.sintonizzata .logo-segnale path { animation: segnale-logo .7s ease-out both; }
-  #schermata-inizio.sintonizzata .logo-segnale path + path { animation-delay: .18s; }
-  @keyframes segnale-logo { 0% { opacity: .22; } 35% { opacity: 1; filter: drop-shadow(0 0 5px var(--segnale)); } 100% { opacity: 1; filter: none; } }
+  /* Il logo della schermata iniziale partecipa alla ricerca. Prima del tocco la radio è spenta: la S al neon
+     è quasi buia, la ghiera fioca e la lancetta a riposo in basso a sinistra. Durante la ricerca la lancetta
+     gira sulla ghiera (le tacche si accendono al suo passaggio), la S si scalda tremolando come un neon e la
+     luce verde del segnale cresce man mano che la lancetta si avvicina alla stazione. Trovata la frequenza,
+     tutto si accende. Lo stato "acceso" è quello di base, così il logo che vola verso il menu resta acceso. */
+  .logo .logo-ago { transform-box: view-box; transform-origin: 256px 256px; transform: rotate(40deg); }
+  .logo .logo-ghiera .lunga { opacity: .95; } .logo .logo-ghiera .corta { opacity: .45; }
+  .logo .logo-s-alone { opacity: .8; }
+  #schermata-inizio:not(.sintonizzata) .logo .logo-ago { transform: rotate(-130deg); }
+  #schermata-inizio:not(.sintonizzata) .logo .logo-ghiera line { opacity: .22; }
+  #schermata-inizio:not(.sintonizzata) .logo .logo-s-tubo { opacity: .26; }
+  #schermata-inizio:not(.sintonizzata) .logo .logo-s-alone,
+  #schermata-inizio:not(.sintonizzata) .logo .logo-luce { opacity: 0; }
+  #schermata-inizio.sintonizzata .logo .logo-s { animation: neon-acceso .9s ease-out both; }
+  #schermata-inizio.sintonizzata .logo .logo-luce { animation: segnale-pieno 1s ease-out both; transform-box: fill-box; transform-origin: center; }
+  @keyframes neon-acceso { 0% { filter: brightness(1); } 25% { filter: brightness(1.6); } 100% { filter: brightness(1); } }
+  @keyframes segnale-pieno { 0% { transform: scale(.6); opacity: .4; } 40% { transform: scale(1.25); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+
+  /* Le tre strisce sotto lo slogan: a radio spenta sono sfasate, durante la ricerca ondeggiano
+     ognuna per conto suo e, trovata la frequenza, si allineano perfettamente */
+  .strisce-avvio { display: grid; gap: 5px; width: min(170px, 48%); margin: 0 0 1.1em; }
+  .strisce-avvio i { display: block; height: 5px; border-radius: 3px; background: var(--ambra); transition: transform .5s cubic-bezier(.2, .9, .3, 1.3); }
+  .strisce-avvio i:nth-child(2) { background: var(--corallo); }
+  .strisce-avvio i:nth-child(3) { background: var(--menta); }
+  #schermata-inizio:not(.sintonizzata) .strisce-avvio i:nth-child(1) { transform: translateX(-14px); }
+  #schermata-inizio:not(.sintonizzata) .strisce-avvio i:nth-child(2) { transform: translateX(16px); }
+  #schermata-inizio:not(.sintonizzata) .strisce-avvio i:nth-child(3) { transform: translateX(-6px); }
+  #schermata-inizio.cerca .strisce-avvio i { transition: none; }
+  #schermata-inizio.sintonizzata .strisce-avvio { animation: strisce-flash .9s ease-out .15s both; }
+  @keyframes strisce-flash { 30% { filter: brightness(1.35) drop-shadow(0 0 6px rgba(255, 181, 46, .55)); } }
   h1 {
     margin: 0; font-family: "Michroma", "Eurostile", "Arial Black", sans-serif; font-weight: 400;
     font-size: clamp(28px, min(10vh, 6.4vw), 64px); font-size: clamp(28px, min(10cqh, 6.4cqw), 64px); line-height: 1; letter-spacing: -0.01em;
   }
   .sub {
-    margin: .55em 0 1.2em; font-size: clamp(16px, 4.6vh, 23px); font-size: clamp(16px, 4.6cqh, 23px); font-weight: 400;
+    margin: .55em 0 .8em; font-size: clamp(16px, 4.6vh, 23px); font-size: clamp(16px, 4.6cqh, 23px); font-weight: 400;
     color: var(--tenue); line-height: 1.25; max-width: 25ch;
   }
 
@@ -3707,28 +3729,19 @@ Cringe | Romantico
     <p class="credito">Mergio Studios</p>
     <div class="azioni angolo"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div>
     <div class="intro">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="logo" role="img" aria-label="Logo Sintonizzati">
-<rect width="200" height="200" rx="46" style="fill:var(--tile)"/>
-<g transform="translate(100 100) scale(1.06) translate(-104 -92)">
-<g class="logo-segnale" fill="none" stroke-linecap="round" style="stroke:var(--segnale)" stroke-width="4"><path d="M178.0 31.4 A11 11 0 0 0 167.0 25.0"/><path d="M185.2 28.0 A19 19 0 0 0 166.3 17.1"/></g>
-<line x1="146" y1="78" x2="168" y2="36" stroke-width="4" stroke-linecap="round" style="stroke:var(--corpo)"/>
-<circle cx="168" cy="36" r="4.5" style="fill:var(--corpo)"/>
-<path d="M60 77V64a8 8 0 0 1 8-8h50a8 8 0 0 1 8 8v13" fill="none" stroke-width="6" style="stroke:var(--corpo)"/>
-<rect x="30" y="76" width="140" height="88" rx="16" style="fill:var(--corpo)"/>
-<g fill="none" stroke-width="3" style="stroke:var(--griglia)"><circle cx="72" cy="120" r="27"/><circle cx="72" cy="120" r="19"/><circle cx="72" cy="120" r="11"/></g>
-<circle cx="72" cy="120" r="4" style="fill:var(--griglia)"/>
-<rect x="104" y="91" width="54" height="27" rx="4" style="fill:#FFB52E"/>
-<g stroke="#5A3A00" stroke-width="2" stroke-linecap="round"><line x1="110" y1="96" x2="110" y2="104"/><line x1="117" y1="97" x2="117" y2="102"/><line x1="124" y1="97" x2="124" y2="102"/><line x1="131" y1="96" x2="131" y2="104"/><line x1="138" y1="97" x2="138" y2="102"/><line x1="145" y1="97" x2="145" y2="102"/><line x1="152" y1="96" x2="152" y2="104"/></g>
-<text x="119" y="114.5" text-anchor="middle" font-family="Michroma, Verdana, sans-serif" font-size="7" style="fill:#5A3A00" letter-spacing=".5">FM</text>
-<line class="logo-ago" x1="137" y1="93.5" x2="137" y2="115.5" stroke-width="3.5" stroke-linecap="round" style="stroke:#D9362B"/>
-<g style="fill:var(--griglia)"><circle cx="114" cy="138" r="8"/><circle cx="148" cy="138" r="8"/></g>
-<g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
-<g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
-</g>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="logo" role="img" aria-label="Logo Sintonizzati"><defs><radialGradient id="lgA-fondo" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#3A3015"/><stop offset=".6" stop-color="#241E0D"/><stop offset="1" stop-color="#15120A"/></radialGradient><radialGradient id="lgA-vetro" cx=".5" cy=".45"><stop offset="0" stop-color="#FFB52E" stop-opacity=".13"/><stop offset="1" stop-color="#FFB52E" stop-opacity="0"/></radialGradient><radialGradient id="lgA-segnale"><stop offset="0" stop-color="#3FC290" stop-opacity=".75"/><stop offset=".55" stop-color="#3FC290" stop-opacity=".25"/><stop offset="1" stop-color="#3FC290" stop-opacity="0"/></radialGradient><linearGradient id="lgA-s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF5A47"/><stop offset=".5" stop-color="#FFB52E"/><stop offset="1" stop-color="#4FD69E"/></linearGradient><filter id="lgA-sfoca" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="12"/></filter><filter id="lgA-luce" filterUnits="userSpaceOnUse" x="0" y="0" width="512" height="512"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="512" height="512" rx="112" fill="url(#lgA-fondo)"/>
+<circle cx="256" cy="256" r="150" fill="url(#lgA-vetro)"/>
+<circle class="logo-luce" cx="374.3" cy="115.0" r="52" fill="url(#lgA-segnale)"/>
+<g class="logo-ghiera" stroke="#FFB52E" stroke-linecap="round"><line class="lunga" x1="256.0" y1="84.0" x2="256.0" y2="60.0" stroke-width="7"/><line class="corta" x1="285.9" y1="86.6" x2="288.1" y2="73.8" stroke-width="4.5"/><line class="corta" x1="314.8" y1="94.4" x2="319.3" y2="82.2" stroke-width="4.5"/><line class="lunga" x1="342.0" y1="107.0" x2="354.0" y2="86.3" stroke-width="7"/><line class="corta" x1="366.6" y1="124.2" x2="374.9" y2="114.3" stroke-width="4.5"/><line class="corta" x1="387.8" y1="145.4" x2="397.7" y2="137.1" stroke-width="4.5"/><line class="lunga" x1="405.0" y1="170.0" x2="425.7" y2="158.0" stroke-width="7"/><line class="corta" x1="417.6" y1="197.2" x2="429.8" y2="192.7" stroke-width="4.5"/><line class="corta" x1="425.4" y1="226.1" x2="438.2" y2="223.9" stroke-width="4.5"/><line class="lunga" x1="428.0" y1="256.0" x2="452.0" y2="256.0" stroke-width="7"/><line class="corta" x1="425.4" y1="285.9" x2="438.2" y2="288.1" stroke-width="4.5"/><line class="corta" x1="417.6" y1="314.8" x2="429.8" y2="319.3" stroke-width="4.5"/><line class="lunga" x1="405.0" y1="342.0" x2="425.7" y2="354.0" stroke-width="7"/><line class="corta" x1="387.8" y1="366.6" x2="397.7" y2="374.9" stroke-width="4.5"/><line class="corta" x1="366.6" y1="387.8" x2="374.9" y2="397.7" stroke-width="4.5"/><line class="lunga" x1="342.0" y1="405.0" x2="354.0" y2="425.7" stroke-width="7"/><line class="corta" x1="314.8" y1="417.6" x2="319.3" y2="429.8" stroke-width="4.5"/><line class="corta" x1="285.9" y1="425.4" x2="288.1" y2="438.2" stroke-width="4.5"/><line class="lunga" x1="256.0" y1="428.0" x2="256.0" y2="452.0" stroke-width="7"/><line class="corta" x1="226.1" y1="425.4" x2="223.9" y2="438.2" stroke-width="4.5"/><line class="corta" x1="197.2" y1="417.6" x2="192.7" y2="429.8" stroke-width="4.5"/><line class="lunga" x1="170.0" y1="405.0" x2="158.0" y2="425.7" stroke-width="7"/><line class="corta" x1="145.4" y1="387.8" x2="137.1" y2="397.7" stroke-width="4.5"/><line class="corta" x1="124.2" y1="366.6" x2="114.3" y2="374.9" stroke-width="4.5"/><line class="lunga" x1="107.0" y1="342.0" x2="86.3" y2="354.0" stroke-width="7"/><line class="corta" x1="94.4" y1="314.8" x2="82.2" y2="319.3" stroke-width="4.5"/><line class="corta" x1="86.6" y1="285.9" x2="73.8" y2="288.1" stroke-width="4.5"/><line class="lunga" x1="84.0" y1="256.0" x2="60.0" y2="256.0" stroke-width="7"/><line class="corta" x1="86.6" y1="226.1" x2="73.8" y2="223.9" stroke-width="4.5"/><line class="corta" x1="94.4" y1="197.2" x2="82.2" y2="192.7" stroke-width="4.5"/><line class="lunga" x1="107.0" y1="170.0" x2="86.3" y2="158.0" stroke-width="7"/><line class="corta" x1="124.2" y1="145.4" x2="114.3" y2="137.1" stroke-width="4.5"/><line class="corta" x1="145.4" y1="124.2" x2="137.1" y2="114.3" stroke-width="4.5"/><line class="lunga" x1="170.0" y1="107.0" x2="158.0" y2="86.3" stroke-width="7"/><line class="corta" x1="197.2" y1="94.4" x2="192.7" y2="82.2" stroke-width="4.5"/><line class="corta" x1="226.1" y1="86.6" x2="223.9" y2="73.8" stroke-width="4.5"/></g>
+<circle cx="256" cy="256" r="154" fill="none" stroke="#FFB52E" stroke-width="2" opacity=".18"/>
+<g class="logo-ago"><line x1="256" y1="110" x2="256" y2="48" stroke="#FF5A47" stroke-width="13" stroke-linecap="round" filter="url(#lgA-luce)"/></g>
+<g class="logo-s"><path class="logo-s-alone" d="M1827 444Q1827 533 1813.0 584.0Q1799 635 1750.0 659.5Q1701 684 1598.0 691.5Q1495 699 1316 702L760 710Q554 713 429.0 735.0Q304 757 240.0 804.5Q176 852 154.5 932.0Q133 1012 133 1132Q133 1263 162.5 1348.0Q192 1433 269.5 1481.0Q347 1529 489.0 1548.5Q631 1568 856 1568H1284Q1488 1568 1624.0 1555.0Q1760 1542 1840.0 1495.0Q1920 1448 1954.5 1349.0Q1989 1250 1989 1077H1797Q1797 1211 1771.5 1279.5Q1746 1348 1687.5 1373.0Q1629 1398 1530.0 1400.0Q1431 1402 1284 1402H866Q687 1402 579.5 1395.0Q472 1388 417.0 1363.0Q362 1338 343.5 1283.0Q325 1228 325 1132Q325 1051 338.0 1002.0Q351 953 396.5 927.5Q442 902 537.0 892.5Q632 883 796 881L1392 873Q1602 870 1727.5 848.5Q1853 827 1915.5 779.0Q1978 731 1998.5 649.5Q2019 568 2019 444Q2019 309 1993.5 217.5Q1968 126 1895.0 71.0Q1822 16 1684.0 -8.0Q1546 -32 1321 -32H853Q648 -32 509.0 -14.0Q370 4 287.5 58.5Q205 113 169.0 221.0Q133 329 133 509H325Q325 368 348.0 291.0Q371 214 428.5 180.5Q486 147 589.5 140.5Q693 134 853 134H1311Q1490 134 1594.0 145.5Q1698 157 1748.0 189.5Q1798 222 1812.5 283.0Q1827 344 1827 444Z" transform="translate(143.02 340.64) scale(0.10500 -0.10500)" fill="url(#lgA-s)" filter="url(#lgA-sfoca)"/><path class="logo-s-tubo" d="M1827 444Q1827 533 1813.0 584.0Q1799 635 1750.0 659.5Q1701 684 1598.0 691.5Q1495 699 1316 702L760 710Q554 713 429.0 735.0Q304 757 240.0 804.5Q176 852 154.5 932.0Q133 1012 133 1132Q133 1263 162.5 1348.0Q192 1433 269.5 1481.0Q347 1529 489.0 1548.5Q631 1568 856 1568H1284Q1488 1568 1624.0 1555.0Q1760 1542 1840.0 1495.0Q1920 1448 1954.5 1349.0Q1989 1250 1989 1077H1797Q1797 1211 1771.5 1279.5Q1746 1348 1687.5 1373.0Q1629 1398 1530.0 1400.0Q1431 1402 1284 1402H866Q687 1402 579.5 1395.0Q472 1388 417.0 1363.0Q362 1338 343.5 1283.0Q325 1228 325 1132Q325 1051 338.0 1002.0Q351 953 396.5 927.5Q442 902 537.0 892.5Q632 883 796 881L1392 873Q1602 870 1727.5 848.5Q1853 827 1915.5 779.0Q1978 731 1998.5 649.5Q2019 568 2019 444Q2019 309 1993.5 217.5Q1968 126 1895.0 71.0Q1822 16 1684.0 -8.0Q1546 -32 1321 -32H853Q648 -32 509.0 -14.0Q370 4 287.5 58.5Q205 113 169.0 221.0Q133 329 133 509H325Q325 368 348.0 291.0Q371 214 428.5 180.5Q486 147 589.5 140.5Q693 134 853 134H1311Q1490 134 1594.0 145.5Q1698 157 1748.0 189.5Q1798 222 1812.5 283.0Q1827 344 1827 444Z" transform="translate(143.02 340.64) scale(0.10500 -0.10500)" fill="url(#lgA-s)"/></g>
 </svg>
       <div>
         <h1>Sintonizzati</h1>
         <p class="sub">Siete davvero sulla stessa frequenza?</p>
+        <div class="strisce-avvio" aria-hidden="true"><i></i><i></i><i></i></div>
         <div class="tuner" id="tuner">
           <button class="loader invito" id="loader" aria-label="Trova la frequenza">
             <span class="invito-testo" aria-hidden="true">Trova la frequenza</span>
@@ -3749,25 +3762,7 @@ Cringe | Romantico
   <!-- Scelta della modalità -->
   <section class="screen" id="schermata-modi" aria-label="Scelta della modalità" hidden>
     <div class="setup">
-      <header class="barra"><div class="marchio"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" aria-hidden="true">
-<rect width="200" height="200" rx="46" style="fill:var(--tile)"/>
-<g transform="translate(100 100) scale(1.06) translate(-104 -92)">
-<g fill="none" stroke-linecap="round" style="stroke:var(--segnale)" stroke-width="4"><path d="M178.0 31.4 A11 11 0 0 0 167.0 25.0"/><path d="M185.2 28.0 A19 19 0 0 0 166.3 17.1"/></g>
-<line x1="146" y1="78" x2="168" y2="36" stroke-width="4" stroke-linecap="round" style="stroke:var(--corpo)"/>
-<circle cx="168" cy="36" r="4.5" style="fill:var(--corpo)"/>
-<path d="M60 77V64a8 8 0 0 1 8-8h50a8 8 0 0 1 8 8v13" fill="none" stroke-width="6" style="stroke:var(--corpo)"/>
-<rect x="30" y="76" width="140" height="88" rx="16" style="fill:var(--corpo)"/>
-<g fill="none" stroke-width="3" style="stroke:var(--griglia)"><circle cx="72" cy="120" r="27"/><circle cx="72" cy="120" r="19"/><circle cx="72" cy="120" r="11"/></g>
-<circle cx="72" cy="120" r="4" style="fill:var(--griglia)"/>
-<rect x="104" y="91" width="54" height="27" rx="4" style="fill:#FFB52E"/>
-<g stroke="#5A3A00" stroke-width="2" stroke-linecap="round"><line x1="110" y1="96" x2="110" y2="104"/><line x1="117" y1="97" x2="117" y2="102"/><line x1="124" y1="97" x2="124" y2="102"/><line x1="131" y1="96" x2="131" y2="104"/><line x1="138" y1="97" x2="138" y2="102"/><line x1="145" y1="97" x2="145" y2="102"/><line x1="152" y1="96" x2="152" y2="104"/></g>
-<text x="119" y="114.5" text-anchor="middle" font-family="Michroma, Verdana, sans-serif" font-size="7" style="fill:#5A3A00" letter-spacing=".5">FM</text>
-<line x1="137" y1="93.5" x2="137" y2="115.5" stroke-width="3.5" stroke-linecap="round" style="stroke:#D9362B"/>
-<g style="fill:var(--griglia)"><circle cx="114" cy="138" r="8"/><circle cx="148" cy="138" r="8"/></g>
-<g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
-<g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
-</g>
-</svg><span class="marchio-testo"><span>Sintonizzati</span><span class="in-onda" id="in-onda" aria-live="polite" hidden><span class="su">su</span><span class="nome-onda" id="nome-onda"></span></span></span></div><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><div class="marchio"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><defs><radialGradient id="lgM2-fondo" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#3A3015"/><stop offset=".6" stop-color="#241E0D"/><stop offset="1" stop-color="#15120A"/></radialGradient><radialGradient id="lgM2-vetro" cx=".5" cy=".45"><stop offset="0" stop-color="#FFB52E" stop-opacity=".13"/><stop offset="1" stop-color="#FFB52E" stop-opacity="0"/></radialGradient><radialGradient id="lgM2-segnale"><stop offset="0" stop-color="#3FC290" stop-opacity=".75"/><stop offset=".55" stop-color="#3FC290" stop-opacity=".25"/><stop offset="1" stop-color="#3FC290" stop-opacity="0"/></radialGradient><linearGradient id="lgM2-s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF5A47"/><stop offset=".5" stop-color="#FFB52E"/><stop offset="1" stop-color="#4FD69E"/></linearGradient><filter id="lgM2-sfoca" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="12"/></filter><filter id="lgM2-luce" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="512" height="512" rx="112" fill="url(#lgM2-fondo)"/><g stroke="#FFB52E" stroke-width="18" stroke-linecap="round" opacity=".9"><line x1="256.0" y1="74.0" x2="256.0" y2="34.0"/><line x1="347.0" y1="98.4" x2="367.0" y2="63.7"/><line x1="413.6" y1="165.0" x2="448.3" y2="145.0"/><line x1="438.0" y1="256.0" x2="478.0" y2="256.0"/><line x1="413.6" y1="347.0" x2="448.3" y2="367.0"/><line x1="347.0" y1="413.6" x2="367.0" y2="448.3"/><line x1="256.0" y1="438.0" x2="256.0" y2="478.0"/><line x1="165.0" y1="413.6" x2="145.0" y2="448.3"/><line x1="98.4" y1="347.0" x2="63.7" y2="367.0"/><line x1="74.0" y1="256.0" x2="34.0" y2="256.0"/><line x1="98.4" y1="165.0" x2="63.7" y2="145.0"/><line x1="165.0" y1="98.4" x2="145.0" y2="63.7"/></g><line x1="352.4" y1="141.1" x2="401.3" y2="82.9" stroke="#FF5A47" stroke-width="30" stroke-linecap="round"/><path d="M1827 444Q1827 533 1813.0 584.0Q1799 635 1750.0 659.5Q1701 684 1598.0 691.5Q1495 699 1316 702L760 710Q554 713 429.0 735.0Q304 757 240.0 804.5Q176 852 154.5 932.0Q133 1012 133 1132Q133 1263 162.5 1348.0Q192 1433 269.5 1481.0Q347 1529 489.0 1548.5Q631 1568 856 1568H1284Q1488 1568 1624.0 1555.0Q1760 1542 1840.0 1495.0Q1920 1448 1954.5 1349.0Q1989 1250 1989 1077H1797Q1797 1211 1771.5 1279.5Q1746 1348 1687.5 1373.0Q1629 1398 1530.0 1400.0Q1431 1402 1284 1402H866Q687 1402 579.5 1395.0Q472 1388 417.0 1363.0Q362 1338 343.5 1283.0Q325 1228 325 1132Q325 1051 338.0 1002.0Q351 953 396.5 927.5Q442 902 537.0 892.5Q632 883 796 881L1392 873Q1602 870 1727.5 848.5Q1853 827 1915.5 779.0Q1978 731 1998.5 649.5Q2019 568 2019 444Q2019 309 1993.5 217.5Q1968 126 1895.0 71.0Q1822 16 1684.0 -8.0Q1546 -32 1321 -32H853Q648 -32 509.0 -14.0Q370 4 287.5 58.5Q205 113 169.0 221.0Q133 329 133 509H325Q325 368 348.0 291.0Q371 214 428.5 180.5Q486 147 589.5 140.5Q693 134 853 134H1311Q1490 134 1594.0 145.5Q1698 157 1748.0 189.5Q1798 222 1812.5 283.0Q1827 344 1827 444Z" transform="translate(124.19 354.08) scale(0.12250 -0.12250)" fill="url(#lgM2-s)"/></svg><span class="marchio-testo"><span>Sintonizzati</span><span class="in-onda" id="in-onda" aria-live="polite" hidden><span class="su">su</span><span class="nome-onda" id="nome-onda"></span></span></span></div><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2>Come giocate?</h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
@@ -4105,25 +4100,7 @@ Cringe | Romantico
   <!-- Fine partita -->
   <section class="screen" id="schermata-fine" aria-label="Fine partita" hidden>
     <div class="setup">
-      <header class="barra"><div class="marchio"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" aria-hidden="true">
-<rect width="200" height="200" rx="46" style="fill:var(--tile)"/>
-<g transform="translate(100 100) scale(1.06) translate(-104 -92)">
-<g fill="none" stroke-linecap="round" style="stroke:var(--segnale)" stroke-width="4"><path d="M178.0 31.4 A11 11 0 0 0 167.0 25.0"/><path d="M185.2 28.0 A19 19 0 0 0 166.3 17.1"/></g>
-<line x1="146" y1="78" x2="168" y2="36" stroke-width="4" stroke-linecap="round" style="stroke:var(--corpo)"/>
-<circle cx="168" cy="36" r="4.5" style="fill:var(--corpo)"/>
-<path d="M60 77V64a8 8 0 0 1 8-8h50a8 8 0 0 1 8 8v13" fill="none" stroke-width="6" style="stroke:var(--corpo)"/>
-<rect x="30" y="76" width="140" height="88" rx="16" style="fill:var(--corpo)"/>
-<g fill="none" stroke-width="3" style="stroke:var(--griglia)"><circle cx="72" cy="120" r="27"/><circle cx="72" cy="120" r="19"/><circle cx="72" cy="120" r="11"/></g>
-<circle cx="72" cy="120" r="4" style="fill:var(--griglia)"/>
-<rect x="104" y="91" width="54" height="27" rx="4" style="fill:#FFB52E"/>
-<g stroke="#5A3A00" stroke-width="2" stroke-linecap="round"><line x1="110" y1="96" x2="110" y2="104"/><line x1="117" y1="97" x2="117" y2="102"/><line x1="124" y1="97" x2="124" y2="102"/><line x1="131" y1="96" x2="131" y2="104"/><line x1="138" y1="97" x2="138" y2="102"/><line x1="145" y1="97" x2="145" y2="102"/><line x1="152" y1="96" x2="152" y2="104"/></g>
-<text x="119" y="114.5" text-anchor="middle" font-family="Michroma, Verdana, sans-serif" font-size="7" style="fill:#5A3A00" letter-spacing=".5">FM</text>
-<line x1="137" y1="93.5" x2="137" y2="115.5" stroke-width="3.5" stroke-linecap="round" style="stroke:#D9362B"/>
-<g style="fill:var(--griglia)"><circle cx="114" cy="138" r="8"/><circle cx="148" cy="138" r="8"/></g>
-<g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
-<g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
-</g>
-</svg><span>Sintonizzati</span></div><p class="suggerimento" id="fine-nota"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+      <header class="barra"><div class="marchio"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><defs><radialGradient id="lgM3-fondo" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#3A3015"/><stop offset=".6" stop-color="#241E0D"/><stop offset="1" stop-color="#15120A"/></radialGradient><radialGradient id="lgM3-vetro" cx=".5" cy=".45"><stop offset="0" stop-color="#FFB52E" stop-opacity=".13"/><stop offset="1" stop-color="#FFB52E" stop-opacity="0"/></radialGradient><radialGradient id="lgM3-segnale"><stop offset="0" stop-color="#3FC290" stop-opacity=".75"/><stop offset=".55" stop-color="#3FC290" stop-opacity=".25"/><stop offset="1" stop-color="#3FC290" stop-opacity="0"/></radialGradient><linearGradient id="lgM3-s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF5A47"/><stop offset=".5" stop-color="#FFB52E"/><stop offset="1" stop-color="#4FD69E"/></linearGradient><filter id="lgM3-sfoca" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="12"/></filter><filter id="lgM3-luce" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="512" height="512" rx="112" fill="url(#lgM3-fondo)"/><g stroke="#FFB52E" stroke-width="18" stroke-linecap="round" opacity=".9"><line x1="256.0" y1="74.0" x2="256.0" y2="34.0"/><line x1="347.0" y1="98.4" x2="367.0" y2="63.7"/><line x1="413.6" y1="165.0" x2="448.3" y2="145.0"/><line x1="438.0" y1="256.0" x2="478.0" y2="256.0"/><line x1="413.6" y1="347.0" x2="448.3" y2="367.0"/><line x1="347.0" y1="413.6" x2="367.0" y2="448.3"/><line x1="256.0" y1="438.0" x2="256.0" y2="478.0"/><line x1="165.0" y1="413.6" x2="145.0" y2="448.3"/><line x1="98.4" y1="347.0" x2="63.7" y2="367.0"/><line x1="74.0" y1="256.0" x2="34.0" y2="256.0"/><line x1="98.4" y1="165.0" x2="63.7" y2="145.0"/><line x1="165.0" y1="98.4" x2="145.0" y2="63.7"/></g><line x1="352.4" y1="141.1" x2="401.3" y2="82.9" stroke="#FF5A47" stroke-width="30" stroke-linecap="round"/><path d="M1827 444Q1827 533 1813.0 584.0Q1799 635 1750.0 659.5Q1701 684 1598.0 691.5Q1495 699 1316 702L760 710Q554 713 429.0 735.0Q304 757 240.0 804.5Q176 852 154.5 932.0Q133 1012 133 1132Q133 1263 162.5 1348.0Q192 1433 269.5 1481.0Q347 1529 489.0 1548.5Q631 1568 856 1568H1284Q1488 1568 1624.0 1555.0Q1760 1542 1840.0 1495.0Q1920 1448 1954.5 1349.0Q1989 1250 1989 1077H1797Q1797 1211 1771.5 1279.5Q1746 1348 1687.5 1373.0Q1629 1398 1530.0 1400.0Q1431 1402 1284 1402H866Q687 1402 579.5 1395.0Q472 1388 417.0 1363.0Q362 1338 343.5 1283.0Q325 1228 325 1132Q325 1051 338.0 1002.0Q351 953 396.5 927.5Q442 902 537.0 892.5Q632 883 796 881L1392 873Q1602 870 1727.5 848.5Q1853 827 1915.5 779.0Q1978 731 1998.5 649.5Q2019 568 2019 444Q2019 309 1993.5 217.5Q1968 126 1895.0 71.0Q1822 16 1684.0 -8.0Q1546 -32 1321 -32H853Q648 -32 509.0 -14.0Q370 4 287.5 58.5Q205 113 169.0 221.0Q133 329 133 509H325Q325 368 348.0 291.0Q371 214 428.5 180.5Q486 147 589.5 140.5Q693 134 853 134H1311Q1490 134 1594.0 145.5Q1698 157 1748.0 189.5Q1798 222 1812.5 283.0Q1827 344 1827 444Z" transform="translate(124.19 354.08) scale(0.12250 -0.12250)" fill="url(#lgM3-s)"/></svg><span>Sintonizzati</span></div><p class="suggerimento" id="fine-nota"></p><div class="azioni"><button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
       <div class="contenuto">
         <div class="pannello">
           <div class="lcd"><h2 id="fine-titolo" aria-live="polite"></h2><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></div>
@@ -4143,25 +4120,7 @@ Cringe | Romantico
   <section class="screen" id="schermata-gioco" aria-label="Partita" hidden>
     <div class="gioco">
       <header class="barra">
-        <div class="marchio"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" aria-hidden="true">
-<rect width="200" height="200" rx="46" style="fill:var(--tile)"/>
-<g transform="translate(100 100) scale(1.06) translate(-104 -92)">
-<g fill="none" stroke-linecap="round" style="stroke:var(--segnale)" stroke-width="4"><path d="M178.0 31.4 A11 11 0 0 0 167.0 25.0"/><path d="M185.2 28.0 A19 19 0 0 0 166.3 17.1"/></g>
-<line x1="146" y1="78" x2="168" y2="36" stroke-width="4" stroke-linecap="round" style="stroke:var(--corpo)"/>
-<circle cx="168" cy="36" r="4.5" style="fill:var(--corpo)"/>
-<path d="M60 77V64a8 8 0 0 1 8-8h50a8 8 0 0 1 8 8v13" fill="none" stroke-width="6" style="stroke:var(--corpo)"/>
-<rect x="30" y="76" width="140" height="88" rx="16" style="fill:var(--corpo)"/>
-<g fill="none" stroke-width="3" style="stroke:var(--griglia)"><circle cx="72" cy="120" r="27"/><circle cx="72" cy="120" r="19"/><circle cx="72" cy="120" r="11"/></g>
-<circle cx="72" cy="120" r="4" style="fill:var(--griglia)"/>
-<rect x="104" y="91" width="54" height="27" rx="4" style="fill:#FFB52E"/>
-<g stroke="#5A3A00" stroke-width="2" stroke-linecap="round"><line x1="110" y1="96" x2="110" y2="104"/><line x1="117" y1="97" x2="117" y2="102"/><line x1="124" y1="97" x2="124" y2="102"/><line x1="131" y1="96" x2="131" y2="104"/><line x1="138" y1="97" x2="138" y2="102"/><line x1="145" y1="97" x2="145" y2="102"/><line x1="152" y1="96" x2="152" y2="104"/></g>
-<text x="119" y="114.5" text-anchor="middle" font-family="Michroma, Verdana, sans-serif" font-size="7" style="fill:#5A3A00" letter-spacing=".5">FM</text>
-<line x1="137" y1="93.5" x2="137" y2="115.5" stroke-width="3.5" stroke-linecap="round" style="stroke:#D9362B"/>
-<g style="fill:var(--griglia)"><circle cx="114" cy="138" r="8"/><circle cx="148" cy="138" r="8"/></g>
-<g stroke-width="2.5" stroke-linecap="round" style="stroke:var(--corpo)"><line x1="114" y1="138" x2="114" y2="132"/><line x1="148" y1="138" x2="152.5" y2="133.5"/></g>
-<g stroke-width="3"><line x1="104" y1="153" x2="158" y2="153" style="stroke:#FFB52E"/><line x1="104" y1="157.5" x2="158" y2="157.5" style="stroke:#FF5A47"/><line x1="104" y1="162" x2="156" y2="162" style="stroke:#3FC290"/></g>
-</g>
-</svg><span class="marchio-testo"><span class="marchio-nome">Sintonizzati</span><span class="in-onda"><span class="su">su</span><span class="nome-onda" id="gioco-stazione"></span></span></span></div>
+        <div class="marchio"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><defs><radialGradient id="lgM4-fondo" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#3A3015"/><stop offset=".6" stop-color="#241E0D"/><stop offset="1" stop-color="#15120A"/></radialGradient><radialGradient id="lgM4-vetro" cx=".5" cy=".45"><stop offset="0" stop-color="#FFB52E" stop-opacity=".13"/><stop offset="1" stop-color="#FFB52E" stop-opacity="0"/></radialGradient><radialGradient id="lgM4-segnale"><stop offset="0" stop-color="#3FC290" stop-opacity=".75"/><stop offset=".55" stop-color="#3FC290" stop-opacity=".25"/><stop offset="1" stop-color="#3FC290" stop-opacity="0"/></radialGradient><linearGradient id="lgM4-s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF5A47"/><stop offset=".5" stop-color="#FFB52E"/><stop offset="1" stop-color="#4FD69E"/></linearGradient><filter id="lgM4-sfoca" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="12"/></filter><filter id="lgM4-luce" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="512" height="512" rx="112" fill="url(#lgM4-fondo)"/><g stroke="#FFB52E" stroke-width="18" stroke-linecap="round" opacity=".9"><line x1="256.0" y1="74.0" x2="256.0" y2="34.0"/><line x1="347.0" y1="98.4" x2="367.0" y2="63.7"/><line x1="413.6" y1="165.0" x2="448.3" y2="145.0"/><line x1="438.0" y1="256.0" x2="478.0" y2="256.0"/><line x1="413.6" y1="347.0" x2="448.3" y2="367.0"/><line x1="347.0" y1="413.6" x2="367.0" y2="448.3"/><line x1="256.0" y1="438.0" x2="256.0" y2="478.0"/><line x1="165.0" y1="413.6" x2="145.0" y2="448.3"/><line x1="98.4" y1="347.0" x2="63.7" y2="367.0"/><line x1="74.0" y1="256.0" x2="34.0" y2="256.0"/><line x1="98.4" y1="165.0" x2="63.7" y2="145.0"/><line x1="165.0" y1="98.4" x2="145.0" y2="63.7"/></g><line x1="352.4" y1="141.1" x2="401.3" y2="82.9" stroke="#FF5A47" stroke-width="30" stroke-linecap="round"/><path d="M1827 444Q1827 533 1813.0 584.0Q1799 635 1750.0 659.5Q1701 684 1598.0 691.5Q1495 699 1316 702L760 710Q554 713 429.0 735.0Q304 757 240.0 804.5Q176 852 154.5 932.0Q133 1012 133 1132Q133 1263 162.5 1348.0Q192 1433 269.5 1481.0Q347 1529 489.0 1548.5Q631 1568 856 1568H1284Q1488 1568 1624.0 1555.0Q1760 1542 1840.0 1495.0Q1920 1448 1954.5 1349.0Q1989 1250 1989 1077H1797Q1797 1211 1771.5 1279.5Q1746 1348 1687.5 1373.0Q1629 1398 1530.0 1400.0Q1431 1402 1284 1402H866Q687 1402 579.5 1395.0Q472 1388 417.0 1363.0Q362 1338 343.5 1283.0Q325 1228 325 1132Q325 1051 338.0 1002.0Q351 953 396.5 927.5Q442 902 537.0 892.5Q632 883 796 881L1392 873Q1602 870 1727.5 848.5Q1853 827 1915.5 779.0Q1978 731 1998.5 649.5Q2019 568 2019 444Q2019 309 1993.5 217.5Q1968 126 1895.0 71.0Q1822 16 1684.0 -8.0Q1546 -32 1321 -32H853Q648 -32 509.0 -14.0Q370 4 287.5 58.5Q205 113 169.0 221.0Q133 329 133 509H325Q325 368 348.0 291.0Q371 214 428.5 180.5Q486 147 589.5 140.5Q693 134 853 134H1311Q1490 134 1594.0 145.5Q1698 157 1748.0 189.5Q1798 222 1812.5 283.0Q1827 344 1827 444Z" transform="translate(124.19 354.08) scale(0.12250 -0.12250)" fill="url(#lgM4-s)"/></svg><span class="marchio-testo"><span class="marchio-nome">Sintonizzati</span><span class="in-onda"><span class="su">su</span><span class="nome-onda" id="gioco-stazione"></span></span></span></div>
         <div class="azioni">
           <button class="ingranaggio" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="tema" aria-label="Cambia tema"><svg class="sole" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
           <button class="btn-piccolo" id="esci">Esci</button>
@@ -4348,7 +4307,7 @@ Cringe | Romantico
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">© 2026 Mergio Studios<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.23</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">© 2026 Mergio Studios<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.24</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -5517,18 +5476,51 @@ Cringe | Romantico
   const durata = riduciMoto ? 600 : 3000;
   let inizio = null;
 
-  // la lancetta del logo: oscillazioni sempre più strette attorno al suo posto, finché si ferma
-  const agoLogo = document.querySelector('#schermata-inizio .logo-ago');
-  function muoviAgoLogo(lin) {
-    if (!agoLogo || riduciMoto) return;
-    const ampiezza = 27 * Math.pow(1 - lin, 1.4) * Math.min(1, lin * 5);
-    const dx = Math.max(-28, Math.min(18, -ampiezza * Math.sin(lin * Math.PI * 4.5)));
-    agoLogo.style.transform = lin >= 1 ? '' : `translateX(${dx.toFixed(2)}px)`;
+  // Il logo durante la ricerca: la lancetta gira sulla ghiera esitando, come una manopola che cerca,
+  // le tacche si accendono al suo passaggio, la S al neon si scalda tremolando, la luce verde del segnale
+  // cresce avvicinandosi alla stazione e le tre strisce sotto lo slogan si allineano piano piano.
+  const inizioEl = document.getElementById('schermata-inizio');
+  const logoAvvio = inizioEl.querySelector('.logo');
+  const agoLogo = logoAvvio.querySelector('.logo-ago');
+  const taccheLogo = [...logoAvvio.querySelectorAll('.logo-ghiera line')];
+  const tuboLogo = logoAvvio.querySelector('.logo-s-tubo');
+  const aloneLogo = logoAvvio.querySelector('.logo-s-alone');
+  const luceLogo = logoAvvio.querySelector('.logo-luce');
+  const strisceAvvio = [...inizioEl.querySelectorAll('.strisce-avvio i')];
+  const ARRIVO_AGO = 40, PARTENZA_AGO = -130;
+  let neon = 0.26;
+  function muoviLogo(lin, ms) {
+    if (riduciMoto) return;
+    const morbido = lin < .5 ? 2 * lin * lin : 1 - Math.pow(-2 * lin + 2, 2) / 2;
+    const ang = lin >= 1 ? ARRIVO_AGO : PARTENZA_AGO + (ARRIVO_AGO - PARTENZA_AGO) * morbido + 24 * Math.sin(lin * Math.PI * 5.5) * Math.pow(1 - lin, 1.2);
+    agoLogo.style.transform = `rotate(${ang.toFixed(2)}deg)`;
+    taccheLogo.forEach((t, i) => {
+      const d = Math.abs(((i * 10 - ang) % 360 + 540) % 360 - 180);
+      const base = t.classList.contains('lunga') ? .3 + .65 * lin : .2 + .25 * lin;
+      t.style.opacity = Math.min(1, base + .8 * Math.exp(-((d / 13) ** 2))).toFixed(3);
+    });
+    const vicino = Math.exp(-(((ang - ARRIVO_AGO) / 26) ** 2));
+    luceLogo.style.opacity = (vicino * (.75 + .25 * Math.random())).toFixed(3);
+    // il neon si scalda: cresce con la ricerca, con qualche sfarfallio finché non è a regime
+    const meta = .26 + .74 * lin * lin;
+    neon += (meta - neon) * .25;
+    const sfarfalla = lin < .85 && Math.random() < .09 ? .45 : 1;
+    tuboLogo.style.opacity = (neon * sfarfalla).toFixed(3);
+    aloneLogo.style.opacity = (Math.max(0, lin - .45) / .55 * .8 * sfarfalla).toFixed(3);
+    // le strisce ondeggiano ognuna con il suo ritmo, sempre meno, finché sono allineate
+    const t = ms / 1000, ampiezza = 18 * Math.pow(1 - morbido, 1.1);
+    [[1.3, 0], [1.9, 2.1], [1.6, 4.2]].forEach(([f, fase], i) => {
+      strisceAvvio[i].style.transform = `translateX(${(ampiezza * Math.sin(t * 2 * Math.PI * f + fase)).toFixed(2)}px)`;
+    });
+  }
+  function fermaLogo() {
+    [agoLogo, tuboLogo, aloneLogo, luceLogo, ...taccheLogo, ...strisceAvvio].forEach(el => { el.style.transform = ''; el.style.opacity = ''; });
+    inizioEl.classList.remove('cerca');
   }
   function carica(ms) {
     if (inizio === null) inizio = ms;
     const lin = Math.min((ms - inizio) / durata, 1);
-    muoviAgoLogo(lin);
+    muoviLogo(lin, ms);
     // la lancetta esita un po', come una manopola che cerca la stazione
     const p = Math.min(1, lin + Math.sin(lin * Math.PI * 3) * 0.05 * (1 - lin));
     progresso = Math.max(progresso, p);
@@ -5544,6 +5536,7 @@ Cringe | Romantico
     loader.disabled = true;
     loader.setAttribute('aria-label', 'Caricamento in corso');
     suona('ricercaIniziale', { durata: durata / 1000 });
+    inizioEl.classList.add('cerca');
     requestAnimationFrame(carica);
   });
 
@@ -5553,6 +5546,7 @@ Cringe | Romantico
     stato.textContent = 'Sintonizzati!';
     loader.classList.add('pronto');
     tuner.classList.add('pronto');
+    fermaLogo();
     document.getElementById('schermata-inizio').classList.add('sintonizzata');
     loader.disabled = false;
     loader.setAttribute('aria-label', 'Gioca');
@@ -5712,6 +5706,7 @@ Cringe | Romantico
         const volo = logo.cloneNode(true);
         volo.classList.add('logo-volante');
         volo.removeAttribute('role'); volo.setAttribute('aria-hidden', 'true');
+        volo.innerHTML = volo.innerHTML.replaceAll('lgA-', 'lgV-');
         Object.assign(volo.style, { left: da.left + 'px', top: da.top + 'px', width: da.width + 'px', height: da.height + 'px' });
         app.append(volo);
         modiEl.classList.add('ingresso');

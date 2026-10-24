@@ -3,7 +3,7 @@
    aggiornamento caricato su GitHub arriva subito; se manca la connessione si usa la copia salvata.
    Anche i caratteri (cartella fonti) vengono salvati all'installazione, così l'app ha sempre il suo aspetto.
    Se cambi le icone, i caratteri o il manifest, aumenta il numero di VERSIONE. */
-const VERSIONE = 'sintonizzati-v4';
+const VERSIONE = 'sintonizzati-v5';
 const FILE = [
   './',
   './index.html',
@@ -13,6 +13,7 @@ const FILE = [
   './icone/icon-512.png',
   './icone/icon-maskable-192.png',
   './icone/icon-maskable-512.png',
+  './icone/icon-monochrome-512.png',
   './icone/apple-touch-icon.png',
   './icone/favicon-32.png',
   './fonti/bricolage-grotesque.woff',
